@@ -32,18 +32,28 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Core\ILisPatientElement.cs" />
+    <Compile Include="Core\ILisReportElement.cs" />
+    <Compile Include="Model\LisReportElement.cs" />
+    <Compile Include="Model\LisPatientElement.cs" />
+    <Compile Include="Model\PatientInfoElement.cs" />
+    <Compile Include="Model\ReportCommonItemElement.cs" />
+    <Compile Include="Model\ReportCustomItemElement.cs" />
+    <Compile Include="Model\ReportGraphItemElement.cs" />
+    <Compile Include="Model\ReportInfoElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
+    <ProjectReference Include="..\XYS\XYS.csproj">
+      <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
+      <Name>XYS</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
