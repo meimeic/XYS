@@ -37,16 +37,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
-    <Compile Include="Core\ILisPatientElement.cs" />
+    <Compile Include="Appender\AppenderSkeleton.cs" />
+    <Compile Include="Appender\IAppender.cs" />
+    <Compile Include="Core\IHandler.cs" />
+    <Compile Include="Core\IReportPatientElement.cs" />
+    <Compile Include="Core\ILisPKElement.cs" />
     <Compile Include="Core\ILisReportElement.cs" />
-    <Compile Include="Model\LisReportElement.cs" />
-    <Compile Include="Model\LisPatientElement.cs" />
-    <Compile Include="Model\PatientInfoElement.cs" />
+    <Compile Include="Core\IReportOptionHandler.cs" />
+    <Compile Include="Filter\IReportFilter.cs" />
+    <Compile Include="Handler\IReportHandler.cs" />
+    <Compile Include="Model\AbstractReportElement.cs" />
+    <Compile Include="Model\AbstractPatientElement.cs" />
+    <Compile Include="Model\LisReportPKElement.cs" />
+    <Compile Include="Model\ReportPatientElement.cs" />
     <Compile Include="Model\ReportCommonItemElement.cs" />
     <Compile Include="Model\ReportCustomItemElement.cs" />
     <Compile Include="Model\ReportGraphItemElement.cs" />
-    <Compile Include="Model\ReportInfoElement.cs" />
+    <Compile Include="Model\ReportExamElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -55,6 +62,7 @@
       <Name>XYS</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace XYS.Lis
+namespace XYS.Lis.Appender
 {
-    public class Class1
+   public abstract class AppenderSkeleton:IAppender
     {
+
     }
 }

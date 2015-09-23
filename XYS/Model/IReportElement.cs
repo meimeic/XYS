@@ -1,8 +1,17 @@
 ﻿namespace XYS.Model
 {
+    public enum ReportElementType
+    {
+        ExamElement = 1,
+        PatientElement,
+        ItemElement,
+        GraphElement,
+        GeneralElement,
+        ReportElement,
+        CustomElement
+    }
     public interface IReportElement
     {
-        string ReportElementName { get; }
-        long ReportElementValue { get; }
+        ReportElementType ElementType { get; }
     }
 }
