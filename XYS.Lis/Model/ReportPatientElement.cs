@@ -12,6 +12,7 @@ namespace XYS.Lis.Model
 
         #region 公共属性
         #endregion
+       
         #region 构造函数
         internal ReportPatientElement()
             : base(elementType)

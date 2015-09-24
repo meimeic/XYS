@@ -19,6 +19,5 @@ namespace XYS.Lis.Model
         }
         #endregion
 
-
     }
 }
