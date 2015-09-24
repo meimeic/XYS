@@ -5,7 +5,7 @@ namespace XYS.Lis.Model
     internal class ReportExamElement:AbstractReportElement
     {
         #region 私有常量字段
-        private const ReportElementType m_elementType = ReportElementType.ExamElement;
+        private const ReportElementType m_defaultElementType = ReportElementType.ExamElement;
         #endregion
 
         #region 私有字段
@@ -35,7 +35,7 @@ namespace XYS.Lis.Model
 
         #region 构造函数
         internal ReportExamElement()
-            : base(m_elementType)
+            : base(m_defaultElementType)
         {
         }
         internal ReportExamElement(ReportElementType elementType)

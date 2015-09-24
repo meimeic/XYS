@@ -3,5 +3,6 @@ namespace XYS.Lis.Core
 {
     public interface ILisReportElement:IReportElement
     {
+
     }
 }

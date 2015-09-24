@@ -4,7 +4,7 @@ namespace XYS.Lis.Model
     public class ReportCommonItemElement:AbstractReportElement
     {
         #region 私有常量字段
-        private const ReportElementType m_elementType = ReportElementType.ItemElement;
+        private const ReportElementType m_defaultElementType = ReportElementType.ItemElement;
         #endregion
 
         #region 私有字段
@@ -21,7 +21,7 @@ namespace XYS.Lis.Model
 
         #region 公共构造方法
         public ReportCommonItemElement()
-            : base(m_elementType)
+            : base(m_defaultElementType)
         { }
         public ReportCommonItemElement(ReportElementType elementType)
             : base(elementType)

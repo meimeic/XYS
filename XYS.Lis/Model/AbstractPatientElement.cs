@@ -1,81 +1,88 @@
 ﻿using XYS.Lis.Core;
 using XYS.Model;
+using XYS.Common;
 namespace XYS.Lis.Model
 {
-   public abstract class AbstractPatientElement:IReportPatientElement
-   {
-       #region 私有字段
-       private readonly ReportElementType m_elementType;
-       private string m_patientName;
-       private string m_pid;
-       private string m_cid;
-       private GenderType m_gender;
-       private Age m_age;
-       private ClinicType m_sickType;
-       private int m_visitTimes;
-       private string m_deptName;
-       private string m_doctor;
-       private string m_clinicalDiagnosis;
-       private string m_explanation;
-       #endregion
+    public abstract class AbstractPatientElement : IReportPatientElement
+    {
+        #region 私有字段
+        private readonly ReportElementType m_elementType;
+        private string m_patientName;
+        private string m_pid;
+        private string m_cid;
+        private GenderType m_gender;
+        private Age m_age;
+        private ClinicType m_clinicType;
+        private int m_visitTimes;
+        private string m_deptName;
+        private string m_doctor;
+        private string m_clinicalDiagnosis;
+        private string m_explanation;
+        private ReportPK m_reportPK;
+        #endregion
 
-       #region 受保护的构造方法
-       protected AbstractPatientElement(ReportElementType elementType)
-       {
-           this.m_elementType = elementType;
-       }
-       #endregion
+        #region 受保护的构造方法
+        protected AbstractPatientElement(ReportElementType elementType)
+        {
+            this.m_elementType = elementType;
+        }
+        #endregion
 
-       #region 实现IPatientElement接口
-       public string SickTypeName
-       {
-           get
-           {
-               switch (this.m_sickType)
-               {
-                   case ClinicType.clinic:
-                       return "门诊";
-                   case ClinicType.hospital:
-                       return "住院";
-                   case ClinicType.other:
-                       return "其他";
-                   case ClinicType.none:
-                       return "未知";
-                   default:
-                       return "未知";
-               }
-           }
-       }
-       public string GenderTypeName
-       {
-           get
-           {
-               switch (this.m_gender)
-               {
-                   case GenderType.female:
-                       return "女";
-                   case GenderType.male:
-                       return "男";
-                   case GenderType.other:
-                       return "未知";
-                   case GenderType.none:
-                       return "未定";
-                   default:
-                       return "未知";
-               }
-           }
-       }
-       #endregion
+        #region 实现IPatientElement接口
+        public string ClinicTypeName
+        {
+            get
+            {
+                switch (this.m_clinicType)
+                {
+                    case ClinicType.clinic:
+                        return "门诊";
+                    case ClinicType.hospital:
+                        return "住院";
+                    case ClinicType.other:
+                        return "其他";
+                    case ClinicType.none:
+                        return "未知";
+                    default:
+                        return "未知";
+                }
+            }
+        }
+        public string GenderTypeName
+        {
+            get
+            {
+                switch (this.m_gender)
+                {
+                    case GenderType.female:
+                        return "女";
+                    case GenderType.male:
+                        return "男";
+                    case GenderType.other:
+                        return "未知";
+                    case GenderType.none:
+                        return "未定";
+                    default:
+                        return "未知";
+                }
+            }
+        }
+        #endregion
 
-       #region 实现IReportElement接口
-       public ReportElementType ElementType
-       {
-           get { return m_elementType; }
-       }
-       #endregion
+        #region 实现IReportElement接口
+        public ReportElementType ElementType
+        {
+            get { return m_elementType; }
+        }
+        public ReportPK ReporterPK
+        {
+            get { return this.m_reportPK; }
+            set { this.m_reportPK = value; }
+        }
+        #endregion
 
-       #region 公共属性
-       public string PatientName
+        #region 公共属性
+        public string PatientName
         {
             get { return this.m_patientName; }
             set { this.m_patientName = value; }
@@ -100,10 +107,10 @@ namespace XYS.Lis.Model
             get { return this.m_age; }
             set { this.m_age = value; }
         }
-        public ClinicType SickType
+        public ClinicType ClinicalType
         {
-            get { return this.m_sickType; }
-            set { this.m_sickType = value; }
+            get { return this.m_clinicType; }
+            set { this.m_clinicType = value; }
         }
         public int VisitTimes
         {
@@ -133,7 +140,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region  内部类
-        internal class Age
+        public class Age
         {
             #region 内部类私有字段
             private int m_value;
@@ -166,5 +173,5 @@ namespace XYS.Lis.Model
             #endregion
         }
         #endregion
-   }
+    }
 }

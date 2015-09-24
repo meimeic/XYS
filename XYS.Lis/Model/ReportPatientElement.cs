@@ -4,7 +4,7 @@ namespace XYS.Lis.Model
     internal class ReportPatientElement : AbstractPatientElement
     {
         #region 私有常量字段
-        private const ReportElementType elementType = ReportElementType.PatientElement;
+        private const ReportElementType m_defaultElementType = ReportElementType.PatientElement;
         #endregion
 
         #region 私有字段
@@ -15,7 +15,7 @@ namespace XYS.Lis.Model
        
         #region 构造函数
         internal ReportPatientElement()
-            : base(elementType)
+            : base(m_defaultElementType)
         {
         }
         internal ReportPatientElement(ReportElementType elementType)

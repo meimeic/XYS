@@ -2,7 +2,7 @@
 
 namespace XYS.Lis.Core
 {
-   public interface IReportPatientElement:IReportElement,IPatientElement
+   public interface IReportPatientElement:ILisReportElement,IPatientElement
     {
 
     }

@@ -1,4 +1,5 @@
-﻿namespace XYS.Model
+﻿using XYS.Common;
+namespace XYS.Model
 {
     public enum ReportElementType
     {
@@ -13,5 +14,6 @@
     public interface IReportElement
     {
         ReportElementType ElementType { get; }
+        ReportPK ReporterPK { get; set; }
     }
 }

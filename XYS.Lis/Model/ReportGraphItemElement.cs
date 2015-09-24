@@ -4,7 +4,7 @@ namespace XYS.Lis.Model
     public class ReportGraphItemElement:AbstractReportElement
     {
         #region 私有静态字段
-        private const ReportElementType m_elementType = ReportElementType.GraphElement;
+        private const ReportElementType m_defaultElementType = ReportElementType.GraphElement;
         #endregion
 
         #region 私有字段
@@ -14,7 +14,7 @@ namespace XYS.Lis.Model
        
         #region 公共构造函数
         public ReportGraphItemElement()
-            : base(m_elementType)
+            : base(m_defaultElementType)
         { }
         public ReportGraphItemElement(ReportElementType elementType)
             : base(elementType)

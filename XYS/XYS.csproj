@@ -43,7 +43,9 @@
     <Compile Include="Common\IOptionHandler.cs" />
     <Compile Include="Common\IReporter.cs" />
     <Compile Include="Common\IReportRepository.cs" />
+    <Compile Include="Common\PKColumn.cs" />
     <Compile Include="Common\ReportIdentify.cs" />
+    <Compile Include="Common\ReportPK.cs" />
     <Compile Include="Model\IPatientElement.cs" />
     <Compile Include="Common\IPKElement.cs" />
     <Compile Include="Model\IReportElement.cs" />
