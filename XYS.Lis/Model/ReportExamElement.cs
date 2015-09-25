@@ -1,8 +1,9 @@
 ﻿using System;
 using XYS.Model;
+using XYS.Lis.Util;
 namespace XYS.Lis.Model
 {
-    internal class ReportExamElement:AbstractReportElement
+    public class ReportExamElement:AbstractReportElement
     {
         #region 私有常量字段
         private const ReportElementType m_defaultElementType = ReportElementType.ExamElement;
@@ -11,6 +12,7 @@ namespace XYS.Lis.Model
         #region 私有字段
         private string m_serialNo;
         private string m_sampleNo;
+        private int m_sectionNo;
         private int m_sampleTypeNo;
         private string m_sampleTypeName;
         //采集、签收、审核时,二次审核,核收时间
@@ -30,7 +32,8 @@ namespace XYS.Lis.Model
         //检验者，审核者
         private string m_technician;
         private string m_checker;
-        private int m_sectionNo;
+        private byte[] m_technicianImage;
+        private byte[] m_checkerImage;
         #endregion
 
         #region 构造函数
@@ -142,6 +145,34 @@ namespace XYS.Lis.Model
         {
             get { return m_receiveDateTime; }
             set { m_receiveDateTime = value; }
+        }
+        public byte[] TechnicianImage
+        {
+            get { return this.m_technicianImage; }
+        }
+        public byte[] CheckerImage
+        {
+            get { return this.m_checkerImage; }
+        }
+        #endregion
+
+        #region 父类重写虚方法
+        protected override void Afterward()
+        {
+            this.SetSignImage();
+        }
+        #endregion
+        #region 受保护的虚方法
+        protected virtual void SetSignImage()
+        {
+            if (this.m_checker != null && !this.m_checker.Equals(""))
+            {
+                this.m_checkerImage = LisTechnician.GetSignImage(this.m_checker);
+            }
+            if (this.m_technician != null && !this.m_technician.Equals(""))
+            {
+                this.m_technicianImage = LisTechnician.GetSignImage(this.m_technician);
+            }
         }
         #endregion
     }

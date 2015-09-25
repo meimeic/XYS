@@ -1,4 +1,5 @@
 ﻿using XYS.Model;
+using System.Text;
 namespace XYS.Lis.Model
 {
     public class ReportCommonItemElement:AbstractReportElement
@@ -17,6 +18,7 @@ namespace XYS.Lis.Model
         private string m_itemUnit;
         private string m_refRange;
         private int m_dispOrder;
+        private int m_prec;
         #endregion
 
         #region 公共构造方法
@@ -73,6 +75,71 @@ namespace XYS.Lis.Model
         {
             get { return this.m_dispOrder; }
             set { this.m_dispOrder = value; }
+        }
+        public int Prec
+        {
+            get { return this.m_prec; }
+            set { this.m_prec = value; }
+        }
+        #endregion
+
+        #region 重写父类方法
+        protected override void Afterward()
+        {
+            if (this.m_prec > 0)
+            {
+                AdjustItemResult();
+                AdjustItemStandard();
+            }
+        }
+        #endregion
+
+        #region 私有实例方法
+        private void AdjustItemResult()
+        {
+            double temp;
+            bool r = double.TryParse(this.m_itemResult, out temp);
+            if (r)
+            {
+                this.m_itemResult=AdjustAccuracy(temp,this.m_prec);
+            }
+        }
+        private void AdjustItemStandard()
+        {
+            double temp;
+            bool r = double.TryParse(this.m_itemStandard, out temp);
+            if (r)
+            {
+                this.m_itemStandard = AdjustAccuracy(temp, this.m_prec);
+            }
+        }
+        #endregion
+
+        #region 受保护的虚方法
+        protected virtual void AdjustStr(ref string s, int prec)
+        {
+            double temp;
+            bool r = double.TryParse(s, out temp);
+            if (r)
+            {
+                s = AdjustAccuracy(temp, prec);
+            }
+        }
+        protected virtual string AdjustAccuracy(double d, int prec)
+        {
+            string formatter = AccuracyFormat(prec);
+            string result = d.ToString(formatter);
+            return result;
+        }
+        protected virtual string AccuracyFormat(int prec)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("0.");
+            for (int i = 0; i < prec; i++)
+            {
+                sb.Append('0');
+            }
+            return sb.ToString();
         }
         #endregion
     }

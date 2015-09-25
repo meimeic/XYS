@@ -1,7 +1,7 @@
 ﻿using XYS.Model;
 namespace XYS.Lis.Model
 {
-    internal class ReportPatientElement : AbstractPatientElement
+    public class ReportPatientElement : AbstractPatientElement
     {
         #region 私有常量字段
         private const ReportElementType m_defaultElementType = ReportElementType.PatientElement;

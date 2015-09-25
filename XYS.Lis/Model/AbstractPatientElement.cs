@@ -3,7 +3,7 @@ using XYS.Model;
 using XYS.Common;
 namespace XYS.Lis.Model
 {
-    public abstract class AbstractPatientElement : IReportPatientElement
+    public abstract class AbstractPatientElement : ILisPatientElement,ILisReportElement
     {
         #region 私有字段
         private readonly ReportElementType m_elementType;
@@ -18,7 +18,7 @@ namespace XYS.Lis.Model
         private string m_doctor;
         private string m_clinicalDiagnosis;
         private string m_explanation;
-        private ReportPK m_reportPK;
+        //private ReportKey m_reportKey;
         #endregion
 
         #region 受保护的构造方法
@@ -74,10 +74,17 @@ namespace XYS.Lis.Model
         {
             get { return m_elementType; }
         }
-        public ReportPK ReporterPK
+        //public ReportKey ReporterKey
+        //{
+        //    get { return this.m_reportKey; }
+        //    set { this.m_reportKey = value; }
+        //}
+        #endregion
+
+        #region 实现ILisReportElement
+        public void AfterFill()
         {
-            get { return this.m_reportPK; }
-            set { this.m_reportPK = value; }
+            this.Afterward();
         }
         #endregion
 
@@ -132,11 +139,16 @@ namespace XYS.Lis.Model
             get { return this.m_clinicalDiagnosis; }
             set { this.m_clinicalDiagnosis = value; }
         }
-        private string Explanation
+        public string Explanation
         {
             get { return this.m_explanation; }
             set { this.m_explanation = value; }
         }
+        #endregion
+
+        #region 受保护的虚函数
+        protected virtual void Afterward()
+        { }
         #endregion
 
         #region  内部类
@@ -173,5 +185,7 @@ namespace XYS.Lis.Model
             #endregion
         }
         #endregion
+
+    
     }
 }

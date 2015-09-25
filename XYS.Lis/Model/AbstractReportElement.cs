@@ -7,7 +7,7 @@ namespace XYS.Lis.Model
     {
         #region 私有字段
         private readonly ReportElementType m_elementType;
-        private ReportPK m_reportPK;
+        //private ReportKey m_reportKey;
         #endregion
 
         #region 受保护的构造函数
@@ -16,16 +16,30 @@ namespace XYS.Lis.Model
             this.m_elementType = elementType;
         }
         #endregion
-        
+
         #region IReportElement实现
         public ReportElementType ElementType
         {
             get { return this.m_elementType; }
         }
-        public ReportPK ReporterPK
+        //public ReportKey ReporterKey
+        //{
+        //    get { return this.m_reportKey; }
+        //    set { this.m_reportKey = value; }
+        //}
+        #endregion
+
+        #region ILisReportElement实现
+        public void AfterFill()
         {
-            get { return this.m_reportPK; }
-            set { this.m_reportPK = value; }
+            //后续操作
+            this.Afterward();
+        }
+        #endregion
+
+        #region 实例虚方法
+        protected virtual void Afterward()
+        {
         }
         #endregion
 

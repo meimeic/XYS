@@ -11,7 +11,7 @@ namespace XYS.Lis.Model
         private string m_itemName;
         private byte[] m_itemImage;
         #endregion
-       
+      
         #region 公共构造函数
         public ReportGraphItemElement()
             : base(m_defaultElementType)
@@ -32,6 +32,9 @@ namespace XYS.Lis.Model
             get { return this.m_itemImage; }
             set { this.m_itemImage = value; }
         }
+        #endregion
+
+        #region
         #endregion
 
     }

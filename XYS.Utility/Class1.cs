@@ -7,5 +7,6 @@ namespace XYS.Utility
 {
     public class Class1
     {
+
     }
 }

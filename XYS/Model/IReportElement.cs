@@ -14,6 +14,6 @@ namespace XYS.Model
     public interface IReportElement
     {
         ReportElementType ElementType { get; }
-        ReportPK ReporterPK { get; set; }
+       // ReportKey ReporterKey { get; set; }
     }
 }

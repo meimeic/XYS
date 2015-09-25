@@ -1,7 +1,7 @@
 ﻿using System;
 namespace XYS.Common
 {
-    public class PKColumn
+    public class KeyColumn
     {
         #region 私有字段
         private object m_pk;
