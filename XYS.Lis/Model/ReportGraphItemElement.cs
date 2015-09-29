@@ -1,40 +1,42 @@
 ﻿using XYS.Model;
+using XYS.Common;
 namespace XYS.Lis.Model
 {
-    public class ReportGraphItemElement:AbstractReportElement
+    public class ReportGraphItemElement : AbstractReportElement
     {
         #region 私有静态字段
         private const ReportElementType m_defaultElementType = ReportElementType.GraphElement;
+        private const string m_defaultGraphSQL = "select graphname,Graphjpg as graphimage from RFGraphData";
         #endregion
 
         #region 私有字段
-        private string m_itemName;
-        private byte[] m_itemImage;
+        private string m_graphName;
+        private byte[] m_graphImage;
         #endregion
-      
+
         #region 公共构造函数
         public ReportGraphItemElement()
-            : base(m_defaultElementType)
+            : base(m_defaultElementType,m_defaultGraphSQL)
         { }
-        public ReportGraphItemElement(ReportElementType elementType)
-            : base(elementType)
-        { }
+        public ReportGraphItemElement(ReportElementType elementType,string sql)
+            : base(elementType,sql)
+        {
+        }
         #endregion
 
         #region 公共属性
-        public string ItemName
+        [TableColumn(true)]
+        public string GraphName
         {
-            get { return this.m_itemName; }
-            set { this.m_itemName = value; }
+            get { return this.m_graphName; }
+            set { this.m_graphName = value; }
         }
-        public byte[] ItemImage
+        [TableColumn(true)]
+        public byte[] GraphImage
         {
-            get { return this.m_itemImage; }
-            set { this.m_itemImage = value; }
+            get { return this.m_graphImage; }
+            set { this.m_graphImage = value; }
         }
-        #endregion
-
-        #region
         #endregion
 
     }

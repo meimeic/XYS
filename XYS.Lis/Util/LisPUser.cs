@@ -1,8 +1,8 @@
 ﻿using System.Collections;
-
+using XYS.Lis.DAL;
 namespace XYS.Lis.Util
 {
-    public class LisTechnician
+    public class LisPUser
     {
         #region 私有静态字段
         private static readonly Hashtable SIGN_IMAGE_TABLE = new Hashtable();
@@ -25,6 +25,7 @@ namespace XYS.Lis.Util
         /// </summary>
         private static void InitImageTable()
         {
+            CommonDAL.GetSignImage(SIGN_IMAGE_TABLE);
         }
         #endregion
     }

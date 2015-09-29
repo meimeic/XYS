@@ -7,13 +7,15 @@ namespace XYS.Lis.Model
     {
         #region 私有字段
         private readonly ReportElementType m_elementType;
+        private readonly string m_searchSQL;
         //private ReportKey m_reportKey;
         #endregion
 
         #region 受保护的构造函数
-        protected AbstractReportElement(ReportElementType elementType)
+        protected AbstractReportElement(ReportElementType elementType,string sql)
         {
             this.m_elementType = elementType;
+            this.m_searchSQL = sql;
         }
         #endregion
 
@@ -30,6 +32,10 @@ namespace XYS.Lis.Model
         #endregion
 
         #region ILisReportElement实现
+        public string SearchSQL
+        {
+            get { return this.m_searchSQL; }
+        }
         public void AfterFill()
         {
             //后续操作
@@ -42,6 +48,5 @@ namespace XYS.Lis.Model
         {
         }
         #endregion
-
     }
 }

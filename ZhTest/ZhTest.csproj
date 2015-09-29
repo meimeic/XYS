@@ -4,15 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4F0C8535-B1E0-46B0-800A-97DF8AC6065E}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{66F2AAB8-2193-47CF-BC70-6CDFC4434364}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XYS.Lis</RootNamespace>
-    <AssemblyName>XYS.Lis</AssemblyName>
+    <RootNamespace>ZhTest</RootNamespace>
+    <AssemblyName>ZhTest</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -22,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,47 +34,52 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Appender\AppenderSkeleton.cs" />
-    <Compile Include="Appender\IAppender.cs" />
-    <Compile Include="Core\IHandler.cs" />
-    <Compile Include="Core\ILisBasicDAL.cs" />
-    <Compile Include="Core\ILisReport.cs" />
-    <Compile Include="Core\ILisPatientElement.cs" />
-    <Compile Include="Core\ILisPKElement.cs" />
-    <Compile Include="Core\ILisReportElement.cs" />
-    <Compile Include="Core\IReportOptionHandler.cs" />
-    <Compile Include="Core\ReportFKImpl.cs" />
-    <Compile Include="Core\LisReportKeyImpl.cs" />
-    <Compile Include="DAL\BasicDAL.cs" />
-    <Compile Include="DAL\CommonDAL.cs" />
-    <Compile Include="DAL\LisReportCommonDAL.cs" />
-    <Compile Include="DAL\LisReportCommonDAL1.cs" />
-    <Compile Include="DAL\LisReportExamDAL.cs" />
-    <Compile Include="DAL\LisReportGraphDAL.cs" />
-    <Compile Include="DAL\LisReportItemDAL.cs" />
-    <Compile Include="DAL\LisReportPatientDAL.cs" />
-    <Compile Include="Filter\IReportFilter.cs" />
-    <Compile Include="Handler\IReportHandler.cs" />
-    <Compile Include="Model\AbstractReportElement.cs" />
-    <Compile Include="Model\AbstractPatientElement.cs" />
-    <Compile Include="Model\LisReportPKElement.cs" />
-    <Compile Include="Model\ReportPatientElement.cs" />
-    <Compile Include="Model\ReportCommonItemElement.cs" />
-    <Compile Include="Model\ReportCustomItemElement.cs" />
-    <Compile Include="Model\ReportGraphItemElement.cs" />
-    <Compile Include="Model\ReportExamElement.cs" />
-    <Compile Include="Model\ReportReportElement.cs" />
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\IReportRepository.cs" />
-    <Compile Include="Repository\ReportRepositorySkeleton.cs" />
-    <Compile Include="Util\LisPUser.cs" />
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="App.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\XYS.Lis\XYS.Lis.csproj">
+      <Project>{4f0c8535-b1e0-46b0-800a-97df8ac6065e}</Project>
+      <Name>XYS.Lis</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XYS.Utility\XYS.Utility.csproj">
       <Project>{7839754d-9da9-4aa7-94a6-32e3a2701669}</Project>
       <Name>XYS.Utility</Name>
@@ -81,10 +88,6 @@
       <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
       <Name>XYS</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Layout\" />
-    <Folder Include="Plugin\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

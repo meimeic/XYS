@@ -7,7 +7,7 @@ namespace XYS.Model
 {
     public enum AgeType
     {
-        year = 1, month, day
+        year = 1, month, day,hours,none
     }
     public enum ClinicType
     {

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace XYS.Utility
+namespace XYS.Lis.Repository
 {
-    public class Class1
+    public abstract class ReportRepositorySkeleton
     {
-
     }
 }

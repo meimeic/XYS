@@ -10,11 +10,11 @@ namespace XYS.Lis.Model
 
         #region 公共构造函数
         public ReportCustomItemElement()
-            : base(m_defaultElementType)
+            : base(m_defaultElementType,"")
         {
         }
         public ReportCustomItemElement(ReportElementType elementType)
-            : base(elementType)
+            : base(elementType,"")
         {
         }
         #endregion

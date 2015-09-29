@@ -1,71 +1,67 @@
 ﻿using System;
-using System.Data;
 using System.Collections;
-using System.Collections.Generic;
 using System.Text;
-using XYS.Common;
-using XYS.Lis.Core;
-using XYS.Utility.DB;
+using System.Data;
 using System.Reflection;
+using System.Collections.Generic;
+using XYS.Common;
+using XYS.Utility.DB;
+using XYS.Lis.Core;
 namespace XYS.Lis.DAL
 {
-    public abstract class BasicDAL<T>:ILisBasicDAL<T>
-        where T:ILisReportElement,new()
+    public class LisReportCommonDAL
     {
-        public T Search(Hashtable equalTable)
+        public static void Fill(ILisReportElement element, Hashtable equalTable)
         {
-            if (equalTable != null && equalTable.Count > 0)
+            DataTable dt = Query(element, equalTable);
+            if (dt != null)
             {
-                T t = new T();
-                Query(t, equalTable);
-                return t;
-            }
-            else
-            {
-                return default(T);
+                FillData(element, dt.Rows[0]);
+                AfterFill(element);
             }
         }
-        public void Search(T t, Hashtable equalTable)
+        public static void FillList(List<ILisReportElement> elementList, Type elementType, Hashtable equalTable)
         {
-            Query(t, equalTable);
-        }
-        protected virtual void Query(T t, Hashtable equalTable)
-        {
-            string sql = GenderSql(equalTable);
-            DataTable dt = GetDataTable(sql);
-            if (dt.Rows.Count > 0)
+            DataTable dt=Query(elementType, equalTable);
+            if (dt != null)
             {
-                FillData(t, dt.Rows[0]);
-                AfterFill(t);
-            }
-        }
-        public List<T> SearchList(Hashtable equalTable)
-        {
-            List<T> result = new List<T>();
-            QueryList(result, equalTable);
-            return result;
-        }
-        public void SearchList(List<T> lt, Hashtable equalTable)
-        {
-            QueryList(lt, equalTable);
-        }
-        protected virtual void QueryList(List<T> lt, Hashtable equalTable)
-        {
-            string sql = GenderSql(equalTable);
-            DataTable dt = GetDataTable(sql);
-            if (dt.Rows.Count > 0)
-            {
-                T t;
+                ILisReportElement element;
                 foreach (DataRow dr in dt.Rows)
                 {
-                    t = new T();
-                    FillData(t, dr);
-                    AfterFill(t);
-                    lt.Add(t);
+                    element = (ILisReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
+                    FillData(element, dr);
+                    AfterFill(element);
+                    elementList.Add(element);
                 }
             }
         }
-        protected virtual string GetSQLWhere(Hashtable equalTable)
+        protected static DataTable Query(ILisReportElement element,Hashtable equalTable)
+        {
+            string sql = GenderSql(element, equalTable);
+            DataTable dt = GetDataTable(sql);
+            if (dt.Rows.Count > 0)
+            {
+                return dt;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        protected static DataTable Query(Type elementType, Hashtable equalTable)
+        {
+            string sql = GenderSql(elementType, equalTable);
+            DataTable dt = GetDataTable(sql);
+            if (dt.Rows.Count > 0)
+            {
+                return dt;
+            }
+            else
+            {
+                return null;
+            }
+        }
+        protected static string GetSQLWhere(Hashtable equalTable)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(" where ");
@@ -100,10 +96,10 @@ namespace XYS.Lis.DAL
             sb.Remove(sb.Length - 5, 5);
             return sb.ToString();
         }
-        protected virtual void FillData(T t, DataRow dr)
+        protected static void FillData(ILisReportElement element, DataRow dr)
         {
-            PropertyInfo[] props = GetProperties(t);
-            if (props == null || props.Length==0)
+            PropertyInfo[] props = GetProperties(element);
+            if (props == null || props.Length == 0)
             {
                 //不存在属性 弹出异常
             }
@@ -116,27 +112,35 @@ namespace XYS.Lis.DAL
                     if (tca != null && tca.IsColumn)
                     {
                         //如果是数据库列属性
-                        FillProperty(t, p, dr);
+                        FillProperty(element, p, dr);
                     }
                 }
             }
         }
-        protected virtual void AfterFill(T t)
+        protected static void AfterFill(ILisReportElement element)
         {
-            t.AfterFill();
+            element.AfterFill();
         }
-        protected abstract string GenderSql(Hashtable equalTable);
+        protected static string GenderSql(ILisReportElement element, Hashtable equalTable)
+        {
+            return element.SearchSQL + GetSQLWhere(equalTable);
+        }
+        protected static string GenderSql(Type elementType, Hashtable equalTable)
+        {
+            ILisReportElement temp = (ILisReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
+            return temp.SearchSQL + GetSQLWhere(equalTable);
+        }
         protected static DataTable GetDataTable(string sql)
         {
             DataTable dt = DbHelperSQL.Query(sql).Tables["dt"];
             return dt;
         }
-        protected virtual PropertyInfo[] GetProperties(T t)
+        protected static PropertyInfo[] GetProperties(ILisReportElement element)
         {
             PropertyInfo[] props = null;
             try
             {
-                Type type = typeof(T);
+                Type type = element.GetType();
                 props = type.GetProperties();
             }
             catch (Exception ex)
@@ -144,18 +148,18 @@ namespace XYS.Lis.DAL
             }
             return props;
         }
-        protected virtual bool FillProperty(T t,PropertyInfo p, DataRow dr)
+        protected static bool FillProperty(ILisReportElement element, PropertyInfo p, DataRow dr)
         {
             try
             {
                 if (dr[p.Name.ToLower()] != DBNull.Value)
                 {
                     object value = Convert.ChangeType(dr[p.Name.ToLower()], p.PropertyType);
-                    p.SetValue(t, value, null);
+                    p.SetValue(element, value, null);
                 }
                 else
                 {
-                    p.SetValue(t, DefaultForType(p.PropertyType), null);
+                    p.SetValue(element, DefaultForType(p.PropertyType), null);
                 }
                 return true;
             }

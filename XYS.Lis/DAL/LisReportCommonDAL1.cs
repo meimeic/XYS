@@ -1,37 +1,30 @@
 ﻿using System;
-using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using XYS.Common;
-using XYS.Lis.Core;
-using XYS.Utility.DB;
+using System.Data;
 using System.Reflection;
+using XYS.Common;
+using XYS.Utility.DB;
+using XYS.Lis.Model;
+using XYS.Lis.Core;
+
 namespace XYS.Lis.DAL
 {
-    public abstract class BasicDAL<T>:ILisBasicDAL<T>
-        where T:ILisReportElement,new()
+    public class LisReportCommonDAL1<T>
+        where T : ILisReportElement, new()
     {
-        public T Search(Hashtable equalTable)
-        {
-            if (equalTable != null && equalTable.Count > 0)
-            {
-                T t = new T();
-                Query(t, equalTable);
-                return t;
-            }
-            else
-            {
-                return default(T);
-            }
-        }
-        public void Search(T t, Hashtable equalTable)
+        public static void Search(T t, Hashtable equalTable)
         {
             Query(t, equalTable);
         }
-        protected virtual void Query(T t, Hashtable equalTable)
+        public static void SearchList(List<T> lt, Hashtable equalTable)
         {
-            string sql = GenderSql(equalTable);
+            QueryList(lt, equalTable);
+        }
+        protected static void Query(T t, Hashtable equalTable)
+        {
+            string sql = GenderSql(t,equalTable);
             DataTable dt = GetDataTable(sql);
             if (dt.Rows.Count > 0)
             {
@@ -39,19 +32,11 @@ namespace XYS.Lis.DAL
                 AfterFill(t);
             }
         }
-        public List<T> SearchList(Hashtable equalTable)
+        protected static void QueryList(List<T> lt, Hashtable equalTable)
         {
-            List<T> result = new List<T>();
-            QueryList(result, equalTable);
-            return result;
-        }
-        public void SearchList(List<T> lt, Hashtable equalTable)
-        {
-            QueryList(lt, equalTable);
-        }
-        protected virtual void QueryList(List<T> lt, Hashtable equalTable)
-        {
-            string sql = GenderSql(equalTable);
+            T temp = new T();
+            string sql = GenderSql(temp,equalTable);
+            temp = default(T);
             DataTable dt = GetDataTable(sql);
             if (dt.Rows.Count > 0)
             {
@@ -65,7 +50,7 @@ namespace XYS.Lis.DAL
                 }
             }
         }
-        protected virtual string GetSQLWhere(Hashtable equalTable)
+        protected static string GetSQLWhere(Hashtable equalTable)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(" where ");
@@ -100,10 +85,10 @@ namespace XYS.Lis.DAL
             sb.Remove(sb.Length - 5, 5);
             return sb.ToString();
         }
-        protected virtual void FillData(T t, DataRow dr)
+        protected static void FillData(T t, DataRow dr)
         {
             PropertyInfo[] props = GetProperties(t);
-            if (props == null || props.Length==0)
+            if (props == null || props.Length == 0)
             {
                 //不存在属性 弹出异常
             }
@@ -121,17 +106,20 @@ namespace XYS.Lis.DAL
                 }
             }
         }
-        protected virtual void AfterFill(T t)
+        protected static void AfterFill(T t)
         {
             t.AfterFill();
         }
-        protected abstract string GenderSql(Hashtable equalTable);
+        protected static string GenderSql(T t,Hashtable equalTable)
+        {
+            return t.SearchSQL+GetSQLWhere(equalTable);
+        }
         protected static DataTable GetDataTable(string sql)
         {
             DataTable dt = DbHelperSQL.Query(sql).Tables["dt"];
             return dt;
         }
-        protected virtual PropertyInfo[] GetProperties(T t)
+        protected static PropertyInfo[] GetProperties(T t)
         {
             PropertyInfo[] props = null;
             try
@@ -144,7 +132,7 @@ namespace XYS.Lis.DAL
             }
             return props;
         }
-        protected virtual bool FillProperty(T t,PropertyInfo p, DataRow dr)
+        protected static bool FillProperty(T t, PropertyInfo p, DataRow dr)
         {
             try
             {
