@@ -4,8 +4,8 @@ namespace XYS.Lis.Model
     public class ReportPatientElement : AbstractPatientElement
     {
         #region 私有常量字段
-        private const ReportElementType m_defaultElementType = ReportElementType.PatientElement;
-        private const string m_defaultPatientSQL = @"select r.cname as patientname,patno as pid,id_number_patient as cid,genderno,age as agevalue,ageunitno,sicktypeno as clinictypeno,hospitalizedtimes as visittimes,d.cname as deptname,isnull(r.doctor,b.cname) as doctor,bed as bedno,zdy2 as clinicaldiagnosis,zdy5 as explanation
+        private const ReportElementTag m_defaultElementTag = ReportElementTag.PatientElement;
+        private static readonly string m_defaultPatientSQL = @"select r.cname as patientname,patno as pid,id_number_patient as cid,genderno,age as agevalue,ageunitno,sicktypeno as clinictypeno,hospitalizedtimes as visittimes,d.cname as deptname,isnull(r.doctor,b.cname) as doctor,bed as bedno,zdy2 as clinicaldiagnosis,zdy5 as explanation
                                                                     from reportform as r left outer join department as d on r.DeptNo=d.DeptNo
                                                                     left outer join doctor as b ON r.doctor = CONVERT(varchar(20), b.doctorno)";
         #endregion
@@ -18,12 +18,12 @@ namespace XYS.Lis.Model
        
         #region 构造函数
         public ReportPatientElement()
-            : base(m_defaultElementType, m_defaultPatientSQL)
+            : base(m_defaultElementTag, m_defaultPatientSQL)
         {
 
         }
-        public ReportPatientElement(ReportElementType elementType,string sql)
-            : base(elementType,sql)
+        public ReportPatientElement(ReportElementTag elementTag,string sql)
+            : base(elementTag,sql)
         {
         }
         #endregion

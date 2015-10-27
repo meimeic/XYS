@@ -9,7 +9,7 @@ using XYS.Utility.DB;
 using System.Reflection;
 namespace XYS.Lis.DAL
 {
-    public abstract class BasicDAL<T>:ILisBasicDAL<T>
+    public abstract class BasicDAL<T>
         where T:ILisReportElement,new()
     {
         public T Search(Hashtable equalTable)

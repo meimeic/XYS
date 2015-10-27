@@ -7,7 +7,7 @@ namespace XYS.Lis.Model
     {
 
         #region 私有字段
-        private readonly ReportElementType m_elementType;
+        private readonly ReportElementTag m_elementTag;
         private readonly string m_searchSQL;
         private string m_patientName;
         private string m_pid;
@@ -30,9 +30,9 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 受保护的构造方法
-        protected AbstractPatientElement(ReportElementType elementType, string sql)
+        protected AbstractPatientElement(ReportElementTag elementTag, string sql)
         {
-            this.m_elementType = elementType;
+            this.m_elementTag = elementTag;
             this.m_searchSQL = sql;
         }
         #endregion
@@ -79,9 +79,9 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实现IReportElement接口
-        public ReportElementType ElementType
+        public ReportElementTag ElementTag
         {
-            get { return m_elementType; }
+            get { return m_elementTag; }
         }
         //public ReportKey ReporterKey
         //{

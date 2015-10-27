@@ -9,9 +9,11 @@ using XYS.Utility.DB;
 using XYS.Lis.Core;
 namespace XYS.Lis.DAL
 {
-    public class LisReportCommonDAL
+    public class LisReportCommonDAL : ILisReportDAL
     {
-        public static void Fill(ILisReportElement element, Hashtable equalTable)
+        public LisReportCommonDAL()
+        { }
+        public void Fill(ILisReportElement element, Hashtable equalTable)
         {
             DataTable dt = Query(element, equalTable);
             if (dt != null)
@@ -20,9 +22,9 @@ namespace XYS.Lis.DAL
                 AfterFill(element);
             }
         }
-        public static void FillList(List<ILisReportElement> elementList, Type elementType, Hashtable equalTable)
+        public void FillList(List<ILisReportElement> elementList, Type elementType, Hashtable equalTable)
         {
-            DataTable dt=Query(elementType, equalTable);
+            DataTable dt = Query(elementType, equalTable);
             if (dt != null)
             {
                 ILisReportElement element;
@@ -35,7 +37,7 @@ namespace XYS.Lis.DAL
                 }
             }
         }
-        protected static DataTable Query(ILisReportElement element,Hashtable equalTable)
+        protected DataTable Query(ILisReportElement element, Hashtable equalTable)
         {
             string sql = GenderSql(element, equalTable);
             DataTable dt = GetDataTable(sql);
@@ -48,7 +50,7 @@ namespace XYS.Lis.DAL
                 return null;
             }
         }
-        protected static DataTable Query(Type elementType, Hashtable equalTable)
+        protected DataTable Query(Type elementType, Hashtable equalTable)
         {
             string sql = GenderSql(elementType, equalTable);
             DataTable dt = GetDataTable(sql);
@@ -61,7 +63,7 @@ namespace XYS.Lis.DAL
                 return null;
             }
         }
-        protected static string GetSQLWhere(Hashtable equalTable)
+        protected string GetSQLWhere(Hashtable equalTable)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(" where ");
@@ -96,7 +98,7 @@ namespace XYS.Lis.DAL
             sb.Remove(sb.Length - 5, 5);
             return sb.ToString();
         }
-        protected static void FillData(ILisReportElement element, DataRow dr)
+        protected void FillData(ILisReportElement element, DataRow dr)
         {
             PropertyInfo[] props = GetProperties(element);
             if (props == null || props.Length == 0)
@@ -117,25 +119,25 @@ namespace XYS.Lis.DAL
                 }
             }
         }
-        protected static void AfterFill(ILisReportElement element)
+        protected void AfterFill(ILisReportElement element)
         {
             element.AfterFill();
         }
-        protected static string GenderSql(ILisReportElement element, Hashtable equalTable)
+        protected string GenderSql(ILisReportElement element, Hashtable equalTable)
         {
             return element.SearchSQL + GetSQLWhere(equalTable);
         }
-        protected static string GenderSql(Type elementType, Hashtable equalTable)
+        protected string GenderSql(Type elementType, Hashtable equalTable)
         {
             ILisReportElement temp = (ILisReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
             return temp.SearchSQL + GetSQLWhere(equalTable);
         }
-        protected static DataTable GetDataTable(string sql)
+        protected DataTable GetDataTable(string sql)
         {
             DataTable dt = DbHelperSQL.Query(sql).Tables["dt"];
             return dt;
         }
-        protected static PropertyInfo[] GetProperties(ILisReportElement element)
+        protected PropertyInfo[] GetProperties(ILisReportElement element)
         {
             PropertyInfo[] props = null;
             try
@@ -148,7 +150,7 @@ namespace XYS.Lis.DAL
             }
             return props;
         }
-        protected static bool FillProperty(ILisReportElement element, PropertyInfo p, DataRow dr)
+        protected bool FillProperty(ILisReportElement element, PropertyInfo p, DataRow dr)
         {
             try
             {
@@ -168,7 +170,7 @@ namespace XYS.Lis.DAL
                 return false;
             }
         }
-        protected static object DefaultForType(Type targetType)
+        protected object DefaultForType(Type targetType)
         {
             return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
         }

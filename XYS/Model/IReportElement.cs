@@ -1,19 +1,19 @@
 ﻿using XYS.Common;
 namespace XYS.Model
 {
-    public enum ReportElementType
+    public enum ReportElementTag : int
     {
-        ExamElement = 1,
+        ReportElement = 1,
+        ExamElement,
         PatientElement,
         ItemElement,
         GraphElement,
-        GeneralElement,
-        ReportElement,
-        CustomElement
+        CustomElement,
+        NoneElement
     }
     public interface IReportElement
     {
-        ReportElementType ElementType { get; }
+        ReportElementTag ElementTag { get; }
        // ReportKey ReporterKey { get; set; }
     }
 }

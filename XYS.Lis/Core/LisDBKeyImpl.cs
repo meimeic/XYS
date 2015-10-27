@@ -2,7 +2,7 @@
 
 namespace XYS.Lis.Core
 {
-    public interface IReportOptionHandler:IOptionHandler
+    public class LisDBKeyImpl : ReportKey
     {
     }
 }

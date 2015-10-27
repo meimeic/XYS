@@ -72,7 +72,7 @@ namespace ZhTest
             equalTable.Add("testtypeno", 1);
             equalTable.Add("sampleno", "4057");
             ReportReportElement rre = new ReportReportElement();
-            LisReportCommonDAL.FillList(rre.CustomItemList,typeof(ReportCommonItemElement),equalTable);
+            LisReportCommonDAL.FillList(rre.CustomItemList,typeof(ReportItemElement),equalTable);
         }
     }
 }

@@ -4,8 +4,6 @@ namespace XYS.Common
 {
     public interface IReporter
     {
-        void InitReport();
-        void FillReportElement();
 
     }
 }

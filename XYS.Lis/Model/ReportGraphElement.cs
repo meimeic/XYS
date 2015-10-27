@@ -2,11 +2,11 @@
 using XYS.Common;
 namespace XYS.Lis.Model
 {
-    public class ReportGraphItemElement : AbstractReportElement
+    public class ReportGraphElement : AbstractReportElement
     {
         #region 私有静态字段
-        private const ReportElementType m_defaultElementType = ReportElementType.GraphElement;
-        private const string m_defaultGraphSQL = "select graphname,Graphjpg as graphimage from RFGraphData";
+        private const ReportElementTag m_defaultElementTag = ReportElementTag.GraphElement;
+        private static readonly string m_defaultGraphSQL = "select graphname,Graphjpg as graphimage from RFGraphData";
         #endregion
 
         #region 私有字段
@@ -15,11 +15,11 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 公共构造函数
-        public ReportGraphItemElement()
-            : base(m_defaultElementType,m_defaultGraphSQL)
+        public ReportGraphElement()
+            : base(m_defaultElementTag,m_defaultGraphSQL)
         { }
-        public ReportGraphItemElement(ReportElementType elementType,string sql)
-            : base(elementType,sql)
+        public ReportGraphElement(ReportElementTag elementTag,string sql)
+            : base(elementTag,sql)
         {
         }
         #endregion

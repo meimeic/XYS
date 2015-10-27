@@ -8,10 +8,10 @@ namespace XYS.Lis.Model
     public class ReportReportElement:AbstractReportElement
     {
         #region 私有常量字段
-        private static readonly ReportElementType m_defaultElementType = ReportElementType.ReportElement;
-        private static readonly Type m_defaultCommonItemType = typeof(ReportCommonItemElement);
-        private static readonly Type m_defaultGraphItemType = typeof(ReportGraphItemElement);
-        private static readonly Type m_defaultCustomItemType = typeof(ReportCustomItemElement);
+        private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.ReportElement;
+        private static readonly Type m_defaultCommonItemType = typeof(ReportItemElement);
+        private static readonly Type m_defaultGraphItemType = typeof(ReportGraphElement);
+        private static readonly Type m_defaultCustomItemType = typeof(ReportCustomElement);
         private static readonly Type m_defaultPatientType = typeof(ReportPatientElement);
         private static readonly Type m_defaultExamType = typeof(ReportExamElement);
         #endregion
@@ -20,16 +20,21 @@ namespace XYS.Lis.Model
         private int m_orderNo;
         private string m_reportTitle;
         private int m_printModelNo;
-        private ILisReportElement m_patient;
-        private ILisReportElement m_examInfo;
+        private string m_remark;
+        private List<int> m_parItemList;
         private Type m_declareCommonItemType;
         private Type m_declareGraphItemType;
         private Type m_declareCustomItemType;
         private Type m_declarePatientType;
         private Type m_declareExamType;
+        //private ILisReportElement m_patient;
+        //private ILisReportElement m_examInfo;
+        //private ReportFKImpl m_reportFK;
         #endregion
 
         #region 私有只读字段
+        private readonly List<ILisReportElement> m_patientList;
+        private readonly List<ILisReportElement> m_examList;
         private readonly List<ILisReportElement> m_commonItemList;
         private readonly List<ILisReportElement> m_graphItemList;
         private readonly List<ILisReportElement> m_customItemList;
@@ -37,31 +42,31 @@ namespace XYS.Lis.Model
 
         #region 公共构造函数
         public ReportReportElement()
-            : base(m_defaultElementType,"")
+            : base(m_defaultElementTag,"")
         {
-            this.m_patient = (ILisReportElement)m_defaultPatientType.Assembly.CreateInstance(m_defaultPatientType.FullName);
-            this.m_examInfo = (ILisReportElement)m_defaultExamType.Assembly.CreateInstance(m_defaultExamType.FullName);
+            //this.m_patient = (ILisReportElement)m_defaultPatientType.Assembly.CreateInstance(m_defaultPatientType.FullName);
+            //this.m_examInfo = (ILisReportElement)m_defaultExamType.Assembly.CreateInstance(m_defaultExamType.FullName);
+            this.m_examList = new List<ILisReportElement>();
+            this.m_patientList = new List<ILisReportElement>();
             this.m_commonItemList = new List<ILisReportElement>();
             this.m_graphItemList = new List<ILisReportElement>();
             this.m_customItemList = new List<ILisReportElement>();
+            this.m_parItemList = new List<int>();
         }
         #endregion
 
         #region 实例属性
-        public ILisReportElement Patient
+        public List<ILisReportElement> PatientList
         {
-            get { return this.m_patient; }
-            //set { this.m_patient = value; }
+            get { return this.m_patientList; }
         }
-        public ILisReportElement ExamInfo
+        public List<ILisReportElement> ExamList
         {
-            get { return this.m_examInfo; }
-            //set { this.m_examInfo = value; }
+            get { return this.m_examList; }
         }
         public List<ILisReportElement> CommonItemList
         {
             get { return this.m_commonItemList; }
-            //set { this.m_commonItemList = value; }
         }
         public List<ILisReportElement> GraphItemList
         {
@@ -73,7 +78,11 @@ namespace XYS.Lis.Model
             get { return this.m_customItemList; }
             //set { this.m_customItemList = value; }
         }
-
+        public List<int> ParItemList
+        {
+            get { return this.m_parItemList; }
+        }
+        //type属性
         public Type CommonItemType
         {
             get 
@@ -159,10 +168,15 @@ namespace XYS.Lis.Model
             get { return this.m_printModelNo; }
             set { this.m_printModelNo = value; }
         }
-        private string ReportTitle
+        public string ReportTitle
         {
             get { return this.m_reportTitle; }
             set { this.m_reportTitle = value; }
+        }
+        public string Remark
+        {
+            get { return this.m_remark; }
+            set { this.m_remark = value; }
         }
         #endregion
 

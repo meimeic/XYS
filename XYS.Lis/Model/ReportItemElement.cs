@@ -3,11 +3,11 @@ using System.Text;
 using XYS.Common;
 namespace XYS.Lis.Model
 {
-    public class ReportCommonItemElement : AbstractReportElement
+    public class ReportItemElement : AbstractReportElement
     {
         #region 私有常量字段
-        private const ReportElementType m_defaultElementType = ReportElementType.ItemElement;
-        private const string m_defaultItemSQL = @"select r.itemno as itemno,paritemno,t.cname as itemcname,t.ename as itemename, ISNULL(r.reportdesc, '') + ISNULL(CONVERT(VARCHAR(50), r.reportvalue), '') as itemresult,resultstatus,ISNULL(r.unit,t.unit) as itemunit,refrange,disporder,prec,secretgrade
+        private const ReportElementTag m_defaultElementTag = ReportElementTag.ItemElement;
+        private static readonly string m_defaultItemSQL = @"select r.itemno as itemno,paritemno,t.cname as itemcname,t.ename as itemename, ISNULL(r.reportdesc, '') + ISNULL(CONVERT(VARCHAR(50), r.reportvalue), '') as itemresult,resultstatus,ISNULL(r.unit,t.unit) as itemunit,refrange,disporder,prec,secretgrade
                                                                             from ReportItem as r left outer join TestItem as t on r.ItemNo=t.ItemNo";
         #endregion
 
@@ -27,11 +27,11 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 公共构造方法
-        public ReportCommonItemElement()
-            : base(m_defaultElementType,m_defaultItemSQL)
+        public ReportItemElement()
+            : base(m_defaultElementTag,m_defaultItemSQL)
         { }
-        public ReportCommonItemElement(ReportElementType elementType,string sql)
-            : base(elementType,sql)
+        public ReportItemElement(ReportElementTag elementTag,string sql)
+            : base(elementTag,sql)
         { }
         #endregion
 

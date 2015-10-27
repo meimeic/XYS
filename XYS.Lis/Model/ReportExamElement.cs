@@ -7,8 +7,8 @@ namespace XYS.Lis.Model
     public class ReportExamElement : AbstractReportElement
     {
         #region 私有常量字段
-        private const ReportElementType m_defaultElementType = ReportElementType.ExamElement;
-        private const string m_defaultEaxmSQL = @"select serialno,sampleno,s.CName as sampletypename,CAST(CONVERT(varchar(10), collectdate, 121) + ' ' + CONVERT(varchar(8), collecttime, 114) AS datetime) as collectdatetime,CAST(CONVERT(varchar(10), inceptdate, 121) + ' ' + CONVERT(varchar(8), incepttime, 114) AS datetime) as inceptdatetime,
+        private const ReportElementTag m_defaultElementTag = ReportElementTag.ExamElement;
+        private static readonly string m_defaultEaxmSQL = @"select serialno,sampleno,s.CName as sampletypename,CAST(CONVERT(varchar(10), collectdate, 121) + ' ' + CONVERT(varchar(8), collecttime, 114) AS datetime) as collectdatetime,CAST(CONVERT(varchar(10), inceptdate, 121) + ' ' + CONVERT(varchar(8), incepttime, 114) AS datetime) as inceptdatetime,
                                                                              CAST(CONVERT(varchar(10), testdate, 121) + ' ' + CONVERT(varchar(8), testtime, 114) AS datetime) as testdatetime,CAST(CONVERT(varchar(10), checkdate, 121) + ' ' + CONVERT(varchar(8), checktime, 114) AS datetime) as checkdatetime,
                                                                              CAST(CONVERT(varchar(10), receivedate, 121) + ' ' + CONVERT(varchar(8), receivetime, 114) AS datetime) as receivedatetime,sendertime2 as secondcheckdatetime,paritemname,sectionno,r.sampletypeno,formmemo,formcomment,formcomment2,technician,checker
                                                                              from ReportForm as r left outer join SampleType as s on r.SampleTypeNo=s.SampleTypeNo";
@@ -40,7 +40,6 @@ namespace XYS.Lis.Model
         private DateTime m_testDateTime;
         private string m_parItemName;
         //备注、结论、解释等
-        private string m_remark;
         private string m_formMemo;
         private string m_formComment;
         private string m_formComment2;
@@ -53,11 +52,11 @@ namespace XYS.Lis.Model
 
         #region 构造函数
         public ReportExamElement()
-            : base(m_defaultElementType,m_defaultEaxmSQL)
+            : base(m_defaultElementTag,m_defaultEaxmSQL)
         {
         }
-        public ReportExamElement(ReportElementType elementType,string sql)
-            : base(elementType,sql)
+        public ReportExamElement(ReportElementTag elementTag,string sql)
+            : base(elementTag,sql)
         {
         }
         #endregion
@@ -168,11 +167,6 @@ namespace XYS.Lis.Model
         {
             get { return m_sampleTypeNo; }
             set { m_sampleTypeNo = value; }
-        }
-        public string Remark
-        {
-            get { return m_remark; }
-            set { m_remark = value; }
         }
         [TableColumn(true)]
         public string FormMemo

@@ -1,12 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+using XYS.Lis.Core;
+using XYS.Lis.Handler;
+using XYS.Lis.Export;
 namespace XYS.Lis.Appender
 {
-   public interface IAppender
+    public interface IAppender
     {
-       string AppenderName { get; set; }
+        string AppenderName { get; set; }
+       
+        void AddHandler(IReportHandler handler);
+        void ClearHandler();
+        void AddExport(IReportExport export);
+        void ClearExport();
+        void Close();
+        string DoAppend(ILisReportElement reportElement,ExportTag exportTag);
     }
 }

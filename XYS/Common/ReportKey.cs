@@ -9,17 +9,17 @@ namespace XYS.Common
         private readonly HashSet<KeyColumn> m_KeySet;
         #endregion
 
-        #region 私有实例字段
-        private IReportElement m_reportElement;
-        private string m_tableName;
-        #endregion
+        //#region 私有实例字段
+        //private IReportElement m_reportElement;
+        //private string m_tableName;
+        //#endregion
 
         #region 公共构造函数
-        public ReportKey()
+        protected ReportKey()
         {
             this.m_KeySet = new HashSet<KeyColumn>();
         }
-        public ReportKey(HashSet<KeyColumn> ketSet)
+        protected ReportKey(HashSet<KeyColumn> ketSet)
         {
             this.m_KeySet = ketSet;
         }
@@ -30,15 +30,23 @@ namespace XYS.Common
             return this;
         }
         #region 实例属性
-        public IReportElement ReportElement
+        //public IReportElement ReportElement
+        //{
+        //    get { return this.m_reportElement; }
+        //    set { this.m_reportElement = value; }
+        //}
+        //public string TableName
+        //{
+        //    get { return this.m_tableName; }
+        //    set { this.m_tableName = value; }
+        //}
+        public int Count
         {
-            get { return this.m_reportElement; }
-            set { this.m_reportElement = value; }
+            get { return this.m_KeySet.Count; }
         }
-        public string TableName
+        public HashSet<KeyColumn> KeySet
         {
-            get { return this.m_tableName; }
-            set { this.m_tableName = value; }
+            get { return this.m_KeySet; }
         }
         #endregion
     }

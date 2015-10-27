@@ -3,7 +3,7 @@ using XYS.Lis.Model;
 
 namespace XYS.Lis.DAL
 {
-    public class LisReportItemDAL:BasicDAL<ReportCommonItemElement>
+    public class LisReportItemDAL:BasicDAL<ReportItemElement>
     {
         protected override string GenderSql(Hashtable equalTable)
         {

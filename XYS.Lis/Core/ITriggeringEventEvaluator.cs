@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace XYS.Lis.Repository
+namespace XYS.Lis.Core
 {
-    public abstract class ReportRepositorySkeleton
+   public interface ITriggeringEventEvaluator
     {
+
     }
 }
