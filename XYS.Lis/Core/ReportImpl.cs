@@ -4,59 +4,64 @@ using System.Collections.Generic;
 
 using XYS.Common;
 using XYS.Lis;
+using XYS.Lis.Model;
 using XYS.Lis.DAL;
-using XYS.Lis.Export;
 
 namespace XYS.Lis.Core
 {
-    public class ReportImpl:ReporterWrapperImpl,IReport
+    public class ReportImpl : ReporterWrapperImpl, IReport
     {
         #region
-        private ExportTag m_export2PDF;
-        private ExportTag m_export2Json;
-        private ExportTag m_export2Html;
-        private ExportTag m_export2Xml;
         private LisReporterKeyDAL m_reportKeyDAL;
         #endregion
+
         #region
         public ReportImpl(ILisReporter reporter)
             : base(reporter)
         {
-            this.m_export2PDF = ExportTag.PDF;
-            this.m_export2Json = ExportTag.JSON;
-            this.m_export2Html = ExportTag.HTML;
-            this.m_export2Xml = ExportTag.XML;
             this.m_reportKeyDAL = new LisReporterKeyDAL();
         }
         #endregion
-        
+
+        #region 实现IReport接口
+        public string ReportExport(ReportKey key)
+        {
+            if (key != null)
+            {
+                ILisReportElement report = new ReportReportElement();
+                this.Reporter.FillReportElement(report, key);
+                this.Reporter.Option(report);
+                return this.Reporter.Export(report);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public virtual string ReportExport(LisSearchRequire require)
+        {
+            ReportKey key = GetReportKey(require);
+            return ReportExport(key);
+        }
+        public string ReportExport(ReportReportElement reportElement)
+        {
+            return this.Reporter.Export(reportElement);
+        }
+
+        public string ReportExport(List<ILisReportElement> reportElementList)
+        {
+            if (reportElementList.Count > 0)
+            {
+                return this.Reporter.Export(reportElementList);
+            }
+            else
+            {
+                return null;
+            }
+        }
+        #endregion
+       
         #region
-
-        public virtual string Report2PDF(LisSearchRequire require)
-        {
-            ReportKey key = GetReportKey(require);
-            if (key != null)
-            {
-                return Reporter.Export(key, this.m_export2PDF);
-            }
-            else
-            {
-                return null;
-            }
-        }
-
-        public virtual string Report2Json(LisSearchRequire require)
-        {
-            ReportKey key = GetReportKey(require);
-            if (key != null)
-            {
-                return Reporter.Export(key, this.m_export2Json);
-            }
-            else
-            {
-                return null;
-            }
-        }
         protected virtual List<ReportKey> GetReportKeyList(LisSearchRequire require)
         {
             return this.m_reportKeyDAL.GetReportKey(require);

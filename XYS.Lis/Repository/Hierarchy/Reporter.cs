@@ -36,8 +36,6 @@ namespace XYS.Lis.Repository.Hierarchy
         protected Reporter(string name)
         {
             this.m_reporterName = name;
-            //this.m_name2ReportFiller = new Hashtable(3);
-            //this.m_tag2ReportExport = new Hashtable(5);
         }
         protected Reporter(string name, string strategyName)
             : this(name)
@@ -158,6 +156,18 @@ namespace XYS.Lis.Repository.Hierarchy
             //IReportExport export = this.GetExport(exportTag);
             //return export.export(reportElement);
         }
+        public virtual string Export(List<ILisReportElement> reportElementList)
+        {
+            if (reportElementList.Count > 0)
+            {
+                ReportElementTag elementTag = reportElementList[0].ElementTag;
+                return this.Export(reportElementList, elementTag);
+            }
+            else
+            {
+                return null;
+            }
+        }
         public virtual string Export(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
         {
             return this.Exporter.export(reportElementList, elementTag);
@@ -276,6 +286,22 @@ namespace XYS.Lis.Repository.Hierarchy
                 this.m_tailHandler = handler;
             }
         }
+        protected virtual void SetFiller(Hashtable fillerTable,string fillerName)
+        {
+            IReportFiller filler = fillerTable[fillerName] as IReportFiller;
+            if (filler != null)
+            {
+                this.Filler = filler;
+            }
+        }
+        protected virtual void SetExporter(Hashtable exportTable, string exportName)
+        {
+            IReportExport export = exportTable[exportName] as IReportExport;
+            if (export != null)
+            {
+                this.Exporter = export;
+            }
+        }
         //protected virtual void AddExport(Hashtable exportTable, List<string> exportNameList)
         //{
         //    IReportExport export;
@@ -323,22 +349,6 @@ namespace XYS.Lis.Repository.Hierarchy
         //{
         //    this.m_tag2ReportExport.Clear();
         //}
-        protected virtual void SetFiller(Hashtable fillerTable,string fillerName)
-        {
-            IReportFiller filler = fillerTable[fillerName] as IReportFiller;
-            if (filler != null)
-            {
-                this.Filler = filler;
-            }
-        }
-        protected virtual void SetExporter(Hashtable exportTable, string exportName)
-        {
-            IReportExport export = exportTable[exportName] as IReportExport;
-            if (export != null)
-            {
-                this.Exporter = export;
-            }
-        }
         #endregion
 
         #region

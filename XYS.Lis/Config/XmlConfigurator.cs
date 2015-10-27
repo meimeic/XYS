@@ -21,6 +21,7 @@ namespace XYS.Lis.Config
         private static readonly Type declaringType = typeof(XmlConfigurator);
         private static readonly Hashtable m_repositoryName2ConfigAndWatchHandler = new Hashtable();
         #endregion
+        
         #region 私有构造函数
         private XmlConfigurator()
         {
@@ -32,9 +33,6 @@ namespace XYS.Lis.Config
         {
             return Configure(ReportManager.GetRepository(Assembly.GetCallingAssembly()));
         }
-        #endregion
-
-        #region
         public static ICollection Configure(IReporterRepository repository)
         {
             ArrayList configurationMessages = new ArrayList();
@@ -180,12 +178,12 @@ namespace XYS.Lis.Config
 				configElement = System.Configuration.ConfigurationManager.GetSection("log4net") as XmlElement;
 #else
                 //configElement = System.Configuration.ConfigurationSettings.GetConfig("log4net") as XmlElement;
-                configElement = System.Configuration.ConfigurationManager.GetSection("lis") as XmlElement;
+                configElement = System.Configuration.ConfigurationManager.GetSection("lis-report") as XmlElement;
 #endif
                 if (configElement == null)
                 {
                     // Failed to load the xml config using configuration settings handler
-                    ReportReport.Error(declaringType, "Failed to find configuration section 'log4net' in the application's .config file. Check your .config file for the <log4net> and <configSections> elements. The configuration section should look like: <section name=\"log4net\" type=\"log4net.Config.Log4NetConfigurationSectionHandler,log4net\" />");
+                    ReportReport.Error(declaringType, "Failed to find configuration section 'lis-report' in the application's .config file. Check your .config file for the <log4net> and <configSections> elements. The configuration section should look like: <section name=\"log4net\" type=\"log4net.Config.Log4NetConfigurationSectionHandler,log4net\" />");
                 }
                 else
                 {

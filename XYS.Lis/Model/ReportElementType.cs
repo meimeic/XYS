@@ -50,6 +50,7 @@ namespace XYS.Lis.Model
                     return this.m_elementType.FullName;
                 }
             }
+            set { this.m_elementName = value; }
         }
         public Type ElementType
         {

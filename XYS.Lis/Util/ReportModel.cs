@@ -34,6 +34,7 @@ namespace XYS.Lis.Util
         public string ModelName
         {
             get { return this.m_modelName; }
+            set { this.m_modelName = value; }
         }
         public string ModelPath
         {

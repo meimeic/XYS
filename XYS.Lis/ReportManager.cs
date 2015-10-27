@@ -6,30 +6,63 @@ namespace XYS.Lis
 {
     public class ReportManager
     {
-        public static IReport GetLogger(Type type)
+
+        private static readonly WrapperMap s_wrapperMap = new WrapperMap(new WrapperCreationHandler(WrapperCreationHandler));
+        public static IReport Exists(ReporterKey key)
         {
-            return GetLogger(Assembly.GetCallingAssembly(), type.FullName);
+            return Exists(Assembly.GetCallingAssembly(), key);
         }
-        public static IReport GetLogger(Assembly repositoryAssembly, string name)
+        public static IReport Exists(Assembly repositoryAssembly, ReporterKey key)
         {
-            return WrapReporter(LoggerManager.GetLogger(repositoryAssembly, name));
+            return WrapReporter(ReporterManager.Exists(repositoryAssembly, key));
         }
-        public static IReport GetReporter(Assembly repositoryAssembly, string name)
+
+        public static IReport GetReporter(ReporterKey key)
         {
-            if (repositoryAssembly == null)
-            {
-                throw new ArgumentNullException("repositoryAssembly");
-            }
-            if (name == null)
-            {
-                throw new ArgumentNullException("name");
-            }
-            return RepositorySelector.GetRepository(repositoryAssembly).GetReporter(name);
+            return GetReporter(Assembly.GetCallingAssembly(), key);
         }
-        public static IRepositorySelector RepositorySelector
+        public static IReport GetReporter(Type type)
         {
-            get { return s_repositorySelector; }
-            set { s_repositorySelector = value; }
+            return GetReporter(Assembly.GetCallingAssembly(), type);
+        }
+        public static IReport GetReporter(Type type, string strategyName)
+        {
+            return GetReporter(Assembly.GetCallingAssembly(), type, strategyName);
+        }
+        
+        public static IReport GetReporter(string repository, ReporterKey key)
+        {
+            return WrapReporter(ReporterManager.GetReporter(repository, key));
+        }
+        public static IReport GetReporter(string repository, Type type)
+        {
+            return WrapReporter(ReporterManager.GetReporter(repository, type));
+        }
+        public static IReport GetReporter(string repository, Type type, string strategyName)
+        {
+            return WrapReporter(ReporterManager.GetReporter(repository, type, strategyName));
+        }
+        
+        public static IReport GetReporter(Assembly repositoryAssembly, ReporterKey key)
+        {
+            return WrapReporter(ReporterManager.GetReporter(repositoryAssembly, key));
+        }
+        public static IReport GetReporter(Assembly repositoryAssembly, Type type)
+        {
+            return WrapReporter(ReporterManager.GetReporter(repositoryAssembly, type));
+        }
+        public static IReport GetReporter(Assembly repositoryAssembly, Type type, string strategyName)
+        {
+            return WrapReporter(ReporterManager.GetReporter(repositoryAssembly, type,strategyName));
+        }
+
+        private static IReport WrapReporter(ILisReporter reporter)
+        {
+            return (IReport)s_wrapperMap.GetWrapper(reporter);
+        }
+        private static IReporterWrapper WrapperCreationHandler(ILisReporter reporter)
+        {
+            return new ReportImpl(reporter);
         }
     }
 }

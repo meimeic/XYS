@@ -28,6 +28,7 @@ namespace XYS.Lis.Util
             if (SECTION_MAP.Count == 0)
             {
                 //
+                ConfigureSection();
             }
             return SECTION_MAP[sectionNo];
         }
@@ -36,6 +37,7 @@ namespace XYS.Lis.Util
             if (PARITEM_MAP.Count == 0)
             {
                 //
+                ConfigureParItem();
             }
             return PARITEM_MAP[parItemNo];
         }
@@ -53,7 +55,8 @@ namespace XYS.Lis.Util
         {
             if (ELEMENT_TYPE_MAP.Count == 0)
             {
-                //初始化化
+                //初始化
+                ConfigureReportElement();
             }
             return ELEMENT_TYPE_MAP[elementName];
         }
@@ -63,10 +66,11 @@ namespace XYS.Lis.Util
             if (PARITEM_MAP.Count == 0)
             {
                 //
+                ConfigureParItem();
             }
             foreach(ParItem item in PARITEM_MAP.AllParItem)
             {
-                table.Add(item.ParItemNo, item.PrintModelNo);
+                table.Add(item.ParItemNo, item.ModelNo);
             }
         }
         public static void InitParItem2OrderNoTable(Hashtable table)
@@ -75,6 +79,7 @@ namespace XYS.Lis.Util
             if (PARITEM_MAP.Count == 0)
             {
                 //
+                ConfigureParItem();
             }
             foreach (ParItem item in PARITEM_MAP.AllParItem)
             {
@@ -87,10 +92,11 @@ namespace XYS.Lis.Util
             if (SECTION_MAP.Count == 0)
             {
                 //
+                ConfigureSection();
             }
             foreach (ReporterSection section in SECTION_MAP.AllReporterSection)
             {
-                table.Add(section.SectionNo, section.PrintModelNo);
+                table.Add(section.SectionNo, section.ModelNo);
             }
         }
         public static void InitSection2OrderNoTable(Hashtable table)
@@ -99,6 +105,7 @@ namespace XYS.Lis.Util
             if (SECTION_MAP.Count == 0)
             {
                 //
+                ConfigureSection();
             }
             foreach (ReporterSection section in SECTION_MAP.AllReporterSection)
             {
@@ -162,20 +169,6 @@ namespace XYS.Lis.Util
             return retc;
         }
         #endregion
-
-        #region
-        private static ReportElementTag GetElementTag(int tag)
-        {
-            if (tag >= 1 && tag <= 7)
-            {
-                return (ReportElementTag)tag;
-            }
-            else
-            {
-                return ReportElementTag.NoneElement;
-            }
-        }
-        #endregion
         
         #region
         private static void ConfigureModel()
@@ -193,29 +186,105 @@ namespace XYS.Lis.Util
         }
         private static void ConfigureModel(ModelElement model)
         {
-            if (model.Value != null)
+            if (model.Value != null && model.ModelPath != null)
             {
                 string name = model.Name;
                 int modelNo = (int)model.Value;
                 string path = model.ModelPath;
                 ReportModel reportModel = new ReportModel(modelNo, path, name);
-                lock (MODEL_MAP)
-                {
-                    MODEL_MAP.Add(reportModel);
-                }
+                MODEL_MAP.Add(reportModel);
             }
         }
         private static void ConfigureSection()
         {
-
+            SectionElement sectionElement;
+            SectionElementCollection sectionElementCollection = paramSection.SectionCollection;
+            foreach (ConfigurationElement element in sectionElementCollection)
+            {
+                sectionElement = element as SectionElement;
+                if (sectionElement != null)
+                {
+                    ConfigureSection(sectionElement);
+                }
+            }
+        }
+        private static void ConfigureSection(SectionElement sectionElement)
+        {
+            if (sectionElement.Value != null)
+            {
+                ReporterSection section = new ReporterSection((int)sectionElement.Value, sectionElement.Name);
+                if (sectionElement.ModelNo != null)
+                {
+                    section.ModelNo = (int)sectionElement.ModelNo;
+                }
+                if (sectionElement.OrderNo != null)
+                {
+                    section.OrderNo = (int)sectionElement.OrderNo;
+                }
+                if (sectionElement.ReportElementFlags != null && !sectionElement.ReportElementFlags.Equals(""))
+                {
+                    string[] reportElements = sectionElement.ReportElementFlags.Split(new char[] { ',' });
+                    section.ClearElementNameList();
+                    foreach (string element in reportElements)
+                    {
+                        section.AddElementName(element);
+                    }
+                }
+                SECTION_MAP.Add(section);
+            }
         }
         private static void ConfigureParItem()
         {
-
+            ParItemElement parItemElement;
+            ParItemElementCollection parItemCollection = paramSection.ParItemCollection;
+            foreach (ConfigurationElement element in parItemCollection)
+            {
+                parItemElement = element as ParItemElement;
+                if (parItemElement != null)
+                {
+                    ConfigureParItem(parItemElement);
+                }
+            }
+        }
+        private static void ConfigureParItem(ParItemElement parItemElement)
+        {
+            if (parItemElement.Value != null)
+            {
+                ParItem parItem = new ParItem((int)parItemElement.Value, parItemElement.Name);
+                if (parItemElement.ModelNo != null)
+                {
+                    parItem.ModelNo = (int)parItemElement.ModelNo;
+                }
+                if (parItemElement.OrderNo != null)
+                {
+                    parItem.OrderNo = (int)parItemElement.OrderNo;
+                }
+                parItem.ImageFlag = parItemElement.CommonImageFlag;
+                parItem.ImagePath = parItemElement.CommonImagePath;
+                PARITEM_MAP.Add(parItem);
+            }
         }
         private static void ConfigureReportElement()
         {
-
+            ReportElementElement reportElement;
+            ReportElementElementCollection reportElementCollection = paramSection.ReportElementCollection;
+            foreach (ConfigurationElement element in reportElementCollection)
+            {
+                reportElement = element as ReportElementElement;
+                if (reportElement != null)
+                {
+                    ConfigureReportElement(reportElement);
+                }
+            }
+        }
+        private static void ConfigureReportElement(ReportElementElement reportElement)
+        {
+            if (reportElement.Type != null && !reportElement.Type.Equals(""))
+            {
+                ReportElementType elementType = new ReportElementType(reportElement.Type);
+                elementType.ElementName = reportElement.Name;
+                ELEMENT_TYPE_MAP.Add(elementType);
+            }
         }
         #endregion
     }

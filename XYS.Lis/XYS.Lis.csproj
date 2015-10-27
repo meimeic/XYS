@@ -65,6 +65,7 @@
     <Compile Include="Core\IReporterWrapper.cs" />
     <Compile Include="Core\IRepositorySelector.cs" />
     <Compile Include="Core\ITriggeringEventEvaluator.cs" />
+    <Compile Include="Core\ReporterManager.cs" />
     <Compile Include="Core\WrapperMap.cs" />
     <Compile Include="Fill\IReportFiller.cs" />
     <Compile Include="Fill\ReportFillByDB.cs" />

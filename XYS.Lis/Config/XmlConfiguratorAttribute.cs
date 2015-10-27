@@ -16,14 +16,13 @@ namespace XYS.Lis.Config
         private string m_configFile = null;
         private string m_configFileExtension = null;
         private bool m_configureAndWatch = false;
-
         private readonly static Type declaringType = typeof(XmlConfiguratorAttribute);
 
         public XmlConfiguratorAttribute()
             : base(0) /* configurator priority 0 */
         {
         }
-
+        #region 属性
         public string ConfigFile
         {
             get { return m_configFile; }
@@ -39,7 +38,9 @@ namespace XYS.Lis.Config
             get { return m_configureAndWatch; }
             set { m_configureAndWatch = value; }
         }
+        #endregion
 
+        #region
         public override void Configure(Assembly sourceAssembly, IReporterRepository targetRepository)
         {
             IList configurationMessages = new ArrayList();
@@ -67,7 +68,9 @@ namespace XYS.Lis.Config
             }
             targetRepository.ConfigurationMessages = configurationMessages;
         }
+        #endregion
 
+        #region
         private void ConfigureFromFile(Assembly sourceAssembly, IReporterRepository targetRepository)
         {
             // Work out the full path to the config file
@@ -262,5 +265,6 @@ namespace XYS.Lis.Config
                 }
             }
         }
+        #endregion
     }
 }

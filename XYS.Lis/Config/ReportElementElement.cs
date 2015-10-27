@@ -24,7 +24,7 @@ namespace XYS.Lis.Config
             private set { }
         }
         [ConfigurationProperty("explain", IsRequired = false)]
-        public string Value
+        public string Explain
         {
             get
             {

@@ -26,7 +26,7 @@ namespace XYS.Lis.Core
         private event ReporterRepositoryCreationEventHandler m_reporterRepositoryCreatedEvent;
         #endregion
 
-        #region
+        #region 构造函数
         public DefaultRepositorySelector(Type defaultRepositoryType)
         {
             if (defaultRepositoryType == null)
@@ -129,16 +129,12 @@ namespace XYS.Lis.Core
                 //    if (rep == null)
                 //    {
                 ReportReport.Debug(declaringType, "Creating repository [" + repositoryName + "] using type [" + repositoryType + "]");
-
                 // Call the no arg constructor for the repositoryType
                 rep = (IReporterRepository)Activator.CreateInstance(repositoryType);
-
                 // Set the name of the repository
                 rep.RepositoryName = repositoryName;
-
                 // Store in map
                 m_name2repositoryMap[repositoryName] = rep;
-
                 // Notify listeners that the repository has been created
                 OnReporterRepositoryCreatedEvent(rep);
                 return rep;
@@ -178,7 +174,6 @@ namespace XYS.Lis.Core
             {
                 throw new ArgumentNullException("repositoryAssembly");
             }
-
             // If the type is not set then use the default type
             if (repositoryType == null)
             {
@@ -233,7 +228,6 @@ namespace XYS.Lis.Core
                     else
                     {
                         ReportReport.Debug(declaringType, "repository [" + actualRepositoryName + "] already exists, using repository type [" + rep.GetType().FullName + "]");
-
                         if (readAssemblyAttributes)
                         {
                             try
@@ -262,7 +256,6 @@ namespace XYS.Lis.Core
             {
                 throw new ArgumentNullException("assembly");
             }
-
             try
             {
                 ReportReport.Debug(declaringType, "Assembly [" + assembly.FullName + "] Loaded From [" + SystemInfo.AssemblyLocationInfo(assembly) + "]");
@@ -321,7 +314,6 @@ namespace XYS.Lis.Core
                 ReportReport.Error(declaringType, "Unhandled exception in GetInfoForAssembly", ex);
             }
         }
-        
         private void ConfigureRepository(Assembly assembly, IReporterRepository repository)
         {
             if (assembly == null)
@@ -332,6 +324,7 @@ namespace XYS.Lis.Core
             {
                 throw new ArgumentNullException("repository");
             }
+            //通过特性配置
             // Look for the Configurator attributes (e.g. XmlConfiguratorAttribute) on the assembly
             object[] configAttributes = Attribute.GetCustomAttributes(assembly, typeof(ConfiguratorAttribute), false);
             if (configAttributes != null && configAttributes.Length > 0)
@@ -355,14 +348,14 @@ namespace XYS.Lis.Core
                     }
                 }
             }
-
+            //通过.config 配置文件进行配置
             if (repository.RepositoryName == DefaultRepositoryName)
             {
                 // Try to configure the default repository using an AppSettings specified config file
                 // Do this even if the repository has been configured (or claims to be), this allows overriding
                 // of the default config files etc, if that is required.
 
-                string repositoryConfigFile = SystemInfo.GetAppSetting("lis.Config");
+                string repositoryConfigFile = SystemInfo.GetAppSetting("lis-report.Config");
                 if (repositoryConfigFile != null && repositoryConfigFile.Length > 0)
                 {
                     string applicationBaseDirectory = null;
@@ -374,32 +367,28 @@ namespace XYS.Lis.Core
                     {
                         ReportReport.Warn(declaringType, "Exception getting ApplicationBaseDirectory. appSettings log4net.Config path [" + repositoryConfigFile + "] will be treated as an absolute URI", ex);
                     }
-
                     string repositoryConfigFilePath = repositoryConfigFile;
                     if (applicationBaseDirectory != null)
                     {
                         repositoryConfigFilePath = Path.Combine(applicationBaseDirectory, repositoryConfigFile);
                     }
                     // Determine whether to watch the file or not based on an app setting value:
+                    //是否观测文件变化
                     bool watchRepositoryConfigFile = false;
-#if NET_2_0 || MONO_2_0
-				    Boolean.TryParse(SystemInfo.GetAppSetting("log4net.Config.Watch"), out watchRepositoryConfigFile);
-#else
                     {
-                        string watch = SystemInfo.GetAppSetting("lis.Config.Watch");
+                        string watch = SystemInfo.GetAppSetting("lis-report.Config.Watch");
                         if (watch != null && watch.Length > 0)
                         {
                             try
                             {
                                 watchRepositoryConfigFile = Boolean.Parse(watch);
                             }
-                            catch (FormatException)
+                            catch (FormatException ex)
                             {
                                 // simply not a Boolean
                             }
                         }
                     }
-#endif
                     if (watchRepositoryConfigFile)
                     {
                         // As we are going to watch the config file it is required to resolve it as a 
@@ -411,7 +400,7 @@ namespace XYS.Lis.Core
                         }
                         catch (Exception ex)
                         {
-                            ReportReport.Error(declaringType, "DefaultRepositorySelector: Exception while parsing lis.Config file physical path [" + repositoryConfigFilePath + "]", ex);
+                            ReportReport.Error(declaringType, "DefaultRepositorySelector: Exception while parsing lis-report.Config file physical path [" + repositoryConfigFilePath + "]", ex);
                         }
                         try
                         {
@@ -435,7 +424,7 @@ namespace XYS.Lis.Core
                         }
                         catch (Exception ex)
                         {
-                            ReportReport.Error(declaringType, "Exception while parsing log4net.Config file path [" + repositoryConfigFile + "]", ex);
+                            ReportReport.Error(declaringType, "Exception while parsing lis-report.Config file path [" + repositoryConfigFile + "]", ex);
                         }
 
                         if (repositoryConfigUri != null)

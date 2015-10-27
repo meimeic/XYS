@@ -12,10 +12,11 @@ using XYS.Lis.Util;
 using XYS.Lis.Fill;
 using XYS.Lis.Handler;
 using XYS.Lis.Export;
+using XYS.Lis.Export.PDF;
 namespace XYS.Lis.Repository.Hierarchy
 {
-    public delegate void ReporterCreationEventHandler(object sender,ReporterCreationEventArgs e);
-    
+    public delegate void ReporterCreationEventHandler(object sender, ReporterCreationEventArgs e);
+
     public class ReporterCreationEventArgs : EventArgs
     {
         private Reporter m_reporter;
@@ -30,7 +31,7 @@ namespace XYS.Lis.Repository.Hierarchy
         }
     }
 
-    public class Hierarchy : ReporterRepositorySkeleton, IXmlRepositoryConfigurator, IBasicRepositoryConfigurator
+    public class Hierarchy : ReporterRepositorySkeleton, IXmlRepositoryConfigurator//, IBasicRepositoryConfigurator
     {
 
         #region
@@ -38,7 +39,7 @@ namespace XYS.Lis.Repository.Hierarchy
         private IReportExport m_defaultExport;
         private IReporterFactory m_defaultFactory;
         private Reporter m_defaultReporter;
-        private Dictionary<ReporterKey,Reporter>  m_key2ReporterMap;
+        private Dictionary<ReporterKey, Reporter> m_key2ReporterMap;
         private event ReporterCreationEventHandler m_reporterCreatedEvent;
         #endregion
 
@@ -68,12 +69,26 @@ namespace XYS.Lis.Repository.Hierarchy
         #region 实例属性
         public virtual IReportFiller DefaultFiller
         {
-            get { return this.m_defaultFiller; }
+            get
+            {
+                if (this.m_defaultFiller == null)
+                {
+                    this.m_defaultFiller = new ReportFillByDB();
+                }
+                return this.m_defaultFiller;
+            }
             set { this.m_defaultFiller = value; }
         }
         public virtual IReportExport DefaultExport
         {
-            get { return this.m_defaultExport; }
+            get
+            {
+                if (this.m_defaultExport == null)
+                {
+                    this.m_defaultExport = new Export2PDF();
+                }
+                return this.m_defaultExport;
+            }
             set { this.m_defaultExport = value; }
         }
         //获取默认reporter
@@ -99,17 +114,10 @@ namespace XYS.Lis.Repository.Hierarchy
         }
         #endregion
 
-        #region 实现IBasicRepositoryConfigurator接口
-        public void Configure(IAppender appender)
-        {
-            throw new System.NotImplementedException();
-        }
-        #endregion
-
         #region 实现IXmlRepositoryConfigurator接口
         public void Configure(XmlElement element)
         {
-            throw new System.NotImplementedException();
+            XmlRepositoryConfigure(element);
         }
         #endregion
 
@@ -162,17 +170,23 @@ namespace XYS.Lis.Repository.Hierarchy
                 handler(this, new ReporterCreationEventArgs(reporter));
             }
         }
-        protected virtual void AddFiller(Reporter reporter,List<string> fillerNameList)
-        {
+        #endregion
 
-        }
-        protected virtual void AddHandler(Reporter reporter, List<string> handlerNameList)
+        #region
+        protected void XmlRepositoryConfigure(XmlElement element)
         {
- 
-        }
-        protected virtual void AddExport(Reporter reporter, List<string> exportNameList)
-        {
+            ArrayList configurationMessages = new ArrayList();
 
+            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            {
+                XmlHierarchyConfigurator config = new XmlHierarchyConfigurator(this);
+                config.Configure(element);
+            }
+            Configured = true;
+            ConfigurationMessages = configurationMessages;
+
+            // Notify listeners
+            OnConfigurationChanged(new ConfigurationChangedEventArgs(configurationMessages));
         }
         #endregion
 
@@ -211,51 +225,51 @@ namespace XYS.Lis.Repository.Hierarchy
         #endregion
 
         #region  没有调用方法
-        //根据传入键值获取报告名称
-        protected virtual string GetReporterName(ReportKey key)
-        {
-            int sectionNo = this.GetSectionNo(key);
-            if (sectionNo <= 0)
-            {
-                return null;
-            }
-            else
-            {
-                return this.GetReporterName(sectionNo);
-            }
-        }
-        //根据小组号获取相应的reporter名称
-        protected virtual string GetReporterName(int sectionNo)
-        {
-            string result = "default";
-            ReporterSection rs = LisMap.GetSection(sectionNo);
-            if (rs != null)
-            {
-                result = rs.ReporterName;
-            }
-            return result;
-        }
-       //根据键 获得小组号
-        protected virtual int GetSectionNo(ReportKey key)
-        {
-            int sectionNo = 0;
-            foreach (KeyColumn c in key.KeySet)
-            {
-                if (c.Name.ToLower() == "sectionno")
-                {
-                    try
-                    {
-                        sectionNo = Convert.ToInt32(c.PK);
-                    }
-                    catch (Exception ex)
-                    {
-                        sectionNo = -1;
-                    }
-                    break;
-                }
-            }
-            return sectionNo;
-        }
+        // //根据传入键值获取报告名称
+        // protected virtual string GetReporterName(ReportKey key)
+        // {
+        //     int sectionNo = this.GetSectionNo(key);
+        //     if (sectionNo <= 0)
+        //     {
+        //         return null;
+        //     }
+        //     else
+        //     {
+        //         return this.GetReporterName(sectionNo);
+        //     }
+        // }
+        // //根据小组号获取相应的reporter名称
+        // protected virtual string GetReporterName(int sectionNo)
+        // {
+        //     string result = "default";
+        //     ReporterSection rs = LisMap.GetSection(sectionNo);
+        //     if (rs != null)
+        //     {
+        //         result = rs.ReporterName;
+        //     }
+        //     return result;
+        // }
+        ////根据键 获得小组号
+        // protected virtual int GetSectionNo(ReportKey key)
+        // {
+        //     int sectionNo = 0;
+        //     foreach (KeyColumn c in key.KeySet)
+        //     {
+        //         if (c.Name.ToLower() == "sectionno")
+        //         {
+        //             try
+        //             {
+        //                 sectionNo = Convert.ToInt32(c.PK);
+        //             }
+        //             catch (Exception ex)
+        //             {
+        //                 sectionNo = -1;
+        //             }
+        //             break;
+        //         }
+        //     }
+        //     return sectionNo;
+        // }
         #endregion
     }
 }

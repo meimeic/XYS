@@ -3,6 +3,6 @@ namespace XYS.Lis.Repository
 {
    public interface IBasicRepositoryConfigurator
     {
-       void Configure(IAppender appender);
+       void Configure();
     }
 }

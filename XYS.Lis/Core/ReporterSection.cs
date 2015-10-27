@@ -7,7 +7,7 @@ namespace XYS.Lis.Core
         #region
         private readonly int m_sectionNo;
         private string m_sectionName;
-        private int m_printModelNo;
+        private int m_ModelNo;
         private int m_orderNo;
         private List<string> m_elementNameList;
         #endregion
@@ -17,22 +17,11 @@ namespace XYS.Lis.Core
         {
             this.m_sectionNo = sectionNo;
             this.m_elementNameList = new List<string>(5);
-            this.m_printModelNo = -1;
+            this.m_ModelNo = -1;
             this.m_orderNo = 0;
         }
         public ReporterSection(int sectionNo, string sectionName)
             : this(sectionNo)
-        {
-            this.m_sectionName = sectionName;
-        }
-        public ReporterSection(int sectionNo, int printModelNo, int orderNo)
-            : this(sectionNo)
-        {
-            this.m_printModelNo = printModelNo;
-            this.m_orderNo = orderNo;
-        }
-        public ReporterSection(int sectionNo, int printModelNo, int orderNo, string sectionName)
-            : this(sectionNo,printModelNo,orderNo)
         {
             this.m_sectionName = sectionName;
         }
@@ -46,14 +35,17 @@ namespace XYS.Lis.Core
         public string SectionName
         {
             get { return this.m_sectionName; }
+            set { this.m_sectionName = value; }
         }
-        public int PrintModelNo
+        public int ModelNo
         {
-            get { return this.m_printModelNo; }
+            get { return this.m_ModelNo; }
+            set { this.m_ModelNo = value; }
         }
         public int OrderNo
         {
             get { return this.m_orderNo; }
+            set { this.m_orderNo = value; }
         }
         public List<string> ElementNameList
         {
@@ -62,14 +54,14 @@ namespace XYS.Lis.Core
         #endregion
 
         #region
-        public void AddElementTag(string elementName)
+        public void AddElementName(string elementName)
         {
             if (!this.m_elementNameList.Contains(elementName))
             {
                 this.m_elementNameList.Add(elementName);
             }
         }
-        public void ClearElementTagList()
+        public void ClearElementNameList()
         {
             this.m_elementNameList.Clear();
         }

@@ -107,7 +107,7 @@ namespace XYS.Lis.Repository.Hierarchy
                     else
                     {
                         // Read the param tags and set properties on the hierarchy
-                        SetParameter(currentElement, m_hierarchy);
+                       // SetParameter(currentElement, m_hierarchy);
                     }
                 }
             }
@@ -179,54 +179,7 @@ namespace XYS.Lis.Repository.Hierarchy
                 }
             }
         }
-        
-        
-        
-        protected IAppender ParseAppender(XmlElement appenderElement)
-        {
-            string appenderName = appenderElement.GetAttribute(NAME_ATTR);
-            string typeName = appenderElement.GetAttribute(TYPE_ATTR);
-            try
-            {
-                IAppender appender = (IAppender)Activator.CreateInstance(SystemInfo.GetTypeFromString(typeName, true, true));
-                appender.AppenderName = appenderName;
-                appender.ClearExport();
-                appender.ClearHandler();
-                foreach (XmlNode currentNode in appenderElement.ChildNodes)
-                {
-                    if (currentNode.NodeType == XmlNodeType.Element)
-                    {
-                        XmlElement currentElement = (XmlElement)currentNode;
-                        if (currentElement.LocalName == HANDLER_STACK_TAG)
-                        {
-                            ParseHandlerStack(appender, currentElement);
-                        }
-                        else if (currentElement.LocalName == HANDLER_TAG)
-                        {
-                            ParseHandler(appender, currentElement);
-                        }
-                        else if (currentElement.LocalName == EXPORTS_TAG)
-                        {
-                            ParseExportStack(appender, currentElement);
-                        }
-                        else if (currentElement.LocalName == EXPORT_TAG)
-                        {
-                            ParseExport(appender, currentElement);
-                        }
-                        else
-                        {
-                            //
-                        }
-                    }
-                }
-                return appender;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-        
+           
         protected void ParseFillStack(XmlElement fillStackHandler)
         {
             foreach (XmlNode currentNode in fillStackHandler)
@@ -324,54 +277,97 @@ namespace XYS.Lis.Repository.Hierarchy
             }
         }
         
-        protected void PraseReportElements(XmlElement reportsElement)
-        {
-            foreach (XmlNode currentNode in reportsElement.ChildNodes)
-            {
-                if (currentNode.NodeType == XmlNodeType.Element)
-                {
-                    XmlElement currentElement = (XmlElement)currentNode;
-                    if (currentElement.LocalName == REPORT_ELEMENT_TAG)
-                    {
-                        PraseReportElement(reporter,currentElement);
-                    }
-                }
-            }
-        }
-        protected void PraseReportElement(Reporter reporter,XmlElement reportElement)
-        {
-            string val = reportElement.GetAttribute(VALUE_ATTR);
-            string typeName = reportElement.GetAttribute(TYPE_ATTR);
-            int elementValue;
-            bool flag = SystemInfo.TryParse(val,out elementValue);
-            ReportElementTag elementTag = ReportElementTag.NoneElement;
-            if (flag)
-            {
-                elementTag = (ReportElementTag)elementValue;
-            }
-            Type elementType = SystemInfo.GetTypeFromString(typeName, true, true);
-            if (elementTag != ReportElementTag.NoneElement && elementType != null)
-            {
-                reporter.AddElementType(new ReportElementType(elementTag, elementType));
-            }
-        }
-        protected void ParseFill(Reporter reporter, XmlElement fillElement)
-        {
-            string typeName = fillElement.GetAttribute(TYPE_ATTR);
-            try
-            {
-                ILisReportDAL reportDAL = (ILisReportDAL)Activator.CreateInstance(SystemInfo.GetTypeFromString(typeName, true, true));
-                if (reportDAL != null)
-                {
-                    //设置参数
-                    reporter.ReporterDAL = reportDAL;
-                }
-            }
-            catch (Exception ex)
-            {
-                return;
-            }
-        }
-
+        //protected void PraseReportElements(XmlElement reportsElement)
+        //{
+        //    foreach (XmlNode currentNode in reportsElement.ChildNodes)
+        //    {
+        //        if (currentNode.NodeType == XmlNodeType.Element)
+        //        {
+        //            XmlElement currentElement = (XmlElement)currentNode;
+        //            if (currentElement.LocalName == REPORT_ELEMENT_TAG)
+        //            {
+        //                PraseReportElement(reporter,currentElement);
+        //            }
+        //        }
+        //    }
+        //}
+        //protected void PraseReportElement(Reporter reporter,XmlElement reportElement)
+        //{
+        //    string val = reportElement.GetAttribute(VALUE_ATTR);
+        //    string typeName = reportElement.GetAttribute(TYPE_ATTR);
+        //    int elementValue;
+        //    bool flag = SystemInfo.TryParse(val,out elementValue);
+        //    ReportElementTag elementTag = ReportElementTag.NoneElement;
+        //    if (flag)
+        //    {
+        //        elementTag = (ReportElementTag)elementValue;
+        //    }
+        //    Type elementType = SystemInfo.GetTypeFromString(typeName, true, true);
+        //    if (elementTag != ReportElementTag.NoneElement && elementType != null)
+        //    {
+        //        reporter.AddElementType(new ReportElementType(elementTag, elementType));
+        //    }
+        //}
+        //protected void ParseFill(Reporter reporter, XmlElement fillElement)
+        //{
+        //    string typeName = fillElement.GetAttribute(TYPE_ATTR);
+        //    try
+        //    {
+        //        ILisReportDAL reportDAL = (ILisReportDAL)Activator.CreateInstance(SystemInfo.GetTypeFromString(typeName, true, true));
+        //        if (reportDAL != null)
+        //        {
+        //            //设置参数
+        //            reporter.ReporterDAL = reportDAL;
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return;
+        //    }
+        //}
+        //protected IAppender ParseAppender(XmlElement appenderElement)
+        //{
+        //    string appenderName = appenderElement.GetAttribute(NAME_ATTR);
+        //    string typeName = appenderElement.GetAttribute(TYPE_ATTR);
+        //    try
+        //    {
+        //        IAppender appender = (IAppender)Activator.CreateInstance(SystemInfo.GetTypeFromString(typeName, true, true));
+        //        appender.AppenderName = appenderName;
+        //        appender.ClearExport();
+        //        appender.ClearHandler();
+        //        foreach (XmlNode currentNode in appenderElement.ChildNodes)
+        //        {
+        //            if (currentNode.NodeType == XmlNodeType.Element)
+        //            {
+        //                XmlElement currentElement = (XmlElement)currentNode;
+        //                if (currentElement.LocalName == HANDLER_STACK_TAG)
+        //                {
+        //                    ParseHandlerStack(appender, currentElement);
+        //                }
+        //                else if (currentElement.LocalName == HANDLER_TAG)
+        //                {
+        //                    ParseHandler(appender, currentElement);
+        //                }
+        //                else if (currentElement.LocalName == EXPORTS_TAG)
+        //                {
+        //                    ParseExportStack(appender, currentElement);
+        //                }
+        //                else if (currentElement.LocalName == EXPORT_TAG)
+        //                {
+        //                    ParseExport(appender, currentElement);
+        //                }
+        //                else
+        //                {
+        //                    //
+        //                }
+        //            }
+        //        }
+        //        return appender;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return null;
+        //    }
+        //}
     }
 }

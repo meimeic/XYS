@@ -19,12 +19,15 @@ namespace XYS.Lis.Core
         void FillReportElement(ILisReportElement reportElement, ReportKey key);
         void FillReportElement(List<ILisReportElement> reportElement, ReportKey key, ReportElementTag elementTag);
         #endregion
+       
         #region
         bool Option(ILisReportElement reportElement);
         bool Option(List<ILisReportElement> reportElementList,ReportElementTag elementTag);
         #endregion
+      
         #region
         string Export(ILisReportElement reportElement);
+        string Export(List<ILisReportElement> reportElementList);
         string Export(List<ILisReportElement> reportElementList,ReportElementTag elementTag);
         #endregion
 

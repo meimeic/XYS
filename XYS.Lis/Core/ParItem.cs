@@ -8,11 +8,11 @@ namespace XYS.Lis.Core
     public class ParItem
     {
         #region
+        private readonly int m_parItemNo;
         private string m_parItemName;
-        private int m_parItemNo;
-        private int m_printModelNo;
+        private int m_ModelNo;
         private int m_orderNo;
-        private int m_imageFlag;
+        private bool m_imageFlag;
         private string m_imagePath;
         #endregion
         
@@ -20,24 +20,12 @@ namespace XYS.Lis.Core
         public ParItem(int itemNo)
         {
             this.m_parItemNo = itemNo;
-            this.m_printModelNo = -1;
+            this.m_ModelNo = -1;
             this.m_orderNo = 0;
-            this.m_imageFlag = 0;
+            this.m_imageFlag = false ;
         }
-        public ParItem(int itemNo, int printModelNo, int orderNo)
+        public ParItem(int itemNo, string parItemName)
             : this(itemNo)
-        {
-            this.m_printModelNo = printModelNo;
-            this.m_orderNo = orderNo;
-        }
-        public ParItem(int itemNo, int printModelNo, int orderNo, int imageFlag, string imagePath)
-            : this(itemNo, printModelNo, orderNo)
-        {
-            this.m_imageFlag = imageFlag;
-            this.m_imagePath = imagePath;
-        }
-        public ParItem(int itemNo, int printModelNo, int orderNo, int imageFlag, string imagePath, string parItemName)
-            : this(itemNo, printModelNo, orderNo, imageFlag, imagePath)
         {
             this.m_parItemName = parItemName;
         }
@@ -47,26 +35,31 @@ namespace XYS.Lis.Core
         public string ParItemName
         {
             get { return this.m_parItemName; }
+            set { this.m_parItemName = value; }
         }
         public int ParItemNo
         {
             get { return this.m_parItemNo; }
         }
-        public int PrintModelNo
+        public int ModelNo
         {
-            get { return this.m_printModelNo; }
+            get { return this.m_ModelNo; }
+            set { this.m_ModelNo = value; }
         }
         public int OrderNo
         {
             get { return this.m_orderNo; }
+            set { this.m_orderNo = value; }
         }
-        public int ImageFlag
+        public bool ImageFlag
         {
             get { return this.m_imageFlag; }
+            set { this.m_imageFlag = value; }
         }
         public string ImagePath
         {
             get { return this.m_imagePath; }
+            set { this.m_imagePath = value; }
         }
         #endregion
     }
