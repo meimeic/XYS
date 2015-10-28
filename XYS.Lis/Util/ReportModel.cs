@@ -8,7 +8,7 @@ namespace XYS.Lis.Util
     public class ReportModel
     {
         #region
-        private int m_modelNo;
+        private readonly int m_modelNo;
         private string m_modelName;
         private string m_modelPath;
         #endregion
@@ -39,6 +39,7 @@ namespace XYS.Lis.Util
         public string ModelPath
         {
             get { return this.m_modelPath; }
+            set { this.m_modelPath = value; }
         }
         #endregion
     }

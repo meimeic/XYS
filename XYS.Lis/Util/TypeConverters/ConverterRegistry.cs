@@ -158,7 +158,6 @@ namespace XYS.Lis.Util.TypeConverters
 						s_type2converter[destinationType] = converter;
 					}
 				}
-
 				return converter;
 			}
 		}

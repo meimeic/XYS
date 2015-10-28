@@ -12,7 +12,7 @@ namespace XYS.Lis.Model
        #endregion
        public ReportElementTypeMap()
        {
-           this.m_mapName2ElementType = new Hashtable(8);
+           this.m_mapName2ElementType = new Hashtable(10);
        }
        public void Clear()
        {

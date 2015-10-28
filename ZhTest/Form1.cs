@@ -10,7 +10,6 @@ using System.Text;
 using System.Windows.Forms;
 
 using XYS.Lis.Util;
-using XYS.Lis.Config;
 namespace ZhTest
 {
     public partial class Form1 : Form
@@ -22,7 +21,7 @@ namespace ZhTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ConfigureModel();
+            ReportModel mode = LisMap.GetReportModel(100);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -43,32 +42,6 @@ namespace ZhTest
         private void button5_Click(object sender, EventArgs e)
         {
         
-        }
-        private void ConfigureModel()
-        {
-
-            ReportModelElement modelElement;
-            ParamSection paramSection = (ParamSection)ConfigurationManager.GetSection("lis-param");
-            ReportModelElementCollection modelCollection = paramSection.ModelCollection;
-            foreach (ConfigurationElement element in modelCollection)
-            {
-                modelElement = element as ReportModelElement;
-                if (modelElement != null)
-                {
-                    ConfigureModel(modelElement);
-                }
-            }
-        }
-        private void ConfigureModel(ReportModelElement model)
-        {
-            if (model.Value != null && model.ModelPath != null)
-            {
-                string name = model.Name;
-                int modelNo = (int)model.Value;
-                string path = model.ModelPath;
-                ReportModel reportModel = new ReportModel(modelNo, path, name);
-               // MODEL_MAP.Add(reportModel);
-            }
         }
     }
 }

@@ -76,7 +76,6 @@
     <Compile Include="Core\ParItem.cs" />
     <Compile Include="Core\ParItemCollection.cs" />
     <Compile Include="Core\ParItemMap.cs" />
-    <Compile Include="Core\ReportElementMap.cs" />
     <Compile Include="Core\ReporterSectionMap.cs" />
     <Compile Include="Core\ReportException.cs" />
     <Compile Include="Core\ReportFKImpl.cs" />

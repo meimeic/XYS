@@ -41,14 +41,14 @@ namespace XYS.Lis.Repository.Hierarchy
       
         private static readonly string NAME_ATTR = "name";
         private static readonly string TYPE_ATTR = "type";
-        private static readonly string VALUE_ATTR = "value";
         private static readonly string REF_ATTR = "ref";
-        private static readonly string PRINT_MODEL_NO_ATTR = "printModelNo";
-        private static readonly string ORDER_NO_ATTR = "orderNo";
-        private static readonly string REPORTER_NAME_ATTR = "reporterName";
-        private static readonly string IMAGE_FLAG_ATTR = "imageFlag";
-        private static readonly string IMAGE_PATH_ATTR = "imagePath";
-        private static readonly string MODEL_PATH_ATTR = "modelPath";
+        //private static readonly string PRINT_MODEL_NO_ATTR = "printModelNo";
+        //private static readonly string ORDER_NO_ATTR = "orderNo";
+        //private static readonly string REPORTER_NAME_ATTR = "reporterName";
+        //private static readonly string IMAGE_FLAG_ATTR = "imageFlag";
+        //private static readonly string IMAGE_PATH_ATTR = "imagePath";
+        //private static readonly string MODEL_PATH_ATTR = "modelPath";
+        //private static readonly string VALUE_ATTR = "value";
 
         #endregion
 
@@ -65,7 +65,6 @@ namespace XYS.Lis.Repository.Hierarchy
             {
                 return;
             }
-
             string rootElementName = element.LocalName;
             if (rootElementName != CONFIGURATION_TAG)
             {

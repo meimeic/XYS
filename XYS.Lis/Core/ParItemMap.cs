@@ -15,7 +15,7 @@ namespace XYS.Lis.Core
         #region
         public ParItemMap()
         {
-            this.m_mapNo2ParItem = new Hashtable();
+            this.m_mapNo2ParItem = new Hashtable(50);
         }
         #endregion
 

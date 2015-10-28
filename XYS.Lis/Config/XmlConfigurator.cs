@@ -7,11 +7,11 @@ using System.Reflection;
 using System.Net;
 using System.Threading;
 
-using XYS.Lis.Appender;
 using XYS.Lis.Repository;
 using XYS.Lis.Util;
 using XYS.Lis;
-
+using XYS.Lis.Core;
+using XYS.Lis.Model;
 namespace XYS.Lis.Config
 {
     public sealed class XmlConfigurator
@@ -153,6 +153,47 @@ namespace XYS.Lis.Config
         #endregion
 
         #region
+        public static XmlElement GetParamConfigurationElement()
+        {
+            ReportReport.Debug(declaringType, "get lis-param section");
+            try
+            {
+                ReportReport.Debug(declaringType, "Application config file is [" + SystemInfo.ConfigurationFileLocation + "]");
+            }
+            catch
+            {
+                // ignore error
+                ReportReport.Debug(declaringType, "Application config file location unknown");
+            }
+            try
+            {
+                XmlElement configElement = null;
+                configElement = System.Configuration.ConfigurationManager.GetSection("lis-param") as XmlElement;
+                if (configElement == null)
+                {
+                    ReportReport.Error(declaringType, "Failed to find configuration section 'lis-param' in the application's .config file. Check your .config file for the <lis-param> and <configSections> elements. The configuration section should look like: <section name=\"lis-param\" type=\"XYS.Lis.Config.ParamSectionHandler,XYS.Lis\" />");
+                }
+                return configElement;
+            }
+            catch (System.Configuration.ConfigurationException confEx)
+            {
+                if (confEx.BareMessage.IndexOf("Unrecognized element") >= 0)
+                {
+                    // Looks like the XML file is not valid
+                    ReportReport.Error(declaringType, "Failed to parse config file. Check your .config file is well formed XML.", confEx);
+                }
+                else
+                {
+                    // This exception is typically due to the assembly name not being correctly specified in the section type.
+                    string configSectionStr = "<section name=\"lis-param\" type=\"XYS.Lis.Config.ParamSectionHandler," + Assembly.GetExecutingAssembly().FullName + "\" />";
+                    ReportReport.Error(declaringType, "Failed to parse config file. Is the <configSections> specified as: " + configSectionStr, confEx);
+                }
+                return null;
+            }
+        }
+        #endregion
+
+        #region
         private static void InternalConfigure(IReporterRepository repository)
         {
             ReportReport.Debug(declaringType, "configuring repository [" + repository.RepositoryName + "] using .config file section");
@@ -181,7 +222,7 @@ namespace XYS.Lis.Config
                 if (configElement == null)
                 {
                     // Failed to load the xml config using configuration settings handler
-                    ReportReport.Error(declaringType, "Failed to find configuration section 'lis-report' in the application's .config file. Check your .config file for the <log4net> and <configSections> elements. The configuration section should look like: <section name=\"log4net\" type=\"log4net.Config.Log4NetConfigurationSectionHandler,log4net\" />");
+                    ReportReport.Error(declaringType, "Failed to find configuration section 'lis-report' in the application's .config file. Check your .config file for the <lis-report> and <configSections> elements. The configuration section should look like: <section name=\"lis-report\" type=\"XYS.Lis.Config.ReportSectionHandler,XYS.Lis\" />");
                 }
                 else
                 {

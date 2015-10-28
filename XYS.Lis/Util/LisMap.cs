@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml;
 using System.Configuration;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace XYS.Lis.Util
     public class LisMap
     {
         #region
+        private static readonly Type declaringType = typeof(LisMap);
         private static readonly ReporterSectionMap SECTION_MAP = new ReporterSectionMap();
         private static readonly ParItemMap PARITEM_MAP = new ParItemMap();
         private static readonly ReportModelMap MODEL_MAP = new ReportModelMap();
@@ -19,7 +21,19 @@ namespace XYS.Lis.Util
         #endregion
 
         #region
-        private static ParamSection paramSection = (ParamSection)ConfigurationManager.GetSection("lis-param");
+        //private static ParamSection paramSection = (ParamSection)ConfigurationManager.GetSection("lis-param");
+        #endregion
+
+        #region
+        private LisMap()
+        { }
+        static LisMap()
+        {
+            ConfigureReportSectionMap();
+            ConfigureParItemMap();
+            ConfigureReportElementMap();
+            ConfigureReportModelMap();
+        }
         #endregion
 
         #region
@@ -28,7 +42,7 @@ namespace XYS.Lis.Util
             if (SECTION_MAP.Count == 0)
             {
                 //
-                ConfigureSection();
+                ConfigureReportSectionMap();
             }
             return SECTION_MAP[sectionNo];
         }
@@ -37,17 +51,15 @@ namespace XYS.Lis.Util
             if (PARITEM_MAP.Count == 0)
             {
                 //
-                ConfigureParItem();
+                ConfigureParItemMap();
             }
             return PARITEM_MAP[parItemNo];
         }
-        
-      
-        public static ReportModel GetPrintModel(int modelNo)
+        public static ReportModel GetReportModel(int modelNo)
         {
             if (MODEL_MAP.Count == 0)
             {
- 
+                ConfigureReportModelMap();
             }
             return MODEL_MAP[modelNo];
         }
@@ -56,7 +68,7 @@ namespace XYS.Lis.Util
             if (ELEMENT_TYPE_MAP.Count == 0)
             {
                 //初始化
-                ConfigureReportElement();
+                ConfigureReportElementMap();
             }
             return ELEMENT_TYPE_MAP[elementName];
         }
@@ -66,7 +78,7 @@ namespace XYS.Lis.Util
             if (PARITEM_MAP.Count == 0)
             {
                 //
-                ConfigureParItem();
+                ConfigureParItemMap();
             }
             foreach(ParItem item in PARITEM_MAP.AllParItem)
             {
@@ -79,7 +91,7 @@ namespace XYS.Lis.Util
             if (PARITEM_MAP.Count == 0)
             {
                 //
-                ConfigureParItem();
+                ConfigureParItemMap();
             }
             foreach (ParItem item in PARITEM_MAP.AllParItem)
             {
@@ -92,7 +104,7 @@ namespace XYS.Lis.Util
             if (SECTION_MAP.Count == 0)
             {
                 //
-                ConfigureSection();
+                ConfigureReportSectionMap();
             }
             foreach (ReporterSection section in SECTION_MAP.AllReporterSection)
             {
@@ -105,7 +117,7 @@ namespace XYS.Lis.Util
             if (SECTION_MAP.Count == 0)
             {
                 //
-                ConfigureSection();
+                ConfigureReportSectionMap();
             }
             foreach (ReporterSection section in SECTION_MAP.AllReporterSection)
             {
@@ -171,135 +183,178 @@ namespace XYS.Lis.Util
         #endregion
         
         #region
-        private static void ConfigureModel()
+        //private static void ConfigureModel()
+        //{
+        //    ReportModelElement modelElement;
+        //    ReportModelElementCollection modelCollection = paramSection.ModelCollection;
+        //    foreach (ConfigurationElement element in modelCollection)
+        //    {
+        //        modelElement = element as ReportModelElement;
+        //        if (modelElement != null)
+        //        {
+        //            ConfigureModel(modelElement);
+        //        }
+        //    }
+        //}
+        //private static void ConfigureModel(ReportModelElement model)
+        //{
+        //    if (model.Value != null && model.ModelPath != null)
+        //    {
+        //        string name = model.Name;
+        //        int modelNo = (int)model.Value;
+        //        string path = model.ModelPath;
+        //        ReportModel reportModel = new ReportModel(modelNo, path, name);
+        //        MODEL_MAP.Add(reportModel);
+        //    }
+        //}
+        //private static void ConfigureSection()
+        //{
+        //    ReportSectionElement sectionElement;
+        //    ReportSectionElementCollection sectionElementCollection = paramSection.SectionCollection;
+        //    Console.WriteLine(paramSection.ToString());
+        //    foreach (ConfigurationElement element in sectionElementCollection)
+        //    {
+        //        sectionElement = element as ReportSectionElement;
+        //        if (sectionElement != null)
+        //        {
+        //            ConfigureSection(sectionElement);
+        //        }
+        //    }
+        //}
+        //private static void ConfigureSection(ReportSectionElement sectionElement)
+        //{
+        //    if (sectionElement.Value != null)
+        //    {
+        //        ReporterSection section = new ReporterSection((int)sectionElement.Value, sectionElement.Name);
+        //        if (sectionElement.ModelNo != null)
+        //        {
+        //            section.ModelNo = (int)sectionElement.ModelNo;
+        //        }
+        //        if (sectionElement.OrderNo != null)
+        //        {
+        //            section.OrderNo = (int)sectionElement.OrderNo;
+        //        }
+        //        if (sectionElement.ReportElementFlags != null && !sectionElement.ReportElementFlags.Equals(""))
+        //        {
+        //            string[] reportElements = sectionElement.ReportElementFlags.Split(new char[] { ',' });
+        //            section.ClearElementNameList();
+        //            foreach (string element in reportElements)
+        //            {
+        //                section.AddElementName(element);
+        //            }
+        //        }
+        //        SECTION_MAP.Add(section);
+        //    }
+        //}
+        //private static void ConfigureParItem()
+        //{
+        //    ParItemElement parItemElement;
+        //    ParItemElementCollection parItemCollection = paramSection.ParItemCollection;
+        //    foreach (ConfigurationElement element in parItemCollection)
+        //    {
+        //        parItemElement = element as ParItemElement;
+        //        if (parItemElement != null)
+        //        {
+        //            ConfigureParItem(parItemElement);
+        //        }
+        //    }
+        //}
+        //private static void ConfigureParItem(ParItemElement parItemElement)
+        //{
+        //    if (parItemElement.Value != null)
+        //    {
+        //        ParItem parItem = new ParItem((int)parItemElement.Value, parItemElement.Name);
+        //        if (parItemElement.ModelNo != null)
+        //        {
+        //            parItem.ModelNo = (int)parItemElement.ModelNo;
+        //        }
+        //        if (parItemElement.OrderNo != null)
+        //        {
+        //            parItem.OrderNo = (int)parItemElement.OrderNo;
+        //        }
+        //        parItem.ImageFlag = parItemElement.CommonImageFlag;
+        //        parItem.ImagePath = parItemElement.CommonImagePath;
+        //        PARITEM_MAP.Add(parItem);
+        //    }
+        //}
+        //private static void ConfigureReportElement()
+        //{
+        //    ReportElementElement reportElement;
+        //    ReportElementElementCollection reportElementCollection = paramSection.ReportElementCollection;
+        //    foreach (ConfigurationElement element in reportElementCollection)
+        //    {
+        //        reportElement = element as ReportElementElement;
+        //        if (reportElement != null)
+        //        {
+        //            ConfigureReportElement(reportElement);
+        //        }
+        //    }
+        //}
+        //private static void ConfigureReportElement(ReportElementElement reportElement)
+        //{
+        //    if (reportElement.Type != null && !reportElement.Type.Equals(""))
+        //    {
+        //        ReportElementType elementType = new ReportElementType(reportElement.Type);
+        //        elementType.ElementName = reportElement.Name;
+        //        if (reportElement.Value != null)
+        //        {
+        //            elementType.ElementTag = GetElementTag((int)reportElement.Value);
+        //        }
+        //        ELEMENT_TYPE_MAP.Add(elementType);
+        //    }
+        //}
+        //private static ReportElementTag GetElementTag(int tag)
+        //{
+        //    if (tag <= 0 || tag > 7)
+        //    {
+        //        return ReportElementTag.NoneElement;
+        //    }
+        //    else
+        //    {
+        //        return (ReportElementTag)tag;
+        //    }
+        //}
+        #endregion
+
+        #region
+        private static void ConfigureReportModelMap()
         {
-            ReportModelElement modelElement;
-            ReportModelElementCollection modelCollection = paramSection.ModelCollection;
-            foreach (ConfigurationElement element in modelCollection)
+            XmlParamConfigurator config = new XmlParamConfigurator();
+            XmlElement paramElement = XmlConfigurator.GetParamConfigurationElement();
+            if (paramElement != null)
             {
-                modelElement = element as ReportModelElement;
-                if (modelElement != null)
-                {
-                    ConfigureModel(modelElement);
-                }
+                ReportReport.Debug(declaringType, "configuring ReportModelMap");
+                config.ConfigReportModelMap(paramElement, MODEL_MAP);
             }
         }
-        private static void ConfigureModel(ReportModelElement model)
+        private static void ConfigureReportElementMap()
         {
-            if (model.Value != null && model.ModelPath != null)
+            XmlParamConfigurator config = new XmlParamConfigurator();
+            XmlElement paramElement = XmlConfigurator.GetParamConfigurationElement();
+            if (paramElement != null)
             {
-                string name = model.Name;
-                int modelNo = (int)model.Value;
-                string path = model.ModelPath;
-                ReportModel reportModel = new ReportModel(modelNo, path, name);
-                MODEL_MAP.Add(reportModel);
+                ReportReport.Debug(declaringType, "configuring ReportElementTypeMap");
+                config.ConfigReportElementMap(paramElement, ELEMENT_TYPE_MAP);
             }
         }
-        private static void ConfigureSection()
+        private static void ConfigureReportSectionMap()
         {
-            ReportSectionElement sectionElement;
-            ReportSectionElementCollection sectionElementCollection = paramSection.SectionCollection;
-            Console.WriteLine(paramSection.ToString());
-            foreach (ConfigurationElement element in sectionElementCollection)
+            XmlParamConfigurator config = new XmlParamConfigurator();
+            XmlElement paramElement = XmlConfigurator.GetParamConfigurationElement();
+            if (paramElement != null)
             {
-                sectionElement = element as ReportSectionElement;
-                if (sectionElement != null)
-                {
-                    ConfigureSection(sectionElement);
-                }
+                ReportReport.Debug(declaringType, "configuring ReportSectionMap");
+                config.ConfigSectionMap(paramElement, SECTION_MAP);
             }
         }
-        private static void ConfigureSection(ReportSectionElement sectionElement)
+        public static void ConfigureParItemMap()
         {
-            if (sectionElement.Value != null)
+            XmlParamConfigurator config = new XmlParamConfigurator();
+            XmlElement paramElement = XmlConfigurator.GetParamConfigurationElement();
+            if (paramElement != null)
             {
-                ReporterSection section = new ReporterSection((int)sectionElement.Value, sectionElement.Name);
-                if (sectionElement.ModelNo != null)
-                {
-                    section.ModelNo = (int)sectionElement.ModelNo;
-                }
-                if (sectionElement.OrderNo != null)
-                {
-                    section.OrderNo = (int)sectionElement.OrderNo;
-                }
-                if (sectionElement.ReportElementFlags != null && !sectionElement.ReportElementFlags.Equals(""))
-                {
-                    string[] reportElements = sectionElement.ReportElementFlags.Split(new char[] { ',' });
-                    section.ClearElementNameList();
-                    foreach (string element in reportElements)
-                    {
-                        section.AddElementName(element);
-                    }
-                }
-                SECTION_MAP.Add(section);
-            }
-        }
-        private static void ConfigureParItem()
-        {
-            ParItemElement parItemElement;
-            ParItemElementCollection parItemCollection = paramSection.ParItemCollection;
-            foreach (ConfigurationElement element in parItemCollection)
-            {
-                parItemElement = element as ParItemElement;
-                if (parItemElement != null)
-                {
-                    ConfigureParItem(parItemElement);
-                }
-            }
-        }
-        private static void ConfigureParItem(ParItemElement parItemElement)
-        {
-            if (parItemElement.Value != null)
-            {
-                ParItem parItem = new ParItem((int)parItemElement.Value, parItemElement.Name);
-                if (parItemElement.ModelNo != null)
-                {
-                    parItem.ModelNo = (int)parItemElement.ModelNo;
-                }
-                if (parItemElement.OrderNo != null)
-                {
-                    parItem.OrderNo = (int)parItemElement.OrderNo;
-                }
-                parItem.ImageFlag = parItemElement.CommonImageFlag;
-                parItem.ImagePath = parItemElement.CommonImagePath;
-                PARITEM_MAP.Add(parItem);
-            }
-        }
-        private static void ConfigureReportElement()
-        {
-            ReportElementElement reportElement;
-            ReportElementElementCollection reportElementCollection = paramSection.ReportElementCollection;
-            foreach (ConfigurationElement element in reportElementCollection)
-            {
-                reportElement = element as ReportElementElement;
-                if (reportElement != null)
-                {
-                    ConfigureReportElement(reportElement);
-                }
-            }
-        }
-        private static void ConfigureReportElement(ReportElementElement reportElement)
-        {
-            if (reportElement.Type != null && !reportElement.Type.Equals(""))
-            {
-                ReportElementType elementType = new ReportElementType(reportElement.Type);
-                elementType.ElementName = reportElement.Name;
-                if (reportElement.Value != null)
-                {
-                    elementType.ElementTag = GetElementTag((int)reportElement.Value);
-                }
-                ELEMENT_TYPE_MAP.Add(elementType);
-            }
-        }
-        private static ReportElementTag GetElementTag(int tag)
-        {
-            if (tag <= 0 || tag > 7)
-            {
-                return ReportElementTag.NoneElement;
-            }
-            else
-            {
-                return (ReportElementTag)tag;
+                ReportReport.Debug(declaringType, "configuring ParItemMap");
+                config.ConfigParItemMap(paramElement, PARITEM_MAP);
             }
         }
         #endregion

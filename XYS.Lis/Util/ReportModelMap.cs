@@ -14,7 +14,7 @@ namespace XYS.Lis.Util
        #region
        public ReportModelMap()
        {
-           this.m_mapNo2PdfModel = new Hashtable();
+           this.m_mapNo2PdfModel = new Hashtable(20);
        }
        #endregion
 

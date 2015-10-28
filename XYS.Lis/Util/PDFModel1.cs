@@ -136,9 +136,9 @@ namespace XYS.Lis.Util
         public class PrintModelItem
         {
             #region
-            private int m_modelNo;
-            private string m_modelName;
-            private string m_modelPath;
+            //private int m_modelNo;
+            //private string m_modelName;
+            //private string m_modelPath;
             #endregion
         }
         #endregion
