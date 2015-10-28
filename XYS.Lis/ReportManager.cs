@@ -2,12 +2,14 @@
 using System.Reflection;
 
 using XYS.Lis.Core;
+using XYS.Lis.Repository;
 namespace XYS.Lis
 {
     public class ReportManager
     {
 
         private static readonly WrapperMap s_wrapperMap = new WrapperMap(new WrapperCreationHandler(WrapperCreationHandler));
+        
         public static IReport Exists(ReporterKey key)
         {
             return Exists(Assembly.GetCallingAssembly(), key);
@@ -54,6 +56,43 @@ namespace XYS.Lis
         public static IReport GetReporter(Assembly repositoryAssembly, Type type, string strategyName)
         {
             return WrapReporter(ReporterManager.GetReporter(repositoryAssembly, type,strategyName));
+        }
+
+        public static IReporterRepository GetRepository()
+        {
+            return GetRepository(Assembly.GetCallingAssembly());
+        }
+        public static IReporterRepository GetRepository(string repository)
+        {
+            return ReporterManager.GetRepository(repository);
+        }
+        public static IReporterRepository GetRepository(Assembly repositoryAssembly)
+        {
+            return ReporterManager.GetRepository(repositoryAssembly);
+        }
+
+
+        public static IReporterRepository CreateRepository(Type repositoryType)
+        {
+            return CreateRepository(Assembly.GetCallingAssembly(), repositoryType);
+        }
+
+        public static IReporterRepository CreateRepository(string repository)
+        {
+            return ReporterManager.CreateRepository(repository);
+        }
+        public static IReporterRepository CreateRepository(string repository, Type repositoryType)
+        {
+            return ReporterManager.CreateRepository(repository, repositoryType);
+        }
+        public static IReporterRepository CreateRepository(Assembly repositoryAssembly, Type repositoryType)
+        {
+            return ReporterManager.CreateRepository(repositoryAssembly, repositoryType);
+        }
+
+        public static IReporterRepository[] GetAllRepositories()
+        {
+            return ReporterManager.GetAllRepositories();
         }
 
         private static IReport WrapReporter(ILisReporter reporter)

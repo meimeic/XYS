@@ -98,7 +98,7 @@ namespace XYS.Lis.Fill
 
         #region 抽象方法
         protected abstract void FillReport(ReportReportElement rre, ReportKey key);
-        
+
         protected abstract void FillElements(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag);
         
         protected abstract void FillElement(ILisReportElement reportElement, ReportKey key);
@@ -106,9 +106,18 @@ namespace XYS.Lis.Fill
         #endregion
 
         #region
-        protected Type GetElementType(ReportElementTag elementTag)
+        protected Type GetElementType(int sectionNo,ReportElementTag elementTag)
         {
-            ReportElementType elementType = LisMap.GetElementType(elementTag);
+            ReportElementTypeCollection availableElements = GetAvailableElements(sectionNo);
+            ReportElementType elementType=null;
+            foreach (ReportElementType type in availableElements)
+            {
+                if (type.ElementTag == elementTag)
+                {
+                    elementType = type;
+                    break;
+                }
+            }
             if (elementType != null)
             {
                 return elementType.ElementType;
@@ -118,27 +127,27 @@ namespace XYS.Lis.Fill
                 return null;
             }
         }
-        
-        protected ILisReportElement CreateReportElement(ReportElementTag elementTag)
-        {
-            Type type = GetElementType(elementTag);
-            if (type != null)
-            {
-                try
-                {
-                    ILisReportElement element = (ILisReportElement)Activator.CreateInstance(type);
-                    return element;
-                }
-                catch (Exception ex)
-                {
-                    return null;
-                }
-            }
-            else
-            {
-                return null;
-            }
-        }
+
+        //protected ILisReportElement CreateReportElement(ReportElementTag elementTag)
+        //{
+        //    Type type = GetElementType(elementTag);
+        //    if (type != null)
+        //    {
+        //        try
+        //        {
+        //            ILisReportElement element = (ILisReportElement)Activator.CreateInstance(type);
+        //            return element;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            return null;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
         
         protected ReportElementTypeCollection GetAvailableElements(int sectionNo)
         {
@@ -162,7 +171,7 @@ namespace XYS.Lis.Fill
             return retc;
         }
         
-        private virtual void InitDefaultElements()
+        private void InitDefaultElements()
         {
             this.m_defaultElementTypeCollection.Add(ReportElementType.DEFAULTEXAM);
             this.m_defaultElementTypeCollection.Add(ReportElementType.DEFAULTREPORT);
@@ -186,6 +195,7 @@ namespace XYS.Lis.Fill
                 }
             }
         }
+        
         #endregion
     }
 }

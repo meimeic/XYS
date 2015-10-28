@@ -9,7 +9,6 @@ namespace XYS.Lis.Config
         {
             return new ParItemElement();
         }
-
         protected override object GetElementKey(ConfigurationElement element)
         {
             return (element as ParItemElement).Name;
@@ -21,11 +20,19 @@ namespace XYS.Lis.Config
                 return BaseGet(name) as ReportElementElement;
             }
         }
-        public new ReportElementElement this[int index]
+        public ReportElementElement this[int index]
         {
             get
             {
                 return BaseGet(index) as ReportElementElement;
+            }
+            set
+            {
+                if (BaseGet(index) != null)
+                {
+                    BaseRemoveAt(index);
+                }
+                BaseAdd(index, value);
             }
         }
         protected override string ElementName

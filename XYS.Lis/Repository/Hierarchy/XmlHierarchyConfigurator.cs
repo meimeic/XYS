@@ -39,15 +39,6 @@ namespace XYS.Lis.Repository.Hierarchy
         private static readonly string EXPORT_TAG = "export";
         //private static readonly string EXPORTS_TAG = "exports";
       
-        private static readonly string REPORT_ELEMENTS_TAG = "reportElements";
-        private static readonly string REPORT_ELEMENT_TAG = "reportElement";
-        private static readonly string SECTIONS_TAG = "sections";
-        private static readonly string SECTION_TAG = "section";
-        private static readonly string PAR_ITEMS_TAG = "parItems";
-        private static readonly string PAR_ITEM_TAG = "parItem";
-        private static readonly string PRINT_MODELS_TAG = "printModels";
-        private static readonly string PRINT_MODEL_TAG = "printModel";
-
         private static readonly string NAME_ATTR = "name";
         private static readonly string TYPE_ATTR = "type";
         private static readonly string VALUE_ATTR = "value";

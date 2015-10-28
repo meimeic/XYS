@@ -35,5 +35,15 @@ namespace XYS.Lis.Export.PDF
             return null;
         }
         #endregion
+
+        protected override string InnerElementListExport(List<ILisReportElement> elementList)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string InnerReportExport(ReportReportElement rre)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

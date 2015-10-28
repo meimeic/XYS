@@ -40,7 +40,8 @@ namespace XYS.Lis.Handler
                     }
                     else
                     {
-                        return OperateReport(rre);
+                         OperateReport(rre);
+                         return HandlerResult.Continue;
                     }
                 case ReportElementTag.ExamElement:
                     ReportExamElement exam = reportElement as ReportExamElement;
@@ -108,7 +109,15 @@ namespace XYS.Lis.Handler
             switch (elementTag)
             {
                 case ReportElementTag.ReportElement:
-                    rs = OperateReportList(reportElementList);
+                    OperateReportList(reportElementList);
+                    if (reportElementList.Count > 0)
+                    {
+                        rs= HandlerResult.Continue;
+                    }
+                    else
+                    {
+                        rs= HandlerResult.Fail;
+                    }
                     break;
                 case ReportElementTag.ExamElement:
                     OperateExamList(reportElementList);
@@ -140,12 +149,11 @@ namespace XYS.Lis.Handler
 
 
         #region
-        protected override HandlerResult OperateReportList(List<ILisReportElement> reportList)
+        protected override void OperateReportList(List<ILisReportElement> reportList)
         {
             if (reportList.Count > 0)
             {
-
-                HandlerResult rs = HandlerResult.Fail;
+                //HandlerResult rs = HandlerResult.Fail;
                 for (int i = reportList.Count - 1; i >= 0; i--)
                 {
                     ReportReportElement rre = reportList[i] as ReportReportElement;
@@ -155,31 +163,32 @@ namespace XYS.Lis.Handler
                     }
                     else
                     {
-                        rs = GetMax(rs, OperateReport(rre));
+                        OperateReport(rre);
+                        //rs = GetMax(rs, OperateReport(rre));
                     }
                 }
-                return rs;
+              //  return rs;
             }
-            else
-            {
-                return HandlerResult.Fail;
-            }
+            //else
+            //{
+            //    return HandlerResult.Fail;
+            //}
         }
-        protected override HandlerResult OperateReport(ReportReportElement rre)
+        protected override void OperateReport(ReportReportElement rre)
         {
             OperateExamList(rre.ExamList);
             OperatePatientList(rre.PatientList);
             OperateCommonItemList(rre.CommonItemList, rre.ParItemList);
             OperateGraphItemList(rre.GraphItemList);
             OperateCustomItemList(rre.CustomItemList);
-            if (rre.CommonItemList.Count > 0 && rre.ExamList.Count > 0 && rre.PatientList.Count > 0)
-            {
-                return HandlerResult.Continue;
-            }
-            else
-            {
-                return HandlerResult.Fail;
-            }
+            //if (rre.CommonItemList.Count > 0 && rre.ExamList.Count > 0 && rre.PatientList.Count > 0)
+            //{
+            //    return HandlerResult.Continue;
+            //}
+            //else
+            //{
+            //    return HandlerResult.Fail;
+            //}
         }
         //protected virtual HandlerResult OperateReporter(ReportReportElement rre)
         //{

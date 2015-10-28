@@ -3,16 +3,16 @@ using System.Configuration;
 
 namespace XYS.Lis.Config
 {
-    public class SectionElementCollection : ConfigurationElementCollection
+    public class ReportSectionElementCollection : ConfigurationElementCollection
     {
         protected override ConfigurationElement CreateNewElement()
         {
-            return new SectionElement();
+            return new ReportSectionElement();
         }
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return (element as SectionElement).Name;
+            return (element as ReportSectionElement).Name;
         }
         public new ReportElementElement this[string name]
         {
@@ -21,7 +21,7 @@ namespace XYS.Lis.Config
                 return BaseGet(name) as ReportElementElement;
             }
         }
-        public new ReportElementElement this[int index]
+        public ReportElementElement this[int index]
         {
             get
             {
@@ -32,7 +32,7 @@ namespace XYS.Lis.Config
         {
             get
             {
-                return "section";
+                return "reportSection";
             }
         }
         public override ConfigurationElementCollectionType CollectionType

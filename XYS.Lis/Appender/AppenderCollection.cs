@@ -322,14 +322,6 @@ namespace XYS.Lis.Appender
 
         #region Implementation (ICollection)
 
-        void ICollection.CopyTo(Array array, int start)
-        {
-            if (m_count > 0)
-            {
-                Array.Copy(m_array, 0, array, start, m_count);
-            }
-        }
-
         #endregion
 
         #region Implementation (IList)

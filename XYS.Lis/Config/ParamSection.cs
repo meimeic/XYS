@@ -11,17 +11,17 @@ namespace XYS.Lis.Config
         {
             get
             {
-                return (ReportElementElementCollection)this["reportElements"];
+                return (ReportElementElementCollection)base["reportElements"];
             }
             private set { }
         }
-        [ConfigurationProperty("sections", IsDefaultCollection = true)]
-        [ConfigurationCollection(typeof(SectionElementCollection), AddItemName = "section")]
-        public SectionElementCollection SectionCollection
+        [ConfigurationProperty("reportSections", IsDefaultCollection = true)]
+        [ConfigurationCollection(typeof(ReportSectionElementCollection), AddItemName = "reportSection")]
+        public ReportSectionElementCollection SectionCollection
         {
             get
             {
-                return (SectionElementCollection)this["sections"];
+                return (ReportSectionElementCollection)base["reportSections"];
             }
             private set { }
         }
@@ -31,17 +31,17 @@ namespace XYS.Lis.Config
         {
             get
             {
-                return (ParItemElementCollection)this["parItems"];
+                return (ParItemElementCollection)base["parItems"];
             }
             private set { }
         }
-        [ConfigurationProperty("models", IsDefaultCollection = true)]
-        [ConfigurationCollection(typeof(ModelElementCollection), AddItemName = "model")]
-        public ModelElementCollection ModelCollection
+        [ConfigurationProperty("reportModels", IsDefaultCollection = true)]
+        [ConfigurationCollection(typeof(ReportModelElementCollection), AddItemName = "reportModel")]
+        public ReportModelElementCollection ModelCollection
         {
             get
             {
-                return (ModelElementCollection)this["models"];
+                return (ReportModelElementCollection)base["reportModels"];
             }
             private set { }
         }

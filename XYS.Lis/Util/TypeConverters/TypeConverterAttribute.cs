@@ -71,7 +71,7 @@ namespace XYS.Lis.Util.TypeConverters
 		/// </remarks>
 		public TypeConverterAttribute(Type converterType)
 		{
-			m_typeName = log4net.Util.SystemInfo.AssemblyQualifiedName(converterType);
+			m_typeName = XYS.Lis.Util.SystemInfo.AssemblyQualifiedName(converterType);
 		}
 
 		#endregion

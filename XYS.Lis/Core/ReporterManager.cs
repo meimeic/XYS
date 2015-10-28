@@ -64,8 +64,8 @@ namespace XYS.Lis.Core
            get { return s_repositorySelector; }
            set { s_repositorySelector = value; }
        }
-       
-       #region
+
+       #region 通过库名获取库
        public static IReporterRepository GetRepository(string repository)
        {
            if (repository == null)
@@ -84,7 +84,7 @@ namespace XYS.Lis.Core
        }
        #endregion
 
-       #region
+       #region 查看reporter 是否存在
        public static ILisReporter Exists(string repository, ReporterKey key)
        {
            if (repository == null)
@@ -111,7 +111,7 @@ namespace XYS.Lis.Core
        }
        #endregion
 
-       #region
+       #region 获取reporter 若不存在，则创建
        public static ILisReporter GetReporter(string repository, ReporterKey key)
        {
            if (repository == null)

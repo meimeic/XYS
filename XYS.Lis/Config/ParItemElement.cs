@@ -67,7 +67,7 @@ namespace XYS.Lis.Config
             }
             private set { }
         }
-          [ConfigurationProperty("imagePath", IsRequired = false)]
+        [ConfigurationProperty("imagePath", IsRequired = false)]
         public string CommonImagePath
         {
             get

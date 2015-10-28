@@ -86,7 +86,7 @@ namespace XYS.Lis.Util.TypeConverters
 					}
 
 					// Try to resolve via DNS. This is a blocking call.
-					IPHostEntry host = Dns.GetHostByName(str);
+					IPHostEntry host = Dns.GetHostEntry(str);
 					if (host != null && 
 						host.AddressList != null && 
 						host.AddressList.Length > 0 &&

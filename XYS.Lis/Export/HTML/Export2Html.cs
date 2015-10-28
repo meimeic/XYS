@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using XYS.Lis.Core;
+using XYS.Lis.Model;
 using XYS.Lis.Export;
 
 namespace XYS.Lis.Export.HTML
@@ -11,7 +13,6 @@ namespace XYS.Lis.Export.HTML
         public Export2Html()
             : this("Export2Html")
         {
- 
         }
         public Export2Html(string name)
             : base(name)
@@ -19,6 +20,16 @@ namespace XYS.Lis.Export.HTML
             this.ExportTag = DEFAULT_EXPORT;
         }
         protected override string InnerElementExport(ILisReportElement reportElement)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string InnerElementListExport(List<ILisReportElement> elementList)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string InnerReportExport(ReportReportElement rre)
         {
             throw new NotImplementedException();
         }

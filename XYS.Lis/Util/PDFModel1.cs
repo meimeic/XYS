@@ -140,7 +140,6 @@ namespace XYS.Lis.Util
             private string m_modelName;
             private string m_modelPath;
             #endregion
-
         }
         #endregion
 

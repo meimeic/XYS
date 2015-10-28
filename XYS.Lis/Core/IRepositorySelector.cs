@@ -22,12 +22,21 @@ namespace XYS.Lis.Core
     }
     public interface IRepositorySelector
     {
+        #region
         IReporterRepository GetRepository(Assembly assembly);
         IReporterRepository GetRepository(string repositoryName);
+        #endregion
+
+        #region
         IReporterRepository CreateRepository(Assembly assembly, Type repositoryType);
         IReporterRepository CreateRepository(string repositoryName, Type repositoryType);
+        #endregion
+        
+        #region
         bool ExistsRepository(string repositoryName);
         IReporterRepository[] GetAllRepositories();
+        #endregion
+
         event ReporterRepositoryCreationEventHandler ReporterRepositoryCreationEvent;
     }
 }

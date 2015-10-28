@@ -21,28 +21,28 @@ namespace XYS.Lis.Repository.Hierarchy
         #endregion
 
         #region
-        private void BuildInReportFillMap()
-        {
-            this.ClearFiller();
-            IReportFiller filler = new ReportFillByDB();
-            this.AddFiller(filler);
-            this.DefaultFill = filler;
-        }
-        private void BuildInReportExportMap()
-        {
-            this.ClearExport();
-            IReportExport export;
-            export = new Export2PDF();
-            this.AddExport(export);
-            this.DefaultExport = export;
-            export = new Export2Json();
-            this.AddExport(export);
-        }
-        private void BuildInHandler()
-        {
-            this.ClearHandler();
-            this.AddHandler(new HeaderDefaultHandler());
-        }                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+        //private void BuildInReportFillMap()
+        //{
+        //    this.ClearFiller();
+        //    IReportFiller filler = new ReportFillByDB();
+        //    this.AddFiller(filler);
+        //    this.DefaultFill = filler;
+        //}
+        //private void BuildInReportExportMap()
+        //{
+        //    this.ClearExport();
+        //    IReportExport export;
+        //    export = new Export2PDF();
+        //    this.AddExport(export);
+        //    this.DefaultExport = export;
+        //    export = new Export2Json();
+        //    this.AddExport(export);
+        //}
+        //private void BuildInHandler()
+        //{
+        //    this.ClearHandler();
+        //    this.AddHandler(new HeaderDefaultHandler());
+        //}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
         #endregion
     }
 }

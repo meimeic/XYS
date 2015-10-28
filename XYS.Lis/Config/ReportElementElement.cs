@@ -14,6 +14,17 @@ namespace XYS.Lis.Config
             }
             private set { }
         }
+        
+        [ConfigurationProperty("value", IsRequired = true)]
+        public int? Value
+        {
+            get 
+            {
+                return (int?)this["value"];
+            }
+            private set { }
+        }
+        
         [ConfigurationProperty("type", IsRequired = true)]
         public string Type
         {
@@ -23,6 +34,7 @@ namespace XYS.Lis.Config
             }
             private set { }
         }
+        
         [ConfigurationProperty("explain", IsRequired = false)]
         public string Explain
         {

@@ -4,17 +4,17 @@ using System.Configuration;
 
 namespace XYS.Lis.Config
 {
-    public class ModelElementCollection: ConfigurationElementCollection
+    public class ReportModelElementCollection: ConfigurationElementCollection
     {
 
         protected override ConfigurationElement CreateNewElement()
         {
-            return new ModelElement();
+            return new ReportModelElement();
         }
 
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return (element as ModelElement).Name;
+            return (element as ReportModelElement).Name;
         }
         public new ReportElementElement this[string name]
         {
@@ -23,7 +23,7 @@ namespace XYS.Lis.Config
                 return BaseGet(name) as ReportElementElement;
             }
         }
-        public new ReportElementElement this[int index]
+        public ReportElementElement this[int index]
         {
             get
             {
@@ -34,7 +34,7 @@ namespace XYS.Lis.Config
         {
             get
             {
-                return "model";
+                return "reportModel";
             }
         }
         public override ConfigurationElementCollectionType CollectionType

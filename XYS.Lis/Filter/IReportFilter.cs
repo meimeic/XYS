@@ -2,7 +2,7 @@
 
 namespace XYS.Lis.Filter
 {
-   public interface IReportFilter:IReportOptionHandler
+   public interface IReportFilter
     {
        IReportFilter Next { get; set; }
     }

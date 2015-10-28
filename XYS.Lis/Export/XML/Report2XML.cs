@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using XYS.Lis.Core;
 using XYS.Lis.Export;
+using XYS.Lis.Model;
 
 namespace XYS.Lis.Export.XML
 {
@@ -18,6 +20,16 @@ namespace XYS.Lis.Export.XML
             this.ExportTag = DEFAULT_EXPORT;
         }
         protected override string InnerElementExport(ILisReportElement reportElement)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string InnerElementListExport(List<ILisReportElement> elementList)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override string InnerReportExport(ReportReportElement rre)
         {
             throw new NotImplementedException();
         }

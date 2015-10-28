@@ -33,6 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -79,14 +80,6 @@
     <ProjectReference Include="..\XYS.Lis\XYS.Lis.csproj">
       <Project>{4f0c8535-b1e0-46b0-800a-97df8ac6065e}</Project>
       <Name>XYS.Lis</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\XYS.Utility\XYS.Utility.csproj">
-      <Project>{7839754d-9da9-4aa7-94a6-32e3a2701669}</Project>
-      <Name>XYS.Utility</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\XYS\XYS.csproj">
-      <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
-      <Name>XYS</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -10,6 +10,7 @@ namespace XYS.Lis.Model
     {
         #region
         private string m_elementName;
+        private ReportElementTag m_elementTag;
         private Type m_elementType;
         #endregion
 
@@ -25,6 +26,7 @@ namespace XYS.Lis.Model
         #region
          public ReportElementType(Type elementType)
          {
+             this.m_elementTag = ReportElementTag.NoneElement;
              this.m_elementType=elementType;
          }
         public ReportElementType(string elementName, Type elementType):this(elementType)
@@ -33,7 +35,8 @@ namespace XYS.Lis.Model
         }
         public ReportElementType(string typeName)
         {
-              this.m_elementType=SystemInfo.GetTypeFromString(typeName, true, true); 
+            this.m_elementTag = ReportElementTag.NoneElement;
+            this.m_elementType = SystemInfo.GetTypeFromString(typeName, true, true);
         }
         #endregion
 
@@ -51,6 +54,11 @@ namespace XYS.Lis.Model
                 }
             }
             set { this.m_elementName = value; }
+        }
+        public ReportElementTag ElementTag
+        {
+            get { return this.m_elementTag; }
+            set { this.m_elementTag = value; }
         }
         public Type ElementType
         {

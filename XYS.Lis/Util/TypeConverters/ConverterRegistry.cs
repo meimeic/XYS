@@ -222,12 +222,12 @@ namespace XYS.Lis.Util.TypeConverters
 				}
 				catch(Exception ex)
 				{
-					LogLog.Error(declaringType, "Cannot CreateConverterInstance of type ["+converterType.FullName+"], Exception in call to Activator.CreateInstance", ex);
+					ReportReport.Error(declaringType, "Cannot CreateConverterInstance of type ["+converterType.FullName+"], Exception in call to Activator.CreateInstance", ex);
 				}
 			}
 			else
 			{
-				LogLog.Error(declaringType, "Cannot CreateConverterInstance of type ["+converterType.FullName+"], type does not implement IConvertFrom or IConvertTo");
+                ReportReport.Error(declaringType, "Cannot CreateConverterInstance of type [" + converterType.FullName + "], type does not implement IConvertFrom or IConvertTo");
 			}
 			return null;
 		}

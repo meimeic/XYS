@@ -43,8 +43,9 @@
     <Compile Include="Appender\AppenderImpl.cs" />
     <Compile Include="Appender\AppenderSkeleton.cs" />
     <Compile Include="Appender\IAppender.cs" />
-    <Compile Include="Config\ModelElement.cs" />
-    <Compile Include="Config\ModelElementCollection.cs" />
+    <Compile Include="Config\ParamSectionHandler.cs" />
+    <Compile Include="Config\ReportModelElement.cs" />
+    <Compile Include="Config\ReportModelElementCollection.cs" />
     <Compile Include="Config\ParItemElement.cs" />
     <Compile Include="Config\ParItemElementCollection.cs" />
     <Compile Include="Config\ReportElementElement.cs" />
@@ -53,10 +54,11 @@
     <Compile Include="Config\ConfiguratorAttribute.cs" />
     <Compile Include="Config\ParamSection.cs" />
     <Compile Include="Config\RepositoryAttribute.cs" />
-    <Compile Include="Config\SectionElement.cs" />
-    <Compile Include="Config\SectionElementCollection.cs" />
+    <Compile Include="Config\ReportSectionElement.cs" />
+    <Compile Include="Config\ReportSectionElementCollection.cs" />
     <Compile Include="Config\XmlConfigurator.cs" />
     <Compile Include="Config\XmlConfiguratorAttribute.cs" />
+    <Compile Include="Config\XmlParamConfigurator.cs" />
     <Compile Include="Core\DefaultRepositorySelector.cs" />
     <Compile Include="Core\IAppenderAttachable.cs" />
     <Compile Include="Core\ILisReporter.cs" />

@@ -10,7 +10,7 @@ namespace XYS.Lis.Core
     public interface ILisReporter
     {
         string ReporterName { get; }
-        string StrategyName { get; protected set; }
+        string StrategyName { get; }
         IReporterRepository Repository { get; }
 
         #region

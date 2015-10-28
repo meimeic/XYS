@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace XYS.Lis.Config
 {
-    public class ModelElement : ConfigurationElement
+    public class ReportModelElement : ConfigurationElement
     {
         [ConfigurationProperty("name", IsRequired = true)]
         public string Name

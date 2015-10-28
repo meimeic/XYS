@@ -173,18 +173,18 @@ namespace XYS.Lis.Util
         #region
         private static void ConfigureModel()
         {
-            ModelElement modelElement;
-            ModelElementCollection modelCollection = paramSection.ModelCollection;
+            ReportModelElement modelElement;
+            ReportModelElementCollection modelCollection = paramSection.ModelCollection;
             foreach (ConfigurationElement element in modelCollection)
             {
-                modelElement = element as ModelElement;
+                modelElement = element as ReportModelElement;
                 if (modelElement != null)
                 {
                     ConfigureModel(modelElement);
                 }
             }
         }
-        private static void ConfigureModel(ModelElement model)
+        private static void ConfigureModel(ReportModelElement model)
         {
             if (model.Value != null && model.ModelPath != null)
             {
@@ -197,18 +197,19 @@ namespace XYS.Lis.Util
         }
         private static void ConfigureSection()
         {
-            SectionElement sectionElement;
-            SectionElementCollection sectionElementCollection = paramSection.SectionCollection;
+            ReportSectionElement sectionElement;
+            ReportSectionElementCollection sectionElementCollection = paramSection.SectionCollection;
+            Console.WriteLine(paramSection.ToString());
             foreach (ConfigurationElement element in sectionElementCollection)
             {
-                sectionElement = element as SectionElement;
+                sectionElement = element as ReportSectionElement;
                 if (sectionElement != null)
                 {
                     ConfigureSection(sectionElement);
                 }
             }
         }
-        private static void ConfigureSection(SectionElement sectionElement)
+        private static void ConfigureSection(ReportSectionElement sectionElement)
         {
             if (sectionElement.Value != null)
             {
@@ -283,7 +284,22 @@ namespace XYS.Lis.Util
             {
                 ReportElementType elementType = new ReportElementType(reportElement.Type);
                 elementType.ElementName = reportElement.Name;
+                if (reportElement.Value != null)
+                {
+                    elementType.ElementTag = GetElementTag((int)reportElement.Value);
+                }
                 ELEMENT_TYPE_MAP.Add(elementType);
+            }
+        }
+        private static ReportElementTag GetElementTag(int tag)
+        {
+            if (tag <= 0 || tag > 7)
+            {
+                return ReportElementTag.NoneElement;
+            }
+            else
+            {
+                return (ReportElementTag)tag;
             }
         }
         #endregion

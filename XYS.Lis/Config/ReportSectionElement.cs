@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace XYS.Lis.Config
 {
-    public class SectionElement : ConfigurationElement
+    public class ReportSectionElement : ConfigurationElement
     {
         [ConfigurationProperty("name", IsRequired = true)]
         public string Name
@@ -14,6 +14,7 @@ namespace XYS.Lis.Config
             }
             private set { }
         }
+        
         [ConfigurationProperty("alias", IsRequired = false)]
         public string Alias
         {
@@ -23,6 +24,7 @@ namespace XYS.Lis.Config
             }
             private set { }
         }
+        
         [ConfigurationProperty("value", IsRequired = true)]
         public int? Value
         {
@@ -32,6 +34,7 @@ namespace XYS.Lis.Config
             }
             private set { }
         }
+        
         [ConfigurationProperty("modelNo", IsRequired = false)]
         public int? ModelNo
         {
@@ -41,6 +44,7 @@ namespace XYS.Lis.Config
             }
             private set { }
         }
+        
         [ConfigurationProperty("orderNo", IsRequired = false)]
         public int? OrderNo
         {
@@ -50,12 +54,13 @@ namespace XYS.Lis.Config
             }
             private set { }
         }
-        [ConfigurationProperty("reportElements", IsRequired = true)]
+        
+        [ConfigurationProperty("reportElementRefs", IsRequired = true)]
         public string ReportElementFlags
         {
             get
             {
-                return this["reportElements"] as string;
+                return this["reportElementRefs"] as string;
             }
             private set { }
         }

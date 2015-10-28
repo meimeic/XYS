@@ -61,9 +61,9 @@ namespace XYS.Lis.Util
          {
              try
              {
-                 InternalDebugging = OptionConverter.ToBoolean(SystemInfo.GetAppSetting("log4net.Internal.Debug"), false);
-                 QuietMode = OptionConverter.ToBoolean(SystemInfo.GetAppSetting("log4net.Internal.Quiet"), false);
-                 EmitInternalMessages = OptionConverter.ToBoolean(SystemInfo.GetAppSetting("log4net.Internal.Emit"), true);
+                 InternalDebugging = OptionConverter.ToBoolean(SystemInfo.GetAppSetting("lis-report.Internal.Debug"), false);
+                 QuietMode = OptionConverter.ToBoolean(SystemInfo.GetAppSetting("lis-report.Internal.Quiet"), false);
+                 EmitInternalMessages = OptionConverter.ToBoolean(SystemInfo.GetAppSetting("lis-report.Internal.Emit"), true);
              }
              catch (Exception ex)
              {

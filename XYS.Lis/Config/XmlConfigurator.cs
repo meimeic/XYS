@@ -47,7 +47,7 @@ namespace XYS.Lis.Config
         public static ICollection Configure(XmlElement element)
         {
             ArrayList configurationMessages = new ArrayList();
-            IReporterRepository repository = ReportManager;
+            IReporterRepository repository = ReportManager.GetRepository(Assembly.GetCallingAssembly());
             using (new ReportReport.ReportReceivedAdapter(configurationMessages))
             {
                 InternalConfigureFromXml(repository, element);
@@ -88,9 +88,7 @@ namespace XYS.Lis.Config
         public static ICollection Configure(Uri configUri)
         {
             ArrayList configurationMessages = new ArrayList();
-
             IReporterRepository repository = ReportManager.GetRepository(Assembly.GetCallingAssembly());
-
             using (new ReportReport.ReportReceivedAdapter(configurationMessages))
             {
                 InternalConfigure(repository, configUri);
@@ -237,12 +235,15 @@ namespace XYS.Lis.Config
 					XmlReader xmlReader = XmlReader.Create(configStream, settings);
 #else
                     // Create a validating reader around a text reader for the file stream
-                    XmlValidatingReader xmlReader = new XmlValidatingReader(new XmlTextReader(configStream));
+                    XmlReaderSettings xmlSettings = new XmlReaderSettings();
 
+                    //XmlValidatingReader xmlReader = new XmlValidatingReader(new XmlTextReader(configStream));
+                    XmlReader xmlReader = XmlReader.Create(new XmlTextReader(configStream),xmlSettings);
                     // Specify that the reader should not perform validation, but that it should
                     // expand entity refs.
-                    xmlReader.ValidationType = ValidationType.None;
-                    xmlReader.EntityHandling = EntityHandling.ExpandEntities;
+                    xmlSettings.ValidationType = ValidationType.None;
+                    //xmlReader.ValidationType = ValidationType.None;
+                   // xmlReader.EntityHandling = EntityHandling.ExpandEntities;
 #endif
 
                     // load the data into the document

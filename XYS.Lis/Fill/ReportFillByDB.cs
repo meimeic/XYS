@@ -65,7 +65,8 @@ namespace XYS.Lis.Fill
                 //错误
                 return;
             }
-            Type type = this.GetElementType(elementTag);
+            int sectionNo = GetSectionNo(key);
+            Type type = this.GetElementType(sectionNo,elementTag);
             Hashtable keyTable = ReportKey2Table(key);
             if (type != null)
             {
@@ -90,7 +91,7 @@ namespace XYS.Lis.Fill
         {
             foreach (ReportElementType elementtype in availableElements)
             {
-                switch (elementtype.ElementName)
+                switch (elementtype.ElementTag)
                 {
                     //报告元素---检验信息项
                     case ReportElementTag.ExamElement:

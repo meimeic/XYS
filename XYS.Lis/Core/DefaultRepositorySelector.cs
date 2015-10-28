@@ -11,18 +11,18 @@ namespace XYS.Lis.Core
 {
     public class DefaultRepositorySelector:IRepositorySelector
     {
-        #region
+        #region 静态成员
         private static readonly string DefaultRepositoryName = "reporter-default-repository";
         private static readonly Type declaringType = typeof(DefaultRepositorySelector);
         #endregion
 
-        #region
+        #region 指读实例成员
         private readonly Type m_defaultRepositoryType;
         private readonly Hashtable m_assembly2repositoryMap = new Hashtable();
         private readonly Hashtable m_name2repositoryMap = new Hashtable();
         #endregion
 
-        #region
+        #region 事件成员
         private event ReporterRepositoryCreationEventHandler m_reporterRepositoryCreatedEvent;
         #endregion
 
@@ -42,7 +42,9 @@ namespace XYS.Lis.Core
             ReportReport.Debug(declaringType, "defaultRepositoryType [" + m_defaultRepositoryType + "]");
         }
         #endregion
+       
         #region  实现IRepositorySelector接口
+
         public IReporterRepository GetRepository(Assembly assembly)
         {
             if (assembly == null)
@@ -51,7 +53,6 @@ namespace XYS.Lis.Core
             }
             return CreateRepository(assembly, this.m_defaultRepositoryType);
         }
-
         public IReporterRepository GetRepository(string repositoryName)
         {
             if (repositoryName == null)
@@ -75,7 +76,6 @@ namespace XYS.Lis.Core
         {
             return CreateRepository(assembly, repositoryType, DefaultRepositoryName,true);
         }
-
         public IReporterRepository CreateRepository(string repositoryName, Type repositoryType)
         {
             if (repositoryName == null)
@@ -148,7 +148,6 @@ namespace XYS.Lis.Core
                 return m_name2repositoryMap.ContainsKey(repositoryName);
             }
         }
-
         public IReporterRepository[] GetAllRepositories()
         {
             lock (this)
@@ -211,10 +210,10 @@ namespace XYS.Lis.Core
                             try
                             {
                                 // Look for aliasing attributes
-                              //-----  LoadAliases(repositoryAssembly, rep);
+                                //-----  LoadAliases(repositoryAssembly, rep);
 
                                 // Look for plugins defined on the assembly
-                               //---- LoadPlugins(repositoryAssembly, rep);
+                                //---- LoadPlugins(repositoryAssembly, rep);
 
                                 // Configure the repository using the assembly attributes
                                 ConfigureRepository(repositoryAssembly, rep);
@@ -233,7 +232,7 @@ namespace XYS.Lis.Core
                             try
                             {
                                 // Look for plugins defined on the assembly
-                               //--- LoadPlugins(repositoryAssembly, rep);
+                                //--- LoadPlugins(repositoryAssembly, rep);
                             }
                             catch (Exception ex)
                             {
@@ -242,7 +241,6 @@ namespace XYS.Lis.Core
                         }
                     }
                     m_assembly2repositoryMap[repositoryAssembly] = rep;
-                    this.OnReporterRepositoryCreatedEvent(rep);
                 }
                 return rep;
             }
