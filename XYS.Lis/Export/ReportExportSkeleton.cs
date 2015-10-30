@@ -20,7 +20,7 @@ namespace XYS.Lis.Export
         #region
         protected ReportExportSkeleton(string name)
         {
-            this.m_exportName = name;
+            this.m_exportName = name.ToLower();
         }
         #endregion
 
@@ -35,7 +35,7 @@ namespace XYS.Lis.Export
         #region 实现IReportExport接口
         public virtual string ExportName
         {
-            get { return this.m_exportName; }
+            get { return this.m_exportName.ToLower(); }
         }
         public virtual ExportTag ExportTag
         {

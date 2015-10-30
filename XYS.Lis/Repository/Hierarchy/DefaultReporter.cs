@@ -10,7 +10,7 @@ namespace XYS.Lis.Repository.Hierarchy
     public class DefaultReporter : Reporter
     {
         #region
-        private static readonly string m_strategyName = "defaultStrategy";
+        private static readonly string m_strategyName = "defaultstrategy";
         #endregion
         
         #region

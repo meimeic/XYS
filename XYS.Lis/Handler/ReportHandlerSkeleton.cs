@@ -15,7 +15,10 @@ namespace XYS.Lis.Handler
         #region
         protected ReportHandlerSkeleton(string name)
         {
-            this.m_handlerName = name;
+            if (name != null)
+            {
+                this.m_handlerName = name.ToLower();
+            }
         }
         #endregion
 

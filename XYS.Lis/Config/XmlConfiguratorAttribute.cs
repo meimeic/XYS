@@ -11,7 +11,7 @@ namespace XYS.Lis.Config
 {
     [AttributeUsage(AttributeTargets.Assembly)]
     [Serializable]
-   public class XmlConfiguratorAttribute:ConfiguratorAttribute
+    public class XmlConfiguratorAttribute : ConfiguratorAttribute
     {
         private string m_configFile = null;
         private string m_configFileExtension = null;
@@ -105,9 +105,8 @@ namespace XYS.Lis.Config
                     }
                     catch (Exception ex)
                     {
-                        ReportReport.Error(declaringType, "Exception getting ApplicationBaseDirectory. Must be able to resolve ApplicationBaseDirectory and AssemblyFileName when ConfigFileExtension property is set.", ex);
+                        ReportReport.Error(declaringType, "XmlConfiguratorAttribute:Exception getting ApplicationBaseDirectory. Must be able to resolve ApplicationBaseDirectory and AssemblyFileName when ConfigFileExtension property is set.", ex);
                     }
-
                     if (applicationBaseDirectory != null)
                     {
                         fullPath2ConfigFile = Path.Combine(applicationBaseDirectory, SystemInfo.AssemblyFileName(sourceAssembly) + m_configFileExtension);
@@ -123,7 +122,7 @@ namespace XYS.Lis.Config
                 }
                 catch (Exception ex)
                 {
-                    ReportReport.Warn(declaringType, "Exception getting ApplicationBaseDirectory. ConfigFile property path [" + m_configFile + "] will be treated as an absolute path.", ex);
+                    ReportReport.Warn(declaringType, "XmlConfiguratorAttribute:Exception getting ApplicationBaseDirectory. ConfigFile property path [" + m_configFile + "] will be treated as an absolute path.", ex);
                 }
                 if (applicationBaseDirectory != null)
                 {
@@ -218,7 +217,6 @@ namespace XYS.Lis.Config
                             path = path.Substring(0, startOfExtension);
                         }
                         path += m_configFileExtension;
-
                         builder.Path = path;
                         fullPath2ConfigFile = builder.Uri;
                     }
@@ -233,7 +231,7 @@ namespace XYS.Lis.Config
                 }
                 catch (Exception ex)
                 {
-                    ReportReport.Warn(declaringType, "Exception getting ApplicationBaseDirectory. ConfigFile property path [" + m_configFile + "] will be treated as an absolute URI.", ex);
+                    ReportReport.Warn(declaringType, "XmlConfiguratorAttribute:Exception getting ApplicationBaseDirectory. ConfigFile property path [" + m_configFile + "] will be treated as an absolute URI.", ex);
                 }
 
                 if (applicationBaseDirectory != null)
@@ -259,7 +257,7 @@ namespace XYS.Lis.Config
                 {
                     if (m_configureAndWatch)
                     {
-                        ReportReport.Warn(declaringType, "XmlConfiguratorAttribute: Unable to watch config file loaded from a URI");
+                        ReportReport.Warn(declaringType, "XmlConfiguratorAttribute:XmlConfiguratorAttribute: Unable to watch config file loaded from a URI");
                     }
                     XmlConfigurator.Configure(targetRepository, fullPath2ConfigFile);
                 }

@@ -38,7 +38,7 @@ namespace XYS.Lis.Repository
             this.m_name2FillerMap = new Hashtable(5);
             this.m_name2HandlerMap = new Hashtable(7);
             this.m_name2ExportMap = new Hashtable(5);
-            this.m_name2StrategyMap = new Hashtable();
+            this.m_name2StrategyMap = new Hashtable(5);
         }
         #endregion
 
@@ -142,6 +142,35 @@ namespace XYS.Lis.Repository
             lock (this.m_name2StrategyMap)
             {
                 this.m_name2StrategyMap[strategy.StrategyName] = strategy;
+            }
+        }
+
+        public virtual void ClearFiller()
+        {
+            lock (this.m_name2FillerMap)
+            {
+                this.m_name2FillerMap.Clear();
+            }
+        }
+        public virtual void ClearHandler()
+        {
+            lock (this.m_name2HandlerMap)
+            {
+                this.m_name2HandlerMap.Clear();
+            }
+        }
+        public virtual void ClearExport()
+        {
+            lock (this.m_name2ExportMap)
+            {
+                this.m_name2ExportMap.Clear();
+            }
+        }
+        public virtual void ClearStrategy()
+        {
+            lock (this.m_name2StrategyMap)
+            {
+                this.m_name2StrategyMap.Clear();
             }
         }
         #endregion

@@ -10,10 +10,12 @@ using System.Text;
 using System.Windows.Forms;
 
 using XYS.Lis.Util;
+using XYS.Lis;
 namespace ZhTest
 {
     public partial class Form1 : Form
     {
+        static IReport report = ReportManager.GetReporter(typeof(Form1));
         public Form1()
         {
             InitializeComponent();
@@ -21,7 +23,6 @@ namespace ZhTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ReportModel mode = LisMap.GetReportModel(100);
         }
 
         private void button2_Click(object sender, EventArgs e)

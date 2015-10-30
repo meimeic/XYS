@@ -11,7 +11,7 @@ namespace XYS.Lis.Core
 
         #region
         public ReporterKey(string name)
-            : this(name, "defaultStrategy")
+            : this(name, "defaultstrategy")
         {
         }
         public ReporterKey(string name, string strategyName)
@@ -21,7 +21,7 @@ namespace XYS.Lis.Core
                 throw new ArgumentNullException("reporterName");
             }
             this.m_name = string.Intern(name);
-            this.m_strategyName = string.Intern(strategyName);
+            this.m_strategyName = string.Intern(strategyName.ToLower());
             this.m_hashCache = this.m_name.GetHashCode() + this.m_strategyName.GetHashCode();
         }
         #endregion
@@ -33,7 +33,13 @@ namespace XYS.Lis.Core
         }
         public string StrategyName
         {
-            get { return this.m_strategyName; }
+            get {
+                if (this.m_strategyName != null)
+                {
+                    return this.m_strategyName.ToLower();
+                }
+                return this.m_strategyName;
+             }
         }
         #endregion
 

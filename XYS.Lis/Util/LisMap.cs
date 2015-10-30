@@ -323,7 +323,7 @@ namespace XYS.Lis.Util
             XmlElement paramElement = XmlConfigurator.GetParamConfigurationElement();
             if (paramElement != null)
             {
-                ReportReport.Debug(declaringType, "configuring ReportModelMap");
+                ReportReport.Debug(declaringType, "LisMap:configuring ReportModelMap");
                 config.ConfigReportModelMap(paramElement, MODEL_MAP);
             }
         }
@@ -333,7 +333,7 @@ namespace XYS.Lis.Util
             XmlElement paramElement = XmlConfigurator.GetParamConfigurationElement();
             if (paramElement != null)
             {
-                ReportReport.Debug(declaringType, "configuring ReportElementTypeMap");
+                ReportReport.Debug(declaringType, "LisMap:configuring ReportElementTypeMap");
                 config.ConfigReportElementMap(paramElement, ELEMENT_TYPE_MAP);
             }
         }
@@ -343,7 +343,7 @@ namespace XYS.Lis.Util
             XmlElement paramElement = XmlConfigurator.GetParamConfigurationElement();
             if (paramElement != null)
             {
-                ReportReport.Debug(declaringType, "configuring ReportSectionMap");
+                ReportReport.Debug(declaringType, "LisMap:configuring ReportSectionMap");
                 config.ConfigSectionMap(paramElement, SECTION_MAP);
             }
         }
@@ -353,7 +353,7 @@ namespace XYS.Lis.Util
             XmlElement paramElement = XmlConfigurator.GetParamConfigurationElement();
             if (paramElement != null)
             {
-                ReportReport.Debug(declaringType, "configuring ParItemMap");
+                ReportReport.Debug(declaringType, "LisMap:configuring ParItemMap");
                 config.ConfigParItemMap(paramElement, PARITEM_MAP);
             }
         }

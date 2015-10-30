@@ -31,7 +31,7 @@ namespace XYS.Lis.Model
          }
         public ReportElementType(string elementName, Type elementType):this(elementType)
         {
-            this.m_elementName = elementName;
+            this.m_elementName = elementName.ToLower();
         }
         public ReportElementType(string typeName)
         {
@@ -46,14 +46,14 @@ namespace XYS.Lis.Model
             get {
                 if(this.m_elementName!=null&&!this.m_elementName.Equals(""))
                 {
-                return this.m_elementName; 
+                return this.m_elementName.ToLower(); 
                 }
                 else
                 {
-                    return this.m_elementType.FullName;
+                    return this.m_elementType.FullName.ToLower();
                 }
             }
-            set { this.m_elementName = value; }
+            set { this.m_elementName = value.ToLower(); }
         }
         public ReportElementTag ElementTag
         {

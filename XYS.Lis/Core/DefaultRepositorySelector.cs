@@ -14,12 +14,12 @@ namespace XYS.Lis.Core
         #region 静态成员
         private static readonly string DefaultRepositoryName = "reporter-default-repository";
         private static readonly Type declaringType = typeof(DefaultRepositorySelector);
+        private readonly Hashtable m_assembly2repositoryMap = new Hashtable();
+        private readonly Hashtable m_name2repositoryMap = new Hashtable();
         #endregion
 
         #region 指读实例成员
         private readonly Type m_defaultRepositoryType;
-        private readonly Hashtable m_assembly2repositoryMap = new Hashtable();
-        private readonly Hashtable m_name2repositoryMap = new Hashtable();
         #endregion
 
         #region 事件成员
@@ -39,7 +39,7 @@ namespace XYS.Lis.Core
                 throw SystemInfo.CreateArgumentOutOfRangeException("defaultRepositoryType", defaultRepositoryType, "Parameter: defaultRepositoryType, Value: [" + defaultRepositoryType + "] out of range. Argument must implement the ILoggerRepository interface");
             }
             m_defaultRepositoryType = defaultRepositoryType;
-            ReportReport.Debug(declaringType, "defaultRepositoryType [" + m_defaultRepositoryType + "]");
+            ReportReport.Debug(declaringType, "DefaultRepositorySelector:defaultRepositoryType [" + m_defaultRepositoryType + "]");
         }
         #endregion
        
@@ -128,7 +128,7 @@ namespace XYS.Lis.Core
                 //    // If we could not find an alias
                 //    if (rep == null)
                 //    {
-                ReportReport.Debug(declaringType, "Creating repository [" + repositoryName + "] using type [" + repositoryType + "]");
+                ReportReport.Debug(declaringType, "DefaultRepositorySelector:Creating repository [" + repositoryName + "] using type [" + repositoryType + "]");
                 // Call the no arg constructor for the repositoryType
                 rep = (IReporterRepository)Activator.CreateInstance(repositoryType);
                 // Set the name of the repository
@@ -185,7 +185,7 @@ namespace XYS.Lis.Core
                 if (rep == null)
                 {
                     // Not found, therefore create
-                    ReportReport.Debug(declaringType, "Creating repository for assembly [" + repositoryAssembly + "]");
+                    ReportReport.Debug(declaringType, "DefaultRepositorySelector:Creating repository for assembly [" + repositoryAssembly + "]");
 
                     // Must specify defaults
                     string actualRepositoryName = repositoryName;
@@ -197,7 +197,7 @@ namespace XYS.Lis.Core
                         GetInfoForAssembly(repositoryAssembly, ref actualRepositoryName, ref actualRepositoryType);
                     }
 
-                    ReportReport.Debug(declaringType, "Assembly [" + repositoryAssembly + "] using repository [" + actualRepositoryName + "] and repository type [" + actualRepositoryType + "]");
+                    ReportReport.Debug(declaringType, "DefaultRepositorySelector:Assembly [" + repositoryAssembly + "] using repository [" + actualRepositoryName + "] and repository type [" + actualRepositoryType + "]");
 
                     // Lookup the repository in the map (as this may already be defined)
                     rep = m_name2repositoryMap[actualRepositoryName] as IReporterRepository;
@@ -256,7 +256,7 @@ namespace XYS.Lis.Core
             }
             try
             {
-                ReportReport.Debug(declaringType, "Assembly [" + assembly.FullName + "] Loaded From [" + SystemInfo.AssemblyLocationInfo(assembly) + "]");
+                ReportReport.Debug(declaringType, "DefaultRepositorySelector:Assembly [" + assembly.FullName + "] Loaded From [" + SystemInfo.AssemblyLocationInfo(assembly) + "]");
             }
             catch
             {
@@ -270,18 +270,18 @@ namespace XYS.Lis.Core
                 if (repositoryAttributes == null || repositoryAttributes.Length == 0)
                 {
                     // This is not a problem, but its nice to know what is going on.
-                    ReportReport.Debug(declaringType, "Assembly [" + assembly + "] does not have a RepositoryAttribute specified.");
+                    ReportReport.Debug(declaringType, "DefaultRepositorySelector:Assembly [" + assembly + "] does not have a RepositoryAttribute specified.");
                 }
                 else
                 {
                     if (repositoryAttributes.Length > 1)
                     {
-                        ReportReport.Error(declaringType, "Assembly [" + assembly + "] has multiple XYS.Lis.Config.RepositoryAttribute assembly attributes. Only using first occurrence.");
+                        ReportReport.Error(declaringType, "DefaultRepositorySelector:Assembly [" + assembly + "] has multiple XYS.Lis.Config.RepositoryAttribute assembly attributes. Only using first occurrence.");
                     }
                     RepositoryAttribute domAttr = repositoryAttributes[0] as RepositoryAttribute;
                     if (domAttr == null)
                     {
-                        ReportReport.Error(declaringType, "Assembly [" + assembly + "] has a RepositoryAttribute but it does not!.");
+                        ReportReport.Error(declaringType, "DefaultRepositorySelector:Assembly [" + assembly + "] has a RepositoryAttribute but it does not!.");
                     }
                     else
                     {
@@ -337,6 +337,7 @@ namespace XYS.Lis.Core
                     {
                         try
                         {
+                            ReportReport.Debug(declaringType, "DefaultRepositorySelector:Configure Repository using assembly attribute [" + configAttr.GetType().Name + "]");
                             configAttr.Configure(assembly, repository);
                         }
                         catch (Exception ex)
@@ -352,10 +353,10 @@ namespace XYS.Lis.Core
                 // Try to configure the default repository using an AppSettings specified config file
                 // Do this even if the repository has been configured (or claims to be), this allows overriding
                 // of the default config files etc, if that is required.
-
                 string repositoryConfigFile = SystemInfo.GetAppSetting("lis-report.Config");
                 if (repositoryConfigFile != null && repositoryConfigFile.Length > 0)
                 {
+                    ReportReport.Debug(declaringType, "DefaultRepositorySelector:Try to configure the default repository using an AppSettings specified config file");
                     string applicationBaseDirectory = null;
                     try
                     {
@@ -363,7 +364,7 @@ namespace XYS.Lis.Core
                     }
                     catch (Exception ex)
                     {
-                        ReportReport.Warn(declaringType, "Exception getting ApplicationBaseDirectory. appSettings log4net.Config path [" + repositoryConfigFile + "] will be treated as an absolute URI", ex);
+                        ReportReport.Warn(declaringType, "DefaultRepositorySelector:Exception getting ApplicationBaseDirectory. appSettings lis-report.Config path [" + repositoryConfigFile + "] will be treated as an absolute URI", ex);
                     }
                     string repositoryConfigFilePath = repositoryConfigFile;
                     if (applicationBaseDirectory != null)
@@ -402,7 +403,7 @@ namespace XYS.Lis.Core
                         }
                         try
                         {
-                            ReportReport.Debug(declaringType, "Loading and watching configuration for default repository from AppSettings specified Config path [" + repositoryConfigFilePath + "]");
+                            ReportReport.Debug(declaringType, "DefaultRepositorySelector:Loading and watching configuration for default repository from AppSettings specified Config path [" + repositoryConfigFilePath + "]");
 
                             XmlConfigurator.ConfigureAndWatch(repository, repositoryConfigFileInfo);
                         }
@@ -422,12 +423,12 @@ namespace XYS.Lis.Core
                         }
                         catch (Exception ex)
                         {
-                            ReportReport.Error(declaringType, "Exception while parsing lis-report.Config file path [" + repositoryConfigFile + "]", ex);
+                            ReportReport.Error(declaringType, "DefaultRepositorySelector:Exception while parsing lis-report.Config file path [" + repositoryConfigFile + "]", ex);
                         }
 
                         if (repositoryConfigUri != null)
                         {
-                            ReportReport.Debug(declaringType, "Loading configuration for default repository from AppSettings specified Config URI [" + repositoryConfigUri.ToString() + "]");
+                            ReportReport.Debug(declaringType, "DefaultRepositorySelector:Loading configuration for default repository from AppSettings specified Config URI [" + repositoryConfigUri.ToString() + "]");
 
                             try
                             {
@@ -436,7 +437,7 @@ namespace XYS.Lis.Core
                             }
                             catch (Exception ex)
                             {
-                                ReportReport.Error(declaringType, "Exception calling XmlConfigurator.Configure method with ConfigUri [" + repositoryConfigUri + "]", ex);
+                                ReportReport.Error(declaringType, "DefaultRepositorySelector:Exception calling XmlConfigurator.Configure method with ConfigUri [" + repositoryConfigUri + "]", ex);
                             }
                         }
                     }

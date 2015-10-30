@@ -56,9 +56,10 @@ namespace XYS.Lis.Core
         #region
         public void AddElementName(string elementName)
         {
-            if (!this.m_elementNameList.Contains(elementName))
+            string name = elementName.ToLower();
+            if (!this.m_elementNameList.Contains(name))
             {
-                this.m_elementNameList.Add(elementName);
+                this.m_elementNameList.Add(name);
             }
         }
         public void ClearElementNameList()

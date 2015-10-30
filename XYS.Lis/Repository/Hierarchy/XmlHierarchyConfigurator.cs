@@ -16,6 +16,7 @@ namespace XYS.Lis.Repository.Hierarchy
     public class XmlHierarchyConfigurator
     {
         #region
+        private static Type declaringType = typeof(XmlHierarchyConfigurator);
         private Hierarchy m_hierarchy;
         private Hashtable m_reporterBag;
         #endregion
@@ -24,6 +25,7 @@ namespace XYS.Lis.Repository.Hierarchy
 
         // String constants used while parsing the XML data
         private static readonly string CONFIGURATION_TAG = "lis-report";
+        private static readonly string REPORTER_STRATEGY_STACK_TAG = "reporter-strategy-stack";
         private static readonly string REPORTER_STRATEGY_TAG = "reporter-strategy";
         //private static readonly string APPENDER_TAG = "appender";
         private static readonly string FILL_REF_TAG = "fill-ref";
@@ -69,6 +71,8 @@ namespace XYS.Lis.Repository.Hierarchy
             if (rootElementName != CONFIGURATION_TAG)
             {
                 //
+                ReportReport.Error(declaringType, "XmlHierarchyConfigurator:Xml element is - not a <" + CONFIGURATION_TAG + "> element.");
+                return;
             }
             foreach (XmlNode currentNode in element.ChildNodes)
             {
@@ -76,23 +80,49 @@ namespace XYS.Lis.Repository.Hierarchy
                 {
                     XmlElement currentElement = (XmlElement)currentNode;
                     //策略节点
-                    if (currentElement.LocalName == REPORTER_STRATEGY_TAG)
+                    if (currentElement.LocalName == REPORTER_STRATEGY_STACK_TAG)
+                    {
+                        this.m_hierarchy.ClearStrategy();
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterStrategyMap by " + REPORTER_STRATEGY_STACK_TAG+" element");
+                        foreach (XmlNode node in currentElement.ChildNodes)
+                        {
+                            if (node.NodeType == XmlNodeType.Element)
+                            {
+                                XmlElement tempElement = (XmlElement)node;
+                                if (tempElement.LocalName == REPORTER_STRATEGY_TAG)
+                                {
+                                    ParseStrategy(tempElement);
+                                }
+                            }
+                        }
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterStrategyMap by " + REPORTER_STRATEGY_STACK_TAG + " element");
+                    }
+                    else if (currentElement.LocalName == REPORTER_STRATEGY_TAG)
                     {
                         ParseStrategy(currentElement);
                     }
                     else if (currentElement.LocalName == FILL_STACK_TAG)
                     {
+                        this.m_hierarchy.ClearFiller();
                         //
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterFillMap by " + FILL_STACK_TAG + " element");
                         ParseFillStack(currentElement);
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterFillMap by " + FILL_STACK_TAG + " element");
                     }
                     else if (currentElement.LocalName == HANDLER_STACK_TAG)
                     {
+                        this.m_hierarchy.ClearHandler();
                         //
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterHandlerMap by " + HANDLER_STACK_TAG + " element");
                         ParseHandlerStack(currentElement);
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterHandlerMap by " + HANDLER_STACK_TAG + " element");
                     }
                     else if (currentElement.LocalName == EXPORT_STACK_TAG)
                     {
+                        this.m_hierarchy.ClearExport();
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterExportMap by " + EXPORT_STACK_TAG + " element");
                         ParseExportStack(currentElement);
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterExportMap by " + EXPORT_STACK_TAG + " element");
                     }
                     else
                     {
@@ -105,8 +135,11 @@ namespace XYS.Lis.Repository.Hierarchy
         protected void ParseStrategy(XmlElement reporterElement)
         {
             string strategyName = reporterElement.GetAttribute(NAME_ATTR);
+            ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Loading Strategy [" + strategyName + "]");
             ReporterStrategy strategy = new ReporterStrategy(strategyName);
             ParseChildrenOfStrategyElement(reporterElement, strategy);
+            this.m_hierarchy.AddStrategy(strategy);
+            ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Loaded Strategy [" + strategyName + "]");
         }
         protected void ParseChildrenOfStrategyElement(XmlElement element, ReporterStrategy strategy)
         {
@@ -187,6 +220,7 @@ namespace XYS.Lis.Repository.Hierarchy
         protected void ParseFill(XmlElement fillElement)
         {
             string fillName = fillElement.GetAttribute(NAME_ATTR);
+            ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Configure Filler [" + fillName + "]");
             object[] param = new object[] { fillName };
             string typeName = fillElement.GetAttribute(TYPE_ATTR);
             try
@@ -219,6 +253,7 @@ namespace XYS.Lis.Repository.Hierarchy
         protected void ParseHandler(XmlElement handlerElement)
         {
             string handlerName = handlerElement.GetAttribute(NAME_ATTR);
+            ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Configure Handler [" + handlerName + "]");
             object[] param = new object[] { handlerName };
             string typeName = handlerElement.GetAttribute(TYPE_ATTR);
             try
@@ -251,6 +286,7 @@ namespace XYS.Lis.Repository.Hierarchy
         protected void ParseExport(XmlElement exportElement)
         {
             string exportName = exportElement.GetAttribute(NAME_ATTR);
+            ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Configure Export [" + exportName + "]");
             object[] param = new object[] { exportName };
             string typeName = exportElement.GetAttribute(TYPE_ATTR);
             try

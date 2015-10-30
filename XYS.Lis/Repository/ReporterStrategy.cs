@@ -15,15 +15,14 @@ namespace XYS.Lis.Repository
         //private readonly List<string> m_exportList;
         public ReporterStrategy(string name)
         {
-            this.m_strategyName = name;
-
+            this.m_strategyName = name.ToLower();
             this.m_handlerList = new List<string>(7);
             //this.m_exportList=new List<string>(5);
             //this.m_fillerList = new List<string>(5);
         }
         public string StrategyName
         {
-            get { return this.m_strategyName; }
+            get { return this.m_strategyName.ToLower(); }
         }
 
         public List<string> HandlerList
@@ -33,13 +32,27 @@ namespace XYS.Lis.Repository
 
         public string FillerName
         {
-            get { return this.m_fillerName; }
-            set { this.m_fillerName = value; }
+            get
+            {
+                if (this.m_fillerName != null)
+                {
+                    return this.m_fillerName.ToLower();
+                }
+                return this.m_fillerName;
+            }
+            set { this.m_fillerName = value.ToLower(); }
         }
         public string ExportName
         {
-            get { return this.m_exportName; }
-            set { this.m_exportName = value; }
+            get
+            {
+                if (this.m_exportName != null)
+                {
+                    return this.m_exportName.ToLower();
+                }
+                return this.m_exportName;
+            }
+            set { this.m_exportName = value.ToLower(); }
         }
         //public List<string> ExportList
         //{
@@ -56,7 +69,7 @@ namespace XYS.Lis.Repository
             {
                 if (!this.m_handlerList.Contains(handlerName))
                 {
-                    this.m_handlerList.Add(handlerName);
+                    this.m_handlerList.Add(handlerName.ToLower());
                 }
             }
         }

@@ -8,17 +8,6 @@ using System.Collections;
 
 namespace XYS.Lis.Util
 {
-    /// <summary>
-    /// Utility class for system specific information.
-    /// </summary>
-    /// <remarks>
-    /// <para>
-    /// Utility class of static methods for system specific information.
-    /// </para>
-    /// </remarks>
-    /// <author>Nicko Cadell</author>
-    /// <author>Gert Driesen</author>
-    /// <author>Alexey Solofnenko</author>
     public sealed class SystemInfo
     {
         #region Private Constants
@@ -48,7 +37,6 @@ namespace XYS.Lis.Util
                 ReportReport.Debug(declaringType, "Initializing NullText value to [" + nullTextAppSettingsKey + "].");
                 nullText = nullTextAppSettingsKey;
             }
-
             // Look for log4net.NotAvailableText in AppSettings
             string notAvailableTextAppSettingsKey = SystemInfo.GetAppSetting("lis-report.NotAvailableText");
             if (notAvailableTextAppSettingsKey != null && notAvailableTextAppSettingsKey.Length > 0)
@@ -360,7 +348,6 @@ namespace XYS.Lis.Util
         {
             return type.FullName + ", " + type.Assembly.FullName;
         }
-
         /// <summary>
         /// Gets the short name of the <see cref="Assembly" />.
         /// </summary>
@@ -456,7 +443,6 @@ namespace XYS.Lis.Util
         {
             return GetTypeFromString(relativeType.Assembly, typeName, throwOnError, ignoreCase);
         }
-
         /// <summary>
         /// Loads the type specified in the type string.
         /// </summary>
@@ -503,10 +489,10 @@ namespace XYS.Lis.Util
         /// </remarks>
         public static Type GetTypeFromString(Assembly relativeAssembly, string typeName, bool throwOnError, bool ignoreCase)
         {
-            // Check if the type name specifies the assembly name
+            // typeName 不包含程序集名称
             if (typeName.IndexOf(',') == -1)
             {
-                ReportReport.Debug(declaringType, "SystemInfo: Loading type ["+typeName+"] from assembly ["+relativeAssembly.FullName+"]");
+                ReportReport.Debug(declaringType, "SystemInfo: Loading type [" + typeName + "] from assembly [" + relativeAssembly.FullName + "]");
 #if NETCF
 				return relativeAssembly.GetType(typeName, throwOnError);
 #else
@@ -515,7 +501,7 @@ namespace XYS.Lis.Util
                 if (type != null)
                 {
                     // Found type in relative assembly
-                    ReportReport.Debug(declaringType, "SystemInfo: Loaded type ["+typeName+"] from assembly ["+relativeAssembly.FullName+"]");
+                    ReportReport.Debug(declaringType, "SystemInfo: Loaded type [" + typeName + "] from assembly [" + relativeAssembly.FullName + "]");
                     return type;
                 }
                 Assembly[] loadedAssemblies = null;
@@ -537,7 +523,7 @@ namespace XYS.Lis.Util
                         if (type != null)
                         {
                             // Found type in loaded assembly
-                            ReportReport.Debug(declaringType, "Loaded type [" + typeName + "] from assembly [" + assembly.FullName + "] by searching loaded assemblies.");
+                            ReportReport.Debug(declaringType, "SystemInfo:Loaded type [" + typeName + "] from assembly [" + assembly.FullName + "] by searching loaded assemblies.");
                             return type;
                         }
                     }
@@ -546,15 +532,15 @@ namespace XYS.Lis.Util
                 // Didn't find the type
                 if (throwOnError)
                 {
-                    throw new TypeLoadException("Could not load type [" + typeName + "]. Tried assembly [" + relativeAssembly.FullName + "] and all loaded assemblies");
+                    throw new TypeLoadException("SystemInfo:Could not load type [" + typeName + "]. Tried assembly [" + relativeAssembly.FullName + "] and all loaded assemblies");
                 }
                 return null;
 #endif
             }
             else
             {
-                // Includes explicit assembly name
-                //LogLog.Debug(declaringType, "SystemInfo: Loading type ["+typeName+"] from global Type");
+                //包含程序集名称
+                ReportReport.Debug(declaringType, "SystemInfo: Loading type [" + typeName + "] from global Type");
 
 #if NETCF
 				// In NETCF 2 and 3 arg versions seem to behave differently
@@ -605,7 +591,6 @@ namespace XYS.Lis.Util
 #endif
         }
 
-
         /// <summary>
         /// Parse a string into an <see cref="Int32"/> value
         /// </summary>
@@ -633,9 +618,8 @@ namespace XYS.Lis.Util
 
 			return false;
 #else
-            // Initialise out param
+            // 初始化 out 参数
             val = 0;
-
             try
             {
                 double doubleVal;
@@ -680,7 +664,7 @@ namespace XYS.Lis.Util
 
 			return false;
 #else
-            // Initialise out param
+            // 初始化 out 参数
             val = 0;
             try
             {
@@ -726,7 +710,7 @@ namespace XYS.Lis.Util
 
 			return false;
 #else
-            // Initialise out param
+            // 初始化 out 参数
             val = 0;
             try
             {
@@ -771,7 +755,7 @@ namespace XYS.Lis.Util
             catch (Exception ex)
             {
                 // If an exception is thrown here then it looks like the config file does not parse correctly.
-                ReportReport.Error(declaringType, "Exception while reading ConfigurationSettings. Check your .config file is well formed XML.", ex);
+                ReportReport.Error(declaringType, "SystemInfo:Exception while reading ConfigurationSettings. Check your .config file is well formed XML.", ex);
             }
             return null;
         }

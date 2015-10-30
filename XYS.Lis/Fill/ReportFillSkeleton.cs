@@ -23,7 +23,7 @@ namespace XYS.Lis.Fill
         {
             this.m_section2ElementTypesMap = new Dictionary<int, ReportElementTypeCollection>();
             this.m_defaultElementTypeCollection = new ReportElementTypeCollection(6);
-            this.m_fillerName = name;
+            this.m_fillerName = name.ToLower();
         }
         #endregion
 
@@ -44,7 +44,7 @@ namespace XYS.Lis.Fill
         #region 实现接口
         public virtual string FillerName
         {
-            get { return this.m_fillerName; }
+            get { return this.m_fillerName.ToLower(); }
         }
         
         //public virtual ILisReportElement Fill(ReportKey key, ReportElementTag elementTag)

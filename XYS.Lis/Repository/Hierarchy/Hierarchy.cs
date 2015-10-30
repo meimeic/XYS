@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+//using System.Collections.Generic;
 using System.Xml;
 
 using XYS.Common;
@@ -39,7 +39,7 @@ namespace XYS.Lis.Repository.Hierarchy
         private IReportExport m_defaultExport;
         private IReporterFactory m_defaultFactory;
         private Reporter m_defaultReporter;
-        private Dictionary<ReporterKey, Reporter> m_key2ReporterMap;
+        private Hashtable m_key2ReporterMap;
         private event ReporterCreationEventHandler m_reporterCreatedEvent;
         #endregion
 
@@ -62,7 +62,7 @@ namespace XYS.Lis.Repository.Hierarchy
                 throw new ArgumentNullException("reporterFactory");
             }
             this.m_defaultFactory = reporterFactory;
-            this.m_key2ReporterMap = new Dictionary<ReporterKey, Reporter>();
+            this.m_key2ReporterMap = new Hashtable(20);
         }
         #endregion
 
@@ -176,7 +176,6 @@ namespace XYS.Lis.Repository.Hierarchy
         protected void XmlRepositoryConfigure(XmlElement element)
         {
             ArrayList configurationMessages = new ArrayList();
-
             using (new ReportReport.ReportReceivedAdapter(configurationMessages))
             {
                 XmlHierarchyConfigurator config = new XmlHierarchyConfigurator(this);
