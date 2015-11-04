@@ -42,10 +42,19 @@ namespace XYS.Lis.Export
             get { return this.m_exportTag; }
             protected set { this.m_exportTag = value; }
         }
+      
         public virtual string export(ILisReportElement element)
         {
             PreFilter(element);
-            return InnerElementExport(element);
+            if (element.ElementTag == ReportElementTag.ReportElement)
+            {
+                ReportReportElement rre = element as ReportReportElement;
+                return InnerReportExport(rre);
+            }
+            else
+            {
+                return InnerElementExport(element);
+            }
         }
         public virtual string export(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
         {

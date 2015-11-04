@@ -14,14 +14,15 @@ namespace XYS.Lis.Fill
     {
         #region
         private readonly string m_fillerName;
-        private readonly Dictionary<int, ReportElementTypeCollection> m_section2ElementTypesMap;
+        //private readonly Dictionary<int, ReportElementTypeCollection> m_section2ElementTypesMap;
+        private readonly Hashtable m_section2ElementTypesMap;
         private ReportElementTypeCollection m_defaultElementTypeCollection;
         #endregion
         
         #region
         protected ReportFillSkeleton(string name)
         {
-            this.m_section2ElementTypesMap = new Dictionary<int, ReportElementTypeCollection>();
+            this.m_section2ElementTypesMap = new Hashtable(10);
             this.m_defaultElementTypeCollection = new ReportElementTypeCollection(6);
             this.m_fillerName = name.ToLower();
         }

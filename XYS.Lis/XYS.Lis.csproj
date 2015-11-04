@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FastReport, Version=2013.2.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\GitHub\Repos\XYSTest\lib\FastReport.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -166,6 +170,7 @@
     <Compile Include="Util\TypeConverters\PatternStringConverter.cs" />
     <Compile Include="Util\TypeConverters\TypeConverter.cs" />
     <Compile Include="Util\TypeConverters\TypeConverterAttribute.cs" />
+    <Compile Include="Util\XMLTools.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XYS.Utility\XYS.Utility.csproj">

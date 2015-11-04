@@ -168,7 +168,7 @@ namespace XYS.Lis.Handler
                 this.InitParItem2OrderTable();
             }
             int temp;
-            foreach (ICollection c in this.m_parItem2Order.Keys)
+            foreach (object c in this.m_parItem2Order.Keys)
             {
                 try
                 {

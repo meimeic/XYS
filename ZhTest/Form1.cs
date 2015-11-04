@@ -23,6 +23,9 @@ namespace ZhTest
 
         private void button1_Click(object sender, EventArgs e)
         {
+            LisSearchRequire re = new LisSearchRequire(5);
+            re.EqualFields.Add("SerialNo", "1502139819");
+            report.ReportExport(re);
         }
 
         private void button2_Click(object sender, EventArgs e)

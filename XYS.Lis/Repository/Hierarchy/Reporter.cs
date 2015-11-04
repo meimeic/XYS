@@ -379,7 +379,7 @@ namespace XYS.Lis.Repository.Hierarchy
             ReporterStrategy stratrgy = this.Hierarchy.StrategyMap[this.StrategyName] as ReporterStrategy;
             if (stratrgy == null)
             {
-                throw new ArgumentNullException("can not find stratrgy");
+                throw new ArgumentNullException("can not find the stratrgy [" + this.StrategyName + "]");
             }
             SetFiller(this.Hierarchy.FillerMap, stratrgy.FillerName);
             AddHandler(this.Hierarchy.HandlerMap, stratrgy.HandlerList);

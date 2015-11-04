@@ -7,6 +7,7 @@ using XYS.Lis.Util.TypeConverters;
 namespace XYS.Lis.Util
 {
     public delegate void ReportReceivedEventHandler(object sender, ReportReceivedEventArgs e);
+    
     public class ReportReceivedEventArgs : EventArgs
     {
         private ReportReport m_report;
@@ -23,6 +24,7 @@ namespace XYS.Lis.Util
 
     }
     //处理dll加载过程中的错误
+    
     public class ReportReport
     {
         #region
@@ -76,6 +78,7 @@ namespace XYS.Lis.Util
             }
         }
         #endregion
+        
         #region
         public Type Source
         {
@@ -155,6 +158,7 @@ namespace XYS.Lis.Util
                 OnReportReceived(source, PREFIX, message, null);
             }
         }
+        
         public static void Debug(Type source, string message, Exception exception)
         {
             if (IsDebugEnabled)
@@ -170,6 +174,7 @@ namespace XYS.Lis.Util
                 OnReportReceived(source, PREFIX, message, exception);
             }
         }
+        
         public static void Warn(Type source, string message)
         {
             if (IsWarnEnabled)
@@ -181,6 +186,7 @@ namespace XYS.Lis.Util
                 OnReportReceived(source, WARN_PREFIX, message, null);
             }
         }
+        
         public static void Warn(Type source, string message, Exception exception)
         {
             if (IsWarnEnabled)
@@ -196,6 +202,7 @@ namespace XYS.Lis.Util
                 OnReportReceived(source, WARN_PREFIX, message, exception);
             }
         }
+        
         public static void Error(Type source, string message)
         {
             if (IsErrorEnabled)
@@ -208,6 +215,7 @@ namespace XYS.Lis.Util
                 OnReportReceived(source, ERR_PREFIX, message, null);
             }
         }
+        
         public static void Error(Type source, string message, Exception exception)
         {
             if (IsErrorEnabled)
@@ -223,6 +231,7 @@ namespace XYS.Lis.Util
                 OnReportReceived(source, ERR_PREFIX, message, exception);
             }
         }
+        
         public static void OnReportReceived(Type source, string prefix, string message, Exception exception)
         {
             if (ReportReceived != null)
@@ -250,6 +259,7 @@ namespace XYS.Lis.Util
                 // Ignore exception, what else can we do? Not really a good idea to propagate back to the caller
             }
         }
+        
         private static void EmitErrorLine(string message)
         {
             try
@@ -297,6 +307,7 @@ namespace XYS.Lis.Util
                 ReportReceived -= handler;
             }
         }
+        
         #endregion
     }
 }

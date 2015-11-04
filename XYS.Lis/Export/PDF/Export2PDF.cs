@@ -1,9 +1,14 @@
 ﻿using System;
+using System.Data;
+using System.IO;
 using System.Collections.Generic;
+
+using FastReport;
 
 using XYS.Lis.Core;
 using XYS.Lis.Export;
 using XYS.Lis.Model;
+using XYS.Lis.Util;
 using XYS.Model;
 
 namespace XYS.Lis.Export.PDF
@@ -29,13 +34,6 @@ namespace XYS.Lis.Export.PDF
         {
             throw new NotImplementedException();
         }
-
-        protected virtual string GenderPDF(ReportReportElement rre)
-        {
-            return null;
-        }
-        #endregion
-
         protected override string InnerElementListExport(List<ILisReportElement> elementList)
         {
             throw new NotImplementedException();
@@ -45,5 +43,45 @@ namespace XYS.Lis.Export.PDF
         {
             throw new NotImplementedException();
         }
+        #endregion
+
+        protected virtual string GenderPDF(ReportReportElement rre)
+        {
+            return null;
+        }
+
+        #region
+        private DataSet GetExportDataSet(string frdName)
+        {
+            string frdFullName = GetReportDataStructPath(frdName);
+            DataSet ds = CreateDataSet(frdFullName);
+            return ds;
+        }
+        private string GetReportDataStructPath(string frdName)
+        {
+            return Path.Combine(SystemInfo.ApplicationBaseDirectory, "dataset", frdName);
+        }
+        private DataSet CreateDataSet(string frdFile)
+        {
+            DataSet ds = XMLTools.ConvertFRDFile2DataSet(frdFile);
+            return ds;
+        }
+        private void FillExam()
+        { 
+        }
+        private void FillPatient()
+        { 
+        }
+        private void FillItem()
+        { 
+        }
+        private void FillGraph()
+        {
+        }
+        private void FillCustom()
+        {
+        }
+        #endregion
+
     }
 }

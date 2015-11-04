@@ -31,7 +31,6 @@ namespace XYS.Lis
         {
             return GetReporter(Assembly.GetCallingAssembly(), type, strategyName);
         }
-        
         public static IReport GetReporter(string repository, ReporterKey key)
         {
             return WrapReporter(ReporterManager.GetReporter(repository, key));

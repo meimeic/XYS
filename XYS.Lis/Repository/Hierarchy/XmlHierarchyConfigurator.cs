@@ -83,7 +83,7 @@ namespace XYS.Lis.Repository.Hierarchy
                     if (currentElement.LocalName == REPORTER_STRATEGY_STACK_TAG)
                     {
                         this.m_hierarchy.ClearStrategy();
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterStrategyMap by " + REPORTER_STRATEGY_STACK_TAG+" element");
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterStrategyMap by <" + REPORTER_STRATEGY_STACK_TAG+"> element");
                         foreach (XmlNode node in currentElement.ChildNodes)
                         {
                             if (node.NodeType == XmlNodeType.Element)
@@ -95,7 +95,7 @@ namespace XYS.Lis.Repository.Hierarchy
                                 }
                             }
                         }
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterStrategyMap by " + REPORTER_STRATEGY_STACK_TAG + " element");
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterStrategyMap");
                     }
                     else if (currentElement.LocalName == REPORTER_STRATEGY_TAG)
                     {
@@ -105,24 +105,24 @@ namespace XYS.Lis.Repository.Hierarchy
                     {
                         this.m_hierarchy.ClearFiller();
                         //
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterFillMap by " + FILL_STACK_TAG + " element");
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterFillMap by <" + FILL_STACK_TAG + "> element");
                         ParseFillStack(currentElement);
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterFillMap by " + FILL_STACK_TAG + " element");
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterFillMap");
                     }
                     else if (currentElement.LocalName == HANDLER_STACK_TAG)
                     {
                         this.m_hierarchy.ClearHandler();
                         //
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterHandlerMap by " + HANDLER_STACK_TAG + " element");
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterHandlerMap by <" + HANDLER_STACK_TAG + "> element");
                         ParseHandlerStack(currentElement);
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterHandlerMap by " + HANDLER_STACK_TAG + " element");
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterHandlerMap");
                     }
                     else if (currentElement.LocalName == EXPORT_STACK_TAG)
                     {
                         this.m_hierarchy.ClearExport();
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterExportMap by " + EXPORT_STACK_TAG + " element");
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterExportMap by <" + EXPORT_STACK_TAG + "> element");
                         ParseExportStack(currentElement);
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterExportMap by " + EXPORT_STACK_TAG + " element");
+                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterExportMap");
                     }
                     else
                     {
@@ -195,9 +195,10 @@ namespace XYS.Lis.Repository.Hierarchy
                 string handlerName = element.GetAttribute(REF_ATTR);
                 if (handlerName != null && !handlerName.Equals(""))
                 {
-                    if (!strategy.HandlerList.Contains(handlerName))
+                    string hName = handlerName.ToLower();
+                    if (!strategy.HandlerList.Contains(hName))
                     {
-                        strategy.HandlerList.Add(handlerName);
+                        strategy.HandlerList.Add(hName);
                     }
                 }
             }

@@ -16,7 +16,7 @@ namespace XYS.Lis.Fill
         private static readonly string m_FillerName = "DBFiller";
         private LisReportCommonDAL m_reportDAL;
         #endregion
-        
+
         #region
         public ReportFillByDB()
             : this(m_FillerName)
@@ -46,7 +46,7 @@ namespace XYS.Lis.Fill
             set { this.m_reportDAL = value; }
         }
         #endregion
-        
+
         #region 实现父类抽象方法
         protected override void FillReport(ReportReportElement rre, ReportKey key)
         {
@@ -66,7 +66,7 @@ namespace XYS.Lis.Fill
                 return;
             }
             int sectionNo = GetSectionNo(key);
-            Type type = this.GetElementType(sectionNo,elementTag);
+            Type type = this.GetElementType(sectionNo, elementTag);
             Hashtable keyTable = ReportKey2Table(key);
             if (type != null)
             {
@@ -121,10 +121,12 @@ namespace XYS.Lis.Fill
                 }
             }
         }
+        
         protected virtual void FillElement(ILisReportElement reportElement, Hashtable keyTable)
         {
             this.ReportDAL.Fill(reportElement, keyTable);
         }
+        
         protected virtual void FillElements(List<ILisReportElement> reportElementList, Hashtable keyTable, Type elementType)
         {
             this.ReportDAL.FillList(reportElementList, elementType, keyTable);

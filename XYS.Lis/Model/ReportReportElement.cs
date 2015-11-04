@@ -7,6 +7,7 @@ namespace XYS.Lis.Model
 {
     public class ReportReportElement:AbstractReportElement
     {
+
         #region 私有常量字段
         private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.ReportElement;
         private static readonly Type m_defaultCommonItemType = typeof(ReportItemElement);

@@ -81,6 +81,10 @@
       <Project>{4f0c8535-b1e0-46b0-800a-97df8ac6065e}</Project>
       <Name>XYS.Lis</Name>
     </ProjectReference>
+    <ProjectReference Include="..\XYS\XYS.csproj">
+      <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
+      <Name>XYS</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
