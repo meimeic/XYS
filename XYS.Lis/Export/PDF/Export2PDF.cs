@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Data;
 using System.IO;
 using System.Collections.Generic;
@@ -34,7 +35,11 @@ namespace XYS.Lis.Export.PDF
         {
             throw new NotImplementedException();
         }
-        protected override string InnerElementListExport(List<ILisReportElement> elementList)
+        protected override string InnerElementsExport(List<ILisReportElement> elementList)
+        {
+            throw new NotImplementedException();
+        }
+        protected override string InnerElementsExport(Hashtable table,ReportElementTag elementTag)
         {
             throw new NotImplementedException();
         }

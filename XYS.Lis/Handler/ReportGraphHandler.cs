@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using XYS.Lis.Core;
 using XYS.Model;
@@ -60,12 +61,33 @@ namespace XYS.Lis.Handler
                 return HandlerResult.Continue;
             }
         }
+        public override HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag)
+        {
+            if (elementTag == ReportElementTag.ReportElement)
+            {
+                OperateReportTable(reportElementTable);
+                return HandlerResult.Continue;
+            }
+            else if (elementTag == ReportElementTag.GraphElement)
+            {
+                OperateGraphItems(reportElementTable);
+                return HandlerResult.Continue;
+            }
+            else
+            {
+                return HandlerResult.Continue;
+            }
+        }
         #endregion
 
         #region
         protected override void OperateReport(ReportReportElement rre)
         {
-            OperateGraphItems(rre.GraphItemList);
+            Hashtable table = rre.ItemTable[ReportElementTag.GraphElement] as Hashtable;
+            if (table != null)
+            {
+                OperateGraphItems(table);
+            }
         }
         #endregion
         #region
@@ -78,6 +100,22 @@ namespace XYS.Lis.Handler
                 for (int i = graphList.Count - 1; i >= 0; i--)
                 {
                     rge = graphList[i] as ReportGraphElement;
+                    if (rge != null)
+                    {
+                        OperateGraphItem(rge);
+                    }
+                }
+            }
+        }
+        protected virtual void OperateGraphItems(Hashtable table)
+        {
+            if (table.Count > 0)
+            {
+                //
+                ReportGraphElement rge;
+                foreach (DictionaryEntry de in table)
+                {
+                    rge = de.Value as ReportGraphElement;
                     if (rge != null)
                     {
                         OperateGraphItem(rge);

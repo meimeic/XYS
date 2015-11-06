@@ -58,7 +58,7 @@ namespace XYS.Lis.Fill
             this.FillReport(rre, keyTable, availableElements);
         }
 
-        protected override void FillElements(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag)
+        protected override void FillElements(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag)
         {
             if (elementTag == ReportElementTag.ReportElement || elementTag == ReportElementTag.NoneElement)
             {
@@ -70,7 +70,7 @@ namespace XYS.Lis.Fill
             Hashtable keyTable = ReportKey2Table(key);
             if (type != null)
             {
-                this.FillElements(reportElementList, keyTable, type);
+                this.FillElements(reportElementTable, type, keyTable);
             }
         }
 
@@ -79,6 +79,7 @@ namespace XYS.Lis.Fill
             if (reportElement.ElementTag == ReportElementTag.ReportElement)
             {
                 //填充报告
+                return;
             }
             Hashtable keyTable = ReportKey2Table(key);
             FillElement(reportElement, keyTable);
@@ -94,20 +95,19 @@ namespace XYS.Lis.Fill
                 switch (elementtype.ElementTag)
                 {
                     //报告元素---检验信息项
-                    case ReportElementTag.ExamElement:
-                        FillElements(rre.ExamList, keyTable, elementtype.ElementType);
-                        break;
                     //报告元素---患者信息项
+                    case ReportElementTag.ExamElement:
                     case ReportElementTag.PatientElement:
-                        FillElements(rre.PatientList, keyTable, elementtype.ElementType);
+                        FillReportItem(rre,elementtype.ElementTag, elementtype.ElementType, keyTable);                    
                         break;
                     //报告元素---检验项
-                    case ReportElementTag.ItemElement:
-                        FillElements(rre.CommonItemList, keyTable, elementtype.ElementType);
-                        break;
                     //报告元素---图片项
+                    case ReportElementTag.ItemElement:
                     case ReportElementTag.GraphElement:
-                        FillElements(rre.GraphItemList, keyTable, elementtype.ElementType);
+                        lock (this)
+                        {
+                            FillReportItemTable(rre, elementtype.ElementTag, elementtype.ElementType, keyTable);
+                        }
                         break;
                     //报告元素---自定义项
                     case ReportElementTag.CustomElement:
@@ -120,17 +120,30 @@ namespace XYS.Lis.Fill
                         break;
                 }
             }
+            rre.AfterFill();
+        }
+        protected virtual void FillReportItem(ReportReportElement rre,ReportElementTag elementTag,Type elementType,Hashtable keyTable)
+        {
+            ILisReportElement element = (ILisReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
+            FillElement(element, keyTable);
+            rre.AddItem(elementTag, element);
+        }
+        protected virtual void FillReportItemTable(ReportReportElement rre, ReportElementTag elementTag, Type elementType, Hashtable keyTable)
+        {
+            Hashtable table = new Hashtable(16);
+            FillElements(table,elementType, keyTable);
+            rre.AddTableItem(elementTag, table);
         }
         
         protected virtual void FillElement(ILisReportElement reportElement, Hashtable keyTable)
         {
             this.ReportDAL.Fill(reportElement, keyTable);
         }
-        
-        protected virtual void FillElements(List<ILisReportElement> reportElementList, Hashtable keyTable, Type elementType)
+        protected virtual void FillElements(Hashtable reportElementTable,Type elementType, Hashtable keyTable)
         {
-            this.ReportDAL.FillList(reportElementList, elementType, keyTable);
+            this.ReportDAL.FillTable(reportElementTable, elementType, keyTable);
         }
+        
         protected virtual int GetSectionNo(ReportKey key)
         {
             int sectionNo = 0;

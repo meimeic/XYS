@@ -47,11 +47,11 @@ namespace XYS.Lis.Handler
                 return HandlerResult.Continue;
             }
         }
-        public override HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
+        public override HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag)
         {
             if (elementTag == ReportElementTag.ReportElement)
             {
-                OperateReportList(reportElementList);
+                OperateReportTable(reportElementTable);
                 return HandlerResult.Continue;
             }
             else
@@ -64,17 +64,28 @@ namespace XYS.Lis.Handler
         #region
         protected override void OperateReport(ReportReportElement rre)
         {
-            if (rre.ExamList.Count > 0)
+            ReportExamElement ree;
+            //if (rre.ExamList.Count > 0)
+            //{
+            //    ReportExamElement examElement = rre.ExamList[0] as ReportExamElement;
+            //    if (examElement != null)
+            //    {
+            //        //按照检验大项设置
+            //        SetReportOrderNoByParItem(rre);
+            //        if (rre.OrderNo <= 0)
+            //        {
+            //            SetReportOrderNoBySection(rre, examElement.SectionNo);
+            //        }
+            //    }
+            //}
+            ree = rre.ItemTable[ReportElementTag.ExamElement] as ReportExamElement;
+            if (ree != null)
             {
-                ReportExamElement examElement = rre.ExamList[0] as ReportExamElement;
-                if (examElement != null)
+                //按照检验大项设置
+                SetReportOrderNoByParItem(rre);
+                if (rre.OrderNo <= 0)
                 {
-                    //按照检验大项设置
-                    SetReportOrderNoByParItem(rre);
-                    if (rre.OrderNo <= 0)
-                    {
-                        SetReportOrderNoBySection(rre, examElement.SectionNo);
-                    }
+                    SetReportOrderNoBySection(rre, ree.SectionNo);
                 }
             }
         }

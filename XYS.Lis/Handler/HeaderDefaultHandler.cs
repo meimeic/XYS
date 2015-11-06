@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Lis.Core;
@@ -12,11 +13,11 @@ namespace XYS.Lis.Handler
     /// </summary>
     public class HeaderDefaultHandler : ReportHandlerSkeleton
     {
-        #region
+        #region 变量
         public static readonly string m_defaultHandlerName = "HeaderDefaultHandler";
         #endregion
 
-        #region
+        #region 构造函数
         public HeaderDefaultHandler()
             : this(m_defaultHandlerName)
         {
@@ -51,7 +52,7 @@ namespace XYS.Lis.Handler
                     }
                     else
                     {
-                        OperateExamInfo(exam);
+                        OperateExam(exam);
                         return HandlerResult.Continue;
                     }
                 case ReportElementTag.PatientElement:
@@ -73,7 +74,7 @@ namespace XYS.Lis.Handler
                     }
                     else
                     {
-                        OperateCommonItem(commonItem);
+                        OperateItem(commonItem);
                         return HandlerResult.Continue;
                     }
                 case ReportElementTag.GraphElement:
@@ -84,7 +85,7 @@ namespace XYS.Lis.Handler
                     }
                     else
                     {
-                        OperateGraphItem(graphItem);
+                        OperateGraph(graphItem);
                         return HandlerResult.Continue;
                     }
                 case ReportElementTag.CustomElement:
@@ -95,7 +96,7 @@ namespace XYS.Lis.Handler
                     }
                     else
                     {
-                        OperateCustomItem(customItem);
+                        OperateCustom(customItem);
                         return HandlerResult.Continue;
                     }
                 default:
@@ -103,40 +104,33 @@ namespace XYS.Lis.Handler
             }
         }
 
-        public override HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
+        public override HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag)
         {
             HandlerResult rs = HandlerResult.Fail;
             switch (elementTag)
             {
                 case ReportElementTag.ReportElement:
-                    OperateReportList(reportElementList);
-                    if (reportElementList.Count > 0)
-                    {
-                        rs= HandlerResult.Continue;
-                    }
-                    else
-                    {
-                        rs= HandlerResult.Fail;
-                    }
+                    OperateReportTable(reportElementTable);
+                    rs = HandlerResult.Continue;
                     break;
                 case ReportElementTag.ExamElement:
-                    OperateExamList(reportElementList);
+                    OperateExamTable(elementTag, reportElementTable);
                     rs = HandlerResult.Continue;
                     break;
                 case ReportElementTag.PatientElement:
-                    OperatePatientList(reportElementList);
+                    OperatePatientTable(elementTag, reportElementTable);
                     rs = HandlerResult.Continue;
                     break;
                 case ReportElementTag.ItemElement:
-                    OperateCommonItemList(reportElementList, null);
+                    OperateItemTable(elementTag, reportElementTable);
                     rs = HandlerResult.Continue;
                     break;
                 case ReportElementTag.GraphElement:
-                    OperateGraphItemList(reportElementList);
+                    OperateGraphTable(elementTag, reportElementTable);
                     rs = HandlerResult.Continue;
                     break;
                 case ReportElementTag.CustomElement:
-                    OperateCustomItemList(reportElementList);
+                    OperateCustomTable(elementTag, reportElementTable);
                     rs = HandlerResult.Continue;
                     break;
                 default:
@@ -149,38 +143,106 @@ namespace XYS.Lis.Handler
 
 
         #region
-        protected override void OperateReportList(List<ILisReportElement> reportList)
+        protected override void OperateReportTable(Hashtable reportTable)
         {
-            if (reportList.Count > 0)
+            FilterItem(ReportElementTag.ReportElement, reportTable);
+            ReportReportElement rre;
+            foreach(DictionaryEntry de in reportTable)
             {
-                //HandlerResult rs = HandlerResult.Fail;
-                for (int i = reportList.Count - 1; i >= 0; i--)
+                rre = de.Value as ReportReportElement;
+                if (rre != null)
                 {
-                    ReportReportElement rre = reportList[i] as ReportReportElement;
-                    if (rre == null)
-                    {
-                        reportList.RemoveAt(i);
-                    }
-                    else
-                    {
-                        OperateReport(rre);
-                        //rs = GetMax(rs, OperateReport(rre));
-                    }
+                    OperateReport(rre);
                 }
-              //  return rs;
             }
-            //else
+            //if (reportTable.Count > 0)
             //{
-            //    return HandlerResult.Fail;
+            //    //HandlerResult rs = HandlerResult.Fail;
+            //    for (int i = reportTable.Count - 1; i >= 0; i--)
+            //    {
+            //        ReportReportElement rre = reportTable[i] as ReportReportElement;
+            //        if (rre == null)
+            //        {
+            //            reportTable.RemoveAt(i);
+            //        }
+            //        else
+            //        {
+            //            OperateReport(rre);
+            //            //rs = GetMax(rs, OperateReport(rre));
+            //        }
+            //    }
+            //  //  return rs;
             //}
+            ////else
+            ////{
+            ////    return HandlerResult.Fail;
+            ////}
         }
         protected override void OperateReport(ReportReportElement rre)
         {
-            OperateExamList(rre.ExamList);
-            OperatePatientList(rre.PatientList);
-            OperateCommonItemList(rre.CommonItemList, rre.ParItemList);
-            OperateGraphItemList(rre.GraphItemList);
-            OperateCustomItemList(rre.CustomItemList);
+            ReportElementTag elementTag;
+            ReportExamElement ree;
+            ReportPatientElement rpe;
+            Hashtable table;
+            foreach (DictionaryEntry de in rre.ItemTable)
+            {
+                if (de.Key != null)
+                {
+                    try
+                    {
+                        elementTag = (ReportElementTag)de.Key;
+                        switch (elementTag)
+                        {
+                            case ReportElementTag.ExamElement:
+                                ree = de.Value as ReportExamElement;
+                                if (ree != null)
+                                {
+                                    OperateExam(ree);
+                                }
+                                break;
+                            case ReportElementTag.PatientElement:
+                                rpe = de.Value as ReportPatientElement;
+                                if (rpe != null)
+                                {
+                                    OperatePatient(rpe);
+                                }
+                                break;
+                            case ReportElementTag.ItemElement:
+                                table = de.Value as Hashtable;
+                                if (table != null)
+                                {
+                                    OperateItemTable(elementTag, table);
+                                }
+                                break;
+                            case ReportElementTag.GraphElement:
+                                table = de.Value as Hashtable;
+                                if (table != null)
+                                {
+                                    OperateGraphTable(elementTag, table);
+                                }
+                                break;
+                            case ReportElementTag.CustomElement:
+                                table = de.Value as Hashtable;
+                                if (table != null)
+                                {
+                                    OperateCustomTable(elementTag, table);
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        continue;
+                    }
+                }
+            }
+            //OperateExamList(rre.ExamList);
+            //OperatePatientList(rre.PatientList);
+            //OperateCommonItemList(rre.CommonItemList, rre.ParItemList);
+            //OperateGraphItemList(rre.GraphItemList);
+            //OperateCustomItemList(rre.CustomItemList);
             //if (rre.CommonItemList.Count > 0 && rre.ExamList.Count > 0 && rre.PatientList.Count > 0)
             //{
             //    return HandlerResult.Continue;
@@ -194,6 +256,29 @@ namespace XYS.Lis.Handler
         //{
 
         //}
+        protected virtual void OperateReportItemTable(ReportElementTag elementTag, Hashtable table)
+        {
+            switch (elementTag)
+            {
+                case ReportElementTag.ExamElement:
+                    OperateExamTable(elementTag,table);
+                    break;
+                case ReportElementTag.PatientElement:
+                    OperatePatientTable(elementTag,table);
+                    break;
+                case ReportElementTag.ItemElement:
+                    OperateItemTable(elementTag,table);
+                    break;
+                case ReportElementTag.GraphElement:
+                    OperateGraphTable(elementTag,table);
+                    break;
+                case ReportElementTag.CustomElement:
+                    OperateCustomTable(elementTag,table);
+                    break;
+                default:
+                    break;
+            }
+        }
         
         protected virtual void OperateExamList(List<ILisReportElement> examList)
         {
@@ -209,12 +294,25 @@ namespace XYS.Lis.Handler
                     }
                     else
                     {
-                        OperateExamInfo(examItem);
+                        OperateExam(examItem);
                     }
                 }
             }
         }
-        protected virtual void OperateExamInfo(ReportExamElement ree)
+        protected virtual void OperateExamTable(ReportElementTag elementTag,Hashtable table)
+        {
+            ReportExamElement ree;
+            FilterItem(elementTag, table);
+            foreach (DictionaryEntry de in table)
+            {
+                ree = de.Value as ReportExamElement;
+                if (ree != null)
+                {
+                    OperateExam(ree);
+                }
+            }
+        }
+        protected virtual void OperateExam(ReportExamElement ree)
         {
             //检验信息处理
 
@@ -239,12 +337,25 @@ namespace XYS.Lis.Handler
                 }
             }
         }
+        protected virtual void OperatePatientTable(ReportElementTag elementTag,Hashtable table)
+        {
+            ReportPatientElement rpe;
+            FilterItem(elementTag, table);
+            foreach (DictionaryEntry de in table)
+            {
+                rpe = de.Value as ReportPatientElement;
+                if (rpe != null)
+                {
+                    OperatePatient(rpe);
+                }
+            }
+        }
         protected virtual void OperatePatient(ReportPatientElement rpe)
         {
             //
         }
         
-        protected virtual void OperateCommonItemList(List<ILisReportElement> commonItemList, List<int> parItemNos)
+        protected virtual void OperateItemList(List<ILisReportElement> commonItemList, List<int> parItemNos)
         {
             ReportItemElement commonItem;
             if (commonItemList.Count > 0)
@@ -267,18 +378,31 @@ namespace XYS.Lis.Handler
                             parItemNos.Add(commonItem.ParItemNo);
                         }
                         //检验项通用处理
-                        OperateCommonItem(commonItem);
+                        OperateItem(commonItem);
                     }
                 }
             }
         }
-        protected virtual void OperateCommonItem(ReportItemElement rcie)
+        protected virtual void OperateItemTable(ReportElementTag elementTag,Hashtable table)
+        {
+            ReportItemElement rie;
+            FilterItem(elementTag, table);
+            foreach (DictionaryEntry de in table)
+            {
+                rie = de.Value as ReportItemElement;
+                if (rie != null)
+                {
+                    OperateItem(rie);
+                }
+            }
+        }
+        protected virtual void OperateItem(ReportItemElement rcie)
         {
             //检验项通用处理
 
         }
 
-        protected virtual void OperateGraphItemList(List<ILisReportElement> graphItemList)
+        protected virtual void OperateGraphList(List<ILisReportElement> graphItemList)
         {
             ReportGraphElement graphItem;
             if (graphItemList.Count > 0)
@@ -292,17 +416,30 @@ namespace XYS.Lis.Handler
                     }
                     else
                     {
-                        OperateGraphItem(graphItem);
+                        OperateGraph(graphItem);
                     }
                 }
             }
         }
-        protected virtual void OperateGraphItem(ReportGraphElement rgie)
+        protected virtual void OperateGraphTable(ReportElementTag elementTag,Hashtable table)
+        {
+            ReportGraphElement rge;
+            FilterItem(elementTag, table);
+            foreach (DictionaryEntry de in table)
+            {
+                rge = de.Value as ReportGraphElement;
+                if (rge != null)
+                {
+                    OperateGraph(rge);
+                }
+            }
+        }
+        protected virtual void OperateGraph(ReportGraphElement rgie)
         {
             //
         }
         
-        protected virtual void OperateCustomItemList(List<ILisReportElement> customItemList)
+        protected virtual void OperateCustomList(List<ILisReportElement> customItemList)
         {
             ReportCustomElement customItem;
             if (customItemList.Count > 0)
@@ -316,21 +453,72 @@ namespace XYS.Lis.Handler
                     }
                     else
                     {
-                        OperateCustomItem(customItem);
+                        OperateCustom(customItem);
                     }
                 }
             }
         }
-        protected virtual void OperateCustomItem(ReportCustomElement customItem)
+        protected virtual void OperateCustomTable(ReportElementTag elementTag,Hashtable table)
+        {
+            ReportCustomElement rce;
+            FilterItem(elementTag, table);
+            foreach (DictionaryEntry de in table)
+            {
+                rce = de.Value as ReportCustomElement;
+                if (rce != null)
+                {
+                    OperateCustom(rce);
+                }
+            }
+        }
+        protected virtual void OperateCustom(ReportCustomElement customItem)
         {
             //自定义项处理
 
         }
+        
         protected bool IsRemoveByItemNo(int itemNo)
         {
             return TestItem.GetHideItemNo.Contains(itemNo);
         }
-
+        protected void FilterItem(ReportElementTag elementTag, Hashtable table)
+        {
+            ArrayList removeKey = new ArrayList();
+            foreach (DictionaryEntry de in table)
+            {
+                if (!IsElement(de.Value, elementTag))
+                {
+                    if (de.Key != null)
+                    {
+                        removeKey.Add(de.Key);
+                    }
+                }
+            }
+            foreach (object obj in removeKey)
+            {
+                table.Remove(obj);
+            }
+        }
+        private bool IsElement(object obj, ReportElementTag elementTag)
+        {
+            switch (elementTag)
+            {
+                case ReportElementTag.ReportElement:
+                    return obj is ReportReportElement;
+                case ReportElementTag.ExamElement:
+                    return obj is ReportExamElement;
+                case ReportElementTag.PatientElement:
+                    return obj is ReportPatientElement;
+                case ReportElementTag.ItemElement:
+                    return obj is ReportItemElement;
+                case ReportElementTag.GraphElement:
+                    return obj is ReportGraphElement;
+                case ReportElementTag.CustomElement:
+                    return obj is ReportCustomElement;
+                default:
+                    return true;
+            }
+        }
         protected HandlerResult GetMin(HandlerResult rs1, HandlerResult rs2)
         {
             return (int)rs1 < (int)rs2 ? rs1 : rs2;

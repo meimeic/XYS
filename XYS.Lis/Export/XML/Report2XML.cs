@@ -24,7 +24,7 @@ namespace XYS.Lis.Export.XML
             throw new NotImplementedException();
         }
 
-        protected override string InnerElementListExport(List<ILisReportElement> elementList)
+        protected override string InnerElementsExport(List<ILisReportElement> elementList)
         {
             throw new NotImplementedException();
         }

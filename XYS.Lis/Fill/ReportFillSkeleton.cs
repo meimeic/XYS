@@ -84,7 +84,7 @@ namespace XYS.Lis.Fill
             }
         }
 
-        public virtual void Fill(List<ILisReportElement> reportElement, ReportKey key, ReportElementTag elementTag)
+        public virtual void Fill(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag)
         {
             if (elementTag == ReportElementTag.ReportElement)
             {
@@ -92,7 +92,7 @@ namespace XYS.Lis.Fill
             }
             else
             {
-                FillElements(reportElement, key, elementTag);
+                FillElements(reportElementTable, key, elementTag);
             }
         }
         #endregion
@@ -100,7 +100,7 @@ namespace XYS.Lis.Fill
         #region 抽象方法
         protected abstract void FillReport(ReportReportElement rre, ReportKey key);
 
-        protected abstract void FillElements(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag);
+        protected abstract void FillElements(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag);
         
         protected abstract void FillElement(ILisReportElement reportElement, ReportKey key);
 

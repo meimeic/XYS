@@ -6,6 +6,15 @@ namespace XYS.Lis.Util
 {
     public class XMLTools
     {
+        #region
+        private static readonly string TABLE_TAG = "TableDataSource";
+        private static readonly string COLUMN_TAG = "Column";
+        private static readonly string NAME_ATTR = "Name";
+        private static readonly string REF_NAME_ATTR = "ReferenceName";
+        private static readonly string DATA_TYPE_ATTR = "DataType";
+        private static readonly string ENABLE_ATTR = "Enabled";
+        #endregion
+        
         #region 公共静态方法
 
         //根据xml文件生成dataset
@@ -75,7 +84,20 @@ namespace XYS.Lis.Util
             }
             return relationColumns;
         }
-
         #endregion
+
+        public static string ConvertObj2Xml(Type elementType)
+        {
+            string elementName = elementType.Name;
+
+        }
+        private static void InitTableXmlNodeAttr()
+        {
+ 
+        }
+        private static void InitColumnXmlNodeAttr()
+        {
+
+        }
     }
 }

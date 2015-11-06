@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 using XYS.Model;
@@ -64,13 +65,25 @@ namespace XYS.Lis.Export
             }
             else
             {
-                return InnerElementListExport(reportElementList);
+                return InnerElementsExport(reportElementList);
+            }
+        }
+        public virtual string export(Hashtable reportElementTable, ReportElementTag elementTag)
+        {
+            if (elementTag == ReportElementTag.ReportElement)
+            {
+                return this.ReportTableExport(reportElementTable);
+            }
+            else
+            {
+                return InnerElementsExport(reportElementTable, elementTag);
             }
         }
         #endregion
 
         #region
-        protected abstract string InnerElementListExport(List<ILisReportElement> elementList);
+        protected abstract string InnerElementsExport(List<ILisReportElement> elementList);
+        protected abstract string InnerElementsExport(Hashtable table, ReportElementTag elementTag);
         protected abstract string InnerElementExport(ILisReportElement reportElement);
         protected abstract string InnerReportExport(ReportReportElement rre);
         #endregion
@@ -98,6 +111,33 @@ namespace XYS.Lis.Export
                 }
             }
             return sb.ToString();
+        }
+        protected virtual string ReportTableExport(Hashtable table)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (table.Count > 0)
+            {
+                ReportReportElement rre;
+                string temp;
+                foreach (DictionaryEntry de in table)
+                {
+                    rre = de.Value as ReportReportElement;
+                    if (rre != null)
+                    {
+                        temp = InnerReportExport(rre);
+                        sb.Append(temp);
+                        sb.Append(this.ReportInfoSeparator);
+                    }
+                }
+            }
+            return sb.ToString();
+        }
+        #endregion
+
+        #region
+        public string ConvertObject2Xml(ILisReportElement element)
+        {
+            return null;
         }
         #endregion
     }

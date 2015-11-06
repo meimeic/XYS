@@ -54,46 +54,69 @@ namespace XYS.Lis.Handler
                 return HandlerResult.Continue;
             }
         }
+        public override HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag)
+        {
+            if (elementTag == ReportElementTag.ReportElement)
+            {
+                OperateReportTable(reportElementTable);
+                return HandlerResult.Continue;
+            }
+            else
+            {
+                return HandlerResult.Continue;
+            }
+        }
         #endregion
 
         #region 实现抽象方法
         protected override void OperateReport(ReportReportElement rre)
         {
-            if (rre.ExamList.Count > 0)
+            ReportExamElement ree;
+            //if (rre.ExamList.Count > 0)
+            //{
+            //    ReportExamElement examElement = rre.ExamList[0] as ReportExamElement;
+            //    if (examElement != null)
+            //    {
+            //        //按照检验大项设置
+            //        SetPrintModelNoByParItem(rre);
+            //        if (rre.PrintModelNo <= 0)
+            //        {
+            //            SetPrintModelNoBySectionNo(rre, examElement.SectionNo);
+            //        }
+            //    }
+            //}
+            ree = rre.ItemTable[ReportElementTag.ExamElement] as ReportExamElement;
+            if (ree != null)
             {
-                ReportExamElement examElement = rre.ExamList[0] as ReportExamElement;
-                if (examElement != null)
+                //按照检验大项设置
+                SetPrintModelNoByParItem(rre);
+                if (rre.PrintModelNo <= 0)
                 {
-                    //按照检验大项设置
-                    SetPrintModelNoByParItem(rre);
-                    if (rre.PrintModelNo <= 0)
-                    {
-                        SetPrintModelNoBySectionNo(rre, examElement.SectionNo);
-                    }
+                    SetPrintModelNoBySectionNo(rre, ree.SectionNo);
                 }
             }
         }
         #endregion
 
-        protected virtual int SetPrintModelNo(ReportReportElement rre)
-        {
-            //-1 失败 0 继续 1 成功
-            int flag=-1;
-            if(rre.ExamList.Count>0)
-            {
-                ReportExamElement examElement = rre.ExamList[0] as ReportExamElement;
-                if (examElement != null)
-                {
-                    //按照检验大项设置
-                    SetPrintModelNoByParItem(rre);
-                    if (rre.PrintModelNo <= 0)
-                    {
-                        SetPrintModelNoBySectionNo(rre, examElement.SectionNo);
-                    }
-                }
-            }
-            return flag;
-        }
+        //protected virtual int SetPrintModelNo(ReportReportElement rre)
+        //{
+        //    //-1 失败 0 继续 1 成功
+        //    int flag=-1;
+        //    if(rre.ExamList.Count>0)
+        //    {
+        //        ReportExamElement examElement = rre.ExamList[0] as ReportExamElement;
+        //        if (examElement != null)
+        //        {
+        //            //按照检验大项设置
+        //            SetPrintModelNoByParItem(rre);
+        //            if (rre.PrintModelNo <= 0)
+        //            {
+        //                SetPrintModelNoBySectionNo(rre, examElement.SectionNo);
+        //            }
+        //        }
+        //    }
+        //    return flag;
+        //}
         protected virtual void SetPrintModelNoBySectionNo(ReportReportElement rre,int sectionNo)
         {
             rre.PrintModelNo = this.GetPrintModelNoBySectionNo(sectionNo);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 using XYS.Model;
 using XYS.Lis.Core;
@@ -24,7 +25,7 @@ namespace XYS.Lis.Handler
 
         #region 实现IReportHandler接口
         public abstract HandlerResult ReportOptions(ILisReportElement reportElement);
-        public abstract HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag);
+        public abstract HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag);
         public IReportHandler Next
         {
             get { return this.m_nextHandler; }
@@ -37,6 +38,7 @@ namespace XYS.Lis.Handler
         #endregion
         
         #region
+        protected abstract void OperateReport(ReportReportElement rre);
         protected virtual void OperateReportList(List<ILisReportElement> reportElementList)
         {
             if (reportElementList.Count > 0)
@@ -52,7 +54,21 @@ namespace XYS.Lis.Handler
                 }
             }
         }
-        protected abstract void OperateReport(ReportReportElement rre);
+        protected virtual void OperateReportTable(Hashtable reportTable)
+        {
+            if (reportTable.Count > 0)
+            {
+                ReportReportElement rre;
+                foreach (object reportElement in reportTable.Values)
+                {
+                    rre = reportElement as ReportReportElement;
+                    if (rre != null)
+                    {
+                        OperateReport(rre);
+                    }
+                }
+            }
+        }
         #endregion
     }
 }

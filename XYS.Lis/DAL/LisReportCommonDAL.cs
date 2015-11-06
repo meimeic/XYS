@@ -4,9 +4,13 @@ using System.Text;
 using System.Data;
 using System.Reflection;
 using System.Collections.Generic;
+
 using XYS.Common;
 using XYS.Utility.DB;
 using XYS.Lis.Core;
+using XYS.Model;
+using XYS.Lis.Model;
+
 namespace XYS.Lis.DAL
 {
     public class LisReportCommonDAL : ILisReportDAL
@@ -35,6 +39,58 @@ namespace XYS.Lis.DAL
                     AfterFill(element);
                     elementList.Add(element);
                 }
+            }
+        }
+        public void FillTable(Hashtable elementTable, Type elementType, Hashtable equalTable)
+        {
+            DataTable dt = Query(elementType, equalTable);
+            if (dt != null)
+            {
+                ILisReportElement element;
+                foreach (DataRow dr in dt.Rows)
+                {
+                    element = (ILisReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
+                    FillData(element, dr);
+                    AfterFill(element);
+                    AddElement(elementTable, element);
+                }
+            }
+        }
+        protected void AddElement(Hashtable elementTable, ILisReportElement element)
+        {
+
+            switch (element.ElementTag)
+            {
+                case ReportElementTag.ExamElement:
+                    ReportExamElement examElement = element as ReportExamElement;
+                    if (examElement != null)
+                    {
+                        elementTable[examElement.SerialNo] = element;
+                    }
+                    break;
+                case ReportElementTag.PatientElement:
+                    ReportPatientElement patientElement = element as ReportPatientElement;
+                    if (patientElement != null)
+                    {
+                        elementTable[patientElement.PID] = element;
+                    }
+                    break;
+                case ReportElementTag.ItemElement:
+                    ReportItemElement itemElement = element as ReportItemElement;
+                    if (itemElement != null)
+                    {
+                        elementTable[itemElement.ItemNo] = element;
+                    }
+                    break;
+                case ReportElementTag.GraphElement:
+                    ReportGraphElement graphElement = element as ReportGraphElement;
+                    if (graphElement != null)
+                    {
+                        elementTable[graphElement.GraphName] = element;
+                    }
+                    break;
+                default:
+                    break;
             }
         }
         protected DataTable Query(ILisReportElement element, Hashtable equalTable)

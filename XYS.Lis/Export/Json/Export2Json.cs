@@ -22,7 +22,7 @@ namespace XYS.Lis.Export.Json
             throw new NotImplementedException();
         }
 
-        protected override string InnerElementListExport(List<ILisReportElement> elementList)
+        protected override string InnerElementsExport(List<ILisReportElement> elementList)
         {
             throw new NotImplementedException();
         }
