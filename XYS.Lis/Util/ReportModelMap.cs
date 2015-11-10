@@ -29,7 +29,7 @@ namespace XYS.Lis.Util
                }
            }
        }
-       public ReportModelCollection AllPdfModel
+       public ReportModelCollection AllModels
        {
            get 
            {

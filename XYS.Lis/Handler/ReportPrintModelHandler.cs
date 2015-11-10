@@ -42,18 +42,18 @@ namespace XYS.Lis.Handler
                 return HandlerResult.Continue;
             }
         }
-        public override HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
-        {
-            if (elementTag == ReportElementTag.ReportElement)
-            {
-                OperateReportList(reportElementList);
-                return HandlerResult.Continue;
-            }
-            else
-            {
-                return HandlerResult.Continue;
-            }
-        }
+        //public override HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
+        //{
+        //    if (elementTag == ReportElementTag.ReportElement)
+        //    {
+        //        OperateReportList(reportElementList);
+        //        return HandlerResult.Continue;
+        //    }
+        //    else
+        //    {
+        //        return HandlerResult.Continue;
+        //    }
+        //}
         public override HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag)
         {
             if (elementTag == ReportElementTag.ReportElement)

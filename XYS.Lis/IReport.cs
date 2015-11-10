@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections;
+
 
 using XYS.Common;
 using XYS.Lis.Core;
@@ -11,6 +12,6 @@ namespace XYS.Lis
         string ReportExport(ReportKey key);
         string ReportExport(LisSearchRequire require);
         string ReportExport(ReportReportElement reportElement);
-        string ReportExport(List<ILisReportElement> reportElementList);
+        string ReportExport(Hashtable reportElementTable);
     }
 }

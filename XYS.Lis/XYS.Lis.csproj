@@ -100,12 +100,10 @@
     <Compile Include="DAL\LisReporterKeyDAL.cs" />
     <Compile Include="Export\ExportType.cs" />
     <Compile Include="Export\ExportTag.cs" />
-    <Compile Include="Export\HTML\Export2Html.cs" />
     <Compile Include="Export\Json\Export2Json.cs" />
     <Compile Include="Export\PDF\Export2PDF.cs" />
     <Compile Include="Export\IReportExport.cs" />
     <Compile Include="Export\ReportExportSkeleton.cs" />
-    <Compile Include="Export\XML\Report2XML.cs" />
     <Compile Include="Filter\IReportFilter.cs" />
     <Compile Include="Handler\HeaderDefaultHandler.cs" />
     <Compile Include="Handler\HandlerResult.cs" />

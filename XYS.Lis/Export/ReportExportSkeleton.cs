@@ -57,17 +57,6 @@ namespace XYS.Lis.Export
                 return InnerElementExport(element);
             }
         }
-        public virtual string export(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
-        {
-            if (elementTag == ReportElementTag.ReportElement)
-            {
-                return this.ReportListExport(reportElementList);
-            }
-            else
-            {
-                return InnerElementsExport(reportElementList);
-            }
-        }
         public virtual string export(Hashtable reportElementTable, ReportElementTag elementTag)
         {
             if (elementTag == ReportElementTag.ReportElement)
@@ -82,8 +71,7 @@ namespace XYS.Lis.Export
         #endregion
 
         #region
-        protected abstract string InnerElementsExport(List<ILisReportElement> elementList);
-        protected abstract string InnerElementsExport(Hashtable table, ReportElementTag elementTag);
+        protected abstract string InnerElementsExport(Hashtable elementsTable, ReportElementTag elementTag);
         protected abstract string InnerElementExport(ILisReportElement reportElement);
         protected abstract string InnerReportExport(ReportReportElement rre);
         #endregion
@@ -91,26 +79,6 @@ namespace XYS.Lis.Export
         #region
         protected virtual void PreFilter(ILisReportElement reportElement)
         {
-        }
-        protected virtual string ReportListExport(List<ILisReportElement> reportList)
-        {
-            StringBuilder sb = new StringBuilder();
-            if (reportList.Count > 0)
-            {
-                ReportReportElement rre;
-                string temp;
-                foreach (ILisReportElement reportElement in reportList)
-                {
-                    rre = reportElement as ReportReportElement;
-                    if (rre != null)
-                    {
-                        temp=InnerReportExport(rre);
-                        sb.Append(temp);
-                        sb.Append(this.ReportInfoSeparator);
-                    }
-                }
-            }
-            return sb.ToString();
         }
         protected virtual string ReportTableExport(Hashtable table)
         {
@@ -139,6 +107,41 @@ namespace XYS.Lis.Export
         {
             return null;
         }
+        #endregion
+
+        #region
+        //protected virtual string ReportListExport(List<ILisReportElement> reportList)
+        //{
+        //    StringBuilder sb = new StringBuilder();
+        //    if (reportList.Count > 0)
+        //    {
+        //        ReportReportElement rre;
+        //        string temp;
+        //        foreach (ILisReportElement reportElement in reportList)
+        //        {
+        //            rre = reportElement as ReportReportElement;
+        //            if (rre != null)
+        //            {
+        //                temp = InnerReportExport(rre);
+        //                sb.Append(temp);
+        //                sb.Append(this.ReportInfoSeparator);
+        //            }
+        //        }
+        //    }
+        //    return sb.ToString();
+        //}
+        //protected abstract string InnerElementsExport(List<ILisReportElement> elementList);
+        //public virtual string export(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
+        //{
+        //    if (elementTag == ReportElementTag.ReportElement)
+        //    {
+        //        return this.ReportListExport(reportElementList);
+        //    }
+        //    else
+        //    {
+        //        return InnerElementsExport(reportElementList);
+        //    }
+        //}
         #endregion
     }
 }

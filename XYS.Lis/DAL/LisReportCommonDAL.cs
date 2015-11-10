@@ -17,6 +17,10 @@ namespace XYS.Lis.DAL
     {
         public LisReportCommonDAL()
         { }
+        public void FillImages()
+        {
+
+        }
         public void Fill(ILisReportElement element, Hashtable equalTable)
         {
             DataTable dt = Query(element, equalTable);

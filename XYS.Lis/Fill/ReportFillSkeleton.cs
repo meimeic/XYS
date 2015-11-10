@@ -47,27 +47,7 @@ namespace XYS.Lis.Fill
         {
             get { return this.m_fillerName.ToLower(); }
         }
-        
-        //public virtual ILisReportElement Fill(ReportKey key, ReportElementTag elementTag)
-        //{
-        //    ILisReportElement reportElement = CreateReportElement(elementTag);
-        //    if (reportElement != null)
-        //    {
-        //        Fill(reportElement, key);
-        //    }
-        //    return reportElement;
-        //}
-
-        //public virtual List<ILisReportElement> FillList(ReportKey key, ReportElementTag elementTag)
-        //{
-        //    List<ILisReportElement> result = new List<ILisReportElement>();
-        //    if (elementTag != ReportElementTag.ReportElement)
-        //    {
-        //        FillList(result, key, elementTag);
-        //    }
-        //    return result;
-        //}
-
+       
         public virtual void Fill(ILisReportElement reportElement, ReportKey key)
         {
             if (reportElement.ElementTag == ReportElementTag.ReportElement)
@@ -83,7 +63,6 @@ namespace XYS.Lis.Fill
                 FillElement(reportElement, key);
             }
         }
-
         public virtual void Fill(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag)
         {
             if (elementTag == ReportElementTag.ReportElement)
@@ -99,11 +78,8 @@ namespace XYS.Lis.Fill
 
         #region 抽象方法
         protected abstract void FillReport(ReportReportElement rre, ReportKey key);
-
         protected abstract void FillElements(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag);
-        
         protected abstract void FillElement(ILisReportElement reportElement, ReportKey key);
-
         #endregion
 
         #region
@@ -128,28 +104,6 @@ namespace XYS.Lis.Fill
                 return null;
             }
         }
-
-        //protected ILisReportElement CreateReportElement(ReportElementTag elementTag)
-        //{
-        //    Type type = GetElementType(elementTag);
-        //    if (type != null)
-        //    {
-        //        try
-        //        {
-        //            ILisReportElement element = (ILisReportElement)Activator.CreateInstance(type);
-        //            return element;
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return null;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
-        
         protected ReportElementTypeCollection GetAvailableElements(int sectionNo)
         {
             ReportElementTypeCollection retc = this.m_section2ElementTypesMap[sectionNo] as ReportElementTypeCollection;
@@ -181,22 +135,60 @@ namespace XYS.Lis.Fill
         #endregion
 
         #region
-        public void ClearSection2ElementTypesMap()
-        {
-            this.m_section2ElementTypesMap.Clear();
-        }
-        
-        public void AddSection2ElementTypes(int sectionNo,ReportElementTypeCollection elementTypeCollection)
-        {
-            if (elementTypeCollection != null && elementTypeCollection.Count > 0)
-            {
-                lock (this.m_section2ElementTypesMap)
-                {
-                    this.m_section2ElementTypesMap[sectionNo] = elementTypeCollection;
-                }
-            }
-        }
-        
+        //public void ClearSection2ElementTypesMap()
+        //{
+        //    this.m_section2ElementTypesMap.Clear();
+        //} 
+        //public void AddSection2ElementTypes(int sectionNo,ReportElementTypeCollection elementTypeCollection)
+        //{
+        //    if (elementTypeCollection != null && elementTypeCollection.Count > 0)
+        //    {
+        //        lock (this.m_section2ElementTypesMap)
+        //        {
+        //            this.m_section2ElementTypesMap[sectionNo] = elementTypeCollection;
+        //        }
+        //    }
+        //}
         #endregion
+
+        //public virtual ILisReportElement Fill(ReportKey key, ReportElementTag elementTag)
+        //{
+        //    ILisReportElement reportElement = CreateReportElement(elementTag);
+        //    if (reportElement != null)
+        //    {
+        //        Fill(reportElement, key);
+        //    }
+        //    return reportElement;
+        //}
+
+        //public virtual List<ILisReportElement> FillList(ReportKey key, ReportElementTag elementTag)
+        //{
+        //    List<ILisReportElement> result = new List<ILisReportElement>();
+        //    if (elementTag != ReportElementTag.ReportElement)
+        //    {
+        //        FillList(result, key, elementTag);
+        //    }
+        //    return result;
+        //}
+        //protected ILisReportElement CreateReportElement(ReportElementTag elementTag)
+        //{
+        //    Type type = GetElementType(elementTag);
+        //    if (type != null)
+        //    {
+        //        try
+        //        {
+        //            ILisReportElement element = (ILisReportElement)Activator.CreateInstance(type);
+        //            return element;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            return null;
+        //        }
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
     }
 }

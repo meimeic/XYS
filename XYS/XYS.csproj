@@ -40,6 +40,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Common\CommonPKElement.cs" />
     <Compile Include="Common\CommonReportIdentify.cs" />
+    <Compile Include="Common\Convert2XmlAttribute.cs" />
     <Compile Include="Common\IOptionHandler.cs" />
     <Compile Include="Common\IReporter.cs" />
     <Compile Include="Common\IReportRepository.cs" />

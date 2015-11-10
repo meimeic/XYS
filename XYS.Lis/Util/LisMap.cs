@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Xml;
-using System.Configuration;
+using System.IO;
+using System.Data;
+//using System.Configuration;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+
 using XYS.Lis.Config;
 using XYS.Lis.Core;
+using XYS.Common;
 using XYS.Model;
 using XYS.Lis.Model;
 
@@ -18,6 +23,8 @@ namespace XYS.Lis.Util
         private static readonly ParItemMap PARITEM_MAP = new ParItemMap();
         private static readonly ReportModelMap MODEL_MAP = new ReportModelMap();
         private static readonly ReportElementTypeMap ELEMENT_TYPE_MAP = new ReportElementTypeMap();
+       // private static readonly Hashtable SECTION_2_TYPES_MAP = new Hashtable(20);
+        private static readonly string ROOT_TAG= "Dictionary";
         #endregion
 
         #region
@@ -72,6 +79,19 @@ namespace XYS.Lis.Util
             }
             return ELEMENT_TYPE_MAP[elementName];
         }
+
+        public static void InitModelNo2ModelPathTable(Hashtable table)
+        {
+            table.Clear();
+            if (MODEL_MAP.Count == 0)
+            {
+                ConfigureReportModelMap();
+            }
+            foreach (ReportModel rm in MODEL_MAP.AllModels)
+            {
+                table.Add(rm.ModelNo, rm.ModelPath);
+            }
+        }
         public static void InitParItem2PrintModelTable(Hashtable table)
         {
             table.Clear();
@@ -124,6 +144,7 @@ namespace XYS.Lis.Util
                 table.Add(section.SectionNo, section.OrderNo);
             }
         }
+        
         public static void InitSection2ElementTypeTable(Hashtable table,int sectionNo)
         {
             ReporterSection rs = GetSection(sectionNo);
@@ -154,6 +175,7 @@ namespace XYS.Lis.Util
         }
         public static ReportElementTypeCollection GetSection2ElementTypeCollcetion(int sectionNo)
         {
+
             ReporterSection rs = GetSection(sectionNo);
             if (rs == null)
             {
@@ -356,6 +378,102 @@ namespace XYS.Lis.Util
                 ReportReport.Debug(declaringType, "LisMap:configuring ParItemMap");
                 config.ConfigParItemMap(paramElement, PARITEM_MAP);
             }
+        }
+        #endregion
+
+        #region
+        public static void InitDataSetStruct()
+        {
+            string fileFullName = SystemInfo.GetFileFullName(SystemInfo.GetDataStructFilePath(), "ReportTables.frd");
+            if (!SystemInfo.IsFileExist(fileFullName))
+            {
+                if (ELEMENT_TYPE_MAP.Count == 0)
+                {
+                    ConfigureReportElementMap();
+                }
+                XmlDocument doc = new XmlDocument();
+                XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "utf-8", null);
+                doc.AppendChild(dec);
+                XmlNode root = doc.CreateNode(XmlNodeType.Element, ROOT_TAG, null);
+                foreach (ReportElementType element in ELEMENT_TYPE_MAP.AllElementTypes)
+                {
+                    switch (element.ElementTag)
+                    {
+                        case ReportElementTag.ExamElement:
+                        case ReportElementTag.PatientElement:
+                        case ReportElementTag.ItemElement:
+                            XMLTools.ConvertObj2Xml(doc, root, element.ElementType);
+                            break;
+                        case ReportElementTag.GraphElement:
+                            XMLTools.Image2Xml(doc, root);
+                            break;
+                        case ReportElementTag.ReportElement:
+                        case ReportElementTag.CustomElement:
+                        case ReportElementTag.NoneElement:
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                doc.Save(fileFullName);
+            }
+        }
+        public static void SetDataSet(DataSet ds)
+        {
+            if (ELEMENT_TYPE_MAP.Count == 0)
+            {
+                ConfigureReportElementMap();
+            }
+            foreach (ReportElementType element in ELEMENT_TYPE_MAP.AllElementTypes)
+            {
+                switch (element.ElementTag)
+                {
+                    case ReportElementTag.ExamElement:
+                    case ReportElementTag.PatientElement:
+                    case ReportElementTag.ItemElement:
+                        ConvertObj2Table(ds, element.ElementType);
+                        break;
+                    case ReportElementTag.GraphElement:
+                        Image2Table(ds);
+                        break;
+                    case ReportElementTag.ReportElement:
+                    case ReportElementTag.CustomElement:
+                    case ReportElementTag.NoneElement:
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        private static void ConvertObj2Table(DataSet ds, Type elementType)
+        {
+            Convert2XmlAttribute cxa;
+            DataTable dt = new DataTable();
+            dt.TableName = elementType.Name;
+            PropertyInfo[] props = elementType.GetProperties();
+            if (props == null || props.Length == 0)
+            {
+                return;
+            }
+            foreach (PropertyInfo pro in props)
+            {
+                cxa = (Convert2XmlAttribute)Attribute.GetCustomAttribute(pro, typeof(Convert2XmlAttribute));
+                if (cxa != null && cxa.IsConvert)
+                {
+                    dt.Columns.Add(pro.Name, pro.PropertyType);
+                }
+            }
+            ds.Tables.Add(dt);
+        }
+        private static void Image2Table(DataSet ds)
+        {
+            DataTable dt = new DataTable();
+            dt.TableName = XMLTools.Image_Table_Name;
+            for (int i = 1; i <= XMLTools.Image_Column_Count; i++)
+            {
+                dt.Columns.Add(XMLTools.Image_Column_Prex + i, SystemInfo.GetTypeFromString(XMLTools.Image_Column_DataType, true, true));
+            }
+            ds.Tables.Add(dt);
         }
         #endregion
     }

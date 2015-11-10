@@ -19,7 +19,7 @@ namespace XYS.Model
     }
     public interface IPatientElement
     {
-        string ClinicTypeName { get; }
-        string GenderTypeName { get; }
+        string ClinicName { get; }
+        string GenderName { get; }
     }
 }

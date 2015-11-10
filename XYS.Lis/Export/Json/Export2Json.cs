@@ -22,12 +22,12 @@ namespace XYS.Lis.Export.Json
             throw new NotImplementedException();
         }
 
-        protected override string InnerElementsExport(List<ILisReportElement> elementList)
+        protected override string InnerReportExport(ReportReportElement rre)
         {
             throw new NotImplementedException();
         }
 
-        protected override string InnerReportExport(ReportReportElement rre)
+        protected override string InnerElementsExport(System.Collections.Hashtable table, XYS.Model.ReportElementTag elementTag)
         {
             throw new NotImplementedException();
         }

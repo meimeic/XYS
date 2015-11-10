@@ -14,7 +14,7 @@ using XYS.Lis.Repository;
 
 namespace XYS.Lis.Repository.Hierarchy
 {
-    public abstract class Reporter:ILisReporter
+    public abstract class Reporter : ILisReporter
     {
         #region
         private readonly string m_reporterName;
@@ -43,7 +43,7 @@ namespace XYS.Lis.Repository.Hierarchy
             this.m_strategyName = strategyName;
         }
         #endregion
-        
+
         #region
         public virtual IReportFiller DefaultFill
         {
@@ -55,7 +55,6 @@ namespace XYS.Lis.Repository.Hierarchy
                 }
                 return this.m_defaultFill;
             }
-
         }
         public virtual IReportExport DefaultExport
         {
@@ -107,7 +106,7 @@ namespace XYS.Lis.Repository.Hierarchy
         {
             get { return this.m_headHandler; }
         }
-        
+
         #endregion
 
         #region 实现ILisReport接口
@@ -120,7 +119,7 @@ namespace XYS.Lis.Repository.Hierarchy
             get { return this.m_strategyName; }
             protected set { this.m_strategyName = value; }
         }
-        
+
         public IReporterRepository Repository
         {
             get { return this.m_hierarchy; }
@@ -129,12 +128,12 @@ namespace XYS.Lis.Repository.Hierarchy
         public virtual void FillReportElement(ILisReportElement reportElement, ReportKey key)
         {
             this.Filler.Fill(reportElement, key);
-           // IReportFiller filler = this.GetFiller(fillerName);
+            // IReportFiller filler = this.GetFiller(fillerName);
             //filler.Fill(reportElement, key);
         }
-        public virtual void FillReportElement(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag)
+        public virtual void FillReportElement(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag)
         {
-            this.Filler.Fill(reportElementList, key, elementTag);
+            this.Filler.Fill(reportElementTable, key, elementTag);
             //IReportFiller filler = this.GetFiller(fillerName);
             //filler.Fill(reportElementList, key, elementTag);
         }
@@ -144,33 +143,21 @@ namespace XYS.Lis.Repository.Hierarchy
             bool rs = HandlerEvent(reportElement);
             return rs;
         }
-        public virtual bool Option(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
+        public virtual bool Option(Hashtable reportElementTable, ReportElementTag elementTag)
         {
-            bool rs = HandlerEvent(reportElementList, elementTag);
+            bool rs = HandlerEvent(reportElementTable, elementTag);
             return rs;
         }
-        
+
         public virtual string Export(ILisReportElement reportElement)
         {
             return this.Exporter.export(reportElement);
             //IReportExport export = this.GetExport(exportTag);
             //return export.export(reportElement);
         }
-        public virtual string Export(List<ILisReportElement> reportElementList)
+        public virtual string Export(Hashtable reportElementTable, ReportElementTag elementTag)
         {
-            if (reportElementList.Count > 0)
-            {
-                ReportElementTag elementTag = reportElementList[0].ElementTag;
-                return this.Export(reportElementList, elementTag);
-            }
-            else
-            {
-                return null;
-            }
-        }
-        public virtual string Export(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
-        {
-            return this.Exporter.export(reportElementList, elementTag);
+            return this.Exporter.export(reportElementTable, elementTag);
             //IReportExport export = this.GetExport(exportTag);
             //return export.export(reportElementList, elementTag);
         }
@@ -201,12 +188,12 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             return true;
         }
-        protected virtual bool HandlerEvent(List<ILisReportElement> elementList,ReportElementTag elementTag)
+        protected virtual bool HandlerEvent(Hashtable elementTable, ReportElementTag elementTag)
         {
             IReportHandler handler = this.HandlerHead;
             while (handler != null)
             {
-                switch (handler.ReportOptions(elementList, elementTag))
+                switch (handler.ReportOptions(elementTable, elementTag))
                 {
                     case HandlerResult.Fail:
                         return false;
@@ -225,6 +212,87 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             return true;
         }
+        protected virtual void AddHandler(Hashtable handlerTable, List<string> handlerNameList)
+        {
+            IReportHandler handler;
+            foreach (string name in handlerNameList)
+            {
+                handler = handlerTable[name] as IReportHandler;
+                if (handler != null)
+                {
+                    AddHandler(handler);
+                }
+            }
+        }
+        protected virtual void AddHandler(IReportHandler handler)
+        {
+            if (handler == null)
+            {
+                throw new ArgumentNullException("filter param must not be null");
+            }
+            if (this.m_headHandler == null)
+            {
+                this.m_headHandler = this.m_tailHandler = handler;
+            }
+            else
+            {
+                this.m_tailHandler.Next = handler;
+                this.m_tailHandler = handler;
+            }
+        }
+        protected virtual void SetFiller(Hashtable fillerTable, string fillerName)
+        {
+            IReportFiller filler = fillerTable[fillerName] as IReportFiller;
+            if (filler != null)
+            {
+                this.Filler = filler;
+            }
+        }
+        protected virtual void SetExporter(Hashtable exportTable, string exportName)
+        {
+            IReportExport export = exportTable[exportName] as IReportExport;
+            if (export != null)
+            {
+                this.Exporter = export;
+            }
+        }
+        #endregion
+
+        #region
+        private void InitDefault()
+        {
+            if (this.Hierarchy == null)
+            {
+                throw new ArgumentNullException("Hierarchy");
+            }
+            if (this.m_defaultFill == null)
+            {
+                this.m_defaultFill = this.Hierarchy.DefaultFiller;
+            }
+            if (this.m_defaultExport == null)
+            {
+                this.m_defaultExport = this.Hierarchy.DefaultExport;
+            }
+        }
+        #endregion
+
+        #region
+        public virtual void InnerConfig()
+        {
+            if (this.Hierarchy == null)
+            {
+                throw new ArgumentNullException("Hierarchy");
+            }
+            ReporterStrategy stratrgy = this.Hierarchy.StrategyMap[this.StrategyName] as ReporterStrategy;
+            if (stratrgy == null)
+            {
+                throw new ArgumentNullException("can not find the stratrgy [" + this.StrategyName + "]");
+            }
+            SetFiller(this.Hierarchy.FillerMap, stratrgy.FillerName);
+            AddHandler(this.Hierarchy.HandlerMap, stratrgy.HandlerList);
+            SetExporter(this.Hierarchy.ExportMap, stratrgy.ExportName);
+        }
+        #endregion
         //protected virtual IReportFiller GetFiller(string fillerName)
         //{
         //    if (fillerName != null&&!fillerName.Equals(""))
@@ -258,50 +326,6 @@ namespace XYS.Lis.Repository.Hierarchy
         //        }
         //    }
         //}
-        protected virtual void AddHandler(Hashtable handlerTable, List<string> handlerNameList)
-        {
-            IReportHandler handler;
-            foreach (string name in handlerNameList)
-            {
-                handler = handlerTable[name] as IReportHandler;
-                if (handler != null)
-                {
-                    AddHandler(handler);
-                }
-            }
-        }
-        protected virtual void AddHandler(IReportHandler handler)
-        {
-            if (handler == null)
-            {
-                throw new ArgumentNullException("filter param must not be null");
-            }
-            if (this.m_headHandler == null)
-            {
-                this.m_headHandler = this.m_tailHandler = handler;
-            }
-            else
-            {
-                this.m_tailHandler.Next = handler;
-                this.m_tailHandler = handler;
-            }
-        }
-        protected virtual void SetFiller(Hashtable fillerTable,string fillerName)
-        {
-            IReportFiller filler = fillerTable[fillerName] as IReportFiller;
-            if (filler != null)
-            {
-                this.Filler = filler;
-            }
-        }
-        protected virtual void SetExporter(Hashtable exportTable, string exportName)
-        {
-            IReportExport export = exportTable[exportName] as IReportExport;
-            if (export != null)
-            {
-                this.Exporter = export;
-            }
-        }
         //protected virtual void AddExport(Hashtable exportTable, List<string> exportNameList)
         //{
         //    IReportExport export;
@@ -349,42 +373,17 @@ namespace XYS.Lis.Repository.Hierarchy
         //{
         //    this.m_tag2ReportExport.Clear();
         //}
-        #endregion
-
-        #region
-        private void InitDefault()
-        {
-            if (this.Hierarchy == null)
-            {
-                throw new ArgumentNullException("Hierarchy");
-            }
-            if (this.m_defaultFill == null)
-            {
-                this.m_defaultFill = this.Hierarchy.DefaultFiller;
-            }
-            if (this.m_defaultExport == null)
-            {
-                this.m_defaultExport = this.Hierarchy.DefaultExport;
-            }
-        }
-        #endregion
-
-        #region
-        public virtual void InnerConfig()
-        {
-            if (this.Hierarchy == null)
-            {
-                throw new ArgumentNullException("Hierarchy");
-            }
-            ReporterStrategy stratrgy = this.Hierarchy.StrategyMap[this.StrategyName] as ReporterStrategy;
-            if (stratrgy == null)
-            {
-                throw new ArgumentNullException("can not find the stratrgy [" + this.StrategyName + "]");
-            }
-            SetFiller(this.Hierarchy.FillerMap, stratrgy.FillerName);
-            AddHandler(this.Hierarchy.HandlerMap, stratrgy.HandlerList);
-            SetExporter(this.Hierarchy.ExportMap, stratrgy.ExportName);
-        }
-        #endregion
+        //public virtual string Export(Hashtable reportElementTable)
+        //{
+        //    if (reportElementTable.Count > 0)
+        //    {
+        //        ReportElementTag elementTag = reportElementTable[0].ElementTag;
+        //        return this.Export(reportElementTable, elementTag);
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
     }
 }

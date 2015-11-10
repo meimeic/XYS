@@ -2,7 +2,7 @@
 
 namespace XYS.Lis.Model
 {
-    public class ReportCustomElement:AbstractReportElement
+    public class ReportCustomElement : AbstractReportElement
     {
         #region 私有常量字段
         private const ReportElementTag m_defaultElementTag = ReportElementTag.CustomElement;
@@ -13,11 +13,10 @@ namespace XYS.Lis.Model
             : this(m_defaultElementTag, "")
         {
         }
-        public ReportCustomElement(ReportElementTag elementTag,string sql)
+        public ReportCustomElement(ReportElementTag elementTag, string sql)
             : base(elementTag, sql)
         {
         }
         #endregion
-
     }
 }

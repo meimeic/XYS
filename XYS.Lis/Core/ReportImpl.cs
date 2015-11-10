@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Common;
+using XYS.Model;
 using XYS.Lis;
 using XYS.Lis.Model;
 using XYS.Lis.DAL;
@@ -48,11 +49,11 @@ namespace XYS.Lis.Core
             return this.Reporter.Export(reportElement);
         }
 
-        public string ReportExport(List<ILisReportElement> reportElementList)
+        public string ReportExport(Hashtable reportElementTable)
         {
-            if (reportElementList.Count > 0)
+            if (reportElementTable.Count > 0)
             {
-                return this.Reporter.Export(reportElementList);
+                return this.Reporter.Export(reportElementTable,ReportElementTag.ReportElement);
             }
             else
             {

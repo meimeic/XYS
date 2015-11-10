@@ -36,6 +36,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 公共属性
+        [Convert2Xml()]
         [TableColumn(true)]
         public int ItemNo
         {
@@ -48,47 +49,55 @@ namespace XYS.Lis.Model
             get { return this.m_parItemNo; }
             set { this.m_parItemNo = value; }
         }
+        [Convert2Xml()]
         [TableColumn(true)]
         public string ItemCName
         {
             get { return this.m_itemCName; }
             set { this.m_itemCName = value; }
         }
+        [Convert2Xml()]
         [TableColumn(true)]
         public string ItemEName
         {
             get { return this.m_itemEName; }
             set { this.m_itemEName = value; }
         }
+        [Convert2Xml()]
         [TableColumn(true)]
         public string ItemResult
         {
             get { return this.m_itemResult; }
             set { this.m_itemResult = value; }
         }
+        [Convert2Xml()]
         public string ItemStandard
         {
             get { return this.m_itemStandard; }
             set { this.m_itemStandard = value; }
         }
+        [Convert2Xml()]
         [TableColumn(true)]
         public string ResultStatus
         {
             get { return this.m_resultStatus; }
             set { this.m_resultStatus = value; }
         }
+        [Convert2Xml()]
         [TableColumn(true)]
         public string ItemUnit
         {
             get { return this.m_itemUnit; }
             set { this.m_itemUnit = value; }
         }
+        [Convert2Xml()]
         [TableColumn(true)]
         public string RefRange
         {
             get { return this.m_refRange; }
             set { this.m_refRange = value; }
         }
+       
         [TableColumn(true)]
         public int DispOrder
         {
@@ -101,21 +110,44 @@ namespace XYS.Lis.Model
             get { return this.m_secretGrade; }
             set { this.m_secretGrade = value; }
         }
-        [TableColumn(true)]
-        public int Prec
-        {
-            get { return this.m_prec; }
-            set { this.m_prec = value; }
-        }
+         [TableColumn(true)]
+         public int Prec
+         {
+             get { return this.m_prec; }
+             set { this.m_prec = value; }
+         }
         #endregion
 
         #region 重写父类方法
         protected override void Afterward()
         {
-            if (this.m_prec > 0)
+
+
+            //修正查询结果
+            if (this.Prec > 0)
             {
-                AdjustItemResult();
-                AdjustItemStandard();
+                string result;
+                if (this.ItemResult != null && !this.ItemResult.Equals(""))
+                {
+
+                    //修正检验结果
+                    //AdjustItemResult();
+                    result = AdjustStr(this.ItemResult, this.Prec);
+                    if (result != null)
+                    {
+                        this.ItemResult = result;
+                    }
+                }
+                if (this.ItemStandard != null && !this.ItemStandard.Equals(""))
+                {
+                    //修正标准值
+                    //AdjustItemStandard();
+                    result = AdjustStr(this.ItemStandard, this.Prec);
+                    if (result != null)
+                    {
+                        this.ItemStandard = result;
+                    }
+                }
             }
         }
         #endregion
@@ -124,31 +156,35 @@ namespace XYS.Lis.Model
         private void AdjustItemResult()
         {
             double temp;
-            bool r = double.TryParse(this.m_itemResult, out temp);
+            bool r = double.TryParse(this.ItemResult, out temp);
             if (r)
             {
-                this.m_itemResult = AdjustAccuracy(temp, this.m_prec);
+                this.ItemResult = AdjustAccuracy(temp, this.Prec);
             }
         }
         private void AdjustItemStandard()
         {
             double temp;
-            bool r = double.TryParse(this.m_itemStandard, out temp);
+            bool r = double.TryParse(this.ItemStandard, out temp);
             if (r)
             {
-                this.m_itemStandard = AdjustAccuracy(temp, this.m_prec);
+                this.m_itemStandard = AdjustAccuracy(temp, this.Prec);
             }
         }
         #endregion
 
         #region 受保护的虚方法
-        protected virtual void AdjustStr(ref string s, int prec)
+        protected virtual string AdjustStr(string s, int prec)
         {
             double temp;
             bool r = double.TryParse(s, out temp);
             if (r)
             {
-                s = AdjustAccuracy(temp, prec);
+                return AdjustAccuracy(temp, prec);
+            }
+            else
+            {
+                return null;
             }
         }
         protected virtual string AdjustAccuracy(double d, int prec)

@@ -39,21 +39,6 @@ namespace XYS.Lis.Handler
         
         #region
         protected abstract void OperateReport(ReportReportElement rre);
-        protected virtual void OperateReportList(List<ILisReportElement> reportElementList)
-        {
-            if (reportElementList.Count > 0)
-            {
-                ReportReportElement rre;
-                foreach (ILisReportElement reportElement in reportElementList)
-                {
-                    rre = reportElement as ReportReportElement;
-                    if (rre != null)
-                    {
-                        OperateReport(rre);
-                    }
-                }
-            }
-        }
         protected virtual void OperateReportTable(Hashtable reportTable)
         {
             if (reportTable.Count > 0)
@@ -69,6 +54,24 @@ namespace XYS.Lis.Handler
                 }
             }
         }
+        #endregion
+
+        #region
+        //protected virtual void OperateReportList(List<ILisReportElement> reportElementList)
+        //{
+        //    if (reportElementList.Count > 0)
+        //    {
+        //        ReportReportElement rre;
+        //        foreach (ILisReportElement reportElement in reportElementList)
+        //        {
+        //            rre = reportElement as ReportReportElement;
+        //            if (rre != null)
+        //            {
+        //                OperateReport(rre);
+        //            }
+        //        }
+        //    }
+        //}
         #endregion
     }
 }

@@ -38,7 +38,8 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实现IPatientElement接口
-        public string ClinicTypeName
+        [Convert2Xml()]
+        public string ClinicName
         {
             get
             {
@@ -57,7 +58,8 @@ namespace XYS.Lis.Model
                 }
             }
         }
-        public string GenderTypeName
+        [Convert2Xml()]
+        public string GenderName
         {
             get
             {
@@ -102,24 +104,28 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 公共属性
+        [Convert2Xml()]
         [TableColumn(true)]
         public string PatientName
         {
             get { return this.m_patientName; }
             set { this.m_patientName = value; }
         }
+        [Convert2Xml()]
         [TableColumn(true)]
         public string PID
         {
             get { return this.m_pid; }
             set { this.m_pid = value; }
         }
+        [Convert2Xml()]
         [TableColumn(true)]
         public string CID
         {
             get { return this.m_cid; }
             set { this.m_cid = value; }
         }
+
         [TableColumn(true)]
         public int GenderNo
         {
@@ -129,11 +135,25 @@ namespace XYS.Lis.Model
         public GenderType Gender
         {
             get { return this.m_gender; }
-            //set { this.m_gender = value; }
+            protected set { this.m_gender = value; }
         }
+
         public Age Ager
         {
             get { return this.m_age; }
+            protected set { this.m_age = value; }
+        }
+        [Convert2Xml()]
+        public string AgeStr
+        {
+            get
+            {
+                if (this.Ager == null)
+                {
+                    return "";
+                }
+                return this.Ager.ToString();
+            }
         }
         [TableColumn(true)]
         public int AgeValue
@@ -150,98 +170,108 @@ namespace XYS.Lis.Model
         public AgeType AgeUnit
         {
             get { return this.m_ageUnit; }
-            //  set { this.m_ageUnit = value; }
+            protected set { this.m_ageUnit = value; }
         }
+
         [TableColumn(true)]
-        public int clinicTypeNo
+        public int ClinicTypeNo
         {
             get { return this.m_clinicTypeNo; }
             set { this.m_clinicTypeNo = value; }
         }
-        public ClinicType ClinicalType
+        public ClinicType ClinicType
         {
             get { return this.m_clinicType; }
-            //set { this.m_clinicType = value; }
+            protected set { this.m_clinicType = value; }
         }
+
+        [Convert2Xml()]
         [TableColumn(true)]
         public int VisitTimes
         {
             get { return this.m_visitTimes; }
             set { this.m_visitTimes = value; }
         }
+        [Convert2Xml()]
         [TableColumn(true)]
         public string DeptName
         {
             get { return this.m_deptName; }
             set { this.m_deptName = value; }
         }
+        [Convert2Xml()]
         [TableColumn(true)]
         public string Doctor
         {
             get { return this.m_doctor; }
             set { this.m_doctor = value; }
         }
+        [Convert2Xml()]
         [TableColumn(true)]
         public string BedNo
         {
             get { return this.m_bedNo; }
             set { this.m_bedNo = value; }
         }
+
+        [Convert2Xml()]
         [TableColumn(true)]
         public string ClinicalDiagnosis
         {
             get { return this.m_clinicalDiagnosis; }
             set { this.m_clinicalDiagnosis = value; }
         }
+        [Convert2Xml()]
         [TableColumn(true)]
         public string Explanation
         {
             get { return this.m_explanation; }
             set { this.m_explanation = value; }
         }
+        
         #endregion
 
         #region 受保护的虚函数
         protected virtual void Afterward()
         {
             //性别转换
-            if (this.m_genderNo > 4 || this.m_genderNo <= 0)
+            if (this.GenderNo > 4 || this.GenderNo <= 0)
             {
-                this.m_gender = GenderType.none;
+                this.Gender = GenderType.none;
             }
             else
             {
-                this.m_gender = (GenderType)this.m_genderNo;
+                this.Gender = (GenderType)this.GenderNo;
             }
             //就诊类型转换
-            if (this.m_clinicTypeNo == 1 || this.m_clinicTypeNo == 4)
+            if (this.ClinicTypeNo == 1 || this.ClinicTypeNo == 4)
             {
                 //住院
-                this.m_clinicType = ClinicType.hospital;
+                this.ClinicType = ClinicType.hospital;
             }
-            else if (this.m_clinicTypeNo == 2 || this.m_clinicTypeNo == 3)
+            else if (this.ClinicTypeNo == 2 || this.ClinicTypeNo == 3)
             {
-                this.m_clinicType = ClinicType.clinic;
+                this.ClinicType = ClinicType.clinic;
             }
-            else if (this.m_clinicTypeNo != 0)
+            else if (this.ClinicTypeNo != 0)
             {
-                this.m_clinicType = ClinicType.other;
+                this.ClinicType = ClinicType.other;
             }
             else
             {
-                this.m_clinicType = ClinicType.none;
+                this.ClinicType = ClinicType.none;
             }
             //年龄单位转换
-            if (this.m_ageUnitNo > 4 || this.m_ageUnitNo <= 0)
+            if (this.AgeUnitNo > 4 || this.AgeUnitNo <= 0)
             {
-                this.m_ageUnit = AgeType.none;
+                this.AgeUnit = AgeType.none;
             }
             else
             {
-                this.m_ageUnit = (AgeType)this.m_ageUnitNo;
+                this.AgeUnit = (AgeType)this.AgeUnitNo;
             }
-            Age age = new Age(this.m_ageValue, this.m_ageUnit);
-            this.m_age = age;
+            Age age = new Age(this.AgeValue, this.AgeUnit);
+            this.Ager = age;
         }
         #endregion
 

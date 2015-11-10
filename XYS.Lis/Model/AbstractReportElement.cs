@@ -12,7 +12,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 受保护的构造函数
-        protected AbstractReportElement(ReportElementTag elementTag,string sql)
+        protected AbstractReportElement(ReportElementTag elementTag, string sql)
         {
             this.m_elementTag = elementTag;
             this.m_searchSQL = sql;

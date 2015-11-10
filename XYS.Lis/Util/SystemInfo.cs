@@ -808,7 +808,47 @@ namespace XYS.Lis.Util
             }
             return Path.GetFullPath(path);
         }
+        public static string GetDataStructFilePath()
+        {
+            try
+            {
+                string applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
+                string filePath = Path.Combine(applicationBaseDirectory, "dataset");
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+                return filePath;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
+        public static bool IsFileExist(string filePath)
+        {
+            return File.Exists(filePath);
+        }
+        public static string GetFileFullName(string filePath, string fileName)
+        {
+            return Path.Combine(filePath, fileName);
+        }
+        public static string FormatDateTime(DateTime dt)
+        {
+            return FormatDateTime(dt, "yyyy-MM-dd HH:mm", "");
+        }
+        public static string FormatDateTime(DateTime dt, string formatter, string emptyLabel)
+        {
+            if (dt == DateTime.MinValue)
+            {
+                return emptyLabel;
+            }
+            else
+            {
+                return dt.ToString(formatter);
+            }
+        }
         /// <summary>
         /// Creates a new case-insensitive instance of the <see cref="Hashtable"/> class with the default initial capacity. 
         /// </summary>
