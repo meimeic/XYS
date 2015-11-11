@@ -3,13 +3,15 @@ using System.Collections;
 using System.Data;
 using System.Reflection;
 
-using FastReport;
-
 using XYS.Lis.Core;
 using XYS.Lis.Export;
 using XYS.Lis.Model;
 using XYS.Lis.Util;
 using XYS.Model;
+using XYS.Common;
+
+using FastReport;
+using FastReport.Export.Pdf;
 
 namespace XYS.Lis.Export.PDF
 {
@@ -50,7 +52,9 @@ namespace XYS.Lis.Export.PDF
 
         protected override string InnerReportExport(ReportReportElement rre)
         {
-
+            this.m_ds.Clear();
+            string modelPath = GetModelPath(rre.PrintModelNo);
+            return GenderPdf(modelPath, rre);
         }
         #endregion
 
@@ -73,12 +77,159 @@ namespace XYS.Lis.Export.PDF
         {
 
         }
+        private void FillReportData(Hashtable reportData)
+        {
+            ILisReportElement tempElement;
+            Hashtable tempTable;
+            foreach (DictionaryEntry de in reportData)
+            {
+                try
+                {
+                    ReportElementTag elementTag = (ReportElementTag)de.Key;
+                    switch (elementTag)
+                    {
+                        case ReportElementTag.ExamElement:
+                        case ReportElementTag.PatientElement:
+                            tempElement = de.Value as ILisReportElement;
+                            if (tempElement != null)
+                            {
+                                FillElement(tempElement, this.m_ds);
+                            }
+                            break;
+                        case ReportElementTag.ItemElement:
+                            tempTable = de.Value as Hashtable;
+                            if (tempTable != null)
+                            {
+                                FillElements(tempTable, this.m_ds);
+                            }
+                            break;
+                        case ReportElementTag.GraphElement:
+                            tempTable = de.Value as Hashtable;
+                            if (tempTable != null)
+                            {
+                                FillImageElements(GenderImageTable(tempTable), this.m_ds);
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    continue;
+                }
+            }
+        }
+        private void FillElements(Hashtable elementTable,DataSet ds)
+        {
+            DataTable dt;
+            DataRow dr;
+            Type elementType;
+            PropertyInfo[] props;
+            Convert2XmlAttribute cxa;
+            ILisReportElement element;
+            foreach (DictionaryEntry de in elementTable)
+            {
+                element = de.Value as ILisReportElement;
+                if (element != null)
+                {
+                    elementType = element.GetType();
+                    dt = ds.Tables[elementType.Name];
+                    dr = dt.NewRow();
+                    props = elementType.GetProperties();
+                    if (props == null || props.Length == 0)
+                    {
+                        continue;
+                    }
+                    foreach (PropertyInfo p in props)
+                    {
+                        cxa = (Convert2XmlAttribute)Attribute.GetCustomAttribute(p, typeof(Convert2XmlAttribute));
+                        if (cxa != null && cxa.IsConvert)
+                        {
+                            FillDataColumn(p, dr, element);
+                        }
+                    }
+                    dt.Rows.Add(dr);
+                }
+            }
+        }
         private void FillElement(ILisReportElement element, DataSet ds)
         {
+            Convert2XmlAttribute cxa;
             Type elementType = element.GetType();
             DataTable dt = ds.Tables[elementType.Name];
             DataRow dr = dt.NewRow();
+            PropertyInfo[] props = elementType.GetProperties();
+            if (props == null || props.Length == 0)
+            {
+                return;
+            }
+            foreach (PropertyInfo p in props)
+            {
+                cxa = (Convert2XmlAttribute)Attribute.GetCustomAttribute(p, typeof(Convert2XmlAttribute));
+                if (cxa != null && cxa.IsConvert)
+                {
+                    FillDataColumn(p, dr, element);
+                }
+            }
+            dt.Rows.Add(dr);
+        }
+        private void FillImageElements(SortedList imageElementList, DataSet ds)
+        {
+            int i = 1;
+            int j = 0;
+            string columnName;
+            string tableName = XMLTools.Image_Table_Name;
+            DataTable dt = ds.Tables[tableName];
+            DataRow dr = dt.NewRow();
+            foreach (DictionaryEntry de in imageElementList)
+            {
+                j = i % XMLTools.Image_Column_Count;
+                columnName = XMLTools.Image_Column_Prex + j;
+                dr[columnName] = de.Value;
+                i++;
+            }
+            dt.Rows.Add(dr);
+        }
+        private SortedList GenderImageTable(Hashtable imageElementTable)
+        {
+            ReportGraphElement reportImage;
+            SortedList sl = new SortedList(10);
+            foreach (DictionaryEntry de in imageElementTable)
+            {
+                reportImage = de.Value as ReportGraphElement;
+                if (reportImage != null)
+                {
+                    sl.Add(reportImage.GraphName, reportImage.GraphImage);
+                }
+            }
+            return sl;
+        }
 
+        private string GenderPdf(string modelFullName,ReportReportElement rre)
+        {
+            FillReportData(rre.ItemTable);
+            Report report = new Report();
+            report.Load(modelFullName);
+            report.RegisterData(this.m_ds);
+            report.Prepare();
+            PDFExport export = new PDFExport();
+            string fileFullName = GetPdfFileFullName();
+            report.Export(export, fileFullName);
+            report.Dispose();
+            return fileFullName;
+        }
+        private string GetPdfFilePath()
+        {
+            return @"E:\lis\test";
+        }
+        private string GetPdfFileName()
+        {
+            return "Test.pdf";
+        }
+        private string GetPdfFileFullName()
+        {
+            return SystemInfo.GetFileFullName(GetPdfFilePath(), GetPdfFileName());
         }
         #endregion
 
@@ -98,9 +249,9 @@ namespace XYS.Lis.Export.PDF
         #endregion
 
         #region
-        protected void FillDataRow(PropertyInfo p, DataRow dr)
+        protected void FillDataColumn(PropertyInfo p, DataRow dr,ILisReportElement element)
         {
-            dr[p.Name] = p.GetValue(null, null);
+            dr[p.Name] = p.GetValue(element, null);
         }
         protected object DefaultForType(Type targetType)
         {

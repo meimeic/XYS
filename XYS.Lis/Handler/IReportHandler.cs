@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using XYS.Model;
 using XYS.Lis.Core;
 namespace XYS.Lis.Handler
@@ -7,7 +8,8 @@ namespace XYS.Lis.Handler
     {
         string HandlerName { get; }
         HandlerResult ReportOptions(ILisReportElement reportElement);
-        HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag);
+        //HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag);
+        HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag);
         IReportHandler Next { get; set; }
     }
 }

@@ -41,6 +41,7 @@ namespace XYS.Lis.Model
 
         #region 私有只读字段
         private readonly Hashtable m_itemTable;
+        private readonly Hashtable m_reportItemTable;
         #endregion
 
         #region 公共构造函数
@@ -56,6 +57,7 @@ namespace XYS.Lis.Model
             //this.m_customItemList = new List<ILisReportElement>();
             this.m_parItemList = new List<int>(5);
             this.m_itemTable = new Hashtable(5);
+            this.m_reportItemTable = new Hashtable(5);
         }
         #endregion
 
@@ -166,6 +168,10 @@ namespace XYS.Lis.Model
         {
             get { return this.m_itemTable; }
         }
+        public Hashtable ReportItemTable
+        {
+            get { return this.m_reportItemTable; }
+        }
         public int OrderNo
         {
             get { return this.m_orderNo; }
@@ -220,6 +226,20 @@ namespace XYS.Lis.Model
         public Hashtable GetItem(ReportElementTag elementTag)
         {
             return this.m_itemTable[elementTag] as Hashtable;
+        }
+        
+        public List<ILisReportElement> GetReportItem(ReportElementTag elementTag)
+        {
+            List<ILisReportElement> result = this.m_reportItemTable[elementTag] as List<ILisReportElement>;
+            if (result == null)
+            {
+                result = new List<ILisReportElement>(10);
+                lock (this.m_reportItemTable)
+                {
+                    this.m_reportItemTable[elementTag] = result;
+                }
+            }
+            return result;
         }
         #endregion
     }

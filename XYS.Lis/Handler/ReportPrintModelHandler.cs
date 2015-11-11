@@ -15,6 +15,7 @@ namespace XYS.Lis.Handler
         private Hashtable m_section2PrintModel;
         #endregion
 
+        #region 构造函数
         public ReportPrintModelHandler()
             : this(m_defaultHandlerName)
         { }
@@ -24,6 +25,7 @@ namespace XYS.Lis.Handler
             this.m_parItem2PrintModel = new Hashtable();
             this.m_section2PrintModel = new Hashtable();
         }
+        #endregion
 
         #region
         public override HandlerResult ReportOptions(ILisReportElement reportElement)
@@ -42,18 +44,18 @@ namespace XYS.Lis.Handler
                 return HandlerResult.Continue;
             }
         }
-        //public override HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
-        //{
-        //    if (elementTag == ReportElementTag.ReportElement)
-        //    {
-        //        OperateReportList(reportElementList);
-        //        return HandlerResult.Continue;
-        //    }
-        //    else
-        //    {
-        //        return HandlerResult.Continue;
-        //    }
-        //}
+        public override HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
+        {
+            if (elementTag == ReportElementTag.ReportElement)
+            {
+                OperateElementList(reportElementList,elementTag);
+                return HandlerResult.Continue;
+            }
+            else
+            {
+                return HandlerResult.Continue;
+            }
+        }
         public override HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag)
         {
             if (elementTag == ReportElementTag.ReportElement)
@@ -71,92 +73,52 @@ namespace XYS.Lis.Handler
         #region 实现抽象方法
         protected override void OperateReport(ReportReportElement rre)
         {
-            ReportExamElement ree;
-            //if (rre.ExamList.Count > 0)
-            //{
-            //    ReportExamElement examElement = rre.ExamList[0] as ReportExamElement;
-            //    if (examElement != null)
-            //    {
-            //        //按照检验大项设置
-            //        SetPrintModelNoByParItem(rre);
-            //        if (rre.PrintModelNo <= 0)
-            //        {
-            //            SetPrintModelNoBySectionNo(rre, examElement.SectionNo);
-            //        }
-            //    }
-            //}
-            ree = rre.ItemTable[ReportElementTag.ExamElement] as ReportExamElement;
-            if (ree != null)
+            List<ILisReportElement> reportElementList;
+            ReportExamElement examElement;
+            reportElementList = rre.ReportItemTable[ReportElementTag.ExamElement] as List<ILisReportElement>;
+            if (reportElementList != null)
             {
-                //按照检验大项设置
-                SetPrintModelNoByParItem(rre);
-                if (rre.PrintModelNo <= 0)
+                if (reportElementList.Count > 0)
                 {
-                    SetPrintModelNoBySectionNo(rre, ree.SectionNo);
+                    examElement = reportElementList[0] as ReportExamElement;
+                    if (examElement != null)
+                    {
+                        //按照检验大项设置
+                        SetPrintModelNoByParItem(rre);
+                        if (rre.PrintModelNo <= 0)
+                        {
+                            SetPrintModelNoBySectionNo(rre, examElement.SectionNo);
+                        }
+                    }
                 }
             }
         }
+        protected override bool IsElementAndOperate(ILisReportElement reportElement, ReportElementTag elementTag)
+        {
+            bool result = false;
+            ReportReportElement rre;
+            if (elementTag == ReportElementTag.ReportElement)
+            {
+                rre = reportElement as ReportReportElement;
+                if (rre != null)
+                {
+                    result = true;
+                    OperateReport(rre);
+                }
+            }
+            return result;
+        }
         #endregion
-
-        //protected virtual int SetPrintModelNo(ReportReportElement rre)
-        //{
-        //    //-1 失败 0 继续 1 成功
-        //    int flag=-1;
-        //    if(rre.ExamList.Count>0)
-        //    {
-        //        ReportExamElement examElement = rre.ExamList[0] as ReportExamElement;
-        //        if (examElement != null)
-        //        {
-        //            //按照检验大项设置
-        //            SetPrintModelNoByParItem(rre);
-        //            if (rre.PrintModelNo <= 0)
-        //            {
-        //                SetPrintModelNoBySectionNo(rre, examElement.SectionNo);
-        //            }
-        //        }
-        //    }
-        //    return flag;
-        //}
+        
+        #region
         protected virtual void SetPrintModelNoBySectionNo(ReportReportElement rre,int sectionNo)
         {
             rre.PrintModelNo = this.GetPrintModelNoBySectionNo(sectionNo);
-            //  //对于一个小组存在多个报告模板，根据检验大项进行报告模板匹配
-            //switch (sectionNo)
-            //{
-            //    //细胞化学
-            //    case 3:
-            //    //临检
-            //    case 28:
-            //    //分子遗传小组
-            //    case 11:
-            //        SetPrintModelNoByParItem(rre);
-            //        if (rre.PrintModelNo <= 0)
-            //        {
-            //            //默认模板号
-            //            rre.PrintModelNo = PDFModel.GetPrintModelNoBySection(sectionNo);
-            //        }
-            //        break;
-            //    //细胞形态
-            //    case 39:
-            //        break;
-            //    //分子生物
-            //    case 6:
-            //        break;
-            //    //组织配型
-            //    case 45:
-            //        break;
-            //    //流式细胞
-            //    case 10:
-            //        break;
-            //    default:
-            //        rre.PrintModelNo = PDFModel.GetPrintModelNoBySection(sectionNo);
-            //        break;
-            //}
         }
         //通过paritemno 设置打印模板
         protected virtual void SetPrintModelNoByParItem(ReportReportElement rre)
         {
-            List<int> printModelNoList = new List<int>();
+            List<int> printModelNoList = new List<int>(5);
             foreach (int item in rre.ParItemList)
             {
                 printModelNoList.Add(this.GetPrintModelNoByParItemNo(item));
@@ -211,6 +173,8 @@ namespace XYS.Lis.Handler
             }
             return result;
         }
+        #endregion
+        
         #region
         private void InitParItem2PrintModelTable()
         {
@@ -220,6 +184,28 @@ namespace XYS.Lis.Handler
         {
             LisMap.InitSection2PrintModelTable(this.m_section2PrintModel);
         }
+        #endregion
+
+        #region
+        //protected virtual int SetPrintModelNo(ReportReportElement rre)
+        //{
+        //    //-1 失败 0 继续 1 成功
+        //    int flag=-1;
+        //    if(rre.ExamList.Count>0)
+        //    {
+        //        ReportExamElement examElement = rre.ExamList[0] as ReportExamElement;
+        //        if (examElement != null)
+        //        {
+        //            //按照检验大项设置
+        //            SetPrintModelNoByParItem(rre);
+        //            if (rre.PrintModelNo <= 0)
+        //            {
+        //                SetPrintModelNoBySectionNo(rre, examElement.SectionNo);
+        //            }
+        //        }
+        //    }
+        //    return flag;
+        //}
         #endregion
     }
 }

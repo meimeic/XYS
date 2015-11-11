@@ -18,12 +18,12 @@ namespace XYS.Lis.Fill
         private readonly Hashtable m_section2ElementTypesMap;
         private ReportElementTypeCollection m_defaultElementTypeCollection;
         #endregion
-        
+
         #region
         protected ReportFillSkeleton(string name)
         {
-            this.m_section2ElementTypesMap = new Hashtable(10);
-            this.m_defaultElementTypeCollection = new ReportElementTypeCollection(6);
+            this.m_section2ElementTypesMap = new Hashtable(20);
+            this.m_defaultElementTypeCollection = new ReportElementTypeCollection();
             this.m_fillerName = name.ToLower();
         }
         #endregion
@@ -47,7 +47,7 @@ namespace XYS.Lis.Fill
         {
             get { return this.m_fillerName.ToLower(); }
         }
-       
+
         public virtual void Fill(ILisReportElement reportElement, ReportKey key)
         {
             if (reportElement.ElementTag == ReportElementTag.ReportElement)
@@ -74,35 +74,40 @@ namespace XYS.Lis.Fill
                 FillElements(reportElementTable, key, elementTag);
             }
         }
+        public virtual void Fill(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag)
+        {
+            if (elementTag == ReportElementTag.ReportElement)
+            {
+                return;
+            }
+            else
+            {
+                FillElements(reportElementList, key, elementTag);
+            }
+        }
         #endregion
 
         #region 抽象方法
         protected abstract void FillReport(ReportReportElement rre, ReportKey key);
         protected abstract void FillElements(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag);
+        protected abstract void FillElements(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag);
         protected abstract void FillElement(ILisReportElement reportElement, ReportKey key);
         #endregion
 
-        #region
-        protected Type GetElementType(int sectionNo,ReportElementTag elementTag)
+        #region 辅助方法
+        protected Type GetElementType(int sectionNo, ReportElementTag elementTag)
         {
-            ReportElementTypeCollection availableElements = GetAvailableElements(sectionNo);
-            ReportElementType elementType=null;
-            foreach (ReportElementType type in availableElements)
+            ReportElementTypeCollection availableElements = this.GetAvailableElements(sectionNo);
+            Type type = null;
+            foreach (ReportElementType elementType in availableElements)
             {
-                if (type.ElementTag == elementTag)
+                if (elementType.ElementTag == elementTag)
                 {
-                    elementType = type;
+                    type = elementType.ElementType;
                     break;
                 }
             }
-            if (elementType != null)
-            {
-                return elementType.ElementType;
-            }
-            else
-            {
-                return null;
-            }
+            return type;
         }
         protected ReportElementTypeCollection GetAvailableElements(int sectionNo)
         {
@@ -125,7 +130,6 @@ namespace XYS.Lis.Fill
             }
             return retc;
         }
-        
         private void InitDefaultElements()
         {
             this.m_defaultElementTypeCollection.Add(ReportElementType.DEFAULTEXAM);
@@ -134,7 +138,7 @@ namespace XYS.Lis.Fill
         }
         #endregion
 
-        #region
+        #region 未调用方法
         //public void ClearSection2ElementTypesMap()
         //{
         //    this.m_section2ElementTypesMap.Clear();
@@ -149,8 +153,6 @@ namespace XYS.Lis.Fill
         //        }
         //    }
         //}
-        #endregion
-
         //public virtual ILisReportElement Fill(ReportKey key, ReportElementTag elementTag)
         //{
         //    ILisReportElement reportElement = CreateReportElement(elementTag);
@@ -190,5 +192,6 @@ namespace XYS.Lis.Fill
         //        return null;
         //    }
         //}
+        #endregion
     }
 }

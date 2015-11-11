@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 using XYS.Model;
 using XYS.Common;
@@ -14,6 +15,7 @@ namespace XYS.Lis.Fill
        // void AddSection2ElementTypes(int sectionNo, ReportElementTypeCollection elementTypeCollection);
         void Fill(ILisReportElement reportElement, ReportKey key);
         void Fill(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag);
+        void Fill(List<ILisReportElement> reportElementList,ReportKey key, ReportElementTag elementTag);
         
         //List<ILisReportElement> FillList(ReportKey key, ReportElementTag elementTag);
         // ILisReportElement Fill(ReportKey key, ReportElementTag elementTag);

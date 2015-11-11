@@ -38,7 +38,7 @@ namespace XYS.Lis.Model
 
         #endregion
 
-        private static readonly int DEFAULT_CAPACITY = 8;
+        private static readonly int DEFAULT_CAPACITY = 6;
 
         #region 私有变量 用于实现elementtype 集合
 
