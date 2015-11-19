@@ -12,7 +12,7 @@ namespace XYS.Lis.Core
 {
     public class ReportImpl : ReporterWrapperImpl, IReport
     {
-        #region
+        #region 实例方法
         private LisReporterKeyDAL m_reportKeyDAL;
         #endregion
 
@@ -48,12 +48,11 @@ namespace XYS.Lis.Core
         {
             return this.Reporter.Export(reportElement);
         }
-
-        public string ReportExport(Hashtable reportElementTable)
+        public string ReportExport(List<ILisReportElement> reportElementList)
         {
-            if (reportElementTable.Count > 0)
+            if (reportElementList.Count > 0)
             {
-                return this.Reporter.Export(reportElementTable,ReportElementTag.ReportElement);
+                return this.Reporter.Export(reportElementList,ReportElementTag.ReportElement);
             }
             else
             {
@@ -76,6 +75,7 @@ namespace XYS.Lis.Core
             }
             return null;
         }
+        
         #endregion
     }
 }

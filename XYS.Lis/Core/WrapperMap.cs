@@ -8,7 +8,7 @@ namespace XYS.Lis.Core
     public class WrapperMap
     {
         private readonly WrapperCreationHandler m_createWrapperHandler;
-        private readonly Hashtable m_repositories = new Hashtable();
+        private readonly Hashtable m_repositories = new Hashtable(3);
 
         public WrapperMap(WrapperCreationHandler createWrapperHandler)
         {
@@ -33,7 +33,6 @@ namespace XYS.Lis.Core
                 {
                     // Hierarchy does not exist in map.
                     // Must register with hierarchy
-
                     wrappersMap = new Hashtable();
                     m_repositories[reporter.Repository] = wrappersMap;
 

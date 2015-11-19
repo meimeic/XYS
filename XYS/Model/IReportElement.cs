@@ -4,8 +4,7 @@ namespace XYS.Model
     public enum ReportElementTag : int
     {
         ReportElement = 1,
-        ExamElement,
-        PatientElement,
+        InfoElement,
         ItemElement,
         GraphElement,
         CustomElement,

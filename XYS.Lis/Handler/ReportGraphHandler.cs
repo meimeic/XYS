@@ -1,17 +1,19 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using XYS.Lis.Core;
 using XYS.Model;
 using XYS.Lis.Model;
+using XYS.Lis.Util;
 
 namespace XYS.Lis.Handler
 {
     public class ReportGraphHandler:ReportHandlerSkeleton
     {
         private static readonly string m_defaultHandlerName = "ReportGraphHandler";
-
-
+     
+        #region
         public ReportGraphHandler()
             : this(m_defaultHandlerName)
         {
@@ -20,57 +22,18 @@ namespace XYS.Lis.Handler
             : base(handlerName)
         {
         }
-        #region
+        #endregion
+
+        #region 实现父类继承接口的抽象方法
         public override HandlerResult ReportOptions(ILisReportElement reportElement)
         {
-            if (reportElement.ElementTag == ReportElementTag.ReportElement)
-            {
-                ReportReportElement rre = reportElement as ReportReportElement;
-                if (rre != null)
-                {
-                    OperateReport(rre);
-                }
-                return HandlerResult.Continue;
-            }
-            else if (reportElement.ElementTag == ReportElementTag.GraphElement)
-            {
-                //处理代码
-                ReportGraphElement rgie = reportElement as ReportGraphElement;
-                OperateGraphItem(rgie);
-                return HandlerResult.Continue;
-            }
-            else
-            {
-                return HandlerResult.Continue;
-            }
+            return HandlerResult.Continue;
         }
-        //public override HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
-        //{
-        //    if (elementTag == ReportElementTag.ReportElement)
-        //    {
-        //        OperateReportList(reportElementList);
-        //        return HandlerResult.Continue;
-        //    }
-        //    else if (elementTag == ReportElementTag.GraphElement)
-        //    {
-        //        OperateGraphItems(reportElementList);
-        //        return HandlerResult.Continue;
-        //    }
-        //    else
-        //    {
-        //        return HandlerResult.Continue;
-        //    }
-        //}
-        public override HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag)
+        public override HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
         {
-            if (elementTag == ReportElementTag.ReportElement)
+            if (elementTag == ReportElementTag.ReportElement || elementTag == ReportElementTag.GraphElement)
             {
-                OperateReportTable(reportElementTable);
-                return HandlerResult.Continue;
-            }
-            else if (elementTag == ReportElementTag.GraphElement)
-            {
-                OperateGraphItems(reportElementTable);
+                OperateElementList(reportElementList, elementTag);
                 return HandlerResult.Continue;
             }
             else
@@ -80,52 +43,24 @@ namespace XYS.Lis.Handler
         }
         #endregion
 
-        #region
-        protected override void OperateReport(ReportReportElement rre)
+        #region 实现父类抽象方法
+        protected override void OperateElement(ILisReportElement element, ReportElementTag elementTag)
         {
-            Hashtable table = rre.ItemTable[ReportElementTag.GraphElement] as Hashtable;
-            if (table != null)
-            {
-                OperateGraphItems(table);
-            }
+            throw new NotImplementedException();
         }
         #endregion
-        #region
-        protected virtual void OperateGraphItems(List<ILisReportElement> graphList)
-        {
-            if (graphList.Count > 0)
-            {
-                //
-                ReportGraphElement rge;
-                for (int i = graphList.Count - 1; i >= 0; i--)
-                {
-                    rge = graphList[i] as ReportGraphElement;
-                    if (rge != null)
-                    {
-                        OperateGraphItem(rge);
-                    }
-                }
-            }
-        }
-        protected virtual void OperateGraphItems(Hashtable table)
-        {
-            if (table.Count > 0)
-            {
-                //
-                ReportGraphElement rge;
-                foreach (DictionaryEntry de in table)
-                {
-                    rge = de.Value as ReportGraphElement;
-                    if (rge != null)
-                    {
-                        OperateGraphItem(rge);
-                    }
-                }
-            }
-        }
-        protected virtual void OperateGraphItem(ReportGraphElement rge)
-        {
 
+        #region
+        protected void OperateReport(ReportReportElement rre)
+        {
+            List<ILisReportElement> reportElementList = rre.GetReportItem(ReportElementTag.GraphElement);
+            if (reportElementList.Count > 0)
+            {
+                OperateElementList(reportElementList, ReportElementTag.GraphElement);
+            }
+        }
+        protected virtual void OperateGraph(ReportGraphElement rge)
+        {
         }
         #endregion
     }

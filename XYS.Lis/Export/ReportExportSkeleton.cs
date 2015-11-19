@@ -7,7 +7,7 @@ using XYS.Lis.Model;
 using XYS.Lis.Core;
 namespace XYS.Lis.Export
 {
-    public abstract class ReportExportSkeleton:IReportExport
+    public abstract class ReportExportSkeleton : IReportExport
     {
         #region
         private readonly string m_exportName;
@@ -15,24 +15,18 @@ namespace XYS.Lis.Export
 
         #region
         private ExportTag m_exportTag;
-        private string m_reportInfoSeparator;
         #endregion
 
-        #region
+        #region 构造函数
         protected ReportExportSkeleton(string name)
         {
-            this.m_exportName = name.ToLower();
+            this.m_exportName = name;
         }
         #endregion
 
-        #region
-        public virtual string ReportInfoSeparator
-        {
-            get { return this.m_reportInfoSeparator; }
-            set { this.m_reportInfoSeparator = value; }
-        }
+        #region 实例属性
         #endregion
-        
+
         #region 实现IReportExport接口
         public virtual string ExportName
         {
@@ -43,7 +37,7 @@ namespace XYS.Lis.Export
             get { return this.m_exportTag; }
             protected set { this.m_exportTag = value; }
         }
-      
+
         public virtual string export(ILisReportElement element)
         {
             PreFilter(element);
@@ -57,91 +51,72 @@ namespace XYS.Lis.Export
                 return InnerElementExport(element);
             }
         }
-        public virtual string export(Hashtable reportElementTable, ReportElementTag elementTag)
+        public virtual string export(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
         {
-            if (elementTag == ReportElementTag.ReportElement)
+            if (elementTag != ReportElementTag.NoneElement)
             {
-                return this.ReportTableExport(reportElementTable);
+                return this.ReportElementsExport(reportElementList, elementTag);
             }
             else
             {
-                return InnerElementsExport(reportElementTable, elementTag);
+                return "";
             }
         }
         #endregion
 
         #region
-        protected abstract string InnerElementsExport(Hashtable elementsTable, ReportElementTag elementTag);
         protected abstract string InnerElementExport(ILisReportElement reportElement);
         protected abstract string InnerReportExport(ReportReportElement rre);
+        protected abstract string GetSeparateByTag(ReportElementTag elementTag);
         #endregion
-        
+
         #region
-        protected virtual void PreFilter(ILisReportElement reportElement)
+        protected virtual string ReportElementsExport(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
         {
-        }
-        protected virtual string ReportTableExport(Hashtable table)
-        {
+            string temp;
+            string separate;
+            ReportReportElement rre;
             StringBuilder sb = new StringBuilder();
-            if (table.Count > 0)
+            if (reportElementList.Count > 0)
             {
-                ReportReportElement rre;
-                string temp;
-                foreach (DictionaryEntry de in table)
+                separate = GetSeparateByTag(elementTag);
+                foreach (ILisReportElement reportElement in reportElementList)
                 {
-                    rre = de.Value as ReportReportElement;
-                    if (rre != null)
+                    if (elementTag == ReportElementTag.ReportElement)
                     {
+                        rre = reportElement as ReportReportElement;
                         temp = InnerReportExport(rre);
-                        sb.Append(temp);
-                        sb.Append(this.ReportInfoSeparator);
                     }
+                    else
+                    {
+                        temp = InnerElementExport(reportElement);
+                    }
+                    //
+                    if (temp != null && !temp.Equals(""))
+                    {
+                        sb.Append(temp);
+                    }
+                    if (separate != null && !separate.Equals(""))
+                    {
+                        sb.Append(separate);
+                    }
+                }
+                if (sb.Length > separate.Length)
+                {
+                    sb.Remove(sb.Length - separate.Length, separate.Length);
                 }
             }
             return sb.ToString();
         }
-        #endregion
-
-        #region
-        public string ConvertObject2Xml(ILisReportElement element)
+        protected virtual void PreFilter(ILisReportElement reportElement)
         {
-            return null;
+        }
+        protected virtual void PreFilter(List<ILisReportElement> reportElement, ReportElementTag elementTag)
+        {
         }
         #endregion
 
         #region
-        //protected virtual string ReportListExport(List<ILisReportElement> reportList)
-        //{
-        //    StringBuilder sb = new StringBuilder();
-        //    if (reportList.Count > 0)
-        //    {
-        //        ReportReportElement rre;
-        //        string temp;
-        //        foreach (ILisReportElement reportElement in reportList)
-        //        {
-        //            rre = reportElement as ReportReportElement;
-        //            if (rre != null)
-        //            {
-        //                temp = InnerReportExport(rre);
-        //                sb.Append(temp);
-        //                sb.Append(this.ReportInfoSeparator);
-        //            }
-        //        }
-        //    }
-        //    return sb.ToString();
-        //}
-        //protected abstract string InnerElementsExport(List<ILisReportElement> elementList);
-        //public virtual string export(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
-        //{
-        //    if (elementTag == ReportElementTag.ReportElement)
-        //    {
-        //        return this.ReportListExport(reportElementList);
-        //    }
-        //    else
-        //    {
-        //        return InnerElementsExport(reportElementList);
-        //    }
-        //}
         #endregion
     }
 }

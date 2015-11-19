@@ -12,6 +12,7 @@ namespace XYS.Lis.Handler
     {
         private static readonly string m_defaultHandlerName = "ReportItemHandler";
 
+        #region 构造函数
         public ReportItemHandler()
             : this(m_defaultHandlerName)
         {
@@ -20,7 +21,9 @@ namespace XYS.Lis.Handler
             : base(handlerName)
         {
         }
-        #region
+        #endregion
+
+        #region 实现父类继承接口的抽象方法
         public override HandlerResult ReportOptions(ILisReportElement reportElement)
         {
             if (reportElement.ElementTag == ReportElementTag.ReportElement)
@@ -34,10 +37,10 @@ namespace XYS.Lis.Handler
             }
             else if (reportElement.ElementTag == ReportElementTag.ItemElement)
             {
-                ReportItemElement rcie = reportElement as ReportItemElement;
-                if (rcie != null)
+                ReportItemElement rie = reportElement as ReportItemElement;
+                if (rie != null)
                 {
-                    OperateItem(rcie);
+                    OperateItem(rie);
                 }
                 return HandlerResult.Continue;
             }
@@ -46,33 +49,11 @@ namespace XYS.Lis.Handler
                 return HandlerResult.Continue;
             }
         }
-        //public override HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
-        //{
-        //    if (elementTag == ReportElementTag.ReportElement)
-        //    {
-        //        OperateReportList(reportElementList);
-        //        return HandlerResult.Continue;
-        //    }
-        //    else if (elementTag == ReportElementTag.ItemElement)
-        //    {
-        //        OperateItems(reportElementList);
-        //        return HandlerResult.Continue;
-        //    }
-        //    else
-        //    {
-        //        return HandlerResult.Continue;
-        //    }
-        //}
-        public override HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag)
+        public override HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
         {
-            if (elementTag == ReportElementTag.ReportElement)
+            if (elementTag == ReportElementTag.ReportElement || elementTag == ReportElementTag.ItemElement)
             {
-                OperateReportTable(reportElementTable);
-                return HandlerResult.Continue;
-            }
-            else if (elementTag == ReportElementTag.ItemElement)
-            {
-                OperateItems(reportElementTable);
+                OperateElementList(reportElementList, elementTag);
                 return HandlerResult.Continue;
             }
             else
@@ -82,66 +63,84 @@ namespace XYS.Lis.Handler
         }
         #endregion
 
-        #region
-        protected override void OperateReport(ReportReportElement rre)
+        #region 实现父类抽象方法
+        protected override void OperateElement(ILisReportElement element, ReportElementTag elementTag)
         {
-            Hashtable table = rre.ItemTable[ReportElementTag.ItemElement] as Hashtable;
-            if (table != null)
-            {
-                OperateItems(table);
-            }
+            throw new NotImplementedException();
         }
         #endregion
-        
-        #region
-        protected virtual void OperateItems(List<ILisReportElement> itemList)
+
+        #region 内部实例方法
+        protected void OperateReport(ReportReportElement rre)
         {
-            if (itemList.Count > 0)
-            {
-                ReportItemElement item;
-                for (int i = itemList.Count - 1; i >= 0; i--)
-                {
-                    item = itemList[i] as ReportItemElement;
-                    //处理 删除数据等
-                    OperateItem(item);
-                }
-            }
+            //List<ILisReportElement> itemElementList = rre.GetReportItem(ReportElementTag.ItemElement);
+            //if (itemElementList.Count > 0)
+            //{
+            //    OperateElementList(itemElementList, ReportElementTag.ItemElement);
+            //}
+            //List<ILisReportElement> examElementList = rre.GetReportItem(ReportElementTag.ExamElement);
+            //if (examElementList.Count > 0)
+            //{
+
+            //}
         }
-        protected virtual void OperateItems(Hashtable table)
+        protected virtual void OperateItem(ReportItemElement rie)
         {
-            if (table.Count > 0)
-            {
-                ReportItemElement item;
-                foreach(DictionaryEntry de in table)
-                {
-                    item =de.Value as ReportItemElement;
-                    //处理 删除数据等
-                    if (item != null)
-                    {
-                        OperateItem(item);
-                    }
-                }
-            }
-        }
-        protected virtual void OperateItem(ReportItemElement rcie)
-        {
-            //
+
         }
         protected bool IsRemoveByItemNo(int itemNo)
         {
             return TestItem.GetHideItemNo.Contains(itemNo);
         }
-        protected bool IsRemoveBySecret(int secretGrade)
-        {
-            if (secretGrade > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        #endregion
+
+        #region
+        //public override HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag)
+        //{
+        //    if (elementTag == ReportElementTag.ReportElement)
+        //    {
+        //        OperateReportTable(reportElementTable);
+        //        return HandlerResult.Continue;
+        //    }
+        //    else if (elementTag == ReportElementTag.ItemElement)
+        //    {
+        //        OperateItems(reportElementTable);
+        //        return HandlerResult.Continue;
+        //    }
+        //    else
+        //    {
+        //        return HandlerResult.Continue;
+        //    }
+        //}
+        //protected virtual void OperateItems(List<ILisReportElement> itemList)
+        //{
+        //    if (itemList.Count > 0)
+        //    {
+        //        ReportItemElement item;
+        //        for (int i = itemList.Count - 1; i >= 0; i--)
+        //        {
+        //            item = itemList[i] as ReportItemElement;
+        //            //处理 删除数据等
+        //            OperateItem(item);
+        //        }
+        //    }
+        //}
+        //protected virtual void OperateItems(Hashtable table)
+        //{
+        //    if (table.Count > 0)
+        //    {
+        //        ReportItemElement item;
+        //        foreach (DictionaryEntry de in table)
+        //        {
+        //            item = de.Value as ReportItemElement;
+        //            //处理 删除数据等
+        //            if (item != null)
+        //            {
+        //                OperateItem(item);
+        //            }
+        //        }
+        //    }
+        //}
         #endregion
     }
 }

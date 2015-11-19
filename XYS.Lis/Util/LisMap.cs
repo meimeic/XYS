@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Xml;
-using System.IO;
 using System.Data;
-//using System.Configuration;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
@@ -23,8 +21,7 @@ namespace XYS.Lis.Util
         private static readonly ParItemMap PARITEM_MAP = new ParItemMap();
         private static readonly ReportModelMap MODEL_MAP = new ReportModelMap();
         private static readonly ReportElementTypeMap ELEMENT_TYPE_MAP = new ReportElementTypeMap();
-       // private static readonly Hashtable SECTION_2_TYPES_MAP = new Hashtable(20);
-        private static readonly string ROOT_TAG= "Dictionary";
+        private static readonly string ROOT_TAG = "Dictionary";
         #endregion
 
         #region
@@ -34,13 +31,13 @@ namespace XYS.Lis.Util
         #region
         private LisMap()
         { }
-        static LisMap()
-        {
-            ConfigureReportSectionMap();
-            ConfigureParItemMap();
-            ConfigureReportElementMap();
-            ConfigureReportModelMap();
-        }
+        //static LisMap()
+        //{
+        //    ConfigureReportSectionMap();
+        //    ConfigureParItemMap();
+        //    ConfigureReportElementMap();
+        //    ConfigureReportModelMap();
+        //}
         #endregion
 
         #region
@@ -70,7 +67,7 @@ namespace XYS.Lis.Util
             }
             return MODEL_MAP[modelNo];
         }
-        public static ReportElementType GetElementType(string  elementName)
+        public static ReportElementType GetElementType(string elementName)
         {
             if (ELEMENT_TYPE_MAP.Count == 0)
             {
@@ -83,16 +80,18 @@ namespace XYS.Lis.Util
         public static void InitModelNo2ModelPathTable(Hashtable table)
         {
             table.Clear();
+            string modelFileName;
             if (MODEL_MAP.Count == 0)
             {
                 ConfigureReportModelMap();
             }
             foreach (ReportModel rm in MODEL_MAP.AllModels)
             {
-                table.Add(rm.ModelNo, rm.ModelPath);
+                modelFileName = SystemInfo.GetFileFullName(SystemInfo.GetReportModelFilePath(), rm.ModelPath);
+                table.Add(rm.ModelNo, modelFileName);
             }
         }
-        public static void InitParItem2PrintModelTable(Hashtable table)
+        public static void InitParItem2ReportModelTable(Hashtable table)
         {
             table.Clear();
             if (PARITEM_MAP.Count == 0)
@@ -100,7 +99,7 @@ namespace XYS.Lis.Util
                 //
                 ConfigureParItemMap();
             }
-            foreach(ParItem item in PARITEM_MAP.AllParItem)
+            foreach (ParItem item in PARITEM_MAP.AllParItem)
             {
                 table.Add(item.ParItemNo, item.ModelNo);
             }
@@ -144,8 +143,28 @@ namespace XYS.Lis.Util
                 table.Add(section.SectionNo, section.OrderNo);
             }
         }
-        
-        public static void InitSection2ElementTypeTable(Hashtable table,int sectionNo)
+
+        public static void InitParItem2NormalImageTable(Hashtable table)
+        {
+            table.Clear();
+            if (PARITEM_MAP.Count == 0)
+            {
+                ConfigureParItemMap();
+            }
+            byte[] imageArray;
+            string imageFileName;
+            foreach (ParItem item in PARITEM_MAP.AllParItem)
+            {
+                if (item.ImageFlag)
+                {
+                    imageFileName = SystemInfo.GetFileFullName(SystemInfo.GetNormalImageFilePath(), item.ImagePath);
+                    imageArray = SystemInfo.ReadImageFile(imageFileName);
+                    table[item.ParItemNo] = imageArray;
+                }
+            }
+        }
+
+        public static void InitSection2ElementTypeTable(Hashtable table, int sectionNo)
         {
             ReporterSection rs = GetSection(sectionNo);
             if (rs == null)
@@ -155,9 +174,8 @@ namespace XYS.Lis.Util
             HashSet<ReportElementType> elementSet = new HashSet<ReportElementType>();
             if (rs.ElementNameList.Count == 0)
             {
-                elementSet.Add(ReportElementType.DEFAULTEXAM);
-                elementSet.Add(ReportElementType.DEFAULTPATIENT);
-                elementSet.Add(ReportElementType.DEFAULTREPORT);
+                elementSet.Add(ReportElementType.DEFAULTINFO);
+                elementSet.Add(ReportElementType.DEFAULTITEM);
             }
             else
             {
@@ -184,9 +202,8 @@ namespace XYS.Lis.Util
             ReportElementTypeCollection retc = new ReportElementTypeCollection();
             if (rs.ElementNameList.Count == 0)
             {
-                retc.Add(ReportElementType.DEFAULTEXAM);
-                retc.Add(ReportElementType.DEFAULTPATIENT);
-                retc.Add(ReportElementType.DEFAULTREPORT);
+                retc.Add(ReportElementType.DEFAULTINFO);
+                retc.Add(ReportElementType.DEFAULTITEM);
             }
             else
             {
@@ -203,8 +220,8 @@ namespace XYS.Lis.Util
             return retc;
         }
         #endregion
-        
-        #region
+
+        #region 未使用到的代码
         //private static void ConfigureModel()
         //{
         //    ReportModelElement modelElement;
@@ -382,40 +399,54 @@ namespace XYS.Lis.Util
         #endregion
 
         #region
-        public static void InitDataSetStruct()
+        public static void InitDataSetXmlStruct()
         {
             string fileFullName = SystemInfo.GetFileFullName(SystemInfo.GetDataStructFilePath(), "ReportTables.frd");
-            if (!SystemInfo.IsFileExist(fileFullName))
+            if (ELEMENT_TYPE_MAP.Count == 0)
             {
-                if (ELEMENT_TYPE_MAP.Count == 0)
+                ConfigureReportElementMap();
+            }
+            ReportReport.Debug(declaringType, "LisMap:Start--make the data struct xml file " + fileFullName + " by report elemnt");
+            XmlDocument doc = new XmlDocument();
+            XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "utf-8", null);
+            doc.AppendChild(dec);
+            XmlNode root = doc.CreateNode(XmlNodeType.Element, ROOT_TAG, null);
+            foreach (ReportElementType element in ELEMENT_TYPE_MAP.AllElementTypes)
+            {
+                switch (element.ElementTag)
                 {
-                    ConfigureReportElementMap();
+                    case ReportElementTag.ReportElement:
+                    case ReportElementTag.InfoElement:
+                    case ReportElementTag.ItemElement:
+                    case ReportElementTag.CustomElement:
+                        XMLTools.ConvertObj2Xml(doc, root, element.ElementType);
+                        break;
+                    case ReportElementTag.GraphElement:
+                        XMLTools.Image2Xml(doc, root);
+                        break;
+                    case ReportElementTag.NoneElement:
+                        break;
+                    default:
+                        break;
                 }
-                XmlDocument doc = new XmlDocument();
-                XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "utf-8", null);
-                doc.AppendChild(dec);
-                XmlNode root = doc.CreateNode(XmlNodeType.Element, ROOT_TAG, null);
-                foreach (ReportElementType element in ELEMENT_TYPE_MAP.AllElementTypes)
+            }
+            doc.AppendChild(root);
+            if (SystemInfo.IsFileExist(fileFullName))
+            {
+                if (!SystemInfo.DeleteFile(fileFullName))
                 {
-                    switch (element.ElementTag)
-                    {
-                        case ReportElementTag.ExamElement:
-                        case ReportElementTag.PatientElement:
-                        case ReportElementTag.ItemElement:
-                            XMLTools.ConvertObj2Xml(doc, root, element.ElementType);
-                            break;
-                        case ReportElementTag.GraphElement:
-                            XMLTools.Image2Xml(doc, root);
-                            break;
-                        case ReportElementTag.ReportElement:
-                        case ReportElementTag.CustomElement:
-                        case ReportElementTag.NoneElement:
-                            break;
-                        default:
-                            break;
-                    }
+                    throw new Exception("can not delete the file " + fileFullName);
                 }
+            }
+            try
+            {
                 doc.Save(fileFullName);
+                ReportReport.Debug(declaringType, "LisMap:End--make the data struct xml file " + fileFullName + " by report elemnt");
+            }
+            catch (Exception ex)
+            {
+                ReportReport.Error(declaringType, "LisMap:" + ex.Message);
+                throw ex;
             }
         }
         public static void SetDataSet(DataSet ds)
@@ -428,16 +459,15 @@ namespace XYS.Lis.Util
             {
                 switch (element.ElementTag)
                 {
-                    case ReportElementTag.ExamElement:
-                    case ReportElementTag.PatientElement:
+                    case ReportElementTag.ReportElement:
+                    case ReportElementTag.InfoElement:
                     case ReportElementTag.ItemElement:
+                    case ReportElementTag.CustomElement:
                         ConvertObj2Table(ds, element.ElementType);
                         break;
                     case ReportElementTag.GraphElement:
                         Image2Table(ds);
                         break;
-                    case ReportElementTag.ReportElement:
-                    case ReportElementTag.CustomElement:
                     case ReportElementTag.NoneElement:
                         break;
                     default:
@@ -469,7 +499,7 @@ namespace XYS.Lis.Util
         {
             DataTable dt = new DataTable();
             dt.TableName = XMLTools.Image_Table_Name;
-            for (int i = 1; i <= XMLTools.Image_Column_Count; i++)
+            for (int i = 0; i < XMLTools.Image_Column_Count; i++)
             {
                 dt.Columns.Add(XMLTools.Image_Column_Prex + i, SystemInfo.GetTypeFromString(XMLTools.Image_Column_DataType, true, true));
             }

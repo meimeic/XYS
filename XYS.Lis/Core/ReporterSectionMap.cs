@@ -56,9 +56,9 @@ namespace XYS.Lis.Core
            {
                throw new ArgumentNullException("rs");
            }
-           lock(this)
+           lock (this)
            {
-               this.m_mapNo2ReporterSection.Add(rs.SectionNo,rs);
+               this.m_mapNo2ReporterSection[rs.SectionNo] = rs;
            }
        }
        #endregion

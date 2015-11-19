@@ -6,9 +6,8 @@ namespace XYS.Lis.Model
     public abstract class AbstractReportElement:ILisReportElement
     {
         #region 私有字段
-        private readonly ReportElementTag m_elementTag;
         private readonly string m_searchSQL;
-        //private ReportKey m_reportKey;
+        private readonly ReportElementTag m_elementTag;
         #endregion
 
         #region 受保护的构造函数
@@ -24,11 +23,6 @@ namespace XYS.Lis.Model
         {
             get { return this.m_elementTag; }
         }
-        //public ReportKey ReporterKey
-        //{
-        //    get { return this.m_reportKey; }
-        //    set { this.m_reportKey = value; }
-        //}
         #endregion
 
         #region ILisReportElement实现
@@ -44,9 +38,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实例虚方法
-        protected virtual void Afterward()
-        {
-        }
+        protected abstract void Afterward();
         #endregion
     }
 }

@@ -17,12 +17,10 @@ namespace XYS.Lis.DAL
     {
         public LisReportCommonDAL()
         { }
-        public void FillImages()
-        {
 
-        }
         public void Fill(ILisReportElement element, Hashtable equalTable)
         {
+
             DataTable dt = Query(element, equalTable);
             if (dt != null)
             {
@@ -214,6 +212,10 @@ namespace XYS.Lis.DAL
         {
             try
             {
+                if (dr[p.Name.ToLower()] == null)
+                {
+                    throw new Exception("LisReportCommonDAL:does not exsit the["+p.Name.ToLower()+"] column in the row");
+                }
                 if (dr[p.Name.ToLower()] != DBNull.Value)
                 {
                     object value = Convert.ChangeType(dr[p.Name.ToLower()], p.PropertyType);

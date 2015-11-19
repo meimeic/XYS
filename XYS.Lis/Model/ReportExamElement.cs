@@ -7,10 +7,10 @@ namespace XYS.Lis.Model
     public class ReportExamElement : AbstractReportElement
     {
         #region 私有常量字段
-        private const ReportElementTag m_defaultElementTag = ReportElementTag.ExamElement;
+        private const ReportElementTag m_defaultElementTag = ReportElementTag.InfoElement;
         private static readonly string m_defaultEaxmSQL = @"select serialno,sampleno,s.CName as sampletypename,CAST(CONVERT(varchar(10), collectdate, 121) + ' ' + CONVERT(varchar(8), collecttime, 114) AS datetime) as collectdatetime,CAST(CONVERT(varchar(10), inceptdate, 121) + ' ' + CONVERT(varchar(8), incepttime, 114) AS datetime) as inceptdatetime,
                                                                              CAST(CONVERT(varchar(10), testdate, 121) + ' ' + CONVERT(varchar(8), testtime, 114) AS datetime) as testdatetime,CAST(CONVERT(varchar(10), checkdate, 121) + ' ' + CONVERT(varchar(8), checktime, 114) AS datetime) as checkdatetime,
-                                                                             CAST(CONVERT(varchar(10), receivedate, 121) + ' ' + CONVERT(varchar(8), receivetime, 114) AS datetime) as receivedatetime,sendertime2 as secondcheckdatetime,paritemname,sectionno,r.sampletypeno,formmemo,formcomment,formcomment2,technician,checker
+                                                                             CAST(CONVERT(varchar(10), receivedate, 121) + ' ' + CONVERT(varchar(8), receivetime, 114) AS datetime) as receivedatetime,sendertime2 as secondecheckdatetime,paritemname,sectionno,r.sampletypeno,formmemo,formcomment,formcomment2,technician,checker
                                                                              from ReportForm as r left outer join SampleType as s on r.SampleTypeNo=s.SampleTypeNo";
         #endregion
 
@@ -46,8 +46,6 @@ namespace XYS.Lis.Model
         //检验者，审核者
         private string m_technician;
         private string m_checker;
-        private byte[] m_technicianImage;
-        private byte[] m_checkerImage;
         #endregion
 
         #region 构造函数
@@ -69,6 +67,7 @@ namespace XYS.Lis.Model
             get { return m_serialNo; }
             set { m_serialNo = value; }
         }
+        
         [Convert2Xml()]
         [TableColumn(true)]
         public string SampleNo
@@ -76,6 +75,7 @@ namespace XYS.Lis.Model
             get { return m_sampleNo; }
             set { m_sampleNo = value; }
         }
+        
         [Convert2Xml()]
         [TableColumn(true)]
         public string SampleTypeName
@@ -83,12 +83,12 @@ namespace XYS.Lis.Model
             get { return m_sampleTypeName; }
             set { m_sampleTypeName = value; }
         }
-        [Convert2Xml()]
         
-        public string ReceiveDateTimeStr
-        {
-            get { return SystemInfo.FormatDateTime(this.ReceiveDateTime); }
-        }
+        //[Convert2Xml()]
+        //public string ReceiveDateTimeStr
+        //{
+        //    get { return SystemInfo.FormatDateTime(this.ReceiveDateTime); }
+        //}
         [TableColumn(true)]
         public DateTime ReceiveDateTime
         {
@@ -96,65 +96,35 @@ namespace XYS.Lis.Model
             set { m_receiveDateTime = value; }
         }
 
-        //public DateTime CollectDate
+        //[Convert2Xml()]
+        //public string CollectDateTimeStr
         //{
-        //    get { return this.m_collectDate; }
-        //    set { this.m_collectDate = value; }
+        //    get { return SystemInfo.FormatDateTime(this.CollectDateTime); }
         //}
-        //public DateTime CollectTime
-        //{
-        //    get { return this.m_collectTime; }
-        //    set { this.m_collectTime = value; }
-        //}
-        [Convert2Xml()]
-        public string CollectDateTimeStr
-        {
-            get { return SystemInfo.FormatDateTime(this.CollectDateTime); }
-        }
         [TableColumn(true)]
         public DateTime CollectDateTime
         {
             get { return m_collectDateTime; }
             set { m_collectDateTime = value; }
         }
-        
-        //public DateTime InceptDate
+
+        //[Convert2Xml()]
+        //public string InceptDateTimeStr
         //{
-        //    get { return this.m_inceptDate; }
-        //    set { this.m_inceptDate = value; }
+        //    get { return SystemInfo.FormatDateTime(this.InceptDateTime); }
         //}
-        //public DateTime InceptTime
-        //{
-        //    get { return this.m_inceptTime; }
-        //    set { this.m_inceptTime = value; }
-        //}
-        [Convert2Xml()]
-        public string InceptDateTimeStr
-        {
-            get { return SystemInfo.FormatDateTime(this.InceptDateTime); }
-        }
         [TableColumn(true)]
         public DateTime InceptDateTime
         {
             get { return m_inceptDateTime; }
             set { m_inceptDateTime = value; }
         }
-        
-        //public DateTime TestDate
+
+        //[Convert2Xml()]
+        //public string TestDateTimeStr
         //{
-        //    get { return this.m_testDate; }
-        //    set { this.m_testDate = value; }
+        //    get { return SystemInfo.FormatDateTime(this.TestDateTime); }
         //}
-        //public DateTime TestTime
-        //{
-        //    get { return this.m_testTime; }
-        //    set { this.m_testTime = value; }
-        //}
-        [Convert2Xml()]
-        public string TestDateTimeStr
-        {
-            get { return SystemInfo.FormatDateTime(this.TestDateTime); }
-        }
         [TableColumn(true)]
         public DateTime TestDateTime
         {
@@ -162,21 +132,11 @@ namespace XYS.Lis.Model
             set { m_testDateTime = value; }
         }
 
-        //public DateTime CheckDate
+        //[Convert2Xml()]
+        //public string CheckDateTimeStr
         //{
-        //    get { return this.m_checkDate; }
-        //    set { this.m_checkDate = value; }
+        //    get { return SystemInfo.FormatDateTime(this.CheckDateTime); }
         //}
-        //public DateTime CheckTime
-        //{
-        //    get { return this.m_checkTime; }
-        //    set { this.m_checkTime = value; }
-        //}
-        [Convert2Xml()]
-        public string CheckDateTimeStr
-        {
-            get { return SystemInfo.FormatDateTime(this.CheckDateTime); }
-        }
         [TableColumn(true)]
         public DateTime CheckDateTime
         {
@@ -184,17 +144,18 @@ namespace XYS.Lis.Model
             set { m_checkDateTime = value; }
         }
 
-        [Convert2Xml()]
-        public string SecondCheckDateTimeStr
-        {
-            get { return SystemInfo.FormatDateTime(this.SecondCheckDateTime); }
-        }
+        //[Convert2Xml()]
+        //public string SecondCheckDateTimeStr
+        //{
+        //    get { return SystemInfo.FormatDateTime(this.SecondeCheckDateTime); }
+        //}
         [TableColumn(true)]
-        public DateTime SecondCheckDateTime
+        public DateTime SecondeCheckDateTime
         {
             get { return m_secondCheckDateTime; }
             set { m_secondCheckDateTime = value; }
         }
+        
         [Convert2Xml()]
         [TableColumn(true)]
         public string ParItemName
@@ -252,39 +213,26 @@ namespace XYS.Lis.Model
             get { return m_checker; }
             set { m_checker = value; }
         }
-        [Convert2Xml()]
-        public byte[] TechnicianImage
-        {
-            get { return this.m_technicianImage; }
-            protected set { this.m_technicianImage = value; }
-        }
-        [Convert2Xml()]
-        public byte[] CheckerImage
-        {
-            get { return this.m_checkerImage; }
-            protected set { this.m_checkerImage = value; }
-        }
         #endregion
 
-        #region 父类重写虚方法
+        #region 实现父类抽象方法
         protected override void Afterward()
         {
-            this.SetSignImage();
         }
         #endregion
 
         #region 受保护的虚方法
-        protected virtual void SetSignImage()
-        {
-            if (this.Checker != null && !this.Checker.Equals(""))
-            {
-                this.CheckerImage = LisPUser.GetSignImage(this.Checker);
-            }
-            if (this.Technician != null && !this.Technician.Equals(""))
-            {
-                this.TechnicianImage = LisPUser.GetSignImage(this.Technician);
-            }
-        }
+        //protected virtual void SetSignImage()
+        //{
+        //    //if (this.Checker != null && !this.Checker.Equals(""))
+        //    //{
+        //    //    this.CheckerImage = LisPUser.GetSignImage(this.Checker);
+        //    //}
+        //    //if (this.Technician != null && !this.Technician.Equals(""))
+        //    //{
+        //    //    this.TechnicianImage = LisPUser.GetSignImage(this.Technician);
+        //    //}
+        //}
         #endregion
     }
 }

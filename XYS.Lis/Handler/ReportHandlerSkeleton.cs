@@ -16,16 +16,12 @@ namespace XYS.Lis.Handler
         #region
         protected ReportHandlerSkeleton(string name)
         {
-            if (name != null)
-            {
-                this.m_handlerName = name.ToLower();
-            }
+            this.m_handlerName = name;
         }
         #endregion
 
         #region 实现IReportHandler接口
         public abstract HandlerResult ReportOptions(ILisReportElement reportElement);
-        //public abstract HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag);
         public abstract HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag);
 
         public IReportHandler Next
@@ -35,13 +31,12 @@ namespace XYS.Lis.Handler
         }
         public virtual string HandlerName
         {
-            get { return this.m_handlerName; }
+            get { return this.m_handlerName.ToLower(); }
         }
         #endregion
 
         #region
-        protected abstract bool IsElementAndOperate(ILisReportElement reportElement, ReportElementTag elementTag);
-        protected abstract void OperateReport(ReportReportElement rre);
+        protected abstract void OperateElement(ILisReportElement element,ReportElementTag elementTag);
         #endregion
 
         #region
@@ -49,7 +44,7 @@ namespace XYS.Lis.Handler
         {
             bool result;
             ILisReportElement reportElement;
-            for (int i = reportElementList.Count - 1; i >= 0; i++)
+            for (int i = reportElementList.Count - 1; i >= 0; i--)
             {
                 reportElement = reportElementList[i] as ILisReportElement;
                 if (reportElement == null)
@@ -58,8 +53,12 @@ namespace XYS.Lis.Handler
                 }
                 else
                 {
-                    result = IsElementAndOperate(reportElement, elementTag);
-                    if (!result)
+                    result = IsElement(reportElement, elementTag);
+                    if (result)
+                    {
+                        OperateElement(reportElement, elementTag);
+                    }
+                    else
                     {
                         reportElementList.RemoveAt(i);
                     }
@@ -74,11 +73,8 @@ namespace XYS.Lis.Handler
                 case ReportElementTag.ReportElement:
                     result = reportElement is ReportReportElement;
                     break;
-                case ReportElementTag.ExamElement:
-                    result = reportElement is ReportExamElement;
-                    break;
-                case ReportElementTag.PatientElement:
-                    result = reportElement is ReportPatientElement;
+                case ReportElementTag.InfoElement:
+                    result = reportElement is ReportInfoElement;
                     break;
                 case ReportElementTag.ItemElement:
                     result = reportElement is ReportItemElement;
@@ -98,39 +94,6 @@ namespace XYS.Lis.Handler
             }
             return result;
         }
-        #endregion
-
-        #region
-        //protected virtual void OperateReportTable(Hashtable reportTable)
-        //{
-        //    if (reportTable.Count > 0)
-        //    {
-        //        ReportReportElement rre;
-        //        foreach (object reportElement in reportTable.Values)
-        //        {
-        //            rre = reportElement as ReportReportElement;
-        //            if (rre != null)
-        //            {
-        //                OperateReport(rre);
-        //            }
-        //        }
-        //    }
-        //}
-        //protected virtual void OperateReportList(List<ILisReportElement> reportElementList)
-        //{
-        //    if (reportElementList.Count > 0)
-        //    {
-        //        ReportReportElement rre;
-        //        foreach (ILisReportElement reportElement in reportElementList)
-        //        {
-        //            rre = reportElement as ReportReportElement;
-        //            if (rre != null)
-        //            {
-        //                OperateReport(rre);
-        //            }
-        //        }
-        //    }
-        //}
         #endregion
     }
 }

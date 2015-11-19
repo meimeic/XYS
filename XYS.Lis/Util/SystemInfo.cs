@@ -825,10 +825,72 @@ namespace XYS.Lis.Util
                 throw ex;
             }
         }
-
+        public static string GetNormalImageFilePath()
+        {
+            try
+            {
+                string applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
+                string filePath = Path.Combine(applicationBaseDirectory, "normal");
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+                return filePath;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static string GetReportModelFilePath()
+        {
+            try
+            {
+                string applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
+                string filePath = Path.Combine(applicationBaseDirectory, "model");
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+                return filePath;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public static byte[] ReadImageFile(string filePath)
+        {
+            try
+            {
+                FileStream fs = File.OpenRead(filePath); //OpenRead
+                int filelength = 0;
+                filelength = (int)fs.Length; //获得文件长度 
+                Byte[] image = new Byte[filelength]; //建立一个字节数组 
+                fs.Read(image, 0, filelength); //按字节流读取 
+                return image;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public static bool IsFileExist(string filePath)
         {
             return File.Exists(filePath);
+        }
+        public static bool DeleteFile(string filePath)
+        {
+            try
+            {
+                File.Delete(filePath);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ReportReport.Warn(declaringType, "SystemInfo:deleting the " + filePath + " file ocurre exception:" + ex.Message);
+                return false;
+            }
         }
         public static string GetFileFullName(string filePath, string fileName)
         {

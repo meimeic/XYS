@@ -8,7 +8,6 @@ namespace XYS.Lis.Handler
     {
         string HandlerName { get; }
         HandlerResult ReportOptions(ILisReportElement reportElement);
-        //HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag);
         HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag);
         IReportHandler Next { get; set; }
     }

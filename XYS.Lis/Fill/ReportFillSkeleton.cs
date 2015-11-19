@@ -12,23 +12,21 @@ namespace XYS.Lis.Fill
 {
     public abstract class ReportFillSkeleton : IReportFiller
     {
-        #region
+        #region 变量
         private readonly string m_fillerName;
-        //private readonly Dictionary<int, ReportElementTypeCollection> m_section2ElementTypesMap;
         private readonly Hashtable m_section2ElementTypesMap;
         private ReportElementTypeCollection m_defaultElementTypeCollection;
         #endregion
 
-        #region
+        #region 构造函数
         protected ReportFillSkeleton(string name)
         {
             this.m_section2ElementTypesMap = new Hashtable(20);
-            this.m_defaultElementTypeCollection = new ReportElementTypeCollection();
-            this.m_fillerName = name.ToLower();
+            this.m_defaultElementTypeCollection = new ReportElementTypeCollection(2);
         }
         #endregion
 
-        #region 属性
+        #region 实例属性
         public virtual ReportElementTypeCollection DefaultElementTypeCollection
         {
             get
@@ -63,20 +61,10 @@ namespace XYS.Lis.Fill
                 FillElement(reportElement, key);
             }
         }
-        public virtual void Fill(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag)
-        {
-            if (elementTag == ReportElementTag.ReportElement)
-            {
-                return;
-            }
-            else
-            {
-                FillElements(reportElementTable, key, elementTag);
-            }
-        }
         public virtual void Fill(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag)
         {
-            if (elementTag == ReportElementTag.ReportElement)
+            //不可填充的报告元素
+            if (elementTag == ReportElementTag.ReportElement || elementTag == ReportElementTag.CustomElement || elementTag == ReportElementTag.NoneElement)
             {
                 return;
             }
@@ -89,7 +77,6 @@ namespace XYS.Lis.Fill
 
         #region 抽象方法
         protected abstract void FillReport(ReportReportElement rre, ReportKey key);
-        protected abstract void FillElements(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag);
         protected abstract void FillElements(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag);
         protected abstract void FillElement(ILisReportElement reportElement, ReportKey key);
         #endregion
@@ -132,9 +119,12 @@ namespace XYS.Lis.Fill
         }
         private void InitDefaultElements()
         {
-            this.m_defaultElementTypeCollection.Add(ReportElementType.DEFAULTEXAM);
-            this.m_defaultElementTypeCollection.Add(ReportElementType.DEFAULTREPORT);
-            this.m_defaultElementTypeCollection.Add(ReportElementType.DEFAULTPATIENT);
+            if (this.m_defaultElementTypeCollection == null)
+            {
+                this.m_defaultElementTypeCollection = new ReportElementTypeCollection(2);
+            }
+            this.m_defaultElementTypeCollection.Add(ReportElementType.DEFAULTINFO);
+            this.m_defaultElementTypeCollection.Add(ReportElementType.DEFAULTITEM);
         }
         #endregion
 
@@ -192,6 +182,18 @@ namespace XYS.Lis.Fill
         //        return null;
         //    }
         //}
+        //public virtual void Fill(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag)
+        //{
+        //    if (elementTag == ReportElementTag.ReportElement)
+        //    {
+        //        return;
+        //    }
+        //    else
+        //    {
+        //        FillElements(reportElementTable, key, elementTag);
+        //    }
+        //}
+        //protected abstract void FillElements(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag);
         #endregion
     }
 }

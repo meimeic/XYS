@@ -44,7 +44,7 @@ namespace XYS.Lis.Repository.Hierarchy
         }
         #endregion
 
-        #region
+        #region 实例属性
         public virtual IReportFiller DefaultFill
         {
             get
@@ -106,7 +106,6 @@ namespace XYS.Lis.Repository.Hierarchy
         {
             get { return this.m_headHandler; }
         }
-
         #endregion
 
         #region 实现ILisReport接口
@@ -128,14 +127,10 @@ namespace XYS.Lis.Repository.Hierarchy
         public virtual void FillReportElement(ILisReportElement reportElement, ReportKey key)
         {
             this.Filler.Fill(reportElement, key);
-            // IReportFiller filler = this.GetFiller(fillerName);
-            //filler.Fill(reportElement, key);
         }
-        public virtual void FillReportElement(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag)
+        public virtual void FillReportElement(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag)
         {
-            this.Filler.Fill(reportElementTable, key, elementTag);
-            //IReportFiller filler = this.GetFiller(fillerName);
-            //filler.Fill(reportElementList, key, elementTag);
+            this.Filler.Fill(reportElementList, key, elementTag);
         }
 
         public virtual bool Option(ILisReportElement reportElement)
@@ -143,9 +138,9 @@ namespace XYS.Lis.Repository.Hierarchy
             bool rs = HandlerEvent(reportElement);
             return rs;
         }
-        public virtual bool Option(Hashtable reportElementTable, ReportElementTag elementTag)
+        public virtual bool Option(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
         {
-            bool rs = HandlerEvent(reportElementTable, elementTag);
+            bool rs = HandlerEvent(reportElementList, elementTag);
             return rs;
         }
 
@@ -155,11 +150,9 @@ namespace XYS.Lis.Repository.Hierarchy
             //IReportExport export = this.GetExport(exportTag);
             //return export.export(reportElement);
         }
-        public virtual string Export(Hashtable reportElementTable, ReportElementTag elementTag)
+        public virtual string Export(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
         {
-            return this.Exporter.export(reportElementTable, elementTag);
-            //IReportExport export = this.GetExport(exportTag);
-            //return export.export(reportElementList, elementTag);
+            return this.Exporter.export(reportElementList, elementTag);
         }
         #endregion
 
@@ -188,12 +181,12 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             return true;
         }
-        protected virtual bool HandlerEvent(Hashtable elementTable, ReportElementTag elementTag)
+        protected virtual bool HandlerEvent(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
         {
             IReportHandler handler = this.HandlerHead;
             while (handler != null)
             {
-                switch (handler.ReportOptions(elementTable, elementTag))
+                switch (handler.ReportOptions(reportElementList, elementTag))
                 {
                     case HandlerResult.Fail:
                         return false;
@@ -212,6 +205,7 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             return true;
         }
+        
         protected virtual void AddHandler(Hashtable handlerTable, List<string> handlerNameList)
         {
             IReportHandler handler;
@@ -240,6 +234,7 @@ namespace XYS.Lis.Repository.Hierarchy
                 this.m_tailHandler = handler;
             }
         }
+        
         protected virtual void SetFiller(Hashtable fillerTable, string fillerName)
         {
             IReportFiller filler = fillerTable[fillerName] as IReportFiller;
@@ -293,6 +288,8 @@ namespace XYS.Lis.Repository.Hierarchy
             SetExporter(this.Hierarchy.ExportMap, stratrgy.ExportName);
         }
         #endregion
+
+        #region
         //protected virtual IReportFiller GetFiller(string fillerName)
         //{
         //    if (fillerName != null&&!fillerName.Equals(""))
@@ -385,5 +382,6 @@ namespace XYS.Lis.Repository.Hierarchy
         //        return null;
         //    }
         //}
+        #endregion
     }
 }

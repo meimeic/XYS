@@ -1,14 +1,43 @@
-﻿using XYS.Lis.Core;
+﻿using System;
 using XYS.Model;
 using XYS.Common;
+using XYS.Lis.Util;
+
 namespace XYS.Lis.Model
 {
-    public abstract class AbstractPatientElement : ILisPatientElement, ILisReportElement
+    public class ReportInfoElement : AbstractReportElement,IPatientElement
     {
+        #region 私有常量字段
+        private const ReportElementTag m_defaultElementTag = ReportElementTag.InfoElement;
+        private static readonly string m_defaultEaxmSQL = @"select serialno,sampleno,s.CName as sampletypename,CAST(CONVERT(varchar(10), collectdate, 121) + ' ' + CONVERT(varchar(8), collecttime, 114) AS datetime) as collectdatetime,CAST(CONVERT(varchar(10), inceptdate, 121) + ' ' + CONVERT(varchar(8), incepttime, 114) AS datetime) as inceptdatetime,
+                                                                             CAST(CONVERT(varchar(10), testdate, 121) + ' ' + CONVERT(varchar(8), testtime, 114) AS datetime) as testdatetime,CAST(CONVERT(varchar(10), checkdate, 121) + ' ' + CONVERT(varchar(8), checktime, 114) AS datetime) as checkdatetime,
+                                                                             CAST(CONVERT(varchar(10), receivedate, 121) + ' ' + CONVERT(varchar(8), receivetime, 114) AS datetime) as receivedatetime,sendertime2 as secondecheckdatetime,paritemname,sectionno,r.sampletypeno,formmemo,formcomment,formcomment2,technician,checker,
+                                                                             r.cname as patientname,patno as pid,id_number_patient as cid,genderno,age as agevalue,ageunitno,sicktypeno as clinictypeno,hospitalizedtimes as visittimes,d.cname as deptname,isnull(r.doctor,b.cname) as doctor,bed as bedno,zdy2 as clinicaldiagnosis,zdy5 as explanation
+                                                                             from ReportForm as r left outer join SampleType as s on r.SampleTypeNo=s.SampleTypeNo left outer join department as d on r.DeptNo=d.DeptNo left outer join doctor as b ON r.doctor = CONVERT(varchar(20), b.doctorno)";
+        #endregion
 
         #region 私有字段
-        private readonly ReportElementTag m_elementTag;
-        private readonly string m_searchSQL;
+        private string m_serialNo;
+        private string m_sampleNo;
+        private int m_sectionNo;
+        private int m_sampleTypeNo;
+        private string m_sampleTypeName;
+        private DateTime m_collectDateTime;
+        private DateTime m_inceptDateTime;
+        private DateTime m_checkDateTime;
+        private DateTime m_secondCheckDateTime;
+        private DateTime m_receiveDateTime;
+        //报告附注信息
+        private DateTime m_testDateTime;
+        private string m_parItemName;
+        //备注、结论、解释等
+        private string m_formMemo;
+        private string m_formComment;
+        private string m_formComment2;
+        //检验者，审核者
+        private string m_technician;
+        private string m_checker;
+
         private string m_patientName;
         private string m_pid;
         private string m_cid;
@@ -26,14 +55,18 @@ namespace XYS.Lis.Model
         private string m_bedNo;
         private string m_clinicalDiagnosis;
         private string m_explanation;
-        //private ReportKey m_reportKey;
+
         #endregion
 
-        #region 受保护的构造方法
-        protected AbstractPatientElement(ReportElementTag elementTag, string sql)
+           #region 构造函数
+        public ReportInfoElement()
+            : base(m_defaultElementTag, m_defaultEaxmSQL)
         {
-            this.m_elementTag = elementTag;
-            this.m_searchSQL = sql;
+        }
+        public ReportInfoElement(ReportElementTag elementTag, string sql)
+            : base(elementTag, sql)
+        {
+
         }
         #endregion
 
@@ -43,7 +76,7 @@ namespace XYS.Lis.Model
         {
             get
             {
-                switch (this.m_clinicType)
+                switch (this.ClinicType)
                 {
                     case ClinicType.clinic:
                         return "门诊";
@@ -63,7 +96,7 @@ namespace XYS.Lis.Model
         {
             get
             {
-                switch (this.m_gender)
+                switch (this.Gender)
                 {
                     case GenderType.female:
                         return "女";
@@ -80,25 +113,134 @@ namespace XYS.Lis.Model
         }
         #endregion
 
-        #region 实现IReportElement接口
-        public ReportElementTag ElementTag
-        {
-            get { return m_elementTag; }
-        }
-        #endregion
-
-        #region 实现ILisReportElement
-        public string SearchSQL
-        {
-            get { return this.m_searchSQL; }
-        }
-        public void AfterFill()
-        {
-            this.Afterward();
-        }
-        #endregion
-
         #region 公共属性
+        [Convert2Xml()]
+        [TableColumn(true)]
+        public string SerialNo
+        {
+            get { return m_serialNo; }
+            set { m_serialNo = value; }
+        }
+
+        [Convert2Xml()]
+        [TableColumn(true)]
+        public string SampleNo
+        {
+            get { return m_sampleNo; }
+            set { m_sampleNo = value; }
+        }
+
+        [Convert2Xml()]
+        [TableColumn(true)]
+        public string SampleTypeName
+        {
+            get { return m_sampleTypeName; }
+            set { m_sampleTypeName = value; }
+        }
+
+        [TableColumn(true)]
+        public DateTime ReceiveDateTime
+        {
+            get { return m_receiveDateTime; }
+            set { m_receiveDateTime = value; }
+        }
+
+        [TableColumn(true)]
+        public DateTime CollectDateTime
+        {
+            get { return m_collectDateTime; }
+            set { m_collectDateTime = value; }
+        }
+
+        [TableColumn(true)]
+        public DateTime InceptDateTime
+        {
+            get { return m_inceptDateTime; }
+            set { m_inceptDateTime = value; }
+        }
+
+        [TableColumn(true)]
+        public DateTime TestDateTime
+        {
+            get { return m_testDateTime; }
+            set { m_testDateTime = value; }
+        }
+      
+        [TableColumn(true)]
+        public DateTime CheckDateTime
+        {
+            get { return m_checkDateTime; }
+            set { m_checkDateTime = value; }
+        }
+
+        [TableColumn(true)]
+        public DateTime SecondeCheckDateTime
+        {
+            get { return m_secondCheckDateTime; }
+            set { m_secondCheckDateTime = value; }
+        }
+
+        [Convert2Xml()]
+        [TableColumn(true)]
+        public string ParItemName
+        {
+            get { return m_parItemName; }
+            set { m_parItemName = value; }
+        }
+
+        [TableColumn(true)]
+        public int SectionNo
+        {
+            get { return m_sectionNo; }
+            set { m_sectionNo = value; }
+        }
+        
+        [TableColumn(true)]
+        public int SampleTypeNo
+        {
+            get { return m_sampleTypeNo; }
+            set { m_sampleTypeNo = value; }
+        }
+
+        [Convert2Xml()]
+        [TableColumn(true)]
+        public string FormMemo
+        {
+            get { return m_formMemo; }
+            set { m_formMemo = value; }
+        }
+        [Convert2Xml()]
+        [TableColumn(true)]
+        public string FormComment
+        {
+            get { return m_formComment; }
+            set { m_formComment = value; }
+        }
+        [Convert2Xml()]
+        [TableColumn(true)]
+        public string FormComment2
+        {
+            get { return m_formComment2; }
+            set { m_formComment2 = value; }
+        }
+
+        [Convert2Xml()]
+        [TableColumn(true)]
+        public string Technician
+        {
+            get { return m_technician; }
+            set { m_technician = value; }
+        }
+        
+        [Convert2Xml()]
+        [TableColumn(true)]
+        public string Checker
+        {
+            get { return m_checker; }
+            set { m_checker = value; }
+        }
+
+
         [Convert2Xml()]
         [TableColumn(true)]
         public string PatientName
@@ -106,7 +248,7 @@ namespace XYS.Lis.Model
             get { return this.m_patientName; }
             set { this.m_patientName = value; }
         }
-        
+
         [Convert2Xml()]
         [TableColumn(true)]
         public string PID
@@ -114,7 +256,7 @@ namespace XYS.Lis.Model
             get { return this.m_pid; }
             set { this.m_pid = value; }
         }
-        
+
         [Convert2Xml()]
         [TableColumn(true)]
         public string CID
@@ -129,7 +271,7 @@ namespace XYS.Lis.Model
             get { return this.m_genderNo; }
             set { this.m_genderNo = value; }
         }
-        
+
         public GenderType Gender
         {
             get { return this.m_gender; }
@@ -141,7 +283,7 @@ namespace XYS.Lis.Model
             get { return this.m_age; }
             protected set { this.m_age = value; }
         }
-        
+
         [Convert2Xml()]
         public string AgeStr
         {
@@ -154,21 +296,21 @@ namespace XYS.Lis.Model
                 return this.Ager.ToString();
             }
         }
-        
+
         [TableColumn(true)]
         public int AgeValue
         {
             get { return this.m_ageValue; }
             set { this.m_ageValue = value; }
         }
-       
+
         [TableColumn(true)]
         public int AgeUnitNo
         {
             get { return this.m_ageUnitNo; }
             set { this.m_ageUnitNo = value; }
         }
-        
+
         public AgeType AgeUnit
         {
             get { return this.m_ageUnit; }
@@ -181,7 +323,7 @@ namespace XYS.Lis.Model
             get { return this.m_clinicTypeNo; }
             set { this.m_clinicTypeNo = value; }
         }
-        
+
         public ClinicType ClinicType
         {
             get { return this.m_clinicType; }
@@ -195,7 +337,7 @@ namespace XYS.Lis.Model
             get { return this.m_visitTimes; }
             set { this.m_visitTimes = value; }
         }
-        
+
         [Convert2Xml()]
         [TableColumn(true)]
         public string DeptName
@@ -203,7 +345,7 @@ namespace XYS.Lis.Model
             get { return this.m_deptName; }
             set { this.m_deptName = value; }
         }
-        
+
         [Convert2Xml()]
         [TableColumn(true)]
         public string Doctor
@@ -211,7 +353,7 @@ namespace XYS.Lis.Model
             get { return this.m_doctor; }
             set { this.m_doctor = value; }
         }
-        
+
         [Convert2Xml()]
         [TableColumn(true)]
         public string BedNo
@@ -227,7 +369,7 @@ namespace XYS.Lis.Model
             get { return this.m_clinicalDiagnosis; }
             set { this.m_clinicalDiagnosis = value; }
         }
-        
+
         [Convert2Xml()]
         [TableColumn(true)]
         public string Explanation
@@ -235,11 +377,10 @@ namespace XYS.Lis.Model
             get { return this.m_explanation; }
             set { this.m_explanation = value; }
         }
-        
         #endregion
 
-        #region 受保护的虚函数
-        protected virtual void Afterward()
+        #region 实现父类抽象方法
+        protected override void Afterward()
         {
             //性别转换
             if (this.GenderNo > 4 || this.GenderNo <= 0)

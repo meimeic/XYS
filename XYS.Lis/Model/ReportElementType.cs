@@ -15,23 +15,28 @@ namespace XYS.Lis.Model
         #endregion
 
         #region
-        public static readonly ReportElementType DEFAULTPATIENT = new ReportElementType(typeof(ReportPatientElement));
-        public static readonly ReportElementType DEFAULTEXAM=new ReportElementType(typeof(ReportExamElement));
-        public static readonly ReportElementType DEFAULTITEM = new ReportElementType(typeof(ReportItemElement));
-        public static readonly ReportElementType DEFAULTGRAPH = new ReportElementType(typeof(ReportGraphElement));
-        public static readonly ReportElementType DEFAULTCUSTOM = new ReportElementType(typeof(ReportCustomElement));
-        public static readonly ReportElementType DEFAULTREPORT = new ReportElementType(typeof(ReportReportElement));
+        public static readonly ReportElementType DEFAULTITEM = new ReportElementType(typeof(ReportItemElement), ReportElementTag.ItemElement);
+        public static readonly ReportElementType DEFAULTGRAPH = new ReportElementType(typeof(ReportGraphElement), ReportElementTag.GraphElement);
+        public static readonly ReportElementType DEFAULTCUSTOM = new ReportElementType(typeof(ReportCustomElement), ReportElementTag.CustomElement);
+        public static readonly ReportElementType DEFAULTREPORT = new ReportElementType(typeof(ReportReportElement), ReportElementTag.ReportElement);
+        public static readonly ReportElementType DEFAULTINFO = new ReportElementType(typeof(ReportInfoElement), ReportElementTag.InfoElement);
         #endregion
 
         #region
-         public ReportElementType(Type elementType)
-         {
-             this.m_elementTag = ReportElementTag.NoneElement;
-             this.m_elementType=elementType;
-         }
-        public ReportElementType(string elementName, Type elementType):this(elementType)
+        public ReportElementType(Type elementType)
         {
-            this.m_elementName = elementName.ToLower();
+            this.m_elementTag = ReportElementTag.NoneElement;
+            this.m_elementType = elementType;
+        }
+        public ReportElementType(Type elementType, ReportElementTag elementTag)
+            : this(elementType)
+        {
+            this.m_elementTag = elementTag;
+        }
+        public ReportElementType(string elementName, Type elementType)
+            : this(elementType)
+        {
+            this.m_elementName = elementName;
         }
         public ReportElementType(string typeName)
         {
@@ -43,17 +48,18 @@ namespace XYS.Lis.Model
         #region
         public string ElementName
         {
-            get {
-                if(this.m_elementName!=null&&!this.m_elementName.Equals(""))
+            get
+            {
+                if (this.m_elementName != null && !this.m_elementName.Equals(""))
                 {
-                return this.m_elementName.ToLower(); 
+                    return this.m_elementName.ToLower();
                 }
                 else
                 {
                     return this.m_elementType.FullName.ToLower();
                 }
             }
-            set { this.m_elementName = value.ToLower(); }
+            set { this.m_elementName = value; }
         }
         public ReportElementTag ElementTag
         {

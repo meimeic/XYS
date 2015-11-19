@@ -1,7 +1,9 @@
 ﻿using System;
-using System.Collections;
 using System.Data;
 using System.Reflection;
+using System.Collections;
+using System.Collections.Generic;
+using System.Text;
 
 using XYS.Lis.Core;
 using XYS.Lis.Export;
@@ -15,103 +17,165 @@ using FastReport.Export.Pdf;
 
 namespace XYS.Lis.Export.PDF
 {
-    public class Export2PDF:ReportExportSkeleton
+    public class Export2PDF : ReportExportSkeleton
     {
-        private static readonly ExportTag DEFAULT_EXPORT = ExportTag.PDF;
-        private readonly DataSet m_ds;
-        private readonly Hashtable m_no2ModelPath;
         #region
+        private readonly string m_reportSeparate;
+        private readonly Hashtable m_no2ModelPath;
+        private static readonly DataSet PDF_DS = new DataSet();
+        private static readonly ExportTag DEFAULT_EXPORT = ExportTag.PDF;
+        #endregion
+
+        #region 构造函数
         static Export2PDF()
         {
-            LisMap.InitDataSetStruct();
+            LisMap.SetDataSet(PDF_DS);
         }
         public Export2PDF()
             : this("Export2PDF")
         {
-
         }
         public Export2PDF(string name)
             : base(name)
         {
             this.ExportTag = DEFAULT_EXPORT;
-            this.m_ds = new DataSet();
-            LisMap.SetDataSet(this.m_ds);
+            this.m_reportSeparate = ";";
             this.m_no2ModelPath = new Hashtable(20);
         }
         #endregion
 
         #region
+        public string ReportSeparate
+        {
+            get { return this.m_reportSeparate; }
+        }
+        #endregion
+
+        #region 重写父类虚方法
+        public override string export(ILisReportElement element)
+        {
+            if (element.ElementTag == ReportElementTag.ReportElement)
+            {
+                ReportReportElement rre = element as ReportReportElement;
+                return InnerReportExport(rre);
+            }
+            else
+            {
+                return "";
+            }
+        }
+        public override string export(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
+        {
+            if (elementTag == ReportElementTag.ReportElement)
+            {
+                return ReportElementsExport(reportElementList, elementTag);
+            }
+            else
+            {
+                return "";
+            }
+        }
+        #endregion
+
+        #region 实现父类抽象方法
         protected override string InnerElementExport(ILisReportElement reportElement)
         {
             throw new NotImplementedException();
         }
-        protected override string InnerElementsExport(Hashtable table,ReportElementTag elementTag)
-        {
-            throw new NotImplementedException();
-        }
-
         protected override string InnerReportExport(ReportReportElement rre)
         {
-            this.m_ds.Clear();
+            DataSet ds = PDF_DS.Clone();
+            string fileFullName = GetPdfFileFullName(rre);
             string modelPath = GetModelPath(rre.PrintModelNo);
-            return GenderPdf(modelPath, rre);
+            GenderPdf(modelPath, fileFullName, rre, ds);
+            return fileFullName;
+        }
+        protected override string GetSeparateByTag(ReportElementTag elementTag)
+        {
+            if (elementTag == ReportElementTag.ReportElement)
+            {
+                return this.ReportSeparate;
+            }
+            return null;
+        }
+        #endregion
+
+        #region 重写父类方法
+        protected override string ReportElementsExport(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
+        {
+            string temp;
+            ReportReportElement rre;
+            StringBuilder sb = new StringBuilder();
+            if (elementTag == ReportElementTag.ReportElement && reportElementList.Count > 0)
+            {
+                foreach (ILisReportElement reportElement in reportElementList)
+                {
+                    rre = reportElement as ReportReportElement;
+                    temp = InnerReportExport(rre);
+                    if (temp != null && !temp.Equals(""))
+                    {
+                        sb.Append(temp);
+                        sb.Append(this.ReportSeparate);
+                    }
+                }
+                if (sb.Length > this.ReportSeparate.Length)
+                {
+                    sb.Remove(sb.Length - this.ReportSeparate.Length, this.ReportSeparate.Length);
+                }
+            }
+            return sb.ToString();
         }
         #endregion
 
         #region
-
-        private void FillExam()
+        private void GenderPdf(string modelFullName, string fileFullName, ReportReportElement rre, DataSet ds)
         {
-
+            FillElement(rre, ds);
+            FillReportData(rre.ReportItemTable, ds);
+            Report report = new Report();
+            report.Load(modelFullName);
+            report.RegisterData(ds);
+            report.Prepare();
+            PDFExport export = new PDFExport();
+            report.Export(export, fileFullName);
+            report.Dispose();
         }
-        private void FillPatient()
-        { 
-        }
-        private void FillItem()
-        { 
-        }
-        private void FillGraph()
+        private void GenderPdf(string modelFullName, string fileFullName, DataSet ds)
         {
+            Report report = new Report();
+            report.Load(modelFullName);
+            report.RegisterData(ds);
+            report.Prepare();
+            PDFExport export = new PDFExport();
+            report.Export(export, fileFullName);
+            report.Dispose();
         }
-        private void FillCustom()
+        private void FillReportData(Hashtable reportData, DataSet ds)
         {
-
-        }
-        private void FillReportData(Hashtable reportData)
-        {
-            ILisReportElement tempElement;
-            Hashtable tempTable;
+            List<ILisReportElement> tempElementList;
             foreach (DictionaryEntry de in reportData)
             {
                 try
                 {
                     ReportElementTag elementTag = (ReportElementTag)de.Key;
-                    switch (elementTag)
+                    tempElementList = de.Value as List<ILisReportElement>;
+                    if (tempElementList != null && tempElementList.Count > 0)
                     {
-                        case ReportElementTag.ExamElement:
-                        case ReportElementTag.PatientElement:
-                            tempElement = de.Value as ILisReportElement;
-                            if (tempElement != null)
-                            {
-                                FillElement(tempElement, this.m_ds);
-                            }
-                            break;
-                        case ReportElementTag.ItemElement:
-                            tempTable = de.Value as Hashtable;
-                            if (tempTable != null)
-                            {
-                                FillElements(tempTable, this.m_ds);
-                            }
-                            break;
-                        case ReportElementTag.GraphElement:
-                            tempTable = de.Value as Hashtable;
-                            if (tempTable != null)
-                            {
-                                FillImageElements(GenderImageTable(tempTable), this.m_ds);
-                            }
-                            break;
-                        default:
-                            break;
+                        switch (elementTag)
+                        {
+                            case ReportElementTag.InfoElement:
+                                FillElement(tempElementList[0], ds);
+                                break;
+                            case ReportElementTag.ItemElement:
+                            case ReportElementTag.CustomElement:
+                                FillElements(tempElementList, ds);
+                                break;
+                            case ReportElementTag.GraphElement:
+                                FillImageElements(GenderImageSortList(tempElementList), ds);
+                                break;
+                            default:
+                                break;
+                        }
                     }
                 }
                 catch (Exception ex)
@@ -120,7 +184,7 @@ namespace XYS.Lis.Export.PDF
                 }
             }
         }
-        private void FillElements(Hashtable elementTable,DataSet ds)
+        private void FillElements(List<ILisReportElement> reportElementList, DataSet ds)
         {
             DataTable dt;
             DataRow dr;
@@ -128,28 +192,31 @@ namespace XYS.Lis.Export.PDF
             PropertyInfo[] props;
             Convert2XmlAttribute cxa;
             ILisReportElement element;
-            foreach (DictionaryEntry de in elementTable)
+            if (reportElementList.Count > 0)
             {
-                element = de.Value as ILisReportElement;
-                if (element != null)
+                foreach (ILisReportElement reportElement in reportElementList)
                 {
-                    elementType = element.GetType();
-                    dt = ds.Tables[elementType.Name];
-                    dr = dt.NewRow();
-                    props = elementType.GetProperties();
-                    if (props == null || props.Length == 0)
+                    element = reportElement as ILisReportElement;
+                    if (element != null)
                     {
-                        continue;
-                    }
-                    foreach (PropertyInfo p in props)
-                    {
-                        cxa = (Convert2XmlAttribute)Attribute.GetCustomAttribute(p, typeof(Convert2XmlAttribute));
-                        if (cxa != null && cxa.IsConvert)
+                        elementType = element.GetType();
+                        dt = ds.Tables[elementType.Name];
+                        dr = dt.NewRow();
+                        props = elementType.GetProperties();
+                        if (props == null || props.Length == 0)
                         {
-                            FillDataColumn(p, dr, element);
+                            continue;
                         }
+                        foreach (PropertyInfo p in props)
+                        {
+                            cxa = (Convert2XmlAttribute)Attribute.GetCustomAttribute(p, typeof(Convert2XmlAttribute));
+                            if (cxa != null && cxa.IsConvert)
+                            {
+                                FillDataColumn(p, dr, element);
+                            }
+                        }
+                        dt.Rows.Add(dr);
                     }
-                    dt.Rows.Add(dr);
                 }
             }
         }
@@ -174,9 +241,23 @@ namespace XYS.Lis.Export.PDF
             }
             dt.Rows.Add(dr);
         }
+        private SortedList GenderImageSortList(List<ILisReportElement> imageElementList)
+        {
+            ReportGraphElement reportImage;
+            SortedList sl = new SortedList(10);
+            foreach (ILisReportElement reportElement in imageElementList)
+            {
+                reportImage = reportElement as ReportGraphElement;
+                if (reportImage != null)
+                {
+                    sl.Add(reportImage.GraphName, reportImage.GraphImage);
+                }
+            }
+            return sl;
+        }
         private void FillImageElements(SortedList imageElementList, DataSet ds)
         {
-            int i = 1;
+            int i = 0;
             int j = 0;
             string columnName;
             string tableName = XMLTools.Image_Table_Name;
@@ -191,43 +272,24 @@ namespace XYS.Lis.Export.PDF
             }
             dt.Rows.Add(dr);
         }
-        private SortedList GenderImageTable(Hashtable imageElementTable)
+
+        private void FillDataColumn(PropertyInfo p, DataRow dr, ILisReportElement element)
         {
-            ReportGraphElement reportImage;
-            SortedList sl = new SortedList(10);
-            foreach (DictionaryEntry de in imageElementTable)
-            {
-                reportImage = de.Value as ReportGraphElement;
-                if (reportImage != null)
-                {
-                    sl.Add(reportImage.GraphName, reportImage.GraphImage);
-                }
-            }
-            return sl;
+            dr[p.Name] = p.GetValue(element, null);
         }
 
-        private string GenderPdf(string modelFullName,ReportReportElement rre)
-        {
-            FillReportData(rre.ItemTable);
-            Report report = new Report();
-            report.Load(modelFullName);
-            report.RegisterData(this.m_ds);
-            report.Prepare();
-            PDFExport export = new PDFExport();
-            string fileFullName = GetPdfFileFullName();
-            report.Export(export, fileFullName);
-            report.Dispose();
-            return fileFullName;
-        }
-        private string GetPdfFilePath()
+        #endregion
+
+        #region
+        protected virtual string GetPdfFilePath()
         {
             return @"E:\lis\test";
         }
-        private string GetPdfFileName()
+        protected virtual string GetPdfFileName()
         {
             return "Test.pdf";
         }
-        private string GetPdfFileFullName()
+        protected virtual string GetPdfFileFullName(ReportReportElement rre)
         {
             return SystemInfo.GetFileFullName(GetPdfFilePath(), GetPdfFileName());
         }
@@ -249,10 +311,6 @@ namespace XYS.Lis.Export.PDF
         #endregion
 
         #region
-        protected void FillDataColumn(PropertyInfo p, DataRow dr,ILisReportElement element)
-        {
-            dr[p.Name] = p.GetValue(element, null);
-        }
         protected object DefaultForType(Type targetType)
         {
             return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;

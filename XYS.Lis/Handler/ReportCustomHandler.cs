@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace XYS.Lis.Export
+namespace XYS.Lis.Handler
 {
-    public class ExportType
+    class ReportCustomHandler
     {
-
     }
 }

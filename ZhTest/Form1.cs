@@ -24,13 +24,14 @@ namespace ZhTest
         private void button1_Click(object sender, EventArgs e)
         {
             LisSearchRequire re = new LisSearchRequire(5);
-            re.EqualFields.Add("SerialNo", "1502139819");
+
+            re.EqualFields.Add("SerialNo", textBox1.Text);
             report.ReportExport(re);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-          
+            LisMap.InitDataSetXmlStruct();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -46,6 +47,11 @@ namespace ZhTest
         private void button5_Click(object sender, EventArgs e)
         {
         
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

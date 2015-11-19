@@ -10,6 +10,8 @@ namespace XYS.Lis.Util
     public class XMLTools
     {
         #region
+        private static readonly Type declaringType = typeof(XMLTools);
+
         private static readonly string TABLE_TAG = "TableDataSource";
         private static readonly string COLUMN_TAG = "Column";
         private static readonly string NAME_ATTR = "Name";
@@ -22,10 +24,17 @@ namespace XYS.Lis.Util
         private static readonly string DEFAULT_DATA_TYPE_ATTR_VALUE = "System.Int32";
         private static readonly string DEFAULT_ENABLE_ATTR = "true";
 
-        public static readonly int Image_Column_Count = 10;
-        public static readonly string Image_Table_Name = "ReportImage";
+        public static readonly int Image_Column_Count = 20;
+        public static readonly string Image_Table_Name = "ReportGraphElement";
         public static readonly string Image_Column_Prex = "Image";
         public static readonly string Image_Column_DataType = "System.Byte[]";
+
+        //public static readonly int Man_Column_Count=15;
+        //public static readonly int Man_Column_Start = 9288;
+        //public static readonly string Man_Table_Name = "ReportManItem";
+        //public static readonly string Man_Column_Prex = "Item";
+        //public static readonly string Man_Column_DataType = "System.String";
+
         #endregion
 
         #region 公共静态方法
@@ -101,6 +110,7 @@ namespace XYS.Lis.Util
 
         public static void ConvertObj2Xml(XmlDocument xmlDoc, XmlNode parentNode, Type elementType)
         {
+            ReportReport.Debug(declaringType, "XMLTools:make table element by "+elementType.Name);
             Dictionary<string, string> attrDic = GenderTableAttrDic(elementType);
             XmlElement tableElement = CreateElement(xmlDoc, TABLE_TAG, attrDic);
             InitColumnXmlNodeAttr(xmlDoc, tableElement, elementType);
@@ -109,9 +119,10 @@ namespace XYS.Lis.Util
         public static void Image2Xml(XmlDocument xmlDoc, XmlNode parentNode)
         {
             XmlElement columnElement;
+            ReportReport.Debug(declaringType, "XMLTools:make image table element by " + Image_Table_Name);
             Dictionary<string, string> attrDic = GenderTableAttrDic(Image_Table_Name);
             XmlElement tableElement = CreateElement(xmlDoc, TABLE_TAG, attrDic);
-            for (int i = 1; i <= Image_Column_Count; i++)
+            for (int i = 0; i < Image_Column_Count; i++)
             {
                 attrDic = GenderColumnAttrDic(Image_Column_Prex + i, Image_Column_DataType);
                 columnElement = CreateElement(xmlDoc, COLUMN_TAG, attrDic);
@@ -119,6 +130,20 @@ namespace XYS.Lis.Util
             }
             parentNode.AppendChild(tableElement);
         }
+        //public static void ReportManItem2Xml(XmlDocument xmlDoc, XmlNode parentNode)
+        //{
+        //    XmlElement columnElement;
+        //    Dictionary<string, string> attrDic = GenderTableAttrDic(Man_Table_Name);
+        //    XmlElement tableElement = CreateElement(xmlDoc, TABLE_TAG, attrDic);
+        //    for (int i = Man_Column_Start; i <= Man_Column_Count; i++)
+        //    {
+        //        attrDic = GenderColumnAttrDic(Man_Column_Prex + i, Image_Column_DataType);
+        //        columnElement = CreateElement(xmlDoc, COLUMN_TAG, attrDic);
+        //        tableElement.AppendChild(columnElement);
+        //    }
+        //    parentNode.AppendChild(tableElement);
+        //}
+        
         private static Dictionary<string, string> GenderTableAttrDic(Type elementType)
         {
             return GenderTableAttrDic(elementType.Name);
@@ -135,7 +160,7 @@ namespace XYS.Lis.Util
         
         private static Dictionary<string, string> GenderColumnAttrDic(PropertyInfo p)
         {
-            return GenderColumnAttrDic(p.Name, p.PropertyType.Name);
+            return GenderColumnAttrDic(p.Name, p.PropertyType.FullName);
         }
         private static Dictionary<string, string> GenderColumnAttrDic(string name, string typeName)
         {

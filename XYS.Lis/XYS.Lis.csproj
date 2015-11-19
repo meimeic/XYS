@@ -76,6 +76,8 @@
     <Compile Include="Fill\IReportFiller.cs" />
     <Compile Include="Fill\ReportFillByDB.cs" />
     <Compile Include="Fill\ReportFillSkeleton.cs" />
+    <Compile Include="Handler\ReportCustomHandler.cs" />
+    <Compile Include="Handler\ReportReportHandler.cs" />
     <Compile Include="LisSearchRequire.cs" />
     <Compile Include="Core\ParItem.cs" />
     <Compile Include="Core\ParItemCollection.cs" />
@@ -98,7 +100,6 @@
     <Compile Include="DAL\LisReportItemDAL.cs" />
     <Compile Include="DAL\LisReportPatientDAL.cs" />
     <Compile Include="DAL\LisReporterKeyDAL.cs" />
-    <Compile Include="Export\ExportType.cs" />
     <Compile Include="Export\ExportTag.cs" />
     <Compile Include="Export\Json\Export2Json.cs" />
     <Compile Include="Export\PDF\Export2PDF.cs" />
@@ -110,7 +111,7 @@
     <Compile Include="Handler\ReportGraphHandler.cs" />
     <Compile Include="Handler\ReportItemHandler.cs" />
     <Compile Include="Handler\ReportOrderHandler.cs" />
-    <Compile Include="Handler\ReportPrintModelHandler.cs" />
+    <Compile Include="Handler\ReportModelHandler.cs" />
     <Compile Include="Handler\ReportHandlerSkeleton.cs" />
     <Compile Include="Handler\IReportHandler.cs" />
     <Compile Include="IReport.cs" />
@@ -118,8 +119,8 @@
     <Compile Include="Model\AbstractPatientElement.cs" />
     <Compile Include="Model\ReportElementType.cs" />
     <Compile Include="Model\ReportElementTypeCollection.cs" />
-    <Compile Include="Model\LisReportPKElement.cs" />
     <Compile Include="Model\ReportElementTypeMap.cs" />
+    <Compile Include="Model\ReportInfoElement.cs" />
     <Compile Include="Model\ReportPatientElement.cs" />
     <Compile Include="Model\ReportItemElement.cs" />
     <Compile Include="Model\ReportCustomElement.cs" />

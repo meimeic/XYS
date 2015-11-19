@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using XYS.Model;
 using XYS.Lis.Core;
 using XYS.Lis.Export;
@@ -8,9 +7,9 @@ namespace XYS.Lis.Export
 {
     public interface IReportExport
     {
-        string ExportName { get;}
-        ExportTag ExportTag { get; }
+        string ExportName { get; }
+        ExportTag ExportTag { get; protected set; }
         string export(ILisReportElement element);
-        string export(Hashtable reportElementTable,ReportElementTag elementTag);
+        string export(List<ILisReportElement> reportElementList, ReportElementTag elementTag);
     }
 }

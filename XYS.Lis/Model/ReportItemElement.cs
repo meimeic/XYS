@@ -28,10 +28,10 @@ namespace XYS.Lis.Model
 
         #region 公共构造方法
         public ReportItemElement()
-            : base(m_defaultElementTag,m_defaultItemSQL)
+            : base(m_defaultElementTag, m_defaultItemSQL)
         { }
-        public ReportItemElement(ReportElementTag elementTag,string sql)
-            : base(elementTag,sql)
+        public ReportItemElement(ReportElementTag elementTag, string sql)
+            : base(elementTag, sql)
         { }
         #endregion
 
@@ -43,12 +43,14 @@ namespace XYS.Lis.Model
             get { return this.m_itemNo; }
             set { this.m_itemNo = value; }
         }
+
         [TableColumn(true)]
         public int ParItemNo
         {
             get { return this.m_parItemNo; }
             set { this.m_parItemNo = value; }
         }
+
         [Convert2Xml()]
         [TableColumn(true)]
         public string ItemCName
@@ -56,6 +58,7 @@ namespace XYS.Lis.Model
             get { return this.m_itemCName; }
             set { this.m_itemCName = value; }
         }
+
         [Convert2Xml()]
         [TableColumn(true)]
         public string ItemEName
@@ -63,6 +66,7 @@ namespace XYS.Lis.Model
             get { return this.m_itemEName; }
             set { this.m_itemEName = value; }
         }
+
         [Convert2Xml()]
         [TableColumn(true)]
         public string ItemResult
@@ -70,12 +74,14 @@ namespace XYS.Lis.Model
             get { return this.m_itemResult; }
             set { this.m_itemResult = value; }
         }
+
         [Convert2Xml()]
         public string ItemStandard
         {
             get { return this.m_itemStandard; }
             set { this.m_itemStandard = value; }
         }
+
         [Convert2Xml()]
         [TableColumn(true)]
         public string ResultStatus
@@ -83,6 +89,7 @@ namespace XYS.Lis.Model
             get { return this.m_resultStatus; }
             set { this.m_resultStatus = value; }
         }
+
         [Convert2Xml()]
         [TableColumn(true)]
         public string ItemUnit
@@ -90,6 +97,7 @@ namespace XYS.Lis.Model
             get { return this.m_itemUnit; }
             set { this.m_itemUnit = value; }
         }
+
         [Convert2Xml()]
         [TableColumn(true)]
         public string RefRange
@@ -97,32 +105,33 @@ namespace XYS.Lis.Model
             get { return this.m_refRange; }
             set { this.m_refRange = value; }
         }
-       
+
+        [Convert2Xml()]
         [TableColumn(true)]
         public int DispOrder
         {
             get { return this.m_dispOrder; }
             set { this.m_dispOrder = value; }
         }
-         [TableColumn(true)]
+
+        [TableColumn(true)]
         public int SecretGrade
         {
             get { return this.m_secretGrade; }
             set { this.m_secretGrade = value; }
         }
-         [TableColumn(true)]
-         public int Prec
-         {
-             get { return this.m_prec; }
-             set { this.m_prec = value; }
-         }
+        
+        [TableColumn(true)]
+        public int Prec
+        {
+            get { return this.m_prec; }
+            set { this.m_prec = value; }
+        }
         #endregion
 
-        #region 重写父类方法
+        #region 实现父类抽象方法
         protected override void Afterward()
         {
-
-
             //修正查询结果
             if (this.Prec > 0)
             {

@@ -31,6 +31,7 @@ namespace XYS.Lis.Model
             get { return this.m_graphName; }
             set { this.m_graphName = value; }
         }
+        
         [TableColumn(true)]
         public byte[] GraphImage
         {
@@ -39,5 +40,10 @@ namespace XYS.Lis.Model
         }
         #endregion
 
+        #region 实现父类抽象方法
+        protected override void Afterward()
+        {
+        }
+        #endregion
     }
 }
