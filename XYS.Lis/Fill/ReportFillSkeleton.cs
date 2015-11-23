@@ -21,6 +21,7 @@ namespace XYS.Lis.Fill
         #region 构造函数
         protected ReportFillSkeleton(string name)
         {
+            this.m_fillerName = name;
             this.m_section2ElementTypesMap = new Hashtable(20);
             this.m_defaultElementTypeCollection = new ReportElementTypeCollection(2);
         }

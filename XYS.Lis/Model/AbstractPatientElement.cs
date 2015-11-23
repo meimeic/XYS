@@ -38,7 +38,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实现IPatientElement接口
-        [Convert2Xml()]
+        [Export()]
         public string ClinicName
         {
             get
@@ -58,7 +58,7 @@ namespace XYS.Lis.Model
                 }
             }
         }
-        [Convert2Xml()]
+        [Export()]
         public string GenderName
         {
             get
@@ -99,7 +99,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 公共属性
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string PatientName
         {
@@ -107,7 +107,7 @@ namespace XYS.Lis.Model
             set { this.m_patientName = value; }
         }
         
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string PID
         {
@@ -115,7 +115,7 @@ namespace XYS.Lis.Model
             set { this.m_pid = value; }
         }
         
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string CID
         {
@@ -142,7 +142,7 @@ namespace XYS.Lis.Model
             protected set { this.m_age = value; }
         }
         
-        [Convert2Xml()]
+        [Export()]
         public string AgeStr
         {
             get
@@ -188,7 +188,7 @@ namespace XYS.Lis.Model
             protected set { this.m_clinicType = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public int VisitTimes
         {
@@ -196,7 +196,7 @@ namespace XYS.Lis.Model
             set { this.m_visitTimes = value; }
         }
         
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string DeptName
         {
@@ -204,7 +204,7 @@ namespace XYS.Lis.Model
             set { this.m_deptName = value; }
         }
         
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string Doctor
         {
@@ -212,7 +212,7 @@ namespace XYS.Lis.Model
             set { this.m_doctor = value; }
         }
         
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string BedNo
         {
@@ -220,7 +220,7 @@ namespace XYS.Lis.Model
             set { this.m_bedNo = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string ClinicalDiagnosis
         {
@@ -228,7 +228,7 @@ namespace XYS.Lis.Model
             set { this.m_clinicalDiagnosis = value; }
         }
         
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string Explanation
         {

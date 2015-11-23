@@ -477,7 +477,7 @@ namespace XYS.Lis.Util
         }
         private static void ConvertObj2Table(DataSet ds, Type elementType)
         {
-            Convert2XmlAttribute cxa;
+            ExportAttribute cxa;
             DataTable dt = new DataTable();
             dt.TableName = elementType.Name;
             PropertyInfo[] props = elementType.GetProperties();
@@ -487,7 +487,7 @@ namespace XYS.Lis.Util
             }
             foreach (PropertyInfo pro in props)
             {
-                cxa = (Convert2XmlAttribute)Attribute.GetCustomAttribute(pro, typeof(Convert2XmlAttribute));
+                cxa = (ExportAttribute)Attribute.GetCustomAttribute(pro, typeof(ExportAttribute));
                 if (cxa != null && cxa.IsConvert)
                 {
                     dt.Columns.Add(pro.Name, pro.PropertyType);

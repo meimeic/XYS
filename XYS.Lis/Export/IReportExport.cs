@@ -8,7 +8,7 @@ namespace XYS.Lis.Export
     public interface IReportExport
     {
         string ExportName { get; }
-        ExportTag ExportTag { get; protected set; }
+        ExportTag ExportTag { get;}
         string export(ILisReportElement element);
         string export(List<ILisReportElement> reportElementList, ReportElementTag elementTag);
     }

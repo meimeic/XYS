@@ -60,7 +60,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 公共属性
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string SerialNo
         {
@@ -68,7 +68,7 @@ namespace XYS.Lis.Model
             set { m_serialNo = value; }
         }
         
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string SampleNo
         {
@@ -76,7 +76,7 @@ namespace XYS.Lis.Model
             set { m_sampleNo = value; }
         }
         
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string SampleTypeName
         {
@@ -156,7 +156,7 @@ namespace XYS.Lis.Model
             set { m_secondCheckDateTime = value; }
         }
         
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string ParItemName
         {
@@ -177,21 +177,21 @@ namespace XYS.Lis.Model
             set { m_sampleTypeNo = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string FormMemo
         {
             get { return m_formMemo; }
             set { m_formMemo = value; }
         }
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string FormComment
         {
             get { return m_formComment; }
             set { m_formComment = value; }
         }
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string FormComment2
         {
@@ -199,14 +199,14 @@ namespace XYS.Lis.Model
             set { m_formComment2 = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string Technician
         {
             get { return m_technician; }
             set { m_technician = value; }
         }
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string Checker
         {

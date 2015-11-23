@@ -190,7 +190,7 @@ namespace XYS.Lis.Export.PDF
             DataRow dr;
             Type elementType;
             PropertyInfo[] props;
-            Convert2XmlAttribute cxa;
+            ExportAttribute cxa;
             ILisReportElement element;
             if (reportElementList.Count > 0)
             {
@@ -209,7 +209,7 @@ namespace XYS.Lis.Export.PDF
                         }
                         foreach (PropertyInfo p in props)
                         {
-                            cxa = (Convert2XmlAttribute)Attribute.GetCustomAttribute(p, typeof(Convert2XmlAttribute));
+                            cxa = (ExportAttribute)Attribute.GetCustomAttribute(p, typeof(ExportAttribute));
                             if (cxa != null && cxa.IsConvert)
                             {
                                 FillDataColumn(p, dr, element);
@@ -222,7 +222,7 @@ namespace XYS.Lis.Export.PDF
         }
         private void FillElement(ILisReportElement element, DataSet ds)
         {
-            Convert2XmlAttribute cxa;
+            ExportAttribute cxa;
             Type elementType = element.GetType();
             DataTable dt = ds.Tables[elementType.Name];
             DataRow dr = dt.NewRow();
@@ -233,7 +233,7 @@ namespace XYS.Lis.Export.PDF
             }
             foreach (PropertyInfo p in props)
             {
-                cxa = (Convert2XmlAttribute)Attribute.GetCustomAttribute(p, typeof(Convert2XmlAttribute));
+                cxa = (ExportAttribute)Attribute.GetCustomAttribute(p, typeof(ExportAttribute));
                 if (cxa != null && cxa.IsConvert)
                 {
                     FillDataColumn(p, dr, element);

@@ -36,7 +36,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 公共属性
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public int ItemNo
         {
@@ -51,7 +51,7 @@ namespace XYS.Lis.Model
             set { this.m_parItemNo = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string ItemCName
         {
@@ -59,7 +59,7 @@ namespace XYS.Lis.Model
             set { this.m_itemCName = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string ItemEName
         {
@@ -67,7 +67,7 @@ namespace XYS.Lis.Model
             set { this.m_itemEName = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string ItemResult
         {
@@ -75,14 +75,14 @@ namespace XYS.Lis.Model
             set { this.m_itemResult = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         public string ItemStandard
         {
             get { return this.m_itemStandard; }
             set { this.m_itemStandard = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string ResultStatus
         {
@@ -90,7 +90,7 @@ namespace XYS.Lis.Model
             set { this.m_resultStatus = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string ItemUnit
         {
@@ -98,7 +98,7 @@ namespace XYS.Lis.Model
             set { this.m_itemUnit = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public string RefRange
         {
@@ -106,7 +106,7 @@ namespace XYS.Lis.Model
             set { this.m_refRange = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         [TableColumn(true)]
         public int DispOrder
         {
@@ -147,16 +147,6 @@ namespace XYS.Lis.Model
                         this.ItemResult = result;
                     }
                 }
-                if (this.ItemStandard != null && !this.ItemStandard.Equals(""))
-                {
-                    //修正标准值
-                    //AdjustItemStandard();
-                    result = AdjustStr(this.ItemStandard, this.Prec);
-                    if (result != null)
-                    {
-                        this.ItemStandard = result;
-                    }
-                }
             }
         }
         #endregion
@@ -171,13 +161,27 @@ namespace XYS.Lis.Model
                 this.ItemResult = AdjustAccuracy(temp, this.Prec);
             }
         }
-        private void AdjustItemStandard()
+        public void AdjustItemStandard()
         {
-            double temp;
-            bool r = double.TryParse(this.ItemStandard, out temp);
-            if (r)
+            //double temp;
+            //bool r = double.TryParse(this.ItemStandard, out temp);
+            //if (r)
+            //{
+            //    this.m_itemStandard = AdjustAccuracy(temp, this.Prec);
+            //}
+            if (this.Prec > 0)
             {
-                this.m_itemStandard = AdjustAccuracy(temp, this.Prec);
+                string result;
+                if (this.ItemStandard != null && !this.ItemStandard.Equals(""))
+                {
+                    //修正标准值
+                    //AdjustItemStandard();
+                    result = AdjustStr(this.ItemStandard, this.Prec);
+                    if (result != null)
+                    {
+                        this.ItemStandard = result;
+                    }
+                }
             }
         }
         #endregion

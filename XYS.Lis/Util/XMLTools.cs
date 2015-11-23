@@ -182,7 +182,7 @@ namespace XYS.Lis.Util
         }
         private static void InitColumnXmlNodeAttr(XmlDocument xmlDoc, XmlElement tableElement, Type elementType)
         {
-            Convert2XmlAttribute cxa;
+            ExportAttribute cxa;
             XmlElement columnElement;
             Dictionary<string, string> attrDic;
             PropertyInfo[] props = elementType.GetProperties();
@@ -192,7 +192,7 @@ namespace XYS.Lis.Util
             }
             foreach (PropertyInfo pro in props)
             {
-                cxa = (Convert2XmlAttribute)Attribute.GetCustomAttribute(pro, typeof(Convert2XmlAttribute));
+                cxa = (ExportAttribute)Attribute.GetCustomAttribute(pro, typeof(ExportAttribute));
                 if (cxa != null && cxa.IsConvert)
                 {
                     attrDic = GenderColumnAttrDic(pro);

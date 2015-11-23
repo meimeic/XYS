@@ -30,11 +30,11 @@ namespace XYS.Lis.Model
         private byte[] m_technicianImage;
         private byte[] m_checkerImage;
 
-        private DateTime m_collectDateTime;
-        private DateTime m_inceptDateTime;
-        private DateTime m_testDateTime;
-        private DateTime m_checkDateTime;
-        private DateTime m_secondCheckDateTime;
+        private string m_collectDateTime;
+        private string m_inceptDateTime;
+        private string m_testDateTime;
+        private string m_checkDateTime;
+        private string m_secondCheckDateTime;
 
         private int m_sectionNo;
         private ClinicType m_clinicType;
@@ -49,6 +49,7 @@ namespace XYS.Lis.Model
         {
             this.m_parItemList = new List<int>(5);
             this.m_reportItemTable = new Hashtable(5);
+            this.m_remarkFlag = false;
         }
         #endregion
 
@@ -69,96 +70,74 @@ namespace XYS.Lis.Model
             set { this.m_remarkFlag = value; }
         }
 
-        public DateTime CollectDateTime
+        [Export()]
+        public string CollectDateTime
         {
             get { return this.m_collectDateTime; }
             set { this.m_collectDateTime = value; }
         }
-        public DateTime InceptDateTime
+        
+        [Export()]
+        public string InceptDateTime
         {
             get { return m_inceptDateTime; }
             set { m_inceptDateTime = value; }
         }
-        public DateTime TestDateTime
+        
+        [Export()]
+        public string TestDateTime
         {
             get { return m_testDateTime; }
             set { m_testDateTime = value; }
         }
-        public DateTime CheckDateTime
+        
+        [Export()]
+        public string CheckDateTime
         {
             get { return m_checkDateTime; }
             set { m_checkDateTime = value; }
         }
-        public DateTime SecondeCheckDateTime
+        
+        [Export()]
+        public string SecondeCheckDateTime
         {
             get { return m_secondCheckDateTime; }
             set { m_secondCheckDateTime = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         public string ReportTitle
         {
             get { return this.m_reportTitle; }
             set { this.m_reportTitle = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         public string Remark
         {
             get { return this.m_remark; }
             set { this.m_remark = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         public string ParItemName
         {
             get { return this.m_parItemName; }
             set { this.m_parItemName = value; }
         }
 
-        [Convert2Xml()]
+        [Export()]
         public byte[] TechnicianImage
         {
             get { return this.m_technicianImage; }
             set { this.m_technicianImage = value; }
         }
-        [Convert2Xml()]
+        [Export()]
         public byte[] CheckerImage
         {
             get { return this.m_checkerImage; }
             set { this.m_checkerImage = value; }
         }
-
-        [Convert2Xml()]
-        public string CollectDateTimeStr
-        {
-            get { return SystemInfo.FormatDateTime(this.CollectDateTime); }
-        }
-
-        [Convert2Xml()]
-        public string InceptDateTimeStr
-        {
-            get { return SystemInfo.FormatDateTime(this.InceptDateTime); }
-        }
-
-        [Convert2Xml()]
-        public string TestDateTimeStr
-        {
-            get { return SystemInfo.FormatDateTime(this.TestDateTime, "yyyy-MM-dd", ""); }
-        }
-
-        [Convert2Xml()]
-        public string CheckDateTimeStr
-        {
-            get { return SystemInfo.FormatDateTime(this.CheckDateTime); }
-        }
-
-        [Convert2Xml()]
-        public string SecondCheckDateTimeStr
-        {
-            get { return SystemInfo.FormatDateTime(this.SecondeCheckDateTime); }
-        }
-
 
         public int SectionNo
         {
@@ -183,6 +162,7 @@ namespace XYS.Lis.Model
         #region 实现父类抽象方法
         protected override void Afterward()
         {
+
         }
         #endregion
 

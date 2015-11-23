@@ -63,18 +63,11 @@ namespace XYS.Lis.DAL
 
             switch (element.ElementTag)
             {
-                case ReportElementTag.ExamElement:
-                    ReportExamElement examElement = element as ReportExamElement;
-                    if (examElement != null)
+                case ReportElementTag.InfoElement:
+                    ReportInfoElement infoElement = element as ReportInfoElement;
+                    if (infoElement != null)
                     {
-                        elementTable[examElement.SerialNo] = element;
-                    }
-                    break;
-                case ReportElementTag.PatientElement:
-                    ReportPatientElement patientElement = element as ReportPatientElement;
-                    if (patientElement != null)
-                    {
-                        elementTable[patientElement.PID] = element;
+                        elementTable[infoElement.SerialNo] = element;
                     }
                     break;
                 case ReportElementTag.ItemElement:

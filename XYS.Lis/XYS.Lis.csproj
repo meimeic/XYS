@@ -65,6 +65,7 @@
     <Compile Include="Config\XmlParamConfigurator.cs" />
     <Compile Include="Core\DefaultRepositorySelector.cs" />
     <Compile Include="Core\IAppenderAttachable.cs" />
+    <Compile Include="Core\ILisExportElement.cs" />
     <Compile Include="Core\ILisReporter.cs" />
     <Compile Include="Core\ILisPatientElement.cs" />
     <Compile Include="Core\ILisReportElement.cs" />
@@ -117,6 +118,11 @@
     <Compile Include="IReport.cs" />
     <Compile Include="Model\AbstractReportElement.cs" />
     <Compile Include="Model\AbstractPatientElement.cs" />
+    <Compile Include="Model\Export\ReportCustom.cs" />
+    <Compile Include="Model\Export\ReportGraph.cs" />
+    <Compile Include="Model\Export\ReportInfo.cs" />
+    <Compile Include="Model\Export\ReportItem.cs" />
+    <Compile Include="Model\Export\ReportReport.cs" />
     <Compile Include="Model\ReportElementType.cs" />
     <Compile Include="Model\ReportElementTypeCollection.cs" />
     <Compile Include="Model\ReportElementTypeMap.cs" />

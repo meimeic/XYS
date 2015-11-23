@@ -3,14 +3,14 @@
 namespace XYS.Common
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = true)]
-    public class Convert2XmlAttribute : Attribute
+    public class ExportAttribute : Attribute
     {
         private bool flag;
-        public Convert2XmlAttribute()
+        public ExportAttribute()
         {
             this.flag = true;
         }
-        public Convert2XmlAttribute(bool f)
+        public ExportAttribute(bool f)
         {
             this.flag = f;
         }

@@ -4,6 +4,5 @@ namespace XYS.Lis.Core
 {
    public interface ILisPatientElement:IPatientElement
     {
-
     }
 }

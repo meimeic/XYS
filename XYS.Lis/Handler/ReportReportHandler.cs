@@ -151,12 +151,14 @@ namespace XYS.Lis.Handler
                 for (int i = itemList.Count - 1; i >= 0; i--)
                 {
                     rie = itemList[i] as ReportItemElement;
+                    //删除保密元素
                     if (IsRemoveBySecret(rie.SecretGrade))
                     {
                         itemList.RemoveAt(i);
                     }
                     else
                     {
+
                         OperateSubElement(rie, ReportElementTag.ItemElement);
                     }
                 }
@@ -192,7 +194,10 @@ namespace XYS.Lis.Handler
             //检验项通用处理
             if (rie.ItemNo == 50004360 || rie.ItemNo == 50004370)
             {
-                rie.RefRange = rie.RefRange.Replace(";", SystemInfo.NewLine);
+                if (rie.RefRange != null)
+                {
+                    rie.RefRange = rie.RefRange.Replace(";", SystemInfo.NewLine);
+                }
             }
         }
         private void OperateGraph(ReportGraphElement rgie)
@@ -202,6 +207,11 @@ namespace XYS.Lis.Handler
         private void OperateCustom(ReportCustomElement customItem)
         {
             //通用处理
+        }
+
+        private void ItemEName2Standard(ReportItemElement rie)
+        {
+
         }
         #endregion
 

@@ -12,7 +12,7 @@ namespace XYS.Lis.Core
        #region
        public ReporterSectionMap()
        {
-           this.m_mapNo2ReporterSection = new Hashtable(100);
+           this.m_mapNo2ReporterSection = new Hashtable(30);
        }
        #endregion
 

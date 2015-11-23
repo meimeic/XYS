@@ -108,11 +108,11 @@ namespace XYS.Lis.Handler
                 {
                     rre.TechnicianImage = LisPUser.GetSignImage(rie.Technician);
                 }
-                rre.CollectDateTime = rie.CollectDateTime;
-                rre.InceptDateTime = rie.InceptDateTime;
-                rre.TestDateTime = rie.TestDateTime;
-                rre.CheckDateTime = rie.CheckDateTime;
-                rre.SecondeCheckDateTime = rie.SecondeCheckDateTime;
+                rre.CollectDateTime = SystemInfo.FormatDateTime(rie.CollectDateTime);
+                rre.InceptDateTime = SystemInfo.FormatDateTime(rie.InceptDateTime);
+                rre.TestDateTime = SystemInfo.FormatDateTime(rie.TestDateTime, "yyyy-MM-dd", "");
+                rre.CheckDateTime = SystemInfo.FormatDateTime(rie.CheckDateTime);
+                rre.SecondeCheckDateTime = SystemInfo.FormatDateTime(rie.SecondeCheckDateTime);
                 rre.ClinicType = rie.ClinicType;
             }
         }
