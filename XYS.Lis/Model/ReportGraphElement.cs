@@ -16,15 +16,16 @@ namespace XYS.Lis.Model
 
         #region 公共构造函数
         public ReportGraphElement()
-            : base(m_defaultElementTag,m_defaultGraphSQL)
+            : base(m_defaultElementTag, m_defaultGraphSQL)
         { }
-        public ReportGraphElement(ReportElementTag elementTag,string sql)
-            : base(elementTag,sql)
+        public ReportGraphElement(ReportElementTag elementTag, string sql)
+            : base(elementTag, sql)
         {
         }
         #endregion
 
         #region 公共属性
+        [Export()]
         [TableColumn(true)]
         public string GraphName
         {
@@ -32,6 +33,7 @@ namespace XYS.Lis.Model
             set { this.m_graphName = value; }
         }
         
+        [Export()]
         [TableColumn(true)]
         public byte[] GraphImage
         {

@@ -5,12 +5,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 
-using XYS.Lis.Core;
-using XYS.Lis.Export;
-using XYS.Lis.Model;
-using XYS.Lis.Util;
 using XYS.Model;
+using XYS.Lis.Util;
+using XYS.Lis.Core;
 using XYS.Common;
+using XYS.Lis.Export;
+using XYS.Lis.Model.Export;
 
 using FastReport;
 using FastReport.Export.Pdf;
@@ -19,9 +19,10 @@ namespace XYS.Lis.Export.PDF
 {
     public class Export2PDF : ReportExportSkeleton
     {
-        #region
+        #region 只读字段
         private readonly string m_reportSeparate;
         private readonly Hashtable m_no2ModelPath;
+        private readonly Hashtable m_itemName2CustomPropertyName;
         private static readonly DataSet PDF_DS = new DataSet();
         private static readonly ExportTag DEFAULT_EXPORT = ExportTag.PDF;
         #endregion
@@ -41,6 +42,7 @@ namespace XYS.Lis.Export.PDF
             this.ExportTag = DEFAULT_EXPORT;
             this.m_reportSeparate = ";";
             this.m_no2ModelPath = new Hashtable(20);
+            this.m_itemName2CustomPropertyName = new Hashtable(15);
         }
         #endregion
 
@@ -51,87 +53,98 @@ namespace XYS.Lis.Export.PDF
         }
         #endregion
 
-        #region 重写父类虚方法
-        public override string export(ILisReportElement element)
-        {
-            if (element.ElementTag == ReportElementTag.ReportElement)
-            {
-                ReportReportElement rre = element as ReportReportElement;
-                return InnerReportExport(rre);
-            }
-            else
-            {
-                return "";
-            }
-        }
-        public override string export(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
-        {
-            if (elementTag == ReportElementTag.ReportElement)
-            {
-                return ReportElementsExport(reportElementList, elementTag);
-            }
-            else
-            {
-                return "";
-            }
-        }
-        #endregion
+        //#region 重写父类虚方法
+        //public override string export(ILisExportElement element)
+        //{
+        //    if (element.ElementTag == ReportElementTag.ReportElement)
+        //    {
+        //        ReporterReport rr = element as ReporterReport;
+        //        return InnerReportExport(rr);
+        //    }
+        //    else
+        //    {
+        //        return "";
+        //    }
+        //}
+        //public override string export(List<ILisExportElement> reportElementList, ReportElementTag elementTag)
+        //{
+        //    if (elementTag == ReportElementTag.ReportElement)
+        //    {
+        //        return InnerExport(reportElementList, elementTag);
+        //    }
+        //    else
+        //    {
+        //        return "";
+        //    }
+        //}
+        //#endregion
 
         #region 实现父类抽象方法
-        protected override string InnerElementExport(ILisReportElement reportElement)
+        protected override string InnerExport(ILisExportElement exportElement)
         {
-            throw new NotImplementedException();
-        }
-        protected override string InnerReportExport(ReportReportElement rre)
-        {
-            DataSet ds = PDF_DS.Clone();
-            string fileFullName = GetPdfFileFullName(rre);
-            string modelPath = GetModelPath(rre.PrintModelNo);
-            GenderPdf(modelPath, fileFullName, rre, ds);
-            return fileFullName;
-        }
-        protected override string GetSeparateByTag(ReportElementTag elementTag)
-        {
-            if (elementTag == ReportElementTag.ReportElement)
+            ReporterReport rr;
+            if (exportElement.ElementTag == ReportElementTag.ReportElement)
             {
-                return this.ReportSeparate;
+                rr = exportElement as ReporterReport;
+                if (rr != null)
+                {
+                    return InnerReportExport(rr);
+                }
+                return "";
             }
-            return null;
+            else
+            {
+                return "";
+            }
         }
-        #endregion
-
-        #region 重写父类方法
-        protected override string ReportElementsExport(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
+        protected override string InnerExport(List<ILisExportElement> exportElementList, ReportElementTag elementTag)
         {
             string temp;
-            ReportReportElement rre;
+            ReporterReport rr;
             StringBuilder sb = new StringBuilder();
-            if (elementTag == ReportElementTag.ReportElement && reportElementList.Count > 0)
+            if (elementTag == ReportElementTag.ReportElement)
             {
-                foreach (ILisReportElement reportElement in reportElementList)
+                if (exportElementList.Count > 0)
                 {
-                    rre = reportElement as ReportReportElement;
-                    temp = InnerReportExport(rre);
-                    if (temp != null && !temp.Equals(""))
+                    foreach (ILisExportElement exportElement in exportElementList)
                     {
-                        sb.Append(temp);
-                        sb.Append(this.ReportSeparate);
+                        if (elementTag == ReportElementTag.ReportElement)
+                        {
+                            rr = exportElement as ReporterReport;
+                            temp = InnerReportExport(rr);
+                            if (temp != null && !temp.Equals(""))
+                            {
+                                sb.Append(temp);
+                                sb.Append(this.ReportSeparate);
+                            }
+                        }
+                    }
+                    if (sb.Length > this.ReportSeparate.Length)
+                    {
+                        sb.Remove(sb.Length - this.ReportSeparate.Length, this.ReportSeparate.Length);
                     }
                 }
-                if (sb.Length > this.ReportSeparate.Length)
-                {
-                    sb.Remove(sb.Length - this.ReportSeparate.Length, this.ReportSeparate.Length);
-                }
+                return sb.ToString();
             }
-            return sb.ToString();
+            else
+            {
+                return "";
+            }
         }
         #endregion
 
         #region
-        private void GenderPdf(string modelFullName, string fileFullName, ReportReportElement rre, DataSet ds)
+        protected virtual string InnerReportExport(ReporterReport rr)
         {
-            FillElement(rre, ds);
-            FillReportData(rre.ReportItemTable, ds);
+            DataSet ds = PDF_DS.Clone();
+            string fileFullName = GetPdfFileFullName(rr);
+            string modelPath = GetModelPath(rr.PrintModelNo);
+            GenderPdf(modelPath, fileFullName, rr, ds);
+            return fileFullName;
+        }
+        private void GenderPdf(string modelFullName, string fileFullName, ReporterReport rr, DataSet ds)
+        {
+            FillReport(rr, ds);
             Report report = new Report();
             report.Load(modelFullName);
             report.RegisterData(ds);
@@ -150,53 +163,136 @@ namespace XYS.Lis.Export.PDF
             report.Export(export, fileFullName);
             report.Dispose();
         }
-        private void FillReportData(Hashtable reportData, DataSet ds)
+
+        private void FillReport(ReporterReport rr, DataSet ds)
         {
-            List<ILisReportElement> tempElementList;
-            foreach (DictionaryEntry de in reportData)
+            FillElement(rr, ds);
+            if (rr.ReportInfo != null)
             {
-                try
+                FillElement(rr.ReportInfo, ds);
+            }
+            if(rr.ItemList!=null)
+            {
+                FillItemElements(rr.ItemList, ds);
+            }
+            if (rr.GraphList != null)
+            {
+                FillGraphElements(rr.GraphList, ds);
+            }
+            if (rr.CustomList != null)
+            {
+                FillCustomElements(rr.CustomList, ds);
+            }
+            if (rr.KVList != null)
+            {
+                FillKVElements(rr.KVList,ds);
+            }
+        }
+        private void FillItemElements(Dictionary<int, ReporterItem> exportElementDic, DataSet ds)
+        {
+            if (exportElementDic.Count > 0)
+            {
+                foreach (ReporterItem ri in exportElementDic.Values)
                 {
-                    ReportElementTag elementTag = (ReportElementTag)de.Key;
-                    tempElementList = de.Value as List<ILisReportElement>;
-                    if (tempElementList != null && tempElementList.Count > 0)
-                    {
-                        switch (elementTag)
-                        {
-                            case ReportElementTag.InfoElement:
-                                FillElement(tempElementList[0], ds);
-                                break;
-                            case ReportElementTag.ItemElement:
-                            case ReportElementTag.CustomElement:
-                                FillElements(tempElementList, ds);
-                                break;
-                            case ReportElementTag.GraphElement:
-                                FillImageElements(GenderImageSortList(tempElementList), ds);
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    continue;
+                    FillElement(ri, ds);
                 }
             }
         }
-        private void FillElements(List<ILisReportElement> reportElementList, DataSet ds)
+        private void FillItemElements(List<ReporterItem> itemList, DataSet ds)
+        {
+            if (itemList.Count > 0)
+            {
+                foreach (ReporterItem ri in itemList)
+                {
+                    FillElement(ri, ds);
+                }
+            }
+        }
+        private void FillGraphElements(Dictionary<string, ReporterGraph> exportElementDic, DataSet ds)
+        {
+            if (exportElementDic.Count > 0)
+            {
+                SortedList sl = new SortedList(10);
+                foreach (ReporterGraph rg in exportElementDic.Values)
+                {
+                    sl.Add(rg.GraphName, rg.GraphImage);
+                }
+                FillImageElements(sl, ds);
+            }
+        }
+        private void FillGraphElements(List<ReporterGraph> graphList, DataSet ds)
+        {
+            if (graphList.Count > 0)
+            {
+                SortedList sl = new SortedList(10);
+                foreach (ReporterGraph rg in graphList)
+                {
+                    sl.Add(rg.GraphName, rg.GraphImage);
+                }
+                FillImageElements(sl, ds);
+            }
+        }
+        private void FillKVElements(Dictionary<string, ReporterKV> exportElementDic, DataSet ds)
+        {
+            ReporterCustom custom;
+            if (exportElementDic.Count > 0)
+            {
+                foreach(ReporterKV kv in exportElementDic.Values)
+                {
+                    custom = new ReporterCustom();
+                    custom.Name = kv.Name;
+                    ConvertKV2Custom(kv, custom);
+                    FillElement(custom, ds);
+                }
+            }
+        }
+        private void FillKVElements(List<ReporterKV> kvList, DataSet ds)
+        {
+            ReporterCustom custom;
+            if (kvList.Count > 0)
+            {
+                foreach (ReporterKV kv in kvList)
+                {
+                    custom = new ReporterCustom();
+                    custom.Name = kv.Name;
+                    ConvertKV2Custom(kv, custom);
+                    FillElement(custom, ds);
+                }
+            }
+        }
+        private void FillCustomElements(Dictionary<string, ReporterCustom> exportElementDic, DataSet ds)
+        {
+            if (exportElementDic.Count > 0)
+            {
+                foreach(ReporterCustom rc in exportElementDic.Values)
+                {
+                    FillElement(rc,ds);
+                }
+            }
+        }
+        private void FillCustomElements(List<ReporterCustom> customList, DataSet ds)
+        {
+            if (customList.Count > 0)
+            {
+                foreach (ReporterCustom rc in customList)
+                {
+                    FillElement(rc, ds);
+                }
+            }
+        }
+        private void FillElements(List<ILisExportElement> exportElementList, DataSet ds)
         {
             DataTable dt;
             DataRow dr;
             Type elementType;
             PropertyInfo[] props;
-            ExportAttribute cxa;
-            ILisReportElement element;
-            if (reportElementList.Count > 0)
+            //ExportAttribute cxa;
+            ILisExportElement element;
+            if (exportElementList.Count > 0)
             {
-                foreach (ILisReportElement reportElement in reportElementList)
+                foreach (ILisExportElement reportElement in exportElementList)
                 {
-                    element = reportElement as ILisReportElement;
+                    element = reportElement as ILisExportElement;
                     if (element != null)
                     {
                         elementType = element.GetType();
@@ -207,12 +303,13 @@ namespace XYS.Lis.Export.PDF
                         {
                             continue;
                         }
-                        foreach (PropertyInfo p in props)
+                        foreach (PropertyInfo pro in props)
                         {
-                            cxa = (ExportAttribute)Attribute.GetCustomAttribute(p, typeof(ExportAttribute));
-                            if (cxa != null && cxa.IsConvert)
+                            //cxa = (ExportAttribute)Attribute.GetCustomAttribute(p, typeof(ExportAttribute));
+                            // if (cxa != null && cxa.IsConvert)
+                            if (pro.PropertyType == typeof(string) || pro.PropertyType == typeof(int) || pro.PropertyType == typeof(DateTime) || pro.PropertyType == typeof(byte[]))
                             {
-                                FillDataColumn(p, dr, element);
+                                FillDataColumn(pro, dr, element);
                             }
                         }
                         dt.Rows.Add(dr);
@@ -220,9 +317,9 @@ namespace XYS.Lis.Export.PDF
                 }
             }
         }
-        private void FillElement(ILisReportElement element, DataSet ds)
+        private void FillElement(ILisExportElement element, DataSet ds)
         {
-            ExportAttribute cxa;
+            //ExportAttribute cxa;
             Type elementType = element.GetType();
             DataTable dt = ds.Tables[elementType.Name];
             DataRow dr = dt.NewRow();
@@ -231,29 +328,16 @@ namespace XYS.Lis.Export.PDF
             {
                 return;
             }
-            foreach (PropertyInfo p in props)
+            foreach (PropertyInfo pro in props)
             {
-                cxa = (ExportAttribute)Attribute.GetCustomAttribute(p, typeof(ExportAttribute));
-                if (cxa != null && cxa.IsConvert)
+                //cxa = (ExportAttribute)Attribute.GetCustomAttribute(p, typeof(ExportAttribute));
+                //if (cxa != null && cxa.IsConvert)
+                if (pro.PropertyType == typeof(string) || pro.PropertyType == typeof(int) || pro.PropertyType == typeof(DateTime) || pro.PropertyType == typeof(byte[]))
                 {
-                    FillDataColumn(p, dr, element);
+                    FillDataColumn(pro, dr, element);
                 }
             }
             dt.Rows.Add(dr);
-        }
-        private SortedList GenderImageSortList(List<ILisReportElement> imageElementList)
-        {
-            ReportGraphElement reportImage;
-            SortedList sl = new SortedList(10);
-            foreach (ILisReportElement reportElement in imageElementList)
-            {
-                reportImage = reportElement as ReportGraphElement;
-                if (reportImage != null)
-                {
-                    sl.Add(reportImage.GraphName, reportImage.GraphImage);
-                }
-            }
-            return sl;
         }
         private void FillImageElements(SortedList imageElementList, DataSet ds)
         {
@@ -272,12 +356,49 @@ namespace XYS.Lis.Export.PDF
             }
             dt.Rows.Add(dr);
         }
-
-        private void FillDataColumn(PropertyInfo p, DataRow dr, ILisReportElement element)
+        private void FillDataColumn(PropertyInfo p, DataRow dr, ILisExportElement element)
         {
             dr[p.Name] = p.GetValue(element, null);
         }
 
+        private void ConvertKV2Custom(ReporterKV kv, ReporterCustom custom)
+        {
+            string propertyName;
+            if (kv.KVTable.Count > 0)
+            {
+                foreach (DictionaryEntry de in kv.KVTable)
+                {
+                    propertyName = GetCustomPropertyName(de.Key.ToString());
+                    if (propertyName != null)
+                    {
+                        SetCustomProperty(propertyName, de.Value.ToString(), custom);
+                    }
+                }
+            }
+        }
+        private void SetCustomProperty(string propertyName, object value, ReporterCustom rc)
+        {
+            try
+            {
+                PropertyInfo pro = rc.GetType().GetProperty(propertyName);
+                if (pro != null)
+                {
+                    pro.SetValue(rc, value, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        private string GetCustomPropertyName(string itemName)
+        {
+            if (this.m_itemName2CustomPropertyName.Count == 0)
+            {
+                InitItemName2CustomPropertyNameTable();
+            }
+            return this.m_itemName2CustomPropertyName[itemName] as string;
+        }
         #endregion
 
         #region
@@ -289,13 +410,17 @@ namespace XYS.Lis.Export.PDF
         {
             return "Test.pdf";
         }
-        protected virtual string GetPdfFileFullName(ReportReportElement rre)
+        protected virtual string GetPdfFileFullName(ReporterReport rr)
         {
             return SystemInfo.GetFileFullName(GetPdfFilePath(), GetPdfFileName());
         }
         #endregion
 
         #region
+        private void InitItemName2CustomPropertyNameTable()
+        {
+ 
+        }
         private string GetModelPath(int modelNo)
         {
             if (this.m_no2ModelPath.Count == 0)
@@ -315,6 +440,23 @@ namespace XYS.Lis.Export.PDF
         {
             return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
         }
+        #endregion
+
+        #region
+        //private SortedList GenderImageSortList(List<ILisReportElement> imageElementList)
+        //{
+        //    ReportGraphElement reportImage;
+        //    SortedList sl = new SortedList(10);
+        //    foreach (ILisReportElement reportElement in imageElementList)
+        //    {
+        //        reportImage = reportElement as ReportGraphElement;
+        //        if (reportImage != null)
+        //        {
+        //            sl.Add(reportImage.GraphName, reportImage.GraphImage);
+        //        }
+        //    }
+        //    return sl;
+        //}
         #endregion
     }
 }

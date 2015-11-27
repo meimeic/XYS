@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using XYS.Common;
 using XYS.Lis.Core;
-using XYS.Lis.Model;
+using XYS.Lis.Model.Export;
 
 namespace XYS.Lis
 {
@@ -11,7 +11,7 @@ namespace XYS.Lis
     {
         string ReportExport(ReportKey key);
         string ReportExport(LisSearchRequire require);
-        string ReportExport(ReportReportElement reportElement);
-        string ReportExport(List<ILisReportElement> reportElementList);
+        string ReportExport(ReporterReport reportElement);
+        string ReportExport(List<ILisExportElement> exportElementList);
     }
 }

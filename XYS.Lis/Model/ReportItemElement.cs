@@ -7,7 +7,7 @@ namespace XYS.Lis.Model
     {
         #region 私有常量字段
         private const ReportElementTag m_defaultElementTag = ReportElementTag.ItemElement;
-        private static readonly string m_defaultItemSQL = @"select r.itemno as itemno,paritemno,t.cname as itemcname,t.ename as itemename, ISNULL(r.reportdesc, '') + ISNULL(CONVERT(VARCHAR(50), r.reportvalue), '') as itemresult,resultstatus,ISNULL(r.unit,t.unit) as itemunit,refrange,disporder,prec,secretgrade
+        private static readonly string m_defaultItemSQL = @"select r.itemno as itemno,paritemno,t.cname as itemcname,t.ename as itemename,r.reportdesc as itemdesc,r.reportvalue as itemvalue,resultstatus,ISNULL(r.unit,t.unit) as itemunit,refrange,disporder,prec,secretgrade
                                                                             from ReportItem as r left outer join TestItem as t on r.ItemNo=t.ItemNo";
         #endregion
 
@@ -16,6 +16,8 @@ namespace XYS.Lis.Model
         private int m_parItemNo;
         private string m_itemCName;
         private string m_itemEName;
+        private double m_itemValue;
+        private string m_itemDesc;
         private string m_itemResult;
         private string m_itemStandard;
         private string m_resultStatus;
@@ -67,8 +69,19 @@ namespace XYS.Lis.Model
             set { this.m_itemEName = value; }
         }
 
-        [Export()]
         [TableColumn(true)]
+        public double ItemValue
+        {
+            get { return this.m_itemValue; }
+            set { this.m_itemValue = value; }
+        }
+        [TableColumn(true)]
+        public string ItemDesc
+        {
+            get { return this.m_itemDesc; }
+            set { this.m_itemDesc = value; }
+        }
+        [Export()]
         public string ItemResult
         {
             get { return this.m_itemResult; }
@@ -132,22 +145,31 @@ namespace XYS.Lis.Model
         #region 实现父类抽象方法
         protected override void Afterward()
         {
-            //修正查询结果
-            if (this.Prec > 0)
+            if (this.ItemValue != 0.0D)
             {
-                string result;
-                if (this.ItemResult != null && !this.ItemResult.Equals(""))
-                {
-
-                    //修正检验结果
-                    //AdjustItemResult();
-                    result = AdjustStr(this.ItemResult, this.Prec);
-                    if (result != null)
-                    {
-                        this.ItemResult = result;
-                    }
-                }
+                this.ItemResult = this.ItemValue.ToString();
             }
+            else
+            {
+                this.ItemResult = this.ItemDesc;
+            }
+
+            ////修正查询结果
+            //if (this.Prec > 0)
+            //{
+            //    string result;
+            //    if (this.ItemResult != null && !this.ItemResult.Equals(""))
+            //    {
+
+            //        //修正检验结果
+            //        //AdjustItemResult();
+            //        result = AdjustStr(this.ItemResult, this.Prec);
+            //        if (result != null)
+            //        {
+            //            this.ItemResult = result;
+            //        }
+            //    }
+            //}
         }
         #endregion
 

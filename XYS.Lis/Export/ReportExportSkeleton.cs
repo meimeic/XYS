@@ -3,17 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 
 using XYS.Model;
-using XYS.Lis.Model;
 using XYS.Lis.Core;
+using XYS.Lis.Model.Export;
 namespace XYS.Lis.Export
 {
     public abstract class ReportExportSkeleton : IReportExport
     {
         #region
         private readonly string m_exportName;
-        #endregion
-
-        #region
         private ExportTag m_exportTag;
         #endregion
 
@@ -37,86 +34,110 @@ namespace XYS.Lis.Export
             get { return this.m_exportTag; }
             protected set { this.m_exportTag = value; }
         }
-
-        public virtual string export(ILisReportElement element)
+        public string export(ILisExportElement element)
         {
-            PreFilter(element);
             if (element.ElementTag == ReportElementTag.ReportElement)
             {
-                ReportReportElement rre = element as ReportReportElement;
-                return InnerReportExport(rre);
-            }
-            else
-            {
-                return InnerElementExport(element);
-            }
-        }
-        public virtual string export(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
-        {
-            if (elementTag != ReportElementTag.NoneElement)
-            {
-                return this.ReportElementsExport(reportElementList, elementTag);
-            }
-            else
-            {
-                return "";
-            }
-        }
-        #endregion
-
-        #region
-        protected abstract string InnerElementExport(ILisReportElement reportElement);
-        protected abstract string InnerReportExport(ReportReportElement rre);
-        protected abstract string GetSeparateByTag(ReportElementTag elementTag);
-        #endregion
-
-        #region
-        protected virtual string ReportElementsExport(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
-        {
-            string temp;
-            string separate;
-            ReportReportElement rre;
-            StringBuilder sb = new StringBuilder();
-            if (reportElementList.Count > 0)
-            {
-                separate = GetSeparateByTag(elementTag);
-                foreach (ILisReportElement reportElement in reportElementList)
+                ReporterReport report = element as ReporterReport;
+                if (report != null)
                 {
-                    if (elementTag == ReportElementTag.ReportElement)
-                    {
-                        rre = reportElement as ReportReportElement;
-                        temp = InnerReportExport(rre);
-                    }
-                    else
-                    {
-                        temp = InnerElementExport(reportElement);
-                    }
-                    //
-                    if (temp != null && !temp.Equals(""))
-                    {
-                        sb.Append(temp);
-                    }
-                    if (separate != null && !separate.Equals(""))
-                    {
-                        sb.Append(separate);
-                    }
-                }
-                if (sb.Length > separate.Length)
-                {
-                    sb.Remove(sb.Length - separate.Length, separate.Length);
+                    OperateReport(report);
                 }
             }
-            return sb.ToString();
+            return InnerExport(element);
         }
-        protected virtual void PreFilter(ILisReportElement reportElement)
+        public string export(List<ILisExportElement> exportElementList, ReportElementTag elementTag)
         {
-        }
-        protected virtual void PreFilter(List<ILisReportElement> reportElement, ReportElementTag elementTag)
-        {
+            PreFilter(exportElementList, elementTag);
+            return InnerExport(exportElementList, elementTag);
         }
         #endregion
 
         #region
+        protected abstract string InnerExport(ILisExportElement exportElement);
+        protected abstract string InnerExport(List<ILisExportElement> exportElementList, ReportElementTag elementTag);
+        #endregion
+
+        #region
+        protected virtual void PreFilter(List<ILisExportElement> exportElementList, ReportElementTag elementTag)
+        {
+            if (exportElementList != null && exportElementList.Count > 0)
+            {
+                bool result;
+                for (int i = exportElementList.Count - 1; i >= 0; i--)
+                {
+                    result = IsElementAndOperate(exportElementList[i], elementTag);
+                    if (!result)
+                    {
+                        exportElementList.RemoveAt(i);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region
+        protected virtual bool IsElementAndOperate(ILisExportElement exportElement, ReportElementTag elementTag)
+        {
+            bool result = false;
+            switch (elementTag)
+            {
+                case ReportElementTag.ReportElement:
+                    if (exportElement is ReporterReport)
+                    {
+                        OperateReport(exportElement as ReporterReport);
+                        result = true;
+                    }
+                    break;
+                case ReportElementTag.InfoElement:
+                    if (exportElement is ReporterInfo)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ReportElementTag.ItemElement:
+                    if (exportElement is ReporterItem)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ReportElementTag.GraphElement:
+                    if (exportElement is ReporterGraph)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ReportElementTag.CustomElement:
+                    if (exportElement is ReporterCustom)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ReportElementTag.KVElement:
+                    if (exportElement is ReporterKV)
+                    {
+                        result = true;
+                    }
+                    break;
+                default:
+                    break;
+            }
+            return result;
+        }
+        #endregion
+
+        #region
+        protected virtual void OperateReport(ReporterReport report)
+        {
+            SortReport(report);
+        }
+        private void SortReport(ReporterReport report)
+        {
+            if (report.ItemList != null && report.ItemList.Count > 0)
+            {
+                report.ItemList.Sort();
+            }
+        }
         #endregion
     }
 }

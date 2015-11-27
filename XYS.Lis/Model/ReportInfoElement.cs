@@ -144,35 +144,30 @@ namespace XYS.Lis.Model
             get { return m_receiveDateTime; }
             set { m_receiveDateTime = value; }
         }
-
         [TableColumn(true)]
         public DateTime CollectDateTime
         {
             get { return m_collectDateTime; }
             set { m_collectDateTime = value; }
         }
-
         [TableColumn(true)]
         public DateTime InceptDateTime
         {
             get { return m_inceptDateTime; }
             set { m_inceptDateTime = value; }
         }
-
         [TableColumn(true)]
         public DateTime TestDateTime
         {
             get { return m_testDateTime; }
             set { m_testDateTime = value; }
         }
-      
         [TableColumn(true)]
         public DateTime CheckDateTime
         {
             get { return m_checkDateTime; }
             set { m_checkDateTime = value; }
         }
-
         [TableColumn(true)]
         public DateTime SecondeCheckDateTime
         {
@@ -180,21 +175,22 @@ namespace XYS.Lis.Model
             set { m_secondCheckDateTime = value; }
         }
 
-        [Export()]
         [TableColumn(true)]
         public string ParItemName
         {
             get { return m_parItemName; }
             set { m_parItemName = value; }
         }
-
+         
+        [Export()]
         [TableColumn(true)]
         public int SectionNo
         {
             get { return m_sectionNo; }
             set { m_sectionNo = value; }
         }
-        
+
+        [Export()]
         [TableColumn(true)]
         public int SampleTypeNo
         {
@@ -248,7 +244,6 @@ namespace XYS.Lis.Model
             get { return this.m_patientName; }
             set { this.m_patientName = value; }
         }
-
         [Export()]
         [TableColumn(true)]
         public string PID
@@ -256,7 +251,6 @@ namespace XYS.Lis.Model
             get { return this.m_pid; }
             set { this.m_pid = value; }
         }
-
         [Export()]
         [TableColumn(true)]
         public string CID
@@ -264,14 +258,15 @@ namespace XYS.Lis.Model
             get { return this.m_cid; }
             set { this.m_cid = value; }
         }
-
+        
         [TableColumn(true)]
         public int GenderNo
         {
             get { return this.m_genderNo; }
             set { this.m_genderNo = value; }
         }
-
+ 
+        [Export()]
         public GenderType Gender
         {
             get { return this.m_gender; }
@@ -324,6 +319,7 @@ namespace XYS.Lis.Model
             set { this.m_clinicTypeNo = value; }
         }
 
+         [Export()]
         public ClinicType ClinicType
         {
             get { return this.m_clinicType; }
@@ -385,6 +381,7 @@ namespace XYS.Lis.Model
             this.ConvertGender();
             this.ConvertClinic();
             this.ConvertAge();
+            this.ConvertCID();
         }
         #endregion
 
@@ -436,6 +433,13 @@ namespace XYS.Lis.Model
             Age age = new Age(this.AgeValue, this.AgeUnit);
             this.Ager = age;
         }
+        private void ConvertCID()
+        {
+            if (this.CID != null)
+            {
+                this.CID = this.CID.Trim();
+            }
+        }
         #endregion
 
         #region  内部类
@@ -466,9 +470,9 @@ namespace XYS.Lis.Model
                     case AgeType.day:
                         return this.m_value.ToString() + " 天";
                     case AgeType.hours:
-                        return this.m_value.ToString() + "小时";
+                        return this.m_value.ToString() + " 小时";
                     case AgeType.none:
-                        return this.m_value.ToString() + "年龄单位不明";
+                        return this.m_value.ToString() + " 年龄单位不明";
                     default:
                         return this.m_value.ToString() + " 岁";
                 }

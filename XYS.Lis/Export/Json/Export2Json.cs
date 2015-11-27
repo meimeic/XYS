@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using Newtonsoft.Json;
+
 using XYS.Model;
 using XYS.Lis.Model;
 using XYS.Lis.Export;
@@ -25,28 +27,16 @@ namespace XYS.Lis.Export.Json
             this.ExportTag = DEFAULT_EXPORT;
             this.m_tag2Separate = new Hashtable(6);
         }
-        protected override string InnerElementExport(ILisReportElement reportElement)
+        #region
+        protected override string InnerExport(ILisExportElement exportElement)
+        {
+            return JsonConvert.SerializeObject(exportElement, Formatting.Indented);
+        }
+
+        protected override string InnerExport(List<ILisExportElement> exportElementList, ReportElementTag elementTag)
         {
             throw new NotImplementedException();
         }
-
-        protected override string InnerReportExport(ReportReportElement rre)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        protected override string GetSeparateByTag(ReportElementTag elementTag)
-        {
-            string temp = this.m_tag2Separate[elementTag] as string;
-            if (temp != null)
-            {
-                return temp;
-            }
-            else
-            {
-                return "";
-            }
-        }
+        #endregion
     }
 }

@@ -21,7 +21,6 @@ namespace XYS.Lis.Model
         #region 私有实例字段
         private int m_orderNo;
         private int m_printModelNo;
-
         private string m_reportTitle;
         private string m_remark;
         private bool m_remarkFlag;
@@ -30,11 +29,12 @@ namespace XYS.Lis.Model
         private byte[] m_technicianImage;
         private byte[] m_checkerImage;
 
-        private string m_collectDateTime;
-        private string m_inceptDateTime;
-        private string m_testDateTime;
-        private string m_checkDateTime;
-        private string m_secondCheckDateTime;
+        private DateTime m_receiveDateTime;
+        private DateTime m_collectDateTime;
+        private DateTime m_inceptDateTime;
+        private DateTime m_testDateTime;
+        private DateTime m_checkDateTime;
+        private DateTime m_secondCheckDateTime;
 
         private int m_sectionNo;
         private ClinicType m_clinicType;
@@ -54,11 +54,13 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实例属性
+         [Export()]
         public int OrderNo
         {
             get { return this.m_orderNo; }
             set { this.m_orderNo = value; }
         }
+         [Export()]
         public int PrintModelNo
         {
             get { return this.m_printModelNo; }
@@ -69,37 +71,39 @@ namespace XYS.Lis.Model
             get { return this.m_remarkFlag; }
             set { this.m_remarkFlag = value; }
         }
-
+         
         [Export()]
-        public string CollectDateTime
+        public DateTime ReceiveDateTime
+        {
+            get { return this.m_receiveDateTime; }
+            set { this.m_receiveDateTime = value; }
+        }
+         [Export()]
+        public DateTime CollectDateTime
         {
             get { return this.m_collectDateTime; }
             set { this.m_collectDateTime = value; }
         }
-        
-        [Export()]
-        public string InceptDateTime
+         [Export()]
+        public DateTime InceptDateTime
         {
             get { return m_inceptDateTime; }
             set { m_inceptDateTime = value; }
         }
-        
-        [Export()]
-        public string TestDateTime
+         [Export()]
+        public DateTime TestDateTime
         {
             get { return m_testDateTime; }
             set { m_testDateTime = value; }
         }
-        
-        [Export()]
-        public string CheckDateTime
+         [Export()]
+        public DateTime CheckDateTime
         {
             get { return m_checkDateTime; }
             set { m_checkDateTime = value; }
         }
-        
-        [Export()]
-        public string SecondeCheckDateTime
+         [Export()]
+        public DateTime SecondeCheckDateTime
         {
             get { return m_secondCheckDateTime; }
             set { m_secondCheckDateTime = value; }
@@ -125,7 +129,6 @@ namespace XYS.Lis.Model
             get { return this.m_parItemName; }
             set { this.m_parItemName = value; }
         }
-
         [Export()]
         public byte[] TechnicianImage
         {
@@ -162,7 +165,6 @@ namespace XYS.Lis.Model
         #region 实现父类抽象方法
         protected override void Afterward()
         {
-
         }
         #endregion
 
@@ -178,7 +180,12 @@ namespace XYS.Lis.Model
             this.OrderNo = 0;
             this.PrintModelNo = -1;
             this.ReportTitle = "";
+            this.RemarkFlag = false;
             this.Remark = "";
+            this.ClinicType = ClinicType.none;
+            this.ParItemName = null;
+            this.TechnicianImage = null;
+            this.CheckerImage = null;
         }
         public List<ILisReportElement> GetReportItem(ReportElementTag elementTag)
         {
@@ -195,25 +202,5 @@ namespace XYS.Lis.Model
         }
         #endregion
 
-        #region
-        //private Type m_declareCommonItemType;
-        //private Type m_declareGraphItemType;
-        //private Type m_declareCustomItemType;
-        //private Type m_declarePatientType;
-        //private Type m_declareExamType;
-        //private ILisReportElement m_patient;
-        //private ILisReportElement m_examInfo;
-        //private ReportFKImpl m_reportFK;
-        //private readonly List<ILisReportElement> m_patientList;
-        //private readonly List<ILisReportElement> m_examList;
-        //private readonly List<ILisReportElement> m_commonItemList;
-        //private readonly List<ILisReportElement> m_graphItemList;
-        //private readonly List<ILisReportElement> m_customItemList;
-        //private static readonly Type m_defaultCommonItemType = typeof(ReportItemElement);
-        //private static readonly Type m_defaultGraphItemType = typeof(ReportGraphElement);
-        //private static readonly Type m_defaultCustomItemType = typeof(ReportCustomElement);
-        //private static readonly Type m_defaultPatientType = typeof(ReportPatientElement);
-        //private static readonly Type m_defaultExamType = typeof(ReportExamElement);
-        #endregion
     }
 }

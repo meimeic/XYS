@@ -42,16 +42,16 @@ namespace XYS.Lis.Model
        {
            get { return this.m_mapName2ElementType.Count; }
        }
-       public void Add(string typeName)
-       {
-           ReportElementType type = new ReportElementType(typeName);
-           this.Add(type);
-       }
-       public void Add(Type elementType)
-       {
-           ReportElementType type = new ReportElementType(elementType);
-           this.Add(type);
-       }
+       //public void Add(string typeName)
+       //{
+       //    ReportElementType type = new ReportElementType(typeName);
+       //    this.Add(type);
+       //}
+       //public void Add(Type elementType)
+       //{
+       //    ReportElementType type = new ReportElementType(elementType);
+       //    this.Add(type);
+       //}
        public void Add(ReportElementType elementType)
        {
            if (elementType == null)

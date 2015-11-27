@@ -77,6 +77,7 @@ namespace XYS.Lis.Appender
         #region 
         protected string RenderExport(ILisReportElement reportElement,ExportTag exportTag)
         {
+            ILisExportElement export=null;
             IReportExport exp = GetExport(exportTag);
             if (exp == null)
             {
@@ -84,7 +85,7 @@ namespace XYS.Lis.Appender
             }
             else
             {
-                return exp.export(reportElement);
+                return exp.export(export);
             }
         }
         protected IReportExport GetExport(ExportTag exportTag)

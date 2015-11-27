@@ -6,6 +6,7 @@ using XYS.Common;
 using XYS.Model;
 using XYS.Lis;
 using XYS.Lis.Model;
+using XYS.Lis.Model.Export;
 using XYS.Lis.DAL;
 
 namespace XYS.Lis.Core
@@ -30,9 +31,11 @@ namespace XYS.Lis.Core
             if (key != null)
             {
                 ILisReportElement report = new ReportReportElement();
+                ILisExportElement export = new ReporterReport();
                 this.Reporter.FillReportElement(report, key);
                 this.Reporter.Option(report);
-                return this.Reporter.Export(report);
+                this.Reporter.Convert2Export(report, export);
+                return this.Reporter.Export(export);
             }
             else
             {
@@ -44,15 +47,15 @@ namespace XYS.Lis.Core
             ReportKey key = GetReportKey(require);
             return ReportExport(key);
         }
-        public string ReportExport(ReportReportElement reportElement)
+        public string ReportExport(ReporterReport rr)
         {
-            return this.Reporter.Export(reportElement);
+            return this.Reporter.Export(rr);
         }
-        public string ReportExport(List<ILisReportElement> reportElementList)
+        public string ReportExport(List<ILisExportElement> exportElementList)
         {
-            if (reportElementList.Count > 0)
+            if (exportElementList.Count > 0)
             {
-                return this.Reporter.Export(reportElementList,ReportElementTag.ReportElement);
+                return this.Reporter.Export(exportElementList,ReportElementTag.ReportElement);
             }
             else
             {

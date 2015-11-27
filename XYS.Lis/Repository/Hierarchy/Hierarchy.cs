@@ -37,6 +37,7 @@ namespace XYS.Lis.Repository.Hierarchy
         #region
         private IReportFiller m_defaultFiller;
         private IReportExport m_defaultExport;
+        private IModelConvert m_modelConverter;
         private IReporterFactory m_defaultFactory;
         private Reporter m_defaultReporter;
         private Hashtable m_key2ReporterMap;
@@ -90,6 +91,18 @@ namespace XYS.Lis.Repository.Hierarchy
                 return this.m_defaultExport;
             }
             set { this.m_defaultExport = value; }
+        }
+        public virtual IModelConvert ModelConverter
+        {
+            get
+            {
+                if (this.m_modelConverter == null)
+                {
+                    this.m_modelConverter = new DefaultReport2Export();
+                }
+                return this.m_modelConverter;
+            }
+            set { this.m_modelConverter = value; }
         }
         //获取默认reporter
         public Reporter DefaultReporter

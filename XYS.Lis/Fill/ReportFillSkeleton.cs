@@ -49,6 +49,7 @@ namespace XYS.Lis.Fill
 
         public virtual void Fill(ILisReportElement reportElement, ReportKey key)
         {
+            //填充报告
             if (reportElement.ElementTag == ReportElementTag.ReportElement)
             {
                 ReportReportElement rre = reportElement as ReportReportElement;
@@ -57,15 +58,20 @@ namespace XYS.Lis.Fill
                     FillReport(rre, key);
                 }
             }
-            else
+            //填充元素
+            else if (reportElement.ElementTag != ReportElementTag.NoneElement && reportElement.ElementTag != ReportElementTag.KVElement)
             {
                 FillElement(reportElement, key);
+            }
+            else
+            {
+                return;
             }
         }
         public virtual void Fill(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag)
         {
             //不可填充的报告元素
-            if (elementTag == ReportElementTag.ReportElement || elementTag == ReportElementTag.CustomElement || elementTag == ReportElementTag.NoneElement)
+            if (elementTag == ReportElementTag.NoneElement&&elementTag!=ReportElementTag.KVElement)
             {
                 return;
             }

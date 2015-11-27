@@ -27,6 +27,8 @@ namespace XYS.Lis.Repository.Hierarchy
         private IReportExport m_exporter;
         private IReportHandler m_headHandler;
         private IReportHandler m_tailHandler;
+
+        private IModelConvert m_modelConverter;
         //private readonly Hashtable m_name2ReportFiller;
         //private readonly Hashtable m_tag2ReportExport;
 
@@ -97,6 +99,17 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             set { this.m_exporter = value; }
         }
+        public virtual IModelConvert ModelConverter
+        {
+            get
+            {
+                if (this.m_modelConverter == null)
+                {
+                    this.m_modelConverter = this.Hierarchy.ModelConverter;
+                }
+                return this.m_modelConverter;
+            }
+        }
         public virtual Hierarchy Hierarchy
         {
             get { return this.m_hierarchy; }
@@ -144,15 +157,24 @@ namespace XYS.Lis.Repository.Hierarchy
             return rs;
         }
 
-        public virtual string Export(ILisReportElement reportElement)
+        public virtual bool Convert2Export(ILisReportElement reportElement, ILisExportElement exportElement)
         {
-            return this.Exporter.export(reportElement);
+            return this.ModelConverter.Convert2Export(reportElement, exportElement);
+        }
+        public virtual bool Convert2Export(List<ILisReportElement> reportElementList, List<ILisExportElement> exportElementList,ReportElementTag elementTag)
+        {
+            return this.ModelConverter.Convert2Export(reportElementList, exportElementList, elementTag);
+        }
+       
+        public virtual string Export(ILisExportElement exportElement)
+        {
+            return this.Exporter.export(exportElement);
             //IReportExport export = this.GetExport(exportTag);
             //return export.export(reportElement);
         }
-        public virtual string Export(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
+        public virtual string Export(List<ILisExportElement> exportElementList, ReportElementTag elementTag)
         {
-            return this.Exporter.export(reportElementList, elementTag);
+            return this.Exporter.export(exportElementList, elementTag);
         }
         #endregion
 

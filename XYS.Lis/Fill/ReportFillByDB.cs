@@ -56,7 +56,7 @@ namespace XYS.Lis.Fill
         protected override void FillElement(ILisReportElement reportElement, ReportKey key)
         {
             //不进行填充的报告元素
-            if (reportElement.ElementTag == ReportElementTag.ReportElement || reportElement.ElementTag == ReportElementTag.CustomElement || reportElement.ElementTag == ReportElementTag.NoneElement)
+            if (reportElement.ElementTag == ReportElementTag.ReportElement || reportElement.ElementTag == ReportElementTag.KVElement)
             {
                 return;
             }
@@ -66,8 +66,8 @@ namespace XYS.Lis.Fill
         protected override void FillElements(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag)
         {
             //不进行填充的报告元素
-            if (elementTag == ReportElementTag.ReportElement ||elementTag==ReportElementTag.CustomElement ||elementTag == ReportElementTag.NoneElement)
-            { 
+            if (elementTag == ReportElementTag.ReportElement || elementTag == ReportElementTag.KVElement)
+            {
                 return;
             }
             int sectionNo = GetSectionNo(key);

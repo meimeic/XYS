@@ -219,6 +219,19 @@ namespace XYS.Lis.Util
             }
             return retc;
         }
+
+        public static void InitTag2ExportTypeTable(Hashtable table)
+        {
+            table.Clear();
+            if (ELEMENT_TYPE_MAP.Count == 0)
+            {
+                ConfigureReportElementMap();
+            }
+            foreach (ReportElementType reportType in ELEMENT_TYPE_MAP.AllElementTypes)
+            {
+                table[reportType.ElementTag] = reportType.ExportType;
+            }
+        }
         #endregion
 
         #region 未使用到的代码
@@ -419,11 +432,12 @@ namespace XYS.Lis.Util
                     case ReportElementTag.InfoElement:
                     case ReportElementTag.ItemElement:
                     case ReportElementTag.CustomElement:
-                        XMLTools.ConvertObj2Xml(doc, root, element.ElementType);
+                        XMLTools.ConvertObj2Xml(doc, root, element.ExportType);
                         break;
                     case ReportElementTag.GraphElement:
                         XMLTools.Image2Xml(doc, root);
                         break;
+                    case ReportElementTag.KVElement:
                     case ReportElementTag.NoneElement:
                         break;
                     default:
@@ -463,11 +477,12 @@ namespace XYS.Lis.Util
                     case ReportElementTag.InfoElement:
                     case ReportElementTag.ItemElement:
                     case ReportElementTag.CustomElement:
-                        ConvertObj2Table(ds, element.ElementType);
+                        ConvertObj2Table(ds, element.ExportType);
                         break;
                     case ReportElementTag.GraphElement:
                         Image2Table(ds);
                         break;
+                    case ReportElementTag.KVElement:
                     case ReportElementTag.NoneElement:
                         break;
                     default:
@@ -477,7 +492,7 @@ namespace XYS.Lis.Util
         }
         private static void ConvertObj2Table(DataSet ds, Type elementType)
         {
-            ExportAttribute cxa;
+            // ExportAttribute cxa;
             DataTable dt = new DataTable();
             dt.TableName = elementType.Name;
             PropertyInfo[] props = elementType.GetProperties();
@@ -487,8 +502,9 @@ namespace XYS.Lis.Util
             }
             foreach (PropertyInfo pro in props)
             {
-                cxa = (ExportAttribute)Attribute.GetCustomAttribute(pro, typeof(ExportAttribute));
-                if (cxa != null && cxa.IsConvert)
+                //cxa = (ExportAttribute)Attribute.GetCustomAttribute(pro, typeof(ExportAttribute));
+                //if (cxa != null && cxa.IsConvert)
+                if (pro.PropertyType == typeof(string) || pro.PropertyType == typeof(int) || pro.PropertyType == typeof(DateTime) || pro.PropertyType == typeof(byte[]))
                 {
                     dt.Columns.Add(pro.Name, pro.PropertyType);
                 }

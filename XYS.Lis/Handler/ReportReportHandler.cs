@@ -14,10 +14,10 @@ namespace XYS.Lis.Handler
     {
         #region 变量
         private static readonly string m_defaultHandlerName = "ReportReportHandler";
-        private Hashtable m_section2Order;
-        private Hashtable m_parItem2Order;
-        private Hashtable m_parItem2PrintModel;
-        private Hashtable m_section2PrintModel;
+        private readonly Hashtable m_section2Order;
+        private readonly Hashtable m_parItem2Order;
+        private readonly Hashtable m_parItem2PrintModel;
+        private readonly Hashtable m_section2PrintModel;
         #endregion
 
         #region 构造函数
@@ -35,135 +35,32 @@ namespace XYS.Lis.Handler
         }
         #endregion
 
-        #region 实现父类继承接口的虚方法
-        public override HandlerResult ReportOptions(ILisReportElement reportElement)
-        {
-            ReportReportElement rre;
-            bool result = IsElement(reportElement, reportElement.ElementTag);
-            if (result)
-            {
-                if (reportElement.ElementTag == ReportElementTag.ReportElement)
-                {
-                    rre = reportElement as ReportReportElement;
-                    OperateReport(rre);
-                }
-                else
-                {
-                    OperateSubElement(reportElement,reportElement.ElementTag);
-                }
-                return HandlerResult.Continue;
-            }
-            else
-            {
-                return HandlerResult.Fail;
-            }
-        }
-        public override HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
-        {
-            if (elementTag != ReportElementTag.NoneElement)
-            {
-                OperateElementList(reportElementList, elementTag);
-                return HandlerResult.Continue;
-            }
-            else
-            {
-                return HandlerResult.Fail;
-            }
-        }
-        #endregion
-
         #region 实现父类虚方法
-        protected override void OperateElement(ILisReportElement element, ReportElementTag elementTag)
+        protected override bool OperateElement(ILisReportElement element, ReportElementTag elementTag)
         {
-            ReportReportElement rre;
             if (elementTag == ReportElementTag.ReportElement)
             {
-                rre = element as ReportReportElement;
-                OperateReport(rre);
+                ReportReportElement rre = element as ReportReportElement;
+                return OperateReport(rre);
             }
-            else
-            {
-                OperateSubElement(element, elementTag);
-            }
+            return true;
         }
         #endregion
 
         #region
-        protected virtual void OperateReport(ReportReportElement rre)
+        protected virtual bool OperateReport(ReportReportElement rre)
         {
-            OperateInfoList(rre);
-            //处理item元素
-            OperateItemList(rre);
-
             //设置排序号
             SetReportOrder(rre);
             //设置模板号
             SetReportModel(rre);
             //remark
             SetRemark(rre);
-        }
-        protected virtual void OperateSubElement(ILisReportElement element, ReportElementTag elementTag)
-        {
-            switch (elementTag)
-            {
-                case ReportElementTag.InfoElement:
-                    ReportInfoElement rie1 = element as ReportInfoElement;
-                    OperateInfo(rie1);
-                    break;
-                case ReportElementTag.ItemElement:
-                    ReportItemElement rie = element as ReportItemElement;
-                    OperateItem(rie);
-                    break;
-                case ReportElementTag.GraphElement:
-                    ReportGraphElement rge = element as ReportGraphElement;
-                    OperateGraph(rge);
-                    break;
-                case ReportElementTag.CustomElement:
-                    ReportCustomElement rce = element as ReportCustomElement;
-                    OperateCustom(rce);
-                    break;
-                default:
-                    break;
-            }
+            return true;
         }
         #endregion
-        
-        #region
-        protected virtual void OperateInfoList(ReportReportElement rre)
-        {
-            ReportInfoElement rie;
-            if (rre.SectionNo == 10)
-            {
-                List<ILisReportElement> infoList = rre.GetReportItem(ReportElementTag.InfoElement);
-                if (infoList.Count > 0)
-                {
-                    rie = infoList[0] as ReportInfoElement;
-                    OperateInfo(rie);
-                }
-            }
-        }
-        protected virtual void OperateItemList(ReportReportElement rre)
-        {
-            ReportItemElement rie;
-            List<ILisReportElement> itemList = rre.GetReportItem(ReportElementTag.ItemElement);
-            if (itemList.Count > 0)
-            {
-                for (int i = itemList.Count - 1; i >= 0; i--)
-                {
-                    rie = itemList[i] as ReportItemElement;
-                    //删除保密元素
-                    if (IsRemoveBySecret(rie.SecretGrade))
-                    {
-                        itemList.RemoveAt(i);
-                    }
-                    else
-                    {
 
-                        OperateSubElement(rie, ReportElementTag.ItemElement);
-                    }
-                }
-            }
-        }
+        #region 备注设置
         protected virtual void SetRemark(ReportReportElement rre)
         {
             if (rre.RemarkFlag && rre.ClinicType == ClinicType.clinic)
@@ -172,64 +69,8 @@ namespace XYS.Lis.Handler
             }
         }
         #endregion
-        
-        #region
-        private void OperateInfo(ReportInfoElement rie)
-        {
-            //检验信息处理
-            if (rie.SectionNo == 10)
-            {
-                if (rie.FormMemo != null)
-                {
-                    rie.FormMemo = rie.FormMemo.Replace(";", SystemInfo.NewLine);
-                }
-            }
-        }
-        private void OperatePatient(ReportPatientElement rpe)
-        {
-            //
-        }
-        private void OperateItem(ReportItemElement rie)
-        {
-            //检验项通用处理
-            if (rie.ItemNo == 50004360 || rie.ItemNo == 50004370)
-            {
-                if (rie.RefRange != null)
-                {
-                    rie.RefRange = rie.RefRange.Replace(";", SystemInfo.NewLine);
-                }
-            }
-        }
-        private void OperateGraph(ReportGraphElement rgie)
-        {
-            //
-        }
-        private void OperateCustom(ReportCustomElement customItem)
-        {
-            //通用处理
-        }
 
-        private void ItemEName2Standard(ReportItemElement rie)
-        {
-
-        }
-        #endregion
-
-        #region
-        protected bool IsRemoveBySecret(int secretGrade)
-        {
-            if (secretGrade > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        #endregion
-        
-        #region 排序号设置相关方法
+        #region 排序号设置
         protected virtual void SetReportOrder(ReportReportElement rre)
         {
             SetReportOrderNoByParItem(rre);
@@ -354,7 +195,7 @@ namespace XYS.Lis.Handler
         }
         #endregion
 
-        #region 模板号设置相关方法
+        #region 模板号设置
         protected virtual void SetReportModel(ReportReportElement rre)
         {
             SetReportModelNoByParItem(rre);

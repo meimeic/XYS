@@ -21,9 +21,32 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region 实现IReportHandler接口
-        public abstract HandlerResult ReportOptions(ILisReportElement reportElement);
-        public abstract HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag);
-
+        public virtual HandlerResult ReportOptions(ILisReportElement reportElement)
+        {
+            bool flag = IsElement(reportElement, reportElement.ElementTag);
+            bool result = OperateElement(reportElement, reportElement.ElementTag);
+            if (flag && result)
+            {
+                return HandlerResult.Continue;
+            }
+            return HandlerResult.Fail;
+        }
+        public virtual HandlerResult ReportOptions(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
+        {
+            if (elementTag != ReportElementTag.NoneElement)
+            {
+                OperateElementList(reportElementList, elementTag);
+                if (reportElementList.Count > 0)
+                {
+                    return HandlerResult.Continue;
+                }
+                else
+                {
+                    return HandlerResult.Fail;
+                }
+            }
+            return HandlerResult.Fail;
+        }
         public IReportHandler Next
         {
             get { return this.m_nextHandler; }
@@ -35,33 +58,25 @@ namespace XYS.Lis.Handler
         }
         #endregion
 
-        #region
-        protected abstract void OperateElement(ILisReportElement element,ReportElementTag elementTag);
+        #region 抽象方法(处理元素)
+        protected abstract bool OperateElement(ILisReportElement element, ReportElementTag elementTag);
         #endregion
 
-        #region
+        #region 受保护的虚方法
         protected virtual void OperateElementList(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
         {
-            bool result;
-            ILisReportElement reportElement;
+            bool flag = false;
+            bool result = false;
             for (int i = reportElementList.Count - 1; i >= 0; i--)
             {
-                reportElement = reportElementList[i] as ILisReportElement;
-                if (reportElement == null)
+                flag = IsElement(reportElementList[i], elementTag);
+                if (flag)
+                {
+                    result = OperateElement(reportElementList[i], elementTag);
+                }
+                if (!flag || !result)
                 {
                     reportElementList.RemoveAt(i);
-                }
-                else
-                {
-                    result = IsElement(reportElement, elementTag);
-                    if (result)
-                    {
-                        OperateElement(reportElement, elementTag);
-                    }
-                    else
-                    {
-                        reportElementList.RemoveAt(i);
-                    }
                 }
             }
         }
@@ -84,6 +99,9 @@ namespace XYS.Lis.Handler
                     break;
                 case ReportElementTag.CustomElement:
                     result = reportElement is ReportCustomElement;
+                    break;
+                case ReportElementTag.KVElement:
+                    result = reportElement is ReportKVElement;
                     break;
                 case ReportElementTag.NoneElement:
                     result = false;

@@ -8,6 +8,7 @@ namespace XYS.Model
         ItemElement,
         GraphElement,
         CustomElement,
+        KVElement,
         NoneElement
     }
     public interface IReportElement

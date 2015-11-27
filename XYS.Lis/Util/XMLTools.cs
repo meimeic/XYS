@@ -25,7 +25,7 @@ namespace XYS.Lis.Util
         private static readonly string DEFAULT_ENABLE_ATTR = "true";
 
         public static readonly int Image_Column_Count = 20;
-        public static readonly string Image_Table_Name = "ReportGraphElement";
+        public static readonly string Image_Table_Name = "ReportGraph";
         public static readonly string Image_Column_Prex = "Image";
         public static readonly string Image_Column_DataType = "System.Byte[]";
 
@@ -182,7 +182,7 @@ namespace XYS.Lis.Util
         }
         private static void InitColumnXmlNodeAttr(XmlDocument xmlDoc, XmlElement tableElement, Type elementType)
         {
-            ExportAttribute cxa;
+            //ExportAttribute cxa;
             XmlElement columnElement;
             Dictionary<string, string> attrDic;
             PropertyInfo[] props = elementType.GetProperties();
@@ -192,8 +192,9 @@ namespace XYS.Lis.Util
             }
             foreach (PropertyInfo pro in props)
             {
-                cxa = (ExportAttribute)Attribute.GetCustomAttribute(pro, typeof(ExportAttribute));
-                if (cxa != null && cxa.IsConvert)
+                //cxa = (ExportAttribute)Attribute.GetCustomAttribute(pro, typeof(ExportAttribute));
+                //if (cxa != null && cxa.IsConvert)
+                if(pro.PropertyType==typeof(string)||pro.PropertyType==typeof(int)||pro.PropertyType==typeof(DateTime)||pro.PropertyType==typeof(byte[]))
                 {
                     attrDic = GenderColumnAttrDic(pro);
                     columnElement = CreateElement(xmlDoc, COLUMN_TAG, attrDic);

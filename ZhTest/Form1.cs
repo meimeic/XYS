@@ -15,7 +15,7 @@ namespace ZhTest
 {
     public partial class Form1 : Form
     {
-        static IReport report = ReportManager.GetReporter(typeof(Form1));
+        static IReport report = ReportManager.GetReporter(typeof(Form1), "jsonStrategy");
         public Form1()
         {
             InitializeComponent();
@@ -26,7 +26,8 @@ namespace ZhTest
             LisSearchRequire re = new LisSearchRequire(5);
 
             re.EqualFields.Add("SerialNo", textBox1.Text);
-            report.ReportExport(re);
+            string result = report.ReportExport(re);
+            System.Console.Write(result);
         }
 
         private void button2_Click(object sender, EventArgs e)
