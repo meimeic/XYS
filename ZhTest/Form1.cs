@@ -28,6 +28,7 @@ namespace ZhTest
             re.EqualFields.Add("SerialNo", textBox1.Text);
             string result = report.ReportExport(re);
             System.Console.Write(result);
+      
         }
 
         private void button2_Click(object sender, EventArgs e)
