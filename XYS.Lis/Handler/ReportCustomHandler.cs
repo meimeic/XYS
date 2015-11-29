@@ -33,6 +33,11 @@ namespace XYS.Lis.Handler
                 ReportReportElement rre = element as ReportReportElement;
                 return OperateCustomList(rre);
             }
+            if (elementTag == ReportElementTag.CustomElement)
+            {
+                ReportCustomElement rce = element as ReportCustomElement;
+                return OperateCustom(rce);
+            }
             return true;
         }
         #endregion
@@ -43,7 +48,7 @@ namespace XYS.Lis.Handler
             if (rre.SectionNo == 45)
             {
                 List<ILisReportElement> customList = rre.GetReportItem(ReportElementTag.CustomElement);
-                List<ReportCustomElement> tempList = new List<ReportCustomElement>(30);
+                List<ReportCustomElement> tempList = new List<ReportCustomElement>(15);
                 if (customList.Count > 0)
                 {
                     ReportCustomElement rec;
@@ -54,12 +59,11 @@ namespace XYS.Lis.Handler
                         {
                             tempList.Add(rec);
                         }
-                        else
-                        {
-                            customList.RemoveAt(i);
-                        }
+                        customList.RemoveAt(i);
                     }
                     //
+                    List<ReportCustomElement> searchList = new List<ReportCustomElement>(5);
+                    MergeCustomList(tempList, customList, searchList);
                 }
             }
             return true;
@@ -71,41 +75,60 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region
-        protected virtual void MergeCustomList(int count,List<ReportCustomElement> customList,List<ILisReportElement> resultList)
+        protected virtual void MergeCustomList(List<ReportCustomElement> customList,List<ILisReportElement> resultList, List<ReportCustomElement> searchList)
         {
             string sampleNo;
             if (customList.Count > 0)
             {
-                sampleNo = customList[count-1].Column0;
-                List<ReportCustomElement> searchList = new List<ReportCustomElement>(10);
+                sampleNo = customList[customList.Count-1].Column0;
+                searchList.Clear();
                 FindAll(sampleNo, customList, searchList);
-
+                if (searchList.Count > 1)
+                {
+                    MergeCommonList(searchList);
+                }
+                if (searchList.Count > 0)
+                {
+                    resultList.Add(searchList[0]);
+                }
+                MergeCustomList(customList, resultList, searchList);
             }
         }
         private void MergeCommonList(List<ReportCustomElement> commonList)
         {
-
-            int index;
             ReportCustomElement rce;
             ReportCustomElement target = commonList[0];
             Type type = typeof(ReportCustomElement);
-            string pn1,pn2;
-            PropertyInfo p1, p2;
             for (int i = 1; i < commonList.Count; i++)
             {
                 rce = commonList[i];
-                index = target.ColumnIndex;
-                p1=type.GetProperty()
+                if (rce.Column4 != null && !rce.Column4.Equals(""))
+                {
+                    SetCustomProperty(target, rce.Column4);
+                }
+                if (rce.Column5 != null && !rce.Column5.Equals(""))
+                {
+                    string[] values = rce.Column5.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
+                    if (values.Length > 0)
+                    {
+                        for (int j = 0; j < values.Length; j++)
+                        {
+                            SetCustomProperty(target, values[j]);
+                        }
+                    }
+                }
             }
         }
-        private void SetCustomProperty(string propertyName, ReportCustomElement rce, string propertyName1, ReportCustomElement rce1)
+        private void SetCustomProperty(ReportCustomElement rce, object value)
         {
+            PropertyInfo pro;
+            int index = rce.ColumnIndex;
+            string propertyName = "Column" + index;
             try
             {
-                PropertyInfo pro = rce.GetType().GetProperty(propertyName);
+                pro = rce.GetType().GetProperty(propertyName);
                 if (pro != null)
                 {
-                    PropertyInfo pro1=
                     pro.SetValue(rce, value, null);
                 }
             }
