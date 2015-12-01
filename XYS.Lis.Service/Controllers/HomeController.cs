@@ -10,6 +10,8 @@ namespace XYS.Lis.Service.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.Title = "Home Page";
+
             return View();
         }
     }
