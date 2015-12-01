@@ -63,7 +63,6 @@
     <Compile Include="Config\XmlConfiguratorAttribute.cs" />
     <Compile Include="Config\XmlParamConfigurator.cs" />
     <Compile Include="Core\DefaultRepositorySelector.cs" />
-    <Compile Include="Core\IAppenderAttachable.cs" />
     <Compile Include="Core\ILisExportElement.cs" />
     <Compile Include="Core\ILisReporter.cs" />
     <Compile Include="Core\ILisPatientElement.cs" />

@@ -71,7 +71,7 @@ namespace XYS.Lis.Fill
         public virtual void Fill(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag)
         {
             //不可填充的报告元素
-            if (elementTag == ReportElementTag.NoneElement&&elementTag!=ReportElementTag.KVElement)
+            if (elementTag == ReportElementTag.NoneElement && elementTag != ReportElementTag.KVElement)
             {
                 return;
             }
@@ -105,21 +105,13 @@ namespace XYS.Lis.Fill
         }
         protected ReportElementTypeCollection GetAvailableElements(int sectionNo)
         {
+            if (this.m_section2ElementTypesMap.Count == 0)
+            {
+                InitElementTypesTable();
+            }
             ReportElementTypeCollection retc = this.m_section2ElementTypesMap[sectionNo] as ReportElementTypeCollection;
             if (retc == null)
             {
-                retc = LisMap.GetSection2ElementTypeCollcetion(sectionNo);
-                if (retc != null)
-                {
-                    lock (this.m_section2ElementTypesMap)
-                    {
-                        this.m_section2ElementTypesMap[sectionNo] = retc;
-                    }
-                }
-            }
-            if (retc == null)
-            {
-                //
                 retc = this.DefaultElementTypeCollection;
             }
             return retc;
@@ -133,74 +125,13 @@ namespace XYS.Lis.Fill
             this.m_defaultElementTypeCollection.Add(ReportElementType.DEFAULTINFO);
             this.m_defaultElementTypeCollection.Add(ReportElementType.DEFAULTITEM);
         }
-        #endregion
-
-        #region 未调用方法
-        //public void ClearSection2ElementTypesMap()
-        //{
-        //    this.m_section2ElementTypesMap.Clear();
-        //} 
-        //public void AddSection2ElementTypes(int sectionNo,ReportElementTypeCollection elementTypeCollection)
-        //{
-        //    if (elementTypeCollection != null && elementTypeCollection.Count > 0)
-        //    {
-        //        lock (this.m_section2ElementTypesMap)
-        //        {
-        //            this.m_section2ElementTypesMap[sectionNo] = elementTypeCollection;
-        //        }
-        //    }
-        //}
-        //public virtual ILisReportElement Fill(ReportKey key, ReportElementTag elementTag)
-        //{
-        //    ILisReportElement reportElement = CreateReportElement(elementTag);
-        //    if (reportElement != null)
-        //    {
-        //        Fill(reportElement, key);
-        //    }
-        //    return reportElement;
-        //}
-
-        //public virtual List<ILisReportElement> FillList(ReportKey key, ReportElementTag elementTag)
-        //{
-        //    List<ILisReportElement> result = new List<ILisReportElement>();
-        //    if (elementTag != ReportElementTag.ReportElement)
-        //    {
-        //        FillList(result, key, elementTag);
-        //    }
-        //    return result;
-        //}
-        //protected ILisReportElement CreateReportElement(ReportElementTag elementTag)
-        //{
-        //    Type type = GetElementType(elementTag);
-        //    if (type != null)
-        //    {
-        //        try
-        //        {
-        //            ILisReportElement element = (ILisReportElement)Activator.CreateInstance(type);
-        //            return element;
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            return null;
-        //        }
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
-        //public virtual void Fill(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag)
-        //{
-        //    if (elementTag == ReportElementTag.ReportElement)
-        //    {
-        //        return;
-        //    }
-        //    else
-        //    {
-        //        FillElements(reportElementTable, key, elementTag);
-        //    }
-        //}
-        //protected abstract void FillElements(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag);
+        private void InitElementTypesTable()
+        {
+            lock (this.m_section2ElementTypesMap)
+            {
+                LisMap.InitSection2ElementTypeTable(this.m_section2ElementTypesMap);
+            }
+        }
         #endregion
     }
 }

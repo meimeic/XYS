@@ -1,8 +1,7 @@
-﻿using XYS.Lis.Appender;
-namespace XYS.Lis.Repository
+﻿namespace XYS.Lis.Repository
 {
-   public interface IBasicRepositoryConfigurator
+    public interface IBasicRepositoryConfigurator
     {
-       void Configure();
+        void Configure();
     }
 }

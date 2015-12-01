@@ -25,16 +25,12 @@ namespace ZhTest
         private void button1_Click(object sender, EventArgs e)
         {
             LisSearchRequire re = new LisSearchRequire(5);
-
             re.EqualFields.Add("SerialNo", textBox1.Text);
-            string result = report.ReportExport(re);
-            System.Console.Write(result);
-
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            LisMap.InitDataSetXmlStruct();
+
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -52,8 +48,6 @@ namespace ZhTest
             kc3.Name = "r.sectionno";
             kc3.PK = 45;
             searchKey.AddKey(kc3);
-            string result = report.ReportExport(searchKey);
-            System.Console.Write(result);
         }
 
         private void button4_Click(object sender, EventArgs e)
