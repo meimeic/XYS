@@ -15,11 +15,14 @@ namespace XYS.Lis.Handler
     public class DefaultReport2Export : IModelConvert
     {
         private readonly Hashtable m_tag2ExportType;
+        
+        #region 构造函数
         public DefaultReport2Export()
         {
             this.m_tag2ExportType = new Hashtable(5);
         }
-
+        #endregion
+        
         #region 实现接口方法
         public bool Convert2Export(ILisReportElement reportElement, ILisExportElement exportElement)
         {
@@ -340,7 +343,7 @@ namespace XYS.Lis.Handler
         }
         #endregion
 
-        #region
+        #region 实例私有方法 处理 tag2exporttype;
         private Type GetExportType(ReportElementTag elementTag)
         {
             if (this.m_tag2ExportType.Count == 0)

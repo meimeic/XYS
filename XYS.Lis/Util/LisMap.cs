@@ -199,7 +199,7 @@ namespace XYS.Lis.Util
             {
                 return null;
             }
-            ReportElementTypeCollection retc = new ReportElementTypeCollection();
+            ReportElementTypeCollection retc = new ReportElementTypeCollection(4);
             if (rs.ElementNameList.Count == 0)
             {
                 retc.Add(ReportElementType.DEFAULTINFO);

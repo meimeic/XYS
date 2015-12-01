@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections;
-//using System.Collections.Generic;
 using System.Xml;
 
-using XYS.Common;
 using XYS.Lis.Repository;
 using XYS.Lis.Core;
-using XYS.Model;
-using XYS.Lis.Model;
 using XYS.Lis.Util;
 using XYS.Lis.Fill;
-using XYS.Lis.Handler;
-using XYS.Lis.Export;
-using XYS.Lis.Export.PDF;
+
 namespace XYS.Lis.Repository.Hierarchy
 {
     public delegate void ReporterCreationEventHandler(object sender, ReporterCreationEventArgs e);
@@ -36,8 +30,6 @@ namespace XYS.Lis.Repository.Hierarchy
 
         #region
         private IReportFiller m_defaultFiller;
-        private IReportExport m_defaultExport;
-        private IModelConvert m_modelConverter;
         private IReporterFactory m_defaultFactory;
         private Reporter m_defaultReporter;
         private Hashtable m_key2ReporterMap;
@@ -63,7 +55,7 @@ namespace XYS.Lis.Repository.Hierarchy
                 throw new ArgumentNullException("reporterFactory");
             }
             this.m_defaultFactory = reporterFactory;
-            this.m_key2ReporterMap = new Hashtable(20);
+            this.m_key2ReporterMap = new Hashtable(10);
         }
         #endregion
 
@@ -79,30 +71,6 @@ namespace XYS.Lis.Repository.Hierarchy
                 return this.m_defaultFiller;
             }
             set { this.m_defaultFiller = value; }
-        }
-        public virtual IReportExport DefaultExport
-        {
-            get
-            {
-                if (this.m_defaultExport == null)
-                {
-                    this.m_defaultExport = new Export2PDF();
-                }
-                return this.m_defaultExport;
-            }
-            set { this.m_defaultExport = value; }
-        }
-        public virtual IModelConvert ModelConverter
-        {
-            get
-            {
-                if (this.m_modelConverter == null)
-                {
-                    this.m_modelConverter = new DefaultReport2Export();
-                }
-                return this.m_modelConverter;
-            }
-            set { this.m_modelConverter = value; }
         }
         //获取默认reporter
         public Reporter DefaultReporter
@@ -234,54 +202,6 @@ namespace XYS.Lis.Repository.Hierarchy
                 return null;
             }
         }
-        #endregion
-
-        #region  没有调用方法
-        // //根据传入键值获取报告名称
-        // protected virtual string GetReporterName(ReportKey key)
-        // {
-        //     int sectionNo = this.GetSectionNo(key);
-        //     if (sectionNo <= 0)
-        //     {
-        //         return null;
-        //     }
-        //     else
-        //     {
-        //         return this.GetReporterName(sectionNo);
-        //     }
-        // }
-        // //根据小组号获取相应的reporter名称
-        // protected virtual string GetReporterName(int sectionNo)
-        // {
-        //     string result = "default";
-        //     ReporterSection rs = LisMap.GetSection(sectionNo);
-        //     if (rs != null)
-        //     {
-        //         result = rs.ReporterName;
-        //     }
-        //     return result;
-        // }
-        ////根据键 获得小组号
-        // protected virtual int GetSectionNo(ReportKey key)
-        // {
-        //     int sectionNo = 0;
-        //     foreach (KeyColumn c in key.KeySet)
-        //     {
-        //         if (c.Name.ToLower() == "sectionno")
-        //         {
-        //             try
-        //             {
-        //                 sectionNo = Convert.ToInt32(c.PK);
-        //             }
-        //             catch (Exception ex)
-        //             {
-        //                 sectionNo = -1;
-        //             }
-        //             break;
-        //         }
-        //     }
-        //     return sectionNo;
-        // }
         #endregion
     }
 }

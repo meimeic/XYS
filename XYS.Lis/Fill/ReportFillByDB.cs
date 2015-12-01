@@ -89,7 +89,7 @@ namespace XYS.Lis.Fill
             {
                 tempTag = elementType.ElementTag;
                 tempType = elementType.ElementType;
-                if (tempTag == ReportElementTag.ReportElement || tempTag == ReportElementTag.CustomElement || tempTag == ReportElementTag.NoneElement)
+                if (tempTag == ReportElementTag.ReportElement || tempTag == ReportElementTag.KVElement || tempTag == ReportElementTag.NoneElement)
                 {
                     //过滤不需要填充的元素
                     continue;
@@ -117,7 +117,7 @@ namespace XYS.Lis.Fill
             int sectionNo = 0;
             foreach (KeyColumn c in key.KeySet)
             {
-                if (c.Name.ToLower() == "sectionno")
+                if (c.Name.ToLower().Equals("sectionno") || c.Name.ToLower().Equals("r.sectionno"))
                 {
                     try
                     {
@@ -134,7 +134,7 @@ namespace XYS.Lis.Fill
         }
         protected virtual Hashtable ReportKey2Table(ReportKey keys)
         {
-            Hashtable keyTable = new Hashtable();
+            Hashtable keyTable = new Hashtable(5);
             foreach (KeyColumn key in keys.KeySet)
             {
                 keyTable.Add(key.Name, key.PK);

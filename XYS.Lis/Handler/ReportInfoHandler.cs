@@ -77,6 +77,8 @@ namespace XYS.Lis.Handler
         protected virtual bool OperateInfo(ReportInfoElement rie)
         {
             //此处可以添加判断是否删除代码
+
+            //reportinfo 处理代码
             if (rie.SectionNo == 10)
             {
                 if (rie.FormMemo != null)
@@ -91,7 +93,8 @@ namespace XYS.Lis.Handler
         #region
         private void SetRemarkFlagByInfo(ReportReportElement rre, ReportInfoElement rie)
         {
-            //
+            //通过reportinfo 设置remark标识
+
         }
         #endregion
     }

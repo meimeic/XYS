@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections;
-using System.Collections.Generic;
 
-using XYS.Model;
-using XYS.Common;
 using XYS.Lis.Core;
-using XYS.Lis.Model;
 using XYS.Lis.Util;
 namespace XYS.Lis.Repository
 {
@@ -13,25 +9,23 @@ namespace XYS.Lis.Repository
 
     public interface IReporterRepository
     {
-      
         #region
-        string RepositoryName { get; set; }
         Hashtable FillerMap { get; }
         Hashtable HandlerMap { get; }
-        Hashtable ExportMap { get; }
         Hashtable StrategyMap { get; }
         bool Configured { get; set; }
+        string RepositoryName { get; set; }
         ICollection ConfigurationMessages { get; set; }
         PropertiesDictionary Properties { get; }
         #endregion
-        
-        #region
+
+        #region reporter相关方法
         ILisReporter Exists(ReporterKey key);
         ILisReporter[] GetCurrentReporters();
         ILisReporter GetReporter(ReporterKey key);
         #endregion
-        
-        #region
+
+        #region 事件
         event ReporterRepositoryConfigurationChangedEventHandler ConfigurationChanged;
         #endregion
     }

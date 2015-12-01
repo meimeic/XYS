@@ -6,7 +6,6 @@ using XYS.Common;
 using XYS.Model;
 using XYS.Lis;
 using XYS.Lis.Model;
-using XYS.Lis.Model.Export;
 using XYS.Lis.DAL;
 
 namespace XYS.Lis.Core
@@ -26,41 +25,50 @@ namespace XYS.Lis.Core
         #endregion
 
         #region 实现IReport接口
-        public string ReportExport(ReportKey key)
+        public void InitReport(ReportKey key, ReportReportElement report)
         {
-            if (key != null)
-            {
-                ILisReportElement report = new ReportReportElement();
-                ILisExportElement export = new ReporterReport();
-                this.Reporter.FillReportElement(report, key);
-                this.Reporter.Option(report);
-                this.Reporter.Convert2Export(report, export);
-                return this.Reporter.Export(export);
-            }
-            else
-            {
-                return null;
-            }
+            this.Reporter.FillReportElement(report,key);
         }
-        public virtual string ReportExport(LisSearchRequire require)
+
+        public void InitReport(LisSearchRequire require, ReportReportElement report)
         {
             ReportKey key = GetReportKey(require);
-            return ReportExport(key);
+            this.InitReport(key, report);
         }
-        public string ReportExport(ReporterReport rr)
+
+        public void InitReports(LisSearchRequire require, List<ILisReportElement> reportList)
         {
-            return this.Reporter.Export(rr);
+            List<ReportKey> keyList = GetReportKeyList(require);
+            this.InitReports(keyList, reportList);
         }
-        public string ReportExport(List<ILisExportElement> exportElementList)
+        public void InitReports(List<ReportKey> keyList, List<ILisReportElement> reportList)
         {
-            if (exportElementList.Count > 0)
-            {
-                return this.Reporter.Export(exportElementList,ReportElementTag.ReportElement);
-            }
-            else
-            {
-                return null;
-            }
+            throw new NotImplementedException();
+        }
+
+        public bool OperateReport(ReportReportElement report)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool OperateReport(List<ILisReportElement> reportList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HandleReport(LisSearchRequire require, ReportReportElement report)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HandleReports(List<ReportKey> keyList, List<ILisExportElement> reportList)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void HandleReports(LisSearchRequire require, List<ILisExportElement> reportList)
+        {
+            throw new NotImplementedException();
         }
         #endregion
        
@@ -80,5 +88,6 @@ namespace XYS.Lis.Core
         }
         
         #endregion
+
     }
 }

@@ -1,12 +1,13 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 using System.Data;
-using XYS.Common;
+using System.Collections;
+using System.Collections.Generic;
+
 using XYS.Lis;
-using XYS.Lis.Core;
+using XYS.Common;
 using XYS.Utility.DB;
+
 namespace XYS.Lis.DAL
 {
    public class LisReporterKeyDAL
@@ -116,18 +117,19 @@ namespace XYS.Lis.DAL
        {
            KeyColumn temp;
            LisDBKeyImpl key = new LisDBKeyImpl();
-           // int sectionNo = (int)dr["sectionno"];  
-           //int testTypeNo = (int)dr["testtypeno"];
-           //string sampleNo = dr["sampleno"].ToString();
-           //DateTime receiveDate = (DateTime)dr["receivedate"];
-           temp = new KeyColumn("sectionno", dr["sectionno"]);
-           key.AddKey(temp);
-           temp = new KeyColumn("testtypeno", dr["testtypeno"]);
-           key.AddKey(temp);
-           temp = new KeyColumn("sampleno", dr["sampleno"]);
-           key.AddKey(temp);
-           temp = new KeyColumn("receivedate", dr["receivedate"]);
-           key.AddKey(temp);
+           foreach (DataColumn dc in dr.Table.Columns)
+           {
+               temp = new KeyColumn(dc.ColumnName, dr[dc]);
+               key.AddKey(temp);
+           }
+           //temp = new KeyColumn("sectionno", dr["sectionno"]);
+           //key.AddKey(temp);
+           //temp = new KeyColumn("testtypeno", dr["testtypeno"]);
+           //key.AddKey(temp);
+           //temp = new KeyColumn("sampleno", dr["sampleno"]);
+           //key.AddKey(temp);
+           //temp = new KeyColumn("receivedate", dr["receivedate"]);
+           //key.AddKey(temp);
            return key;
        }
        protected DataTable GetDataTable(string sql)

@@ -63,11 +63,13 @@ namespace XYS.Lis.Handler
                         if (ItemConvert2KV(rie, kvList))
                         {
                             itemElementList.RemoveAt(i);
+                            continue;
                         }
                         //是否删除
-                        if (ItemIsDelete(rie))
+                        if (!OperateItem(rie))
                         {
                             itemElementList.RemoveAt(i);
+                            continue;
                         }
                     }
                     else
@@ -251,7 +253,7 @@ namespace XYS.Lis.Handler
         }
         #endregion
 
-        #region
+        #region 未调用的方法
         //public override HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag)
         //{
         //    if (elementTag == ReportElementTag.ReportElement)

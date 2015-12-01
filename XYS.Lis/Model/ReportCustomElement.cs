@@ -43,8 +43,9 @@ namespace XYS.Lis.Model
 
         #region 公共构造函数
         public ReportCustomElement()
-            : this(m_defaultElementTag, "")
+            : this(m_defaultElementTag, m_defaultEaxmSQL)
         {
+
         }
         public ReportCustomElement(ReportElementTag elementTag, string sql)
             : base(elementTag, sql)

@@ -2,35 +2,26 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using XYS.Model;
 using XYS.Common;
 using XYS.Lis.Core;
-using XYS.Model;
-using XYS.Lis.Model;
 using XYS.Lis.Fill;
 using XYS.Lis.Handler;
-using XYS.Lis.Export;
 using XYS.Lis.Util;
-using XYS.Lis.Repository;
 
 namespace XYS.Lis.Repository.Hierarchy
 {
     public abstract class Reporter : ILisReporter
     {
-        #region
+        #region 变量
         private readonly string m_reporterName;
         private string m_strategyName;
         private Hierarchy m_hierarchy;
 
         private IReportFiller m_defaultFill;
-        private IReportExport m_defaultExport;
         private IReportFiller m_filler;
-        private IReportExport m_exporter;
         private IReportHandler m_headHandler;
         private IReportHandler m_tailHandler;
-
-        private IModelConvert m_modelConverter;
-        //private readonly Hashtable m_name2ReportFiller;
-        //private readonly Hashtable m_tag2ReportExport;
 
         #endregion
 
@@ -58,17 +49,6 @@ namespace XYS.Lis.Repository.Hierarchy
                 return this.m_defaultFill;
             }
         }
-        public virtual IReportExport DefaultExport
-        {
-            get
-            {
-                if (this.m_defaultExport == null)
-                {
-                    this.InitDefault();
-                }
-                return this.m_defaultExport;
-            }
-        }
         public virtual IReportFiller Filler
         {
             get
@@ -83,32 +63,6 @@ namespace XYS.Lis.Repository.Hierarchy
                 }
             }
             set { this.m_filler = value; }
-        }
-        public virtual IReportExport Exporter
-        {
-            get
-            {
-                if (this.m_exporter == null)
-                {
-                    return this.DefaultExport;
-                }
-                else
-                {
-                    return this.m_exporter;
-                }
-            }
-            set { this.m_exporter = value; }
-        }
-        public virtual IModelConvert ModelConverter
-        {
-            get
-            {
-                if (this.m_modelConverter == null)
-                {
-                    this.m_modelConverter = this.Hierarchy.ModelConverter;
-                }
-                return this.m_modelConverter;
-            }
         }
         public virtual Hierarchy Hierarchy
         {
@@ -128,7 +82,14 @@ namespace XYS.Lis.Repository.Hierarchy
         }
         public virtual string StrategyName
         {
-            get { return this.m_strategyName; }
+            get
+            {
+                if (this.m_strategyName != null)
+                {
+                    return this.m_strategyName.ToLower();
+                }
+                return null;
+            }
             protected set { this.m_strategyName = value; }
         }
 
@@ -155,26 +116,6 @@ namespace XYS.Lis.Repository.Hierarchy
         {
             bool rs = HandlerEvent(reportElementList, elementTag);
             return rs;
-        }
-
-        public virtual bool Convert2Export(ILisReportElement reportElement, ILisExportElement exportElement)
-        {
-            return this.ModelConverter.Convert2Export(reportElement, exportElement);
-        }
-        public virtual bool Convert2Export(List<ILisReportElement> reportElementList, List<ILisExportElement> exportElementList,ReportElementTag elementTag)
-        {
-            return this.ModelConverter.Convert2Export(reportElementList, exportElementList, elementTag);
-        }
-       
-        public virtual string Export(ILisExportElement exportElement)
-        {
-            return this.Exporter.export(exportElement);
-            //IReportExport export = this.GetExport(exportTag);
-            //return export.export(reportElement);
-        }
-        public virtual string Export(List<ILisExportElement> exportElementList, ReportElementTag elementTag)
-        {
-            return this.Exporter.export(exportElementList, elementTag);
         }
         #endregion
 
@@ -227,7 +168,7 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             return true;
         }
-        
+
         protected virtual void AddHandler(Hashtable handlerTable, List<string> handlerNameList)
         {
             IReportHandler handler;
@@ -256,21 +197,13 @@ namespace XYS.Lis.Repository.Hierarchy
                 this.m_tailHandler = handler;
             }
         }
-        
+
         protected virtual void SetFiller(Hashtable fillerTable, string fillerName)
         {
             IReportFiller filler = fillerTable[fillerName] as IReportFiller;
             if (filler != null)
             {
                 this.Filler = filler;
-            }
-        }
-        protected virtual void SetExporter(Hashtable exportTable, string exportName)
-        {
-            IReportExport export = exportTable[exportName] as IReportExport;
-            if (export != null)
-            {
-                this.Exporter = export;
             }
         }
         #endregion
@@ -285,10 +218,6 @@ namespace XYS.Lis.Repository.Hierarchy
             if (this.m_defaultFill == null)
             {
                 this.m_defaultFill = this.Hierarchy.DefaultFiller;
-            }
-            if (this.m_defaultExport == null)
-            {
-                this.m_defaultExport = this.Hierarchy.DefaultExport;
             }
         }
         #endregion
@@ -307,103 +236,7 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             SetFiller(this.Hierarchy.FillerMap, stratrgy.FillerName);
             AddHandler(this.Hierarchy.HandlerMap, stratrgy.HandlerList);
-            SetExporter(this.Hierarchy.ExportMap, stratrgy.ExportName);
         }
-        #endregion
-
-        #region
-        //protected virtual IReportFiller GetFiller(string fillerName)
-        //{
-        //    if (fillerName != null&&!fillerName.Equals(""))
-        //    {
-        //        IReportFiller filler = this.m_name2ReportFiller[fillerName] as IReportFiller;
-        //        if (filler != null)
-        //        {
-        //            return filler;
-        //        }
-        //    }
-        //    return this.DefaultFill;
-        //}
-        //protected virtual IReportExport GetExport(ExportTag exportTag)
-        //{
-        //    IReportExport export = this.m_tag2ReportExport[exportTag] as IReportExport;
-        //    if (export != null)
-        //    {
-        //        return export;
-        //    }
-        //    return this.DefaultExport;
-        //}
-        //protected virtual void AddFiller(Hashtable fillerTable, List<string> fillerNameList)
-        //{
-        //    IReportFiller filler;
-        //    foreach (string name in fillerNameList)
-        //    {
-        //        filler = fillerTable[name] as IReportFiller;
-        //        if (filler != null)
-        //        {
-        //            AddFiller(filler);
-        //        }
-        //    }
-        //}
-        //protected virtual void AddExport(Hashtable exportTable, List<string> exportNameList)
-        //{
-        //    IReportExport export;
-        //    foreach (string name in exportNameList)
-        //    {
-        //        export = exportTable[name] as IReportExport;
-        //        if (export != null)
-        //        {
-        //            AddExport(export);
-        //        }
-        //    }
-        //}
-        //protected virtual void AddFiller(IReportFiller filler)
-        //{
-        //    if (filler == null)
-        //    {
-        //        throw new ArgumentNullException("filler");
-        //    }
-        //    else
-        //    {
-        //        this.m_name2ReportFiller[filler.FillerName] = filler;
-        //    }
-        //}
-        //protected virtual void ClearFiller()
-        //{
-        //    this.m_name2ReportFiller.Clear();
-        //}
-
-        //protected virtual void ClearHandler()
-        //{
-        //    this.m_headHandler = this.m_tailHandler = null;
-        //}
-        //protected virtual void AddExport(IReportExport export)
-        //{
-        //    if (export == null)
-        //    {
-        //        throw new ArgumentNullException("export");
-        //    }
-        //    else
-        //    {
-        //        this.m_tag2ReportExport[export.ExportTag] = export;
-        //    }
-        //}
-        //protected virtual void ClearExport()
-        //{
-        //    this.m_tag2ReportExport.Clear();
-        //}
-        //public virtual string Export(Hashtable reportElementTable)
-        //{
-        //    if (reportElementTable.Count > 0)
-        //    {
-        //        ReportElementTag elementTag = reportElementTable[0].ElementTag;
-        //        return this.Export(reportElementTable, elementTag);
-        //    }
-        //    else
-        //    {
-        //        return null;
-        //    }
-        //}
         #endregion
     }
 }

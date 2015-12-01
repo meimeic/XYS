@@ -33,7 +33,7 @@ namespace XYS.Lis.Config
 
         public XmlParamConfigurator()
         {
- 
+
         }
 
         public void ConfigSectionMap(XmlElement element, ReporterSectionMap sectionMap)
@@ -108,10 +108,9 @@ namespace XYS.Lis.Config
                 string name = element.GetAttribute(NAME_ATTR);
                 int value = GetIntValue(element.GetAttribute(VALUE_ATTR));
                 Type type = SystemInfo.GetTypeFromString(typeName, true, true);
-                Type exportType = SystemInfo.GetTypeFromString(exportName, true, true);
                 if (type != null && name != null)
                 {
-                    ReportElementType elementType = new ReportElementType(name, type, exportType);
+                    ReportElementType elementType = new ReportElementType(name, type);
                     elementType.ElementTag = GetElementTag(value);
                     reportTypeMap.Add(elementType);
                 }
@@ -159,7 +158,7 @@ namespace XYS.Lis.Config
             }
         }
 
-        public void ConfigReportModelMap(XmlElement element,ReportModelMap modelMap)
+        public void ConfigReportModelMap(XmlElement element, ReportModelMap modelMap)
         {
             XmlElement mapElement = GetTargetElement(element, REPORT_MODELS_TAG);
             if (mapElement != null)
@@ -179,7 +178,7 @@ namespace XYS.Lis.Config
             if (element.LocalName == REPORT_MODEL_TAG)
             {
                 int value = GetIntValue(element.GetAttribute(VALUE_ATTR));
-                string path=element.GetAttribute(MODEL_PATH_ATTR);
+                string path = element.GetAttribute(MODEL_PATH_ATTR);
                 if (value > 0)
                 {
                     ReportModel model = new ReportModel(value, path);

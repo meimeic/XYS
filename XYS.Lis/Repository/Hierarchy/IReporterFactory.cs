@@ -1,5 +1,4 @@
 ﻿using System;
-
 using XYS.Lis.Core;
 using XYS.Lis.Repository;
 namespace XYS.Lis.Repository.Hierarchy

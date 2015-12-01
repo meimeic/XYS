@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 using XYS.Model;
 using XYS.Common;
-using XYS.Lis.Export;
 using XYS.Lis.Repository;
 namespace XYS.Lis.Core
 {
@@ -21,16 +20,6 @@ namespace XYS.Lis.Core
         #region
         bool Option(ILisReportElement reportElement);
         bool Option(List<ILisReportElement> reportElementList, ReportElementTag elementTag);
-        #endregion
-
-        #region
-        string Export(ILisExportElement exportElement);
-        string Export(List<ILisExportElement> exportElementList, ReportElementTag elementTag);
-        #endregion
-
-        #region
-        bool Convert2Export(ILisReportElement reportElement, ILisExportElement exportElement);
-        bool Convert2Export(List<ILisReportElement> reportElementList, List<ILisExportElement> exportElementList, ReportElementTag elementTag);
         #endregion
     }
 }

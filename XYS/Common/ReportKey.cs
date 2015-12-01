@@ -30,16 +30,6 @@ namespace XYS.Common
             return this;
         }
         #region 实例属性
-        //public IReportElement ReportElement
-        //{
-        //    get { return this.m_reportElement; }
-        //    set { this.m_reportElement = value; }
-        //}
-        //public string TableName
-        //{
-        //    get { return this.m_tableName; }
-        //    set { this.m_tableName = value; }
-        //}
         public int Count
         {
             get { return this.m_KeySet.Count; }

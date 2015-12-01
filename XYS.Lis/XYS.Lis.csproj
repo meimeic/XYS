@@ -46,11 +46,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Appender\AppenderAttachedImpl.cs" />
-    <Compile Include="Appender\AppenderCollection.cs" />
-    <Compile Include="Appender\AppenderImpl.cs" />
-    <Compile Include="Appender\AppenderSkeleton.cs" />
-    <Compile Include="Appender\IAppender.cs" />
     <Compile Include="Config\ParamSectionHandler.cs" />
     <Compile Include="Config\ReportModelElement.cs" />
     <Compile Include="Config\ReportModelElementCollection.cs" />
@@ -94,7 +89,7 @@
     <Compile Include="Core\ReporterSectionMap.cs" />
     <Compile Include="Core\ReportException.cs" />
     <Compile Include="Core\ReportFKImpl.cs" />
-    <Compile Include="Core\LisDBKeyImpl.cs" />
+    <Compile Include="LisDBKeyImpl.cs" />
     <Compile Include="Core\ReporterSection.cs" />
     <Compile Include="Core\ReporterSectionCollection.cs" />
     <Compile Include="Core\ReportImpl.cs" />
@@ -109,11 +104,6 @@
     <Compile Include="DAL\LisReportItemDAL.cs" />
     <Compile Include="DAL\LisReportPatientDAL.cs" />
     <Compile Include="DAL\LisReporterKeyDAL.cs" />
-    <Compile Include="Export\ExportTag.cs" />
-    <Compile Include="Export\Json\Export2Json.cs" />
-    <Compile Include="Export\PDF\Export2PDF.cs" />
-    <Compile Include="Export\IReportExport.cs" />
-    <Compile Include="Export\ReportExportSkeleton.cs" />
     <Compile Include="Filter\IReportFilter.cs" />
     <Compile Include="Handler\HeaderDefaultHandler.cs" />
     <Compile Include="Handler\HandlerResult.cs" />
@@ -124,12 +114,6 @@
     <Compile Include="IReport.cs" />
     <Compile Include="Model\AbstractReportElement.cs" />
     <Compile Include="Model\AbstractPatientElement.cs" />
-    <Compile Include="Model\Export\ReporterCustom.cs" />
-    <Compile Include="Model\Export\ReporterGraph.cs" />
-    <Compile Include="Model\Export\ReporterInfo.cs" />
-    <Compile Include="Model\Export\ReporterItem.cs" />
-    <Compile Include="Model\Export\ReporterKV.cs" />
-    <Compile Include="Model\Export\ReporterReport.cs" />
     <Compile Include="Model\ReportElementType.cs" />
     <Compile Include="Model\ReportElementTypeCollection.cs" />
     <Compile Include="Model\ReportElementTypeMap.cs" />
@@ -195,10 +179,7 @@
       <Name>XYS</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Layout\" />
-    <Folder Include="Plugin\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="lib\FastReport.Bars.dll" />
     <Content Include="lib\FastReport.dll" />

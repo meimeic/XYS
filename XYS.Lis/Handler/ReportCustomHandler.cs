@@ -74,32 +74,46 @@ namespace XYS.Lis.Handler
         }
         #endregion
 
-        #region
-        protected virtual void MergeCustomList(List<ReportCustomElement> customList,List<ILisReportElement> resultList, List<ReportCustomElement> searchList)
+        #region 合并自定义项
+        protected virtual void MergeCustomList(List<ReportCustomElement> customList, List<ILisReportElement> resultList, List<ReportCustomElement> searchList)
         {
             string sampleNo;
+            ReportCustomElement targeCustom = null;
             if (customList.Count > 0)
             {
-                sampleNo = customList[customList.Count-1].Column0;
+                sampleNo = customList[customList.Count - 1].Column0;
                 searchList.Clear();
                 FindAll(sampleNo, customList, searchList);
                 if (searchList.Count > 1)
                 {
-                    MergeCommonList(searchList);
+                    targeCustom = new ReportCustomElement();
+                    MergeCommonList(searchList, targeCustom);
                 }
-                if (searchList.Count > 0)
+                else
                 {
-                    resultList.Add(searchList[0]);
+                    if (searchList.Count == 1)
+                    {
+                        targeCustom = searchList[0];
+                    }
+                }
+                if (targeCustom != null)
+                {
+                    resultList.Add(targeCustom);
                 }
                 MergeCustomList(customList, resultList, searchList);
             }
         }
-        private void MergeCommonList(List<ReportCustomElement> commonList)
+        private void MergeCommonList(List<ReportCustomElement> commonList, ReportCustomElement target)
         {
             ReportCustomElement rce;
-            ReportCustomElement target = commonList[0];
+            //相同数据处理
+            target.Column0 = commonList[0].Column0;
+            target.Column1 = commonList[0].Column1;
+            target.Column2 = commonList[0].Column2;
+            target.Column3 = commonList[0].Column3;
+            //不同数据处理
             Type type = typeof(ReportCustomElement);
-            for (int i = 1; i < commonList.Count; i++)
+            for (int i = 0; i < commonList.Count; i++)
             {
                 rce = commonList[i];
                 if (rce.Column4 != null && !rce.Column4.Equals(""))

@@ -17,6 +17,7 @@ namespace XYS.Lis.Util
         /// </remarks>
         private NullEnumerator()
         {
+
         }
 
         #endregion Private Instance Constructors

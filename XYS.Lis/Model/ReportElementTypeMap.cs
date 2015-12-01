@@ -12,7 +12,7 @@ namespace XYS.Lis.Model
        #endregion
        public ReportElementTypeMap()
        {
-           this.m_mapName2ElementType = new Hashtable(10);
+           this.m_mapName2ElementType = new Hashtable(6);
        }
        public void Clear()
        {
@@ -42,16 +42,6 @@ namespace XYS.Lis.Model
        {
            get { return this.m_mapName2ElementType.Count; }
        }
-       //public void Add(string typeName)
-       //{
-       //    ReportElementType type = new ReportElementType(typeName);
-       //    this.Add(type);
-       //}
-       //public void Add(Type elementType)
-       //{
-       //    ReportElementType type = new ReportElementType(elementType);
-       //    this.Add(type);
-       //}
        public void Add(ReportElementType elementType)
        {
            if (elementType == null)

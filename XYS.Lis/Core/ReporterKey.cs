@@ -3,7 +3,8 @@ namespace XYS.Lis.Core
 {
     public class ReporterKey
     {
-        #region 
+        #region
+        private static readonly string DefaultStrategy = "DefaultStrategy";
         private readonly string m_name;
         private readonly string m_strategyName;
         private readonly int m_hashCache;
@@ -11,18 +12,27 @@ namespace XYS.Lis.Core
 
         #region
         public ReporterKey(string name)
-            : this(name, "defaultstrategy")
         {
-        }
-        public ReporterKey(string name, string strategyName)
-        {
-            if (name == null||name.Equals(""))
+            if (name == null || name.Equals(""))
             {
                 throw new ArgumentNullException("reporterName");
             }
             this.m_name = string.Intern(name);
-            this.m_strategyName = string.Intern(strategyName.ToLower());
+            this.m_strategyName = string.Intern(DefaultStrategy.ToLower());
             this.m_hashCache = this.m_name.GetHashCode() + this.m_strategyName.GetHashCode();
+        }
+        public ReporterKey(string name, string strategyName)
+            : this(name)
+        {
+            if (strategyName != null && !strategyName.Equals(""))
+            {
+                this.m_strategyName = string.Intern(strategyName.ToLower());
+                this.m_hashCache = this.m_name.GetHashCode() + this.m_strategyName.GetHashCode();
+            }
+            else
+            {
+                throw new ArgumentNullException("strategyName");
+            }
         }
         #endregion
 
