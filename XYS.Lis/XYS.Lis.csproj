@@ -33,14 +33,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FastReport, Version=2013.2.5.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\GitHub\Repos\XYSTest\lib\FastReport.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -64,21 +56,23 @@
     <Compile Include="Config\ReportSectionElementCollection.cs" />
     <Compile Include="Config\XmlConfigurator.cs" />
     <Compile Include="Config\XmlConfiguratorAttribute.cs" />
+    <Compile Include="Config\XmlDBConfigurator.cs" />
     <Compile Include="Config\XmlParamConfigurator.cs" />
     <Compile Include="Core\DefaultRepositorySelector.cs" />
-    <Compile Include="Core\ILisExportElement.cs" />
     <Compile Include="Core\ILisReporter.cs" />
     <Compile Include="Core\ILisPatientElement.cs" />
     <Compile Include="Core\ILisReportElement.cs" />
-    <Compile Include="Core\IModelConvert.cs" />
     <Compile Include="Core\IReporterWrapper.cs" />
     <Compile Include="Core\IRepositorySelector.cs" />
     <Compile Include="Core\ITriggeringEventEvaluator.cs" />
     <Compile Include="Core\ReporterManager.cs" />
     <Compile Include="Core\WrapperMap.cs" />
+    <Compile Include="DAL\DbHelperOleDb.cs" />
+    <Compile Include="DAL\DbHelperSQL.cs" />
     <Compile Include="Fill\IReportFiller.cs" />
     <Compile Include="Fill\ReportFillByDB.cs" />
     <Compile Include="Fill\ReportFillSkeleton.cs" />
+    <Compile Include="Fill\ReportListFillByDB.cs" />
     <Compile Include="Handler\DefaultReport2Export.cs" />
     <Compile Include="Handler\ReportCustomHandler.cs" />
     <Compile Include="Handler\ReportInfoHandler.cs" />
@@ -155,7 +149,7 @@
     <Compile Include="Util\PropertiesDictionary.cs" />
     <Compile Include="Util\PropertyEntry.cs" />
     <Compile Include="Util\ReadOnlyPropertiesDictionary.cs" />
-    <Compile Include="Util\ReportReport.cs" />
+    <Compile Include="Util\ReportLog.cs" />
     <Compile Include="Util\SystemInfo.cs" />
     <Compile Include="Util\TestItem.cs" />
     <Compile Include="Util\TypeConverters\BooleanConverter.cs" />
@@ -172,22 +166,12 @@
     <Compile Include="Util\XMLTools.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XYS.Utility\XYS.Utility.csproj">
-      <Project>{7839754d-9da9-4aa7-94a6-32e3a2701669}</Project>
-      <Name>XYS.Utility</Name>
-    </ProjectReference>
     <ProjectReference Include="..\XYS\XYS.csproj">
       <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
       <Name>XYS</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
-  <ItemGroup>
-    <Content Include="lib\FastReport.Bars.dll" />
-    <Content Include="lib\FastReport.dll" />
-    <Content Include="lib\FastReport.Editor.dll" />
-    <Content Include="lib\Newtonsoft.Json.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

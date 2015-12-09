@@ -92,7 +92,6 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             protected set { this.m_strategyName = value; }
         }
-
         public IReporterRepository Repository
         {
             get { return this.m_hierarchy; }
@@ -169,7 +168,7 @@ namespace XYS.Lis.Repository.Hierarchy
             return true;
         }
 
-        protected virtual void AddHandler(Hashtable handlerTable, List<string> handlerNameList)
+        protected virtual void AddHandler(Hashtable handlerTable, IList<string> handlerNameList)
         {
             IReportHandler handler;
             foreach (string name in handlerNameList)
@@ -236,6 +235,13 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             SetFiller(this.Hierarchy.FillerMap, stratrgy.FillerName);
             AddHandler(this.Hierarchy.HandlerMap, stratrgy.HandlerList);
+        }
+        public virtual void Reset()
+        {
+            lock (this)
+            {
+                InnerConfig();
+            }
         }
         #endregion
     }

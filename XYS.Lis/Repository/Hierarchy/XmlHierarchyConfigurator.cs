@@ -54,7 +54,7 @@ namespace XYS.Lis.Repository.Hierarchy
             if (rootElementName != CONFIGURATION_TAG)
             {
                 //
-                ReportReport.Error(declaringType, "XmlHierarchyConfigurator:Xml element is - not a <" + CONFIGURATION_TAG + "> element.");
+                ReportLog.Error(declaringType, "XmlHierarchyConfigurator:Xml element is - not a <" + CONFIGURATION_TAG + "> element.");
                 return;
             }
             foreach (XmlNode currentNode in element.ChildNodes)
@@ -62,11 +62,11 @@ namespace XYS.Lis.Repository.Hierarchy
                 if (currentNode.NodeType == XmlNodeType.Element)
                 {
                     XmlElement currentElement = (XmlElement)currentNode;
-                    //策略节点
+                    //策略节点结合
                     if (currentElement.LocalName == REPORTER_STRATEGY_STACK_TAG)
                     {
                         this.m_hierarchy.ClearStrategy();
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterStrategyMap by <" + REPORTER_STRATEGY_STACK_TAG+"> element");
+                        ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterStrategyMap by <" + REPORTER_STRATEGY_STACK_TAG+"> element");
                         foreach (XmlNode node in currentElement.ChildNodes)
                         {
                             if (node.NodeType == XmlNodeType.Element)
@@ -78,27 +78,28 @@ namespace XYS.Lis.Repository.Hierarchy
                                 }
                             }
                         }
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterStrategyMap");
+                        ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterStrategyMap");
                     }
+                        //策略节点
                     else if (currentElement.LocalName == REPORTER_STRATEGY_TAG)
                     {
                         ParseStrategy(currentElement);
                     }
+                        //填充集合
                     else if (currentElement.LocalName == FILL_STACK_TAG)
                     {
                         this.m_hierarchy.ClearFiller();
-                        //
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterFillMap by <" + FILL_STACK_TAG + "> element");
+                        ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterFillMap by <" + FILL_STACK_TAG + "> element");
                         ParseFillStack(currentElement);
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterFillMap");
+                        ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterFillMap");
                     }
+                        //处理集合
                     else if (currentElement.LocalName == HANDLER_STACK_TAG)
                     {
                         this.m_hierarchy.ClearHandler();
-                        //
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterHandlerMap by <" + HANDLER_STACK_TAG + "> element");
+                        ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterHandlerMap by <" + HANDLER_STACK_TAG + "> element");
                         ParseHandlerStack(currentElement);
-                        ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterHandlerMap");
+                        ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterHandlerMap");
                     }
                     else
                     {
@@ -111,14 +112,15 @@ namespace XYS.Lis.Repository.Hierarchy
         protected void ParseStrategy(XmlElement reporterElement)
         {
             string strategyName = reporterElement.GetAttribute(NAME_ATTR);
-            ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Loading Strategy [" + strategyName + "]");
+            ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Loading Strategy [" + strategyName + "]");
             ReporterStrategy strategy = new ReporterStrategy(strategyName);
             ParseChildrenOfStrategyElement(reporterElement, strategy);
             this.m_hierarchy.AddStrategy(strategy);
-            ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Loaded Strategy [" + strategyName + "]");
+            ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Loaded Strategy [" + strategyName + "]");
         }
         protected void ParseChildrenOfStrategyElement(XmlElement element, ReporterStrategy strategy)
         {
+            this.m_hierarchy.ClearStrategy();
             foreach (XmlNode currentNode in element.ChildNodes)
             {
                 if (currentNode.NodeType == XmlNodeType.Element)
@@ -185,7 +187,7 @@ namespace XYS.Lis.Repository.Hierarchy
         protected void ParseFill(XmlElement fillElement)
         {
             string fillName = fillElement.GetAttribute(NAME_ATTR);
-            ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Configure Filler [" + fillName + "]");
+            ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Configure Filler [" + fillName + "]");
             object[] param = new object[] { fillName };
             string typeName = fillElement.GetAttribute(TYPE_ATTR);
             try
@@ -218,7 +220,7 @@ namespace XYS.Lis.Repository.Hierarchy
         protected void ParseHandler(XmlElement handlerElement)
         {
             string handlerName = handlerElement.GetAttribute(NAME_ATTR);
-            ReportReport.Debug(declaringType, "XmlHierarchyConfigurator:Configure Handler [" + handlerName + "]");
+            ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Configure Handler [" + handlerName + "]");
             object[] param = new object[] { handlerName };
             string typeName = handlerElement.GetAttribute(TYPE_ATTR);
             try

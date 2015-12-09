@@ -6,11 +6,9 @@ using System.Reflection;
 using System.Collections.Generic;
 
 using XYS.Common;
-using XYS.Utility.DB;
 using XYS.Lis.Core;
 using XYS.Model;
 using XYS.Lis.Model;
-
 namespace XYS.Lis.DAL
 {
     public class LisReportCommonDAL : ILisReportDAL

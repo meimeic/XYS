@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections;
 using System.Data;
-using XYS.Utility.DB;
+using System.Collections;
+
 namespace XYS.Lis.DAL
 {
     public class CommonDAL

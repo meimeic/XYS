@@ -34,14 +34,14 @@ namespace XYS.Lis.Util
             string nullTextAppSettingsKey = SystemInfo.GetAppSetting("lis-report.NullText");
             if (nullTextAppSettingsKey != null && nullTextAppSettingsKey.Length > 0)
             {
-                ReportReport.Debug(declaringType, "Initializing NullText value to [" + nullTextAppSettingsKey + "].");
+                ReportLog.Debug(declaringType, "Initializing NullText value to [" + nullTextAppSettingsKey + "].");
                 nullText = nullTextAppSettingsKey;
             }
             // Look for log4net.NotAvailableText in AppSettings
             string notAvailableTextAppSettingsKey = SystemInfo.GetAppSetting("lis-report.NotAvailableText");
             if (notAvailableTextAppSettingsKey != null && notAvailableTextAppSettingsKey.Length > 0)
             {
-                ReportReport.Debug(declaringType, "Initializing NotAvailableText value to [" + notAvailableTextAppSettingsKey + "].");
+                ReportLog.Debug(declaringType, "Initializing NotAvailableText value to [" + notAvailableTextAppSettingsKey + "].");
                 notAvailableText = notAvailableTextAppSettingsKey;
             }
 #endif
@@ -125,17 +125,17 @@ namespace XYS.Lis.Util
                     }
                     catch (System.Net.Sockets.SocketException)
                     {
-                        ReportReport.Debug(declaringType, "Socket exception occurred while getting the dns hostname. Error Ignored.");
+                        ReportLog.Debug(declaringType, "Socket exception occurred while getting the dns hostname. Error Ignored.");
                     }
                     catch (System.Security.SecurityException)
                     {
                         // We may get a security exception looking up the hostname
                         // You must have Unrestricted DnsPermission to access resource
-                        ReportReport.Debug(declaringType, "Security exception occurred while getting the dns hostname. Error Ignored.");
+                        ReportLog.Debug(declaringType, "Security exception occurred while getting the dns hostname. Error Ignored.");
                     }
                     catch (Exception ex)
                     {
-                        ReportReport.Debug(declaringType, "Some other exception occurred while getting the dns hostname. Error Ignored.", ex);
+                        ReportLog.Debug(declaringType, "Some other exception occurred while getting the dns hostname. Error Ignored.", ex);
                     }
 
                     // Get the NETBIOS machine name of the current machine
@@ -161,7 +161,7 @@ namespace XYS.Lis.Util
                     if (s_hostName == null || s_hostName.Length == 0)
                     {
                         s_hostName = s_notAvailableText;
-                        ReportReport.Debug(declaringType, "Could not determine the hostname. Error Ignored. Empty host name will be used");
+                        ReportLog.Debug(declaringType, "Could not determine the hostname. Error Ignored. Empty host name will be used");
                     }
                 }
                 return s_hostName;
@@ -184,7 +184,7 @@ namespace XYS.Lis.Util
                     {
                         // This security exception will occur if the caller does not have 
                         // some undefined set of SecurityPermission flags.
-                        ReportReport.Debug(declaringType, "Security exception while trying to get current domain friendly name. Error Ignored.");
+                        ReportLog.Debug(declaringType, "Security exception while trying to get current domain friendly name. Error Ignored.");
                     }
                     if (s_appFriendlyName == null || s_appFriendlyName.Length == 0)
                     {
@@ -492,7 +492,7 @@ namespace XYS.Lis.Util
             // typeName 不包含程序集名称
             if (typeName.IndexOf(',') == -1)
             {
-                ReportReport.Debug(declaringType, "SystemInfo: Loading type [" + typeName + "] from assembly [" + relativeAssembly.FullName + "]");
+                ReportLog.Debug(declaringType, "SystemInfo: Loading type [" + typeName + "] from assembly [" + relativeAssembly.FullName + "]");
 #if NETCF
 				return relativeAssembly.GetType(typeName, throwOnError);
 #else
@@ -501,7 +501,7 @@ namespace XYS.Lis.Util
                 if (type != null)
                 {
                     // Found type in relative assembly
-                    ReportReport.Debug(declaringType, "SystemInfo: Loaded type [" + typeName + "] from assembly [" + relativeAssembly.FullName + "]");
+                    ReportLog.Debug(declaringType, "SystemInfo: Loaded type [" + typeName + "] from assembly [" + relativeAssembly.FullName + "]");
                     return type;
                 }
                 Assembly[] loadedAssemblies = null;
@@ -523,7 +523,7 @@ namespace XYS.Lis.Util
                         if (type != null)
                         {
                             // Found type in loaded assembly
-                            ReportReport.Debug(declaringType, "SystemInfo:Loaded type [" + typeName + "] from assembly [" + assembly.FullName + "] by searching loaded assemblies.");
+                            ReportLog.Debug(declaringType, "SystemInfo:Loaded type [" + typeName + "] from assembly [" + assembly.FullName + "] by searching loaded assemblies.");
                             return type;
                         }
                     }
@@ -540,7 +540,7 @@ namespace XYS.Lis.Util
             else
             {
                 //包含程序集名称
-                ReportReport.Debug(declaringType, "SystemInfo: Loading type [" + typeName + "] from global Type");
+                ReportLog.Debug(declaringType, "SystemInfo: Loading type [" + typeName + "] from global Type");
 
 #if NETCF
 				// In NETCF 2 and 3 arg versions seem to behave differently
@@ -755,7 +755,7 @@ namespace XYS.Lis.Util
             catch (Exception ex)
             {
                 // If an exception is thrown here then it looks like the config file does not parse correctly.
-                ReportReport.Error(declaringType, "SystemInfo:Exception while reading ConfigurationSettings. Check your .config file is well formed XML.", ex);
+                ReportLog.Error(declaringType, "SystemInfo:Exception while reading ConfigurationSettings. Check your .config file is well formed XML.", ex);
             }
             return null;
         }
@@ -888,7 +888,7 @@ namespace XYS.Lis.Util
             }
             catch (Exception ex)
             {
-                ReportReport.Warn(declaringType, "SystemInfo:deleting the " + filePath + " file ocurre exception:" + ex.Message);
+                ReportLog.Warn(declaringType, "SystemInfo:deleting the " + filePath + " file ocurre exception:" + ex.Message);
                 return false;
             }
         }

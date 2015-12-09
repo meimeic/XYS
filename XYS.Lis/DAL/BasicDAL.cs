@@ -3,10 +3,10 @@ using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using System.Reflection;
+
 using XYS.Common;
 using XYS.Lis.Core;
-using XYS.Utility.DB;
-using System.Reflection;
 namespace XYS.Lis.DAL
 {
     public abstract class BasicDAL<T>

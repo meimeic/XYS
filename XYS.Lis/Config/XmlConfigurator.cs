@@ -19,7 +19,7 @@ namespace XYS.Lis.Config
 
         #region
         private static readonly Type declaringType = typeof(XmlConfigurator);
-        private static readonly Hashtable m_repositoryName2ConfigAndWatchHandler = new Hashtable();
+        private static readonly Hashtable m_repositoryName2ConfigAndWatchHandler = new Hashtable(2);
         #endregion
         
         #region 私有构造函数
@@ -36,7 +36,7 @@ namespace XYS.Lis.Config
         public static ICollection Configure(IReporterRepository repository)
         {
             ArrayList configurationMessages = new ArrayList();
-            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            using (new ReportLog.ReportReceivedAdapter(configurationMessages))
             {
                 InternalConfigure(repository);
             }
@@ -47,7 +47,7 @@ namespace XYS.Lis.Config
         {
             ArrayList configurationMessages = new ArrayList();
             IReporterRepository repository = ReportManager.GetRepository(Assembly.GetCallingAssembly());
-            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            using (new ReportLog.ReportReceivedAdapter(configurationMessages))
             {
                 InternalConfigureFromXml(repository, element);
             }
@@ -57,9 +57,9 @@ namespace XYS.Lis.Config
         public static ICollection Configure(IReporterRepository repository, XmlElement element)
         {
             ArrayList configurationMessages = new ArrayList();
-            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            using (new ReportLog.ReportReceivedAdapter(configurationMessages))
             {
-                ReportReport.Debug(declaringType, "XmlConfigurator:configuring repository [" + repository.RepositoryName + "] using XML element");
+                ReportLog.Debug(declaringType, "XmlConfigurator:configuring repository [" + repository.RepositoryName + "] using XML element");
                 InternalConfigureFromXml(repository, element);
             }
             repository.ConfigurationMessages = configurationMessages;
@@ -68,16 +68,17 @@ namespace XYS.Lis.Config
         public static ICollection Configure(FileInfo configFile)
         {
             ArrayList configurationMessages = new ArrayList();
-            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            using (new ReportLog.ReportReceivedAdapter(configurationMessages))
             {
                 InternalConfigure(ReportManager.GetRepository(Assembly.GetCallingAssembly()), configFile);
             }
             return configurationMessages;
         }
+        
         public static ICollection Configure(IReporterRepository repository, FileInfo configFile)
         {
             ArrayList configurationMessages = new ArrayList();
-            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            using (new ReportLog.ReportReceivedAdapter(configurationMessages))
             {
                 InternalConfigure(repository, configFile);
             }
@@ -88,17 +89,18 @@ namespace XYS.Lis.Config
         {
             ArrayList configurationMessages = new ArrayList();
             IReporterRepository repository = ReportManager.GetRepository(Assembly.GetCallingAssembly());
-            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            using (new ReportLog.ReportReceivedAdapter(configurationMessages))
             {
                 InternalConfigure(repository, configUri);
             }
             repository.ConfigurationMessages = configurationMessages;
             return configurationMessages;
         }
+        
         public static ICollection Configure(IReporterRepository repository, Uri configUri)
         {
             ArrayList configurationMessages = new ArrayList();
-            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            using (new ReportLog.ReportReceivedAdapter(configurationMessages))
             {
                 InternalConfigure(repository, configUri);
             }
@@ -109,7 +111,7 @@ namespace XYS.Lis.Config
         {
             ArrayList configurationMessages = new ArrayList();
             IReporterRepository repository = ReportManager.GetRepository(Assembly.GetCallingAssembly());
-            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            using (new ReportLog.ReportReceivedAdapter(configurationMessages))
             {
                 InternalConfigure(repository, configStream);
             }
@@ -119,7 +121,7 @@ namespace XYS.Lis.Config
         public static ICollection Configure(IReporterRepository repository, Stream configStream)
         {
             ArrayList configurationMessages = new ArrayList();
-            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            using (new ReportLog.ReportReceivedAdapter(configurationMessages))
             {
                 InternalConfigure(repository, configStream);
             }
@@ -130,18 +132,19 @@ namespace XYS.Lis.Config
         {
             ArrayList configurationMessages = new ArrayList();
             IReporterRepository repository = ReportManager.GetRepository(Assembly.GetCallingAssembly());
-            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            using (new ReportLog.ReportReceivedAdapter(configurationMessages))
             {
                 InternalConfigureAndWatch(repository, configFile);
             }
             repository.ConfigurationMessages = configurationMessages;
             return configurationMessages;
         }
+        
         public static ICollection ConfigureAndWatch(IReporterRepository repository, FileInfo configFile)
         {
             ArrayList configurationMessages = new ArrayList();
 
-            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            using (new ReportLog.ReportReceivedAdapter(configurationMessages))
             {
                 InternalConfigureAndWatch(repository, configFile);
             }
@@ -150,66 +153,114 @@ namespace XYS.Lis.Config
         }
         #endregion
 
-        #region
-        public static XmlElement GetParamConfigurationElement()
+        #region 
+        public static XmlElement GetParamConfigurationElement(string tagName)
         {
-            ReportReport.Debug(declaringType, "XmlConfigurator:getting lis-param section");
-            try
+            XmlElement resultElement = null;
+            string configFullFile = SystemInfo.GetFileFullName(SystemInfo.ApplicationBaseDirectory, "Lis.config");
+            XmlElement configElement = GetParamConfigurationElement(new FileInfo(configFullFile));
+            if (configElement != null)
             {
-                ReportReport.Debug(declaringType, "XmlConfigurator:Application config file is [" + SystemInfo.ConfigurationFileLocation + "]");
-            }
-            catch
-            {
-                // ignore error
-                ReportReport.Debug(declaringType, "XmlConfigurator:Application config file location unknown");
-            }
-            try
-            {
-                XmlElement configElement = null;
-                configElement = System.Configuration.ConfigurationManager.GetSection("lis-param") as XmlElement;
-                if (configElement == null)
+                XmlNodeList configNodeList = configElement.GetElementsByTagName(tagName);
+                if (configNodeList.Count == 0)
                 {
-                    ReportReport.Error(declaringType, "XmlConfigurator:Failed to find configuration section 'lis-param' in the application's .config file. Check your .config file for the <lis-param> and <configSections> elements. The configuration section should look like: <section name=\"lis-param\" type=\"XYS.Lis.Config.ParamSectionHandler,XYS.Lis\" />");
-                    return null;
+                    ReportLog.Debug(declaringType, "XmlConfigurator:XML configuration does not contain a <" + tagName + "> element. Configuration Aborted.");
+                }
+                else if (configNodeList.Count > 1)
+                {
+                    resultElement = configNodeList[0] as XmlElement;
+                    ReportLog.Error(declaringType, "XmlConfigurator:XML configuration contains [" + configNodeList.Count + "] <" + tagName + "> elements. Only one is allowed. Configuration Aborted.");
                 }
                 else
                 {
-                    ReportReport.Debug(declaringType, "XmlConfigurator:getted lis-param section");
-                    XmlDocument newDoc = new XmlDocument();
-                    XmlElement newElement = (XmlElement)newDoc.AppendChild(newDoc.ImportNode(configElement, true));
-                    return newElement;
+                    resultElement = configNodeList[0] as XmlElement;
                 }
             }
-            catch (System.Configuration.ConfigurationException confEx)
+            return resultElement;
+        }
+        public static XmlElement GetParamConfigurationElement(FileInfo configFile)
+        {
+            XmlElement resultElement = null;
+            if (configFile == null)
             {
-                if (confEx.BareMessage.IndexOf("Unrecognized element") >= 0)
+                ReportLog.Error(declaringType, "XmlConfigurator:Configure called with null 'configFile' parameter");
+            }
+            else
+            {
+                //文件存在，尝试打开文件
+                if (File.Exists(configFile.FullName))
                 {
-                    // Looks like the XML file is not valid
-                    ReportReport.Error(declaringType, "XmlConfigurator:Failed to parse config file. Check your .config file is well formed XML.", confEx);
+                    FileStream fs = null;
+                    for (int retry = 5; --retry >= 0; )
+                    {
+                        try
+                        {
+                            fs = configFile.Open(FileMode.Open, FileAccess.Read, FileShare.Read);
+                            break;
+                        }
+                        catch (IOException ex)
+                        {
+                            if (retry == 0)
+                            {
+                                ReportLog.Error(declaringType, "XmlConfigurator:Failed to open XML config file [" + configFile.Name + "]", ex);
+                                fs = null;
+                            }
+                            System.Threading.Thread.Sleep(250);
+                        }
+                    }
+                    //处理文件流
+                    if (fs != null)
+                    {
+                        try
+                        {
+                            resultElement = GetParamConfigurationElement(fs);
+                        }
+                        finally
+                        {
+                            fs.Close();
+                        }
+                    }
                 }
                 else
                 {
-                    // This exception is typically due to the assembly name not being correctly specified in the section type.
-                    string configSectionStr = "<section name=\"lis-param\" type=\"XYS.Lis.Config.ParamSectionHandler," + Assembly.GetExecutingAssembly().FullName + "\" />";
-                    ReportReport.Error(declaringType, "XmlConfigurator:Failed to parse config file. Is the <configSections> specified as: " + configSectionStr, confEx);
+                    ReportLog.Debug(declaringType, "XmlConfigurator:config file [" + configFile.FullName + "] not found.");
                 }
-                return null;
             }
+            return resultElement;
+        }
+        public static XmlElement GetParamConfigurationElement(Stream configStream)
+        {
+            XmlElement resultElement = null;
+            XmlDocument doc = new XmlDocument();
+            try
+            {
+                XmlReaderSettings xmlSettings = new XmlReaderSettings();
+                xmlSettings.ValidationType = ValidationType.None;
+                XmlReader xmlReader = XmlReader.Create(new XmlTextReader(configStream), xmlSettings);
+                //将文件流加载到xml文档
+                doc.Load(xmlReader);
+                resultElement = doc.FirstChild as XmlElement;
+            }
+            catch (Exception ex)
+            {
+                ReportLog.Error(declaringType, "XmlConfigurator:Error while loading XML configuration", ex);
+            }
+            return resultElement;
         }
         #endregion
 
         #region
         private static void InternalConfigure(IReporterRepository repository)
         {
-            ReportReport.Debug(declaringType, "XmlConfigurator:configuring repository [" + repository.RepositoryName + "] using .config file section");
+            ReportLog.Debug(declaringType, "XmlConfigurator:configuring repository [" + repository.RepositoryName + "] using .config file section");
             try
             {
-                ReportReport.Debug(declaringType, "XmlConfigurator:Application config file is [" + SystemInfo.ConfigurationFileLocation + "]");
+                ReportLog.Debug(declaringType, "XmlConfigurator:Application config file is [" + SystemInfo.ConfigurationFileLocation + "]");
             }
             catch
             {
                 // ignore error
-                ReportReport.Debug(declaringType, "XmlConfigurator:Application config file location unknown");
+                ReportLog.Debug(declaringType, "XmlConfigurator:Application config file location unknown");
             }
 #if NETCF
 			// No config file reading stuff. Just go straight for the file
@@ -221,17 +272,15 @@ namespace XYS.Lis.Config
 #if NET_2_0
 				configElement = System.Configuration.ConfigurationManager.GetSection("log4net") as XmlElement;
 #else
-                //configElement = System.Configuration.ConfigurationSettings.GetConfig("log4net") as XmlElement;
                 configElement = System.Configuration.ConfigurationManager.GetSection("lis-report") as XmlElement;
 #endif
                 if (configElement == null)
                 {
                     // Failed to load the xml config using configuration settings handler
-                    ReportReport.Error(declaringType, "XmlConfigurator:Failed to find configuration section 'lis-report' in the application's .config file. Check your .config file for the <lis-report> and <configSections> elements. The configuration section should look like: <section name=\"lis-report\" type=\"XYS.Lis.Config.ReportSectionHandler,XYS.Lis\" />");
+                    ReportLog.Error(declaringType, "XmlConfigurator:Failed to find configuration section 'lis-report' in the application's .config file. Check your .config file for the <lis-report> and <configSections> elements. The configuration section should look like: <section name=\"lis-report\" type=\"XYS.Lis.Config.ReportSectionHandler,XYS.Lis\" />");
                 }
                 else
                 {
-                    //Configure using the xml loaded from the config file
                     InternalConfigureFromXml(repository, configElement);
                 }
             }
@@ -240,23 +289,23 @@ namespace XYS.Lis.Config
                 if (confEx.BareMessage.IndexOf("Unrecognized element") >= 0)
                 {
                     // Looks like the XML file is not valid
-                    ReportReport.Error(declaringType, "XmlConfigurator:Failed to parse config file. Check your .config file is well formed XML.", confEx);
+                    ReportLog.Error(declaringType, "XmlConfigurator:Failed to parse config file. Check your .config file is well formed XML.", confEx);
                 }
                 else
                 {
                     // This exception is typically due to the assembly name not being correctly specified in the section type.
                     string configSectionStr = "<section name=\"lis-report\" type=\"XYS.Lis.Config.ConfigurationSectionHandler," + Assembly.GetExecutingAssembly().FullName + "\" />";
-                    ReportReport.Error(declaringType, "XmlConfigurator:Failed to parse config file. Is the <configSections> specified as: " + configSectionStr, confEx);
+                    ReportLog.Error(declaringType, "XmlConfigurator:Failed to parse config file. Is the <configSections> specified as: " + configSectionStr, confEx);
                 }
             }
 #endif
         }
         private static void InternalConfigure(IReporterRepository repository, Stream configStream)
         {
-            ReportReport.Debug(declaringType, "XmlConfigurator:configuring repository [" + repository.RepositoryName + "] using stream");
+            ReportLog.Debug(declaringType, "XmlConfigurator:configuring repository [" + repository.RepositoryName + "] using stream");
             if (configStream == null)
             {
-                ReportReport.Error(declaringType, "XmlConfigurator:Configure called with null 'configStream' parameter");
+                ReportLog.Error(declaringType, "XmlConfigurator:Configure called with null 'configStream' parameter");
             }
             else
             {
@@ -284,38 +333,33 @@ namespace XYS.Lis.Config
                     XmlReaderSettings xmlSettings = new XmlReaderSettings();
                     xmlSettings.ValidationType = ValidationType.None;
                     XmlReader xmlReader = XmlReader.Create(new XmlTextReader(configStream),xmlSettings);
-                    //XmlValidatingReader xmlReader = new XmlValidatingReader(new XmlTextReader(configStream));
-                    // Specify that the reader should not perform validation, but that it should
-                    // expand entity refs.
-                    //xmlReader.ValidationType = ValidationType.None;
-                   // xmlReader.EntityHandling = EntityHandling.ExpandEntities;
 #endif
-                    // load the data into the document
+                    //将文件流加载到xml文档
                     doc.Load(xmlReader);
                 }
                 catch (Exception ex)
                 {
-                    ReportReport.Error(declaringType, "XmlConfigurator:Error while loading XML configuration", ex);
-                    // The document is invalid
+                    ReportLog.Error(declaringType, "XmlConfigurator:Error while loading XML configuration", ex);
                     doc = null;
                 }
 
                 if (doc != null)
                 {
-                    ReportReport.Debug(declaringType, "XmlConfigurator:loading XML configuration");
-
-                    // Configure using the 'lis-report' element
+                    ReportLog.Debug(declaringType, "XmlConfigurator:loading XML configuration");
+                    //获取节点集合
                     XmlNodeList configNodeList = doc.GetElementsByTagName("lis-report");
+                    //节点必须有且只有一个
                     if (configNodeList.Count == 0)
                     {
-                        ReportReport.Debug(declaringType, "XmlConfigurator:XML configuration does not contain a <lis-report> element. Configuration Aborted.");
+                        ReportLog.Debug(declaringType, "XmlConfigurator:XML configuration does not contain a <lis-report> element. Configuration Aborted.");
                     }
                     else if (configNodeList.Count > 1)
                     {
-                        ReportReport.Error(declaringType, "XmlConfigurator:XML configuration contains [" + configNodeList.Count + "] <lis-report> elements. Only one is allowed. Configuration Aborted.");
+                        ReportLog.Error(declaringType, "XmlConfigurator:XML configuration contains [" + configNodeList.Count + "] <lis-report> elements. Only one is allowed. Configuration Aborted.");
                     }
                     else
                     {
+                        //根据节点信息，配置repository
                         InternalConfigureFromXml(repository, configNodeList[0] as XmlElement);
                     }
                 }
@@ -325,41 +369,42 @@ namespace XYS.Lis.Config
         {
             if (element == null)
             {
-                ReportReport.Error(declaringType, "XmlConfigurator:ConfigureFromXml called with null 'element' parameter");
+                ReportLog.Error(declaringType, "XmlConfigurator:ConfigureFromXml called with null 'element' parameter");
             }
             else if (repository == null)
             {
-                ReportReport.Error(declaringType, "XmlConfigurator:ConfigureFromXml called with null 'repository' parameter");
+                ReportLog.Error(declaringType, "XmlConfigurator:ConfigureFromXml called with null 'repository' parameter");
             }
             else
             {
-                ReportReport.Debug(declaringType, "XmlConfigurator:Configuring Repository [" + repository.RepositoryName + "] using XML element");
+                ReportLog.Debug(declaringType, "XmlConfigurator:Configuring Repository [" + repository.RepositoryName + "] using XML element");
+                //将repository转换成可配置类型
                 IXmlRepositoryConfigurator configurableRepository = repository as IXmlRepositoryConfigurator;
                 if (configurableRepository == null)
                 {
                     //不可配置
-                    ReportReport.Warn(declaringType, "XmlConfigurator:Repository [" + repository + "] does not support the XmlConfigurator");
+                    ReportLog.Warn(declaringType, "XmlConfigurator:Repository [" + repository + "] does not support the XmlConfigurator");
                 }
                 else
                 {
                     XmlDocument newDoc = new XmlDocument();
                     XmlElement newElement = (XmlElement)newDoc.AppendChild(newDoc.ImportNode(element, true));
+                    //配置
                     configurableRepository.Configure(newElement);
                 }
             }
         }
         private static void InternalConfigure(IReporterRepository repository, FileInfo configFile)
         {
-            ReportReport.Debug(declaringType, "XmlConfigurator:configuring repository [" + repository.RepositoryName + "] using file [" + configFile + "]");
+            ReportLog.Debug(declaringType, "XmlConfigurator:configuring repository [" + repository.RepositoryName + "] using file [" + configFile + "]");
 
             if (configFile == null)
             {
-                ReportReport.Error(declaringType, "XmlConfigurator:Configure called with null 'configFile' parameter");
+                ReportLog.Error(declaringType, "XmlConfigurator:Configure called with null 'configFile' parameter");
             }
             else
             {
-                // Have to use File.Exists() rather than configFile.Exists()
-                // because configFile.Exists() caches the value, not what we want.
+                //文件存在，尝试打开文件
                 if (File.Exists(configFile.FullName))
                 {
                     // Open the file for reading
@@ -376,18 +421,19 @@ namespace XYS.Lis.Config
                         {
                             if (retry == 0)
                             {
-                                ReportReport.Error(declaringType, "XmlConfigurator:Failed to open XML config file [" + configFile.Name + "]", ex);
+                                ReportLog.Error(declaringType, "XmlConfigurator:Failed to open XML config file [" + configFile.Name + "]", ex);
                                 // The stream cannot be valid
                                 fs = null;
                             }
                             System.Threading.Thread.Sleep(250);
                         }
                     }
+                    //处理文件流
                     if (fs != null)
                     {
                         try
                         {
-                            // Load the configuration from the stream
+                            //调用内部处理文件流方法
                             InternalConfigure(repository, fs);
                         }
                         finally
@@ -399,16 +445,16 @@ namespace XYS.Lis.Config
                 }
                 else
                 {
-                    ReportReport.Debug(declaringType, "XmlConfigurator:config file [" + configFile.FullName + "] not found. Configuration unchanged.");
+                    ReportLog.Debug(declaringType, "XmlConfigurator:config file [" + configFile.FullName + "] not found. Configuration unchanged.");
                 }
             }
         }
         private static void InternalConfigure(IReporterRepository repository, Uri configUri)
         {
-            ReportReport.Debug(declaringType, "XmlConfigurator:configuring repository [" + repository.RepositoryName + "] using URI [" + configUri + "]");
+            ReportLog.Debug(declaringType, "XmlConfigurator:configuring repository [" + repository.RepositoryName + "] using URI [" + configUri + "]");
             if (configUri == null)
             {
-                ReportReport.Error(declaringType, "XmlConfigurator:Configure called with null 'configUri' parameter");
+                ReportLog.Error(declaringType, "XmlConfigurator:Configure called with null 'configUri' parameter");
             }
             else
             {
@@ -427,7 +473,7 @@ namespace XYS.Lis.Config
                     }
                     catch (Exception ex)
                     {
-                        ReportReport.Error(declaringType, "XmlConfigurator:Failed to create WebRequest for URI [" + configUri + "]", ex);
+                        ReportLog.Error(declaringType, "XmlConfigurator:Failed to create WebRequest for URI [" + configUri + "]", ex);
                     }
                     if (configRequest != null)
                     {
@@ -463,7 +509,7 @@ namespace XYS.Lis.Config
                         }
                         catch (Exception ex)
                         {
-                            ReportReport.Error(declaringType, "XmlConfigurator:Failed to request config from URI [" + configUri + "]", ex);
+                            ReportLog.Error(declaringType, "XmlConfigurator:Failed to request config from URI [" + configUri + "]", ex);
                         }
                     }
                 }
@@ -471,36 +517,35 @@ namespace XYS.Lis.Config
         }
         private static void InternalConfigureAndWatch(IReporterRepository repository, FileInfo configFile)
         {
-            ReportReport.Debug(declaringType, "XmlConfigurator:configuring repository [" + repository.RepositoryName + "] using file [" + configFile + "] watching for file updates");
-
+            ReportLog.Debug(declaringType, "XmlConfigurator:configuring repository [" + repository.RepositoryName + "] using file [" + configFile + "] watching for file updates");
             if (configFile == null)
             {
-                ReportReport.Error(declaringType, "XmlConfigurator:ConfigureAndWatch called with null 'configFile' parameter");
+                ReportLog.Error(declaringType, "XmlConfigurator:ConfigureAndWatch called with null 'configFile' parameter");
             }
             else
             {
-                // Configure log4net now
+                // 先根据configFile配置数据
                 InternalConfigure(repository, configFile);
                 try
                 {
                     lock (m_repositoryName2ConfigAndWatchHandler)
                     {
-                        // support multiple repositories each having their own watcher
+                        //根据配置文件名获取handler
                         ConfigureAndWatchHandler handler =(ConfigureAndWatchHandler)m_repositoryName2ConfigAndWatchHandler[configFile.FullName];
                         if (handler != null)
                         {
+                            //若存在则移除此handler
                             m_repositoryName2ConfigAndWatchHandler.Remove(configFile.FullName);
                             handler.Dispose();
                         }
-                        // Create and start a watch handler that will reload the
-                        // configuration whenever the config file is modified.
+                        //加载配置文件时创建一个监控，并启用
                         handler = new ConfigureAndWatchHandler(repository, configFile);
                         m_repositoryName2ConfigAndWatchHandler[configFile.FullName] = handler;
                     }
                 }
                 catch (Exception ex)
                 {
-                    ReportReport.Error(declaringType, "Failed to initialize configuration file watcher for file [" + configFile.FullName + "]", ex);
+                    ReportLog.Error(declaringType, "Failed to initialize configuration file watcher for file [" + configFile.FullName + "]", ex);
                 }
             }
         }
@@ -510,9 +555,12 @@ namespace XYS.Lis.Config
         private sealed class ConfigureAndWatchHandler : IDisposable
         {
             private FileInfo m_configFile;
+            //处理的信息
             private IReporterRepository m_repository;
             private Timer m_timer;
+            //检测时间间隔
             private const int TimeoutMillis = 500;
+            //监控
             private FileSystemWatcher m_watcher;
 
             [System.Security.SecuritySafeCritical]
@@ -520,69 +568,37 @@ namespace XYS.Lis.Config
             {
                 m_repository = repository;
                 m_configFile = configFile;
-
                 // Create a new FileSystemWatcher and set its properties.
                 m_watcher = new FileSystemWatcher();
-                
+
+                //设置监控的文件
                 m_watcher.Path = m_configFile.DirectoryName;
                 m_watcher.Filter = m_configFile.Name;
 
                 // Set the notification filters
                 m_watcher.NotifyFilter = NotifyFilters.CreationTime | NotifyFilters.LastWrite | NotifyFilters.FileName;
                 // Add event handlers. OnChanged will do for all event handlers that fire a FileSystemEventArgs
+                //
                 m_watcher.Changed += new FileSystemEventHandler(ConfigureAndWatchHandler_OnChanged);
                 m_watcher.Created += new FileSystemEventHandler(ConfigureAndWatchHandler_OnChanged);
                 m_watcher.Deleted += new FileSystemEventHandler(ConfigureAndWatchHandler_OnChanged);
                 m_watcher.Renamed += new RenamedEventHandler(ConfigureAndWatchHandler_OnRenamed);
 
-                // Begin watching.
+                //开始监控
                 m_watcher.EnableRaisingEvents = true;
 
-                // Create the timer that will be used to deliver events. Set as disabled
                 m_timer = new Timer(new TimerCallback(OnWatchedFileChange), null, Timeout.Infinite, Timeout.Infinite);
             }
-
-            /// <summary>
-            /// Event handler used by <see cref="ConfigureAndWatchHandler"/>.
-            /// </summary>
-            /// <param name="source">The <see cref="FileSystemWatcher"/> firing the event.</param>
-            /// <param name="e">The argument indicates the file that caused the event to be fired.</param>
-            /// <remarks>
-            /// <para>
-            /// This handler reloads the configuration from the file when the event is fired.
-            /// </para>
-            /// </remarks>
             private void ConfigureAndWatchHandler_OnChanged(object source, FileSystemEventArgs e)
             {
-                ReportReport.Debug(declaringType, "ConfigureAndWatchHandler: " + e.ChangeType + " [" + m_configFile.FullName + "]");
-
-                // Deliver the event in TimeoutMillis time
-                // timer will fire only once
+                ReportLog.Debug(declaringType, "ConfigureAndWatchHandler: " + e.ChangeType + " [" + m_configFile.FullName + "]");
                 m_timer.Change(TimeoutMillis, Timeout.Infinite);
             }
-
-            /// <summary>
-            /// Event handler used by <see cref="ConfigureAndWatchHandler"/>.
-            /// </summary>
-            /// <param name="source">The <see cref="FileSystemWatcher"/> firing the event.</param>
-            /// <param name="e">The argument indicates the file that caused the event to be fired.</param>
-            /// <remarks>
-            /// <para>
-            /// This handler reloads the configuration from the file when the event is fired.
-            /// </para>
-            /// </remarks>
             private void ConfigureAndWatchHandler_OnRenamed(object source, RenamedEventArgs e)
             {
-                ReportReport.Debug(declaringType, "ConfigureAndWatchHandler: " + e.ChangeType + " [" + m_configFile.FullName + "]");
-                // Deliver the event in TimeoutMillis time
-                // timer will fire only once
+                ReportLog.Debug(declaringType, "ConfigureAndWatchHandler: " + e.ChangeType + " [" + m_configFile.FullName + "]");
                 m_timer.Change(TimeoutMillis, Timeout.Infinite);
             }
-
-            /// <summary>
-            /// Called by the timer when the configuration has been updated.
-            /// </summary>
-            /// <param name="state">null</param>
             private void OnWatchedFileChange(object state)
             {
                 XmlConfigurator.InternalConfigure(m_repository, m_configFile);

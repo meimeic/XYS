@@ -14,12 +14,13 @@ namespace XYS.Lis.Core
         #region 静态成员
         private static readonly string DefaultRepositoryName = "reporter-default-repository";
         private static readonly Type declaringType = typeof(DefaultRepositorySelector);
-        private readonly Hashtable m_assembly2repositoryMap = new Hashtable();
-        private readonly Hashtable m_name2repositoryMap = new Hashtable();
         #endregion
 
         #region 指读实例成员
+        //默认的Repository类型
         private readonly Type m_defaultRepositoryType;
+        private readonly Hashtable m_assembly2repositoryMap = new Hashtable(3);
+        private readonly Hashtable m_name2repositoryMap = new Hashtable(2);
         #endregion
 
         #region 事件成员
@@ -39,7 +40,7 @@ namespace XYS.Lis.Core
                 throw SystemInfo.CreateArgumentOutOfRangeException("defaultRepositoryType", defaultRepositoryType, "Parameter: defaultRepositoryType, Value: [" + defaultRepositoryType + "] out of range. Argument must implement the ILoggerRepository interface");
             }
             m_defaultRepositoryType = defaultRepositoryType;
-            ReportReport.Debug(declaringType, "DefaultRepositorySelector:defaultRepositoryType [" + m_defaultRepositoryType + "]");
+            ReportLog.Debug(declaringType, "DefaultRepositorySelector:defaultRepositoryType [" + m_defaultRepositoryType + "]");
         }
         #endregion
        
@@ -61,7 +62,6 @@ namespace XYS.Lis.Core
             }
             lock (this)
             {
-                // Lookup in map
                 IReporterRepository rep = m_name2repositoryMap[repositoryName] as IReporterRepository;
                 if (rep == null)
                 {
@@ -82,7 +82,6 @@ namespace XYS.Lis.Core
             {
                 throw new ArgumentNullException("repositoryName");
             }
-            // If the type is not set then use the default type
             if (repositoryType == null)
             {
                 repositoryType = m_defaultRepositoryType;
@@ -91,51 +90,21 @@ namespace XYS.Lis.Core
             {
                 IReporterRepository rep = null;
 
-                // First check that the repository does not exist
+                //先检查m_name2repositoryMap中是否存在相应记录
                 rep = m_name2repositoryMap[repositoryName] as IReporterRepository;
                 if (rep != null)
                 {
-                    //抛出异常
+                    //存在，抛出异常
                     throw new ReportException("Repository [" + repositoryName + "] is already defined. Repositories cannot be redefined.");
                 }
-                //else
-                //{
-                //    // Lookup an alias before trying to create the new repository
-                //    IReporterRepository aliasedRepository = m_alias2repositoryMap[repositoryName] as ILoggerRepository;
-                //    if (aliasedRepository != null)
-                //    {
-                //        // Found an alias
-
-                //        // Check repository type
-                //        if (aliasedRepository.GetType() == repositoryType)
-                //        {
-                //            // Repository type is compatible
-                //            LogLog.Debug(declaringType, "Aliasing repository [" + repositoryName + "] to existing repository [" + aliasedRepository.Name + "]");
-                //            rep = aliasedRepository;
-
-                //            // Store in map
-                //            m_name2repositoryMap[repositoryName] = rep;
-                //        }
-                //        else
-                //        {
-                //            // Invalid repository type for alias
-                //            LogLog.Error(declaringType, "Failed to alias repository [" + repositoryName + "] to existing repository [" + aliasedRepository.Name + "]. Requested repository type [" + repositoryType.FullName + "] is not compatible with existing type [" + aliasedRepository.GetType().FullName + "]");
-
-                //            // We now drop through to create the repository without aliasing
-                //        }
-                //    }
-
-                //    // If we could not find an alias
-                //    if (rep == null)
-                //    {
-                ReportReport.Debug(declaringType, "DefaultRepositorySelector:Creating repository [" + repositoryName + "] using type [" + repositoryType + "]");
-                // Call the no arg constructor for the repositoryType
+                ReportLog.Debug(declaringType, "DefaultRepositorySelector:Creating repository [" + repositoryName + "] using type [" + repositoryType + "]");
+                //创建repository实例
                 rep = (IReporterRepository)Activator.CreateInstance(repositoryType);
-                // Set the name of the repository
+                //设置repository的name属性
                 rep.RepositoryName = repositoryName;
-                // Store in map
+                //将repository实例加入map
                 m_name2repositoryMap[repositoryName] = rep;
-                // Notify listeners that the repository has been created
+                //通知创建repository事件
                 OnReporterRepositoryCreatedEvent(rep);
                 return rep;
             }
@@ -167,81 +136,80 @@ namespace XYS.Lis.Core
         #endregion
 
         #region
+        //创建repository
         public IReporterRepository CreateRepository(Assembly repositoryAssembly, Type repositoryType, string repositoryName, bool readAssemblyAttributes)
         {
+            //使用这个repository的程序集不能为null
             if (repositoryAssembly == null)
             {
                 throw new ArgumentNullException("repositoryAssembly");
             }
-            // If the type is not set then use the default type
+            // repositoryType为null 则将其置为默认值
             if (repositoryType == null)
             {
                 repositoryType = m_defaultRepositoryType;
             }
+            //锁定该对象
             lock (this)
             {
-                // Lookup in map
+                // 查看assembly2repositoryMap 是否存在此repository
                 IReporterRepository rep = m_assembly2repositoryMap[repositoryAssembly] as IReporterRepository;
+                //在m_assembly2repositoryMap中不存在
                 if (rep == null)
                 {
-                    // Not found, therefore create
-                    ReportReport.Debug(declaringType, "DefaultRepositorySelector:Creating repository for assembly [" + repositoryAssembly + "]");
-
-                    // Must specify defaults
+                    ReportLog.Debug(declaringType, "DefaultRepositorySelector:Creating repository for assembly [" + repositoryAssembly + "]");
+                    //设置实际名称的、及实际类型，并初始化
                     string actualRepositoryName = repositoryName;
                     Type actualRepositoryType = repositoryType;
-
+                    //判断是否可以读取程序集特性
                     if (readAssemblyAttributes)
                     {
-                        // Get the repository and type from the assembly attributes
+                        //通过程序集的特性设置RepositoryName、RepositoryType。
                         GetInfoForAssembly(repositoryAssembly, ref actualRepositoryName, ref actualRepositoryType);
                     }
+                    ReportLog.Debug(declaringType, "DefaultRepositorySelector:Assembly [" + repositoryAssembly + "] using repository [" + actualRepositoryName + "] and repository type [" + actualRepositoryType + "]");
 
-                    ReportReport.Debug(declaringType, "DefaultRepositorySelector:Assembly [" + repositoryAssembly + "] using repository [" + actualRepositoryName + "] and repository type [" + actualRepositoryType + "]");
-
-                    // Lookup the repository in the map (as this may already be defined)
+                    // 在name2repositoryMap中查找是否存在repository
                     rep = m_name2repositoryMap[actualRepositoryName] as IReporterRepository;
+                    //在m_name2repositoryMap不存在，则创建
                     if (rep == null)
                     {
-                        // Create the repository
                         rep = CreateRepository(actualRepositoryName, actualRepositoryType);
+                        //根据程序集特性对Repository进行配置
                         if (readAssemblyAttributes)
                         {
                             try
                             {
-                                // Look for aliasing attributes
-                                //-----  LoadAliases(repositoryAssembly, rep);
-
-                                // Look for plugins defined on the assembly
-                                //---- LoadPlugins(repositoryAssembly, rep);
-
-                                // Configure the repository using the assembly attributes
                                 ConfigureRepository(repositoryAssembly, rep);
                             }
                             catch (Exception ex)
                             {
-                                ReportReport.Error(declaringType, "Failed to configure repository [" + actualRepositoryName + "] from assembly attributes.", ex);
+                                ReportLog.Error(declaringType, "DefaultRepositorySelector:Failed to configure repository [" + actualRepositoryName + "] from assembly attributes.", ex);
                             }
                         }
                     }
+                    //在m_name2repositoryMap存在
                     else
                     {
-                        ReportReport.Debug(declaringType, "repository [" + actualRepositoryName + "] already exists, using repository type [" + rep.GetType().FullName + "]");
+                        ReportLog.Debug(declaringType, "DefaultRepositorySelector:repository [" + actualRepositoryName + "] already exists, using repository type [" + rep.GetType().FullName + "]");
                         if (readAssemblyAttributes)
                         {
                             try
                             {
+                                //目前什么都不做
                                 // Look for plugins defined on the assembly
                                 //--- LoadPlugins(repositoryAssembly, rep);
                             }
                             catch (Exception ex)
                             {
-                                ReportReport.Error(declaringType, "Failed to configure repository [" + actualRepositoryName + "] from assembly attributes.", ex);
+                                ReportLog.Error(declaringType, "DefaultRepositorySelector:Failed to configure repository [" + actualRepositoryName + "] from assembly attributes.", ex);
                             }
                         }
                     }
+                    //将repository添加到m_assembly2repositoryMap
                     m_assembly2repositoryMap[repositoryAssembly] = rep;
                 }
+                //返回
                 return rep;
             }
         }
@@ -256,52 +224,54 @@ namespace XYS.Lis.Core
             }
             try
             {
-                ReportReport.Debug(declaringType, "DefaultRepositorySelector:Assembly [" + assembly.FullName + "] Loaded From [" + SystemInfo.AssemblyLocationInfo(assembly) + "]");
+                //
+                ReportLog.Debug(declaringType, "DefaultRepositorySelector:Assembly [" + assembly.FullName + "] Loaded From [" + SystemInfo.AssemblyLocationInfo(assembly) + "]");
             }
             catch
             {
                 // Ignore exception from debug call
             }
-
             try
             {
-                // Look for the RepositoryAttribute on the assembly 
+                // 查找程序集中的RepositoryAttribute
                 object[] repositoryAttributes = Attribute.GetCustomAttributes(assembly, typeof(RepositoryAttribute), false);
                 if (repositoryAttributes == null || repositoryAttributes.Length == 0)
                 {
-                    // This is not a problem, but its nice to know what is going on.
-                    ReportReport.Debug(declaringType, "DefaultRepositorySelector:Assembly [" + assembly + "] does not have a RepositoryAttribute specified.");
+                    //不存在此特性（默认值不变）
+                    ReportLog.Debug(declaringType, "DefaultRepositorySelector:Assembly [" + assembly + "] does not have a RepositoryAttribute specified.");
                 }
                 else
                 {
+                    //存在多个此特性（当然可以通过设置特性来避免这种情况）
                     if (repositoryAttributes.Length > 1)
                     {
-                        ReportReport.Error(declaringType, "DefaultRepositorySelector:Assembly [" + assembly + "] has multiple XYS.Lis.Config.RepositoryAttribute assembly attributes. Only using first occurrence.");
+                        ReportLog.Error(declaringType, "DefaultRepositorySelector:Assembly [" + assembly + "] has multiple XYS.Lis.Config.RepositoryAttribute assembly attributes. Only using first occurrence.");
                     }
+                    //获取程序集指定的特性
                     RepositoryAttribute domAttr = repositoryAttributes[0] as RepositoryAttribute;
                     if (domAttr == null)
                     {
-                        ReportReport.Error(declaringType, "DefaultRepositorySelector:Assembly [" + assembly + "] has a RepositoryAttribute but it does not!.");
+                        ReportLog.Error(declaringType, "DefaultRepositorySelector:Assembly [" + assembly + "] has a RepositoryAttribute but it does not!.");
                     }
+                    //根据特性设置相关值
                     else
                     {
-                        // If the Name property is set then override the default
+                        //设置repositoryName
                         if (domAttr.Name != null)
                         {
                             repositoryName = domAttr.Name;
                         }
-
-                        // If the RepositoryType property is set then override the default
+                        //设置RepositoryType
                         if (domAttr.RepositoryType != null)
                         {
-                            // Check that the type is a repository
+                            //判断type类型是否为合法的type类型
                             if (typeof(IReporterRepository).IsAssignableFrom(domAttr.RepositoryType))
                             {
                                 repositoryType = domAttr.RepositoryType;
                             }
                             else
                             {
-                                ReportReport.Error(declaringType, "DefaultRepositorySelector: Repository Type [" + domAttr.RepositoryType + "] must implement the ILoggerRepository interface.");
+                                ReportLog.Error(declaringType, "DefaultRepositorySelector: Repository Type [" + domAttr.RepositoryType + "] must implement the ILoggerRepository interface.");
                             }
                         }
                     }
@@ -309,7 +279,7 @@ namespace XYS.Lis.Core
             }
             catch (Exception ex)
             {
-                ReportReport.Error(declaringType, "Unhandled exception in GetInfoForAssembly", ex);
+                ReportLog.Error(declaringType, "DefaultRepositorySelector:Unhandled exception in GetInfoForAssembly", ex);
             }
         }
         private void ConfigureRepository(Assembly assembly, IReporterRepository repository)
@@ -323,7 +293,6 @@ namespace XYS.Lis.Core
                 throw new ArgumentNullException("repository");
             }
             //通过特性配置
-            // Look for the Configurator attributes (e.g. XmlConfiguratorAttribute) on the assembly
             object[] configAttributes = Attribute.GetCustomAttributes(assembly, typeof(ConfiguratorAttribute), false);
             if (configAttributes != null && configAttributes.Length > 0)
             {
@@ -337,26 +306,25 @@ namespace XYS.Lis.Core
                     {
                         try
                         {
-                            ReportReport.Debug(declaringType, "DefaultRepositorySelector:Configure Repository using assembly attribute [" + configAttr.GetType().Name + "]");
+                            ReportLog.Debug(declaringType, "DefaultRepositorySelector:Configure Repository using assembly attribute [" + configAttr.GetType().Name + "]");
                             configAttr.Configure(assembly, repository);
                         }
                         catch (Exception ex)
                         {
-                            ReportReport.Error(declaringType, "Exception calling [" + configAttr.GetType().FullName + "] .Configure method.", ex);
+                            ReportLog.Error(declaringType, "Exception calling [" + configAttr.GetType().FullName + "] .Configure method.", ex);
                         }
                     }
                 }
             }
-            //通过.config 配置文件进行配置
+            //对于默认RepositoryName的repository还需要用指定的.config 配置文件进行配置（可能覆盖特性的配置）
             if (repository.RepositoryName == DefaultRepositoryName)
             {
-                // Try to configure the default repository using an AppSettings specified config file
-                // Do this even if the repository has been configured (or claims to be), this allows overriding
-                // of the default config files etc, if that is required.
+                //获取相关的配置文件名
                 string repositoryConfigFile = SystemInfo.GetAppSetting("lis-report.Config");
                 if (repositoryConfigFile != null && repositoryConfigFile.Length > 0)
                 {
-                    ReportReport.Debug(declaringType, "DefaultRepositorySelector:Try to configure the default repository using an AppSettings specified config file");
+                    //使用AppSettings指定的配置文件进行配置
+                    ReportLog.Debug(declaringType, "DefaultRepositorySelector:Try to configure the default repository using an AppSettings specified config file");
                     string applicationBaseDirectory = null;
                     try
                     {
@@ -364,15 +332,15 @@ namespace XYS.Lis.Core
                     }
                     catch (Exception ex)
                     {
-                        ReportReport.Warn(declaringType, "DefaultRepositorySelector:Exception getting ApplicationBaseDirectory. appSettings lis-report.Config path [" + repositoryConfigFile + "] will be treated as an absolute URI", ex);
+                        ReportLog.Warn(declaringType, "DefaultRepositorySelector:Exception getting ApplicationBaseDirectory. appSettings lis-report.Config path [" + repositoryConfigFile + "] will be treated as an absolute URI", ex);
                     }
+                    //获取配置文件全路径
                     string repositoryConfigFilePath = repositoryConfigFile;
                     if (applicationBaseDirectory != null)
                     {
                         repositoryConfigFilePath = Path.Combine(applicationBaseDirectory, repositoryConfigFile);
                     }
-                    // Determine whether to watch the file or not based on an app setting value:
-                    //是否观测文件变化
+                    //是否观测文件变化（根据AppSettings获取监控文件标识）
                     bool watchRepositoryConfigFile = false;
                     {
                         string watch = SystemInfo.GetAppSetting("lis-report.Config.Watch");
@@ -384,14 +352,13 @@ namespace XYS.Lis.Core
                             }
                             catch (FormatException ex)
                             {
-                                // simply not a Boolean
+                                //无法将string转换成bool
                             }
                         }
                     }
+                    //监控配置文件
                     if (watchRepositoryConfigFile)
                     {
-                        // As we are going to watch the config file it is required to resolve it as a 
-                        // physical file system path pass that in a FileInfo object to the Configurator
                         FileInfo repositoryConfigFileInfo = null;
                         try
                         {
@@ -399,23 +366,23 @@ namespace XYS.Lis.Core
                         }
                         catch (Exception ex)
                         {
-                            ReportReport.Error(declaringType, "DefaultRepositorySelector: Exception while parsing lis-report.Config file physical path [" + repositoryConfigFilePath + "]", ex);
+                            ReportLog.Error(declaringType, "DefaultRepositorySelector: Exception while parsing lis-report.Config file physical path [" + repositoryConfigFilePath + "]", ex);
                         }
                         try
                         {
-                            ReportReport.Debug(declaringType, "DefaultRepositorySelector:Loading and watching configuration for default repository from AppSettings specified Config path [" + repositoryConfigFilePath + "]");
-
+                            ReportLog.Debug(declaringType, "DefaultRepositorySelector:Loading and watching configuration for default repository from AppSettings specified Config path [" + repositoryConfigFilePath + "]");
+                            //根据文件配置repository，并监控文件的变化
                             XmlConfigurator.ConfigureAndWatch(repository, repositoryConfigFileInfo);
                         }
                         catch (Exception ex)
                         {
-                            ReportReport.Error(declaringType, "DefaultRepositorySelector: Exception calling XmlConfigurator.ConfigureAndWatch method with ConfigFilePath [" + repositoryConfigFilePath + "]", ex);
+                            ReportLog.Error(declaringType, "DefaultRepositorySelector: Exception calling XmlConfigurator.ConfigureAndWatch method with ConfigFilePath [" + repositoryConfigFilePath + "]", ex);
                         }
                     }
+                    //不监控
                     else
                     {
-                        // As we are not going to watch the config file it is easiest to just resolve it as a 
-                        // URI and pass that to the Configurator
+                         //不监控可以将其作为uri文件处理
                         Uri repositoryConfigUri = null;
                         try
                         {
@@ -423,21 +390,21 @@ namespace XYS.Lis.Core
                         }
                         catch (Exception ex)
                         {
-                            ReportReport.Error(declaringType, "DefaultRepositorySelector:Exception while parsing lis-report.Config file path [" + repositoryConfigFile + "]", ex);
+                            ReportLog.Error(declaringType, "DefaultRepositorySelector:Exception while parsing lis-report.Config file path [" + repositoryConfigFile + "]", ex);
                         }
 
                         if (repositoryConfigUri != null)
                         {
-                            ReportReport.Debug(declaringType, "DefaultRepositorySelector:Loading configuration for default repository from AppSettings specified Config URI [" + repositoryConfigUri.ToString() + "]");
+                            ReportLog.Debug(declaringType, "DefaultRepositorySelector:Loading configuration for default repository from AppSettings specified Config URI [" + repositoryConfigUri.ToString() + "]");
 
                             try
                             {
-                                // TODO: Support other types of configurator
+                                //配置uri文件
                                 XmlConfigurator.Configure(repository, repositoryConfigUri);
                             }
                             catch (Exception ex)
                             {
-                                ReportReport.Error(declaringType, "DefaultRepositorySelector:Exception calling XmlConfigurator.Configure method with ConfigUri [" + repositoryConfigUri + "]", ex);
+                                ReportLog.Error(declaringType, "DefaultRepositorySelector:Exception calling XmlConfigurator.Configure method with ConfigUri [" + repositoryConfigUri + "]", ex);
                             }
                         }
                     }

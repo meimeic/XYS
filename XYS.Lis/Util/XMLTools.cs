@@ -110,7 +110,7 @@ namespace XYS.Lis.Util
 
         public static void ConvertObj2Xml(XmlDocument xmlDoc, XmlNode parentNode, Type elementType)
         {
-            ReportReport.Debug(declaringType, "XMLTools:make table element by "+elementType.Name);
+            ReportLog.Debug(declaringType, "XMLTools:make table element by "+elementType.Name);
             Dictionary<string, string> attrDic = GenderTableAttrDic(elementType);
             XmlElement tableElement = CreateElement(xmlDoc, TABLE_TAG, attrDic);
             InitColumnXmlNodeAttr(xmlDoc, tableElement, elementType);
@@ -119,7 +119,7 @@ namespace XYS.Lis.Util
         public static void Image2Xml(XmlDocument xmlDoc, XmlNode parentNode)
         {
             XmlElement columnElement;
-            ReportReport.Debug(declaringType, "XMLTools:make image table element by " + Image_Table_Name);
+            ReportLog.Debug(declaringType, "XMLTools:make image table element by " + Image_Table_Name);
             Dictionary<string, string> attrDic = GenderTableAttrDic(Image_Table_Name);
             XmlElement tableElement = CreateElement(xmlDoc, TABLE_TAG, attrDic);
             for (int i = 0; i < Image_Column_Count; i++)

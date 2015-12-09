@@ -44,25 +44,26 @@ namespace XYS.Lis.Config
         public override void Configure(Assembly sourceAssembly, IReporterRepository targetRepository)
         {
             IList configurationMessages = new ArrayList();
-            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            using (new ReportLog.ReportReceivedAdapter(configurationMessages))
             {
                 string applicationBaseDirectory = null;
                 try
                 {
                     applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
                 }
-                catch
+                catch(Exception ex)
                 {
-                    // Ignore this exception because it is only thrown when ApplicationBaseDirectory is a file
-                    // and the application does not have PathDiscovery permission
+
                 }
 
                 if (applicationBaseDirectory == null || (new Uri(applicationBaseDirectory)).IsFile)
                 {
+                    //资源路径为系统路径
                     ConfigureFromFile(sourceAssembly, targetRepository);
                 }
                 else
                 {
+                    //资源路径问网络路径
                     ConfigureFromUri(sourceAssembly, targetRepository);
                 }
             }
@@ -76,9 +77,10 @@ namespace XYS.Lis.Config
             // Work out the full path to the config file
             string fullPath2ConfigFile = null;
 
-            // Select the config file
+            // 使用特定的配置文件（若不存在配置文件扩展名， 则使用程序默认的配置文件）
             if (m_configFile == null || m_configFile.Length == 0)
             {
+                //配置文件扩展名不存在，使用程序默认配置文件
                 if (m_configFileExtension == null || m_configFileExtension.Length == 0)
                 {
                     // Use the default .config file for the AppDomain
@@ -88,9 +90,11 @@ namespace XYS.Lis.Config
                     }
                     catch (Exception ex)
                     {
-                        ReportReport.Error(declaringType, "XmlConfiguratorAttribute: Exception getting ConfigurationFileLocation. Must be able to resolve ConfigurationFileLocation when ConfigFile and ConfigFileExtension properties are not set.", ex);
+                        ReportLog.Error(declaringType, "XmlConfiguratorAttribute: Exception getting ConfigurationFileLocation. Must be able to resolve ConfigurationFileLocation when ConfigFile and ConfigFileExtension properties are not set.", ex);
+                        throw ex;
                     }
                 }
+                 //使用特定扩展名的配置文件（文件名称按照通用规则生成）
                 else
                 {
                     // Force the extension to start with a '.'
@@ -105,7 +109,7 @@ namespace XYS.Lis.Config
                     }
                     catch (Exception ex)
                     {
-                        ReportReport.Error(declaringType, "XmlConfiguratorAttribute:Exception getting ApplicationBaseDirectory. Must be able to resolve ApplicationBaseDirectory and AssemblyFileName when ConfigFileExtension property is set.", ex);
+                        ReportLog.Error(declaringType, "XmlConfiguratorAttribute:Exception getting ApplicationBaseDirectory. Must be able to resolve ApplicationBaseDirectory and AssemblyFileName when ConfigFileExtension property is set.", ex);
                     }
                     if (applicationBaseDirectory != null)
                     {
@@ -113,6 +117,7 @@ namespace XYS.Lis.Config
                     }
                 }
             }
+           //使用指定的配置文件
             else
             {
                 string applicationBaseDirectory = null;
@@ -122,11 +127,11 @@ namespace XYS.Lis.Config
                 }
                 catch (Exception ex)
                 {
-                    ReportReport.Warn(declaringType, "XmlConfiguratorAttribute:Exception getting ApplicationBaseDirectory. ConfigFile property path [" + m_configFile + "] will be treated as an absolute path.", ex);
+                    ReportLog.Warn(declaringType, "XmlConfiguratorAttribute:Exception getting ApplicationBaseDirectory. ConfigFile property path [" + m_configFile + "] will be treated as an absolute path.", ex);
                 }
                 if (applicationBaseDirectory != null)
                 {
-                    // Just the base dir + the config file
+                    //获取文件全名
                     fullPath2ConfigFile = Path.Combine(applicationBaseDirectory, m_configFile);
                 }
                 else
@@ -148,7 +153,7 @@ namespace XYS.Lis.Config
 			}
 			XmlConfigurator.Configure(targetRepository, configFile);
 #else
-            // Do we configure just once or do we configure and then watch?
+            //是否监视配置文件
             if (m_configureAndWatch)
             {
                 XmlConfigurator.ConfigureAndWatch(targetRepository, configFile);
@@ -161,35 +166,38 @@ namespace XYS.Lis.Config
         }
         private void ConfigureFromUri(Assembly sourceAssembly, IReporterRepository targetRepository)
         {
-            // Work out the full path to the config file
+            //得到配置文件的全路径
             Uri fullPath2ConfigFile = null;
 
-            // Select the config file
+            // 选择配置文件
             if (m_configFile == null || m_configFile.Length == 0)
             {
+                //不存在扩展名，使用默认扩展名(.config)的默认配置文件
                 if (m_configFileExtension == null || m_configFileExtension.Length == 0)
                 {
+                    //文件系统路径
                     string systemConfigFilePath = null;
                     try
                     {
+                        //获得本地配置文件
                         systemConfigFilePath = SystemInfo.ConfigurationFileLocation;
                     }
                     catch (Exception ex)
                     {
-                        ReportReport.Error(declaringType, "XmlConfiguratorAttribute: Exception getting ConfigurationFileLocation. Must be able to resolve ConfigurationFileLocation when ConfigFile and ConfigFileExtension properties are not set.", ex);
+                        ReportLog.Error(declaringType, "XmlConfiguratorAttribute: Exception getting ConfigurationFileLocation. Must be able to resolve ConfigurationFileLocation when ConfigFile and ConfigFileExtension properties are not set.", ex);
                     }
-
+                    //本地配置文件存在
                     if (systemConfigFilePath != null)
                     {
                         Uri systemConfigFileUri = new Uri(systemConfigFilePath);
-
-                        // Use the default .config file for the AppDomain
+                        //使用默认扩展名(.config)的配置文件
                         fullPath2ConfigFile = systemConfigFileUri;
                     }
                 }
+                //使用指定扩展名的默认配置文件
                 else
                 {
-                    // Force the extension to start with a '.'
+                    //加点操作
                     if (m_configFileExtension[0] != '.')
                     {
                         m_configFileExtension = "." + m_configFileExtension;
@@ -202,14 +210,13 @@ namespace XYS.Lis.Config
                     }
                     catch (Exception ex)
                     {
-                        ReportReport.Error(declaringType, "XmlConfiguratorAttribute: Exception getting ConfigurationFileLocation. Must be able to resolve ConfigurationFileLocation when the ConfigFile property are not set.", ex);
+                        ReportLog.Error(declaringType, "XmlConfiguratorAttribute: Exception getting ConfigurationFileLocation. Must be able to resolve ConfigurationFileLocation when the ConfigFile property are not set.", ex);
                     }
 
                     if (systemConfigFilePath != null)
                     {
                         UriBuilder builder = new UriBuilder(new Uri(systemConfigFilePath));
-
-                        // Remove the current extension from the systemConfigFileUri path
+                        //将默认配置文件的扩展名改成指定扩展名
                         string path = builder.Path;
                         int startOfExtension = path.LastIndexOf(".");
                         if (startOfExtension >= 0)
@@ -222,6 +229,7 @@ namespace XYS.Lis.Config
                     }
                 }
             }
+            //使用指定的uri资源路径
             else
             {
                 string applicationBaseDirectory = null;
@@ -231,12 +239,12 @@ namespace XYS.Lis.Config
                 }
                 catch (Exception ex)
                 {
-                    ReportReport.Warn(declaringType, "XmlConfiguratorAttribute:Exception getting ApplicationBaseDirectory. ConfigFile property path [" + m_configFile + "] will be treated as an absolute URI.", ex);
+                    ReportLog.Warn(declaringType, "XmlConfiguratorAttribute:Exception getting ApplicationBaseDirectory. ConfigFile property path [" + m_configFile + "] will be treated as an absolute URI.", ex);
                 }
 
                 if (applicationBaseDirectory != null)
                 {
-                    // Just the base dir + the config file
+                    // 获得全路径uri
                     fullPath2ConfigFile = new Uri(new Uri(applicationBaseDirectory), m_configFile);
                 }
                 else
@@ -245,19 +253,21 @@ namespace XYS.Lis.Config
                 }
             }
 
+            //判断uri是否为本地路径
             if (fullPath2ConfigFile != null)
             {
+                //本地路径
                 if (fullPath2ConfigFile.IsFile)
                 {
-                    // The m_configFile could be an absolute local path, therefore we have to be
-                    // prepared to switch back to using FileInfos here
                     ConfigureFromFile(targetRepository, new FileInfo(fullPath2ConfigFile.LocalPath));
                 }
+                //网络路径
                 else
                 {
+                    //网络路径不可监控
                     if (m_configureAndWatch)
                     {
-                        ReportReport.Warn(declaringType, "XmlConfiguratorAttribute:XmlConfiguratorAttribute: Unable to watch config file loaded from a URI");
+                        ReportLog.Warn(declaringType, "XmlConfiguratorAttribute:XmlConfiguratorAttribute: Unable to watch config file loaded from a URI");
                     }
                     XmlConfigurator.Configure(targetRepository, fullPath2ConfigFile);
                 }

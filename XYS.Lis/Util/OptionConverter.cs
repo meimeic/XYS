@@ -124,7 +124,7 @@ namespace XYS.Lis.Util
                 }
                 catch (Exception e)
                 {
-                    ReportReport.Error(declaringType, "[" + argValue + "] is not in proper bool form.", e);
+                    ReportLog.Error(declaringType, "[" + argValue + "] is not in proper bool form.", e);
                 }
             }
             return defaultValue;
@@ -213,7 +213,7 @@ namespace XYS.Lis.Util
                 }
                 else
                 {
-                    ReportReport.Error(declaringType, "OptionConverter: [" + s + "] is not in the correct file size syntax.");
+                    ReportLog.Error(declaringType, "OptionConverter: [" + s + "] is not in the correct file size syntax.");
                 }
             }
             return defaultValue;
@@ -448,14 +448,14 @@ namespace XYS.Lis.Util
                     Type classObj = SystemInfo.GetTypeFromString(className, true, true);
                     if (!superClass.IsAssignableFrom(classObj))
                     {
-                        ReportReport.Error(declaringType, "OptionConverter: A [" + className + "] object is not assignable to a [" + superClass.FullName + "] variable.");
+                        ReportLog.Error(declaringType, "OptionConverter: A [" + className + "] object is not assignable to a [" + superClass.FullName + "] variable.");
                         return defaultValue;
                     }
                     return Activator.CreateInstance(classObj);
                 }
                 catch (Exception e)
                 {
-                    ReportReport.Error(declaringType, "Could not instantiate class [" + className + "].", e);
+                    ReportLog.Error(declaringType, "Could not instantiate class [" + className + "].", e);
                 }
             }
             return defaultValue;

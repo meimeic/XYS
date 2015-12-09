@@ -45,58 +45,13 @@ namespace XYS.Lis.Fill
         #endregion
 
         #region 实现父类抽象方法
-        protected override void FillReport(ReportReportElement rre, ReportKey key)
+        protected override void InnerFillElement(ILisReportElement reportElement, Hashtable keyTable)
         {
-            int sectionNo = GetSectionNo(key);
-            //获取需要填充的报告元素
-            ReportElementTypeCollection availableElements = this.GetAvailableElements(sectionNo);
-            Hashtable keyTable = ReportKey2Table(key);
-            this.FillReport(rre, keyTable, availableElements);
-        }
-        protected override void FillElement(ILisReportElement reportElement, ReportKey key)
-        {
-            //不进行填充的报告元素
-            if (reportElement.ElementTag == ReportElementTag.ReportElement || reportElement.ElementTag == ReportElementTag.KVElement)
-            {
-                return;
-            }
-            Hashtable keyTable = ReportKey2Table(key);
             FillElement(reportElement, keyTable);
         }
-        protected override void FillElements(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag)
+        protected override void InnerFillElements(List<ILisReportElement> reportElementList, Hashtable keyTable, Type elementType)
         {
-            //不进行填充的报告元素
-            if (elementTag == ReportElementTag.ReportElement || elementTag == ReportElementTag.KVElement)
-            {
-                return;
-            }
-            int sectionNo = GetSectionNo(key);
-            Type type = this.GetElementType(sectionNo, elementTag);
-            Hashtable keyTable = ReportKey2Table(key);
-            if (type != null)
-            {
-                this.FillElements(reportElementList, type, keyTable);
-            }
-        }
-        #endregion
-
-        #region 内部逻辑处理
-        protected virtual void FillReport(ReportReportElement rre, Hashtable keyTable, ReportElementTypeCollection availableElements)
-        {
-            Type tempType;
-            ReportElementTag tempTag;
-            foreach (ReportElementType elementType in availableElements)
-            {
-                tempTag = elementType.ElementTag;
-                tempType = elementType.ElementType;
-                if (tempTag == ReportElementTag.ReportElement || tempTag == ReportElementTag.KVElement || tempTag == ReportElementTag.NoneElement)
-                {
-                    //过滤不需要填充的元素
-                    continue;
-                }
-                this.FillElements(rre.GetReportItem(tempTag), tempType, keyTable);
-            }
-            rre.AfterFill();
+            FillElements(reportElementList, keyTable, elementType);
         }
         #endregion
 
@@ -105,76 +60,10 @@ namespace XYS.Lis.Fill
         {
             this.ReportDAL.Fill(reportElement, keyTable);
         }
-        protected virtual void FillElements(List<ILisReportElement> reportElementList, Type elementType, Hashtable keyTable)
+        protected virtual void FillElements(List<ILisReportElement> reportElementList, Hashtable keyTable, Type elementType)
         {
             this.ReportDAL.FillList(reportElementList, elementType, keyTable);
         }
-        #endregion 
-
-        #region 辅助方法
-        protected virtual int GetSectionNo(ReportKey key)
-        {
-            int sectionNo = 0;
-            foreach (KeyColumn c in key.KeySet)
-            {
-                if (c.Name.ToLower().Equals("sectionno") || c.Name.ToLower().Equals("r.sectionno"))
-                {
-                    try
-                    {
-                        sectionNo = Convert.ToInt32(c.PK);
-                    }
-                    catch (Exception ex)
-                    {
-                        return -1;
-                    }
-                    break;
-                }
-            }
-            return sectionNo;
-        }
-        protected virtual Hashtable ReportKey2Table(ReportKey keys)
-        {
-            Hashtable keyTable = new Hashtable(5);
-            foreach (KeyColumn key in keys.KeySet)
-            {
-                keyTable.Add(key.Name, key.PK);
-            }
-            return keyTable;
-        }
-        #endregion
-
-        #region 未调用方法
-        //protected override void FillElements(Hashtable reportElementTable, ReportKey key, ReportElementTag elementTag)
-        //{
-        //    if (elementTag == ReportElementTag.ReportElement || elementTag == ReportElementTag.NoneElement)
-        //    {
-        //        //错误
-        //        return;
-        //    }
-        //    int sectionNo = GetSectionNo(key);
-        //    Type type = this.GetElementType(sectionNo, elementTag);
-        //    Hashtable keyTable = ReportKey2Table(key);
-        //    if (type != null)
-        //    {
-        //        this.FillElements(reportElementTable, type, keyTable);
-        //    }
-        //}
-        //protected virtual void FillReportItem(ReportReportElement rre, ReportElementTag elementTag, Type elementType, Hashtable keyTable)
-        //{
-        //    ILisReportElement element = (ILisReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
-        //    FillElement(element, keyTable);
-        //    rre.AddItem(elementTag, element);
-        //}
-        //protected virtual void FillReportItemTable(ReportReportElement rre, ReportElementTag elementTag, Type elementType, Hashtable keyTable)
-        //{
-        //    Hashtable table = new Hashtable(16);
-        //    FillElements(table, elementType, keyTable);
-        //    rre.AddTableItem(elementTag, table);
-        //}
-        //protected virtual void FillElements(Hashtable reportElementTable, Type elementType, Hashtable keyTable)
-        //{
-        //    this.ReportDAL.FillTable(reportElementTable, elementType, keyTable);
-        //}
         #endregion
     }
 }

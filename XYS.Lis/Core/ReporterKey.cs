@@ -43,13 +43,7 @@ namespace XYS.Lis.Core
         }
         public string StrategyName
         {
-            get {
-                if (this.m_strategyName != null)
-                {
-                    return this.m_strategyName.ToLower();
-                }
-                return this.m_strategyName;
-             }
+            get { return this.m_strategyName; }
         }
         #endregion
 

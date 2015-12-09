@@ -2,34 +2,14 @@
 
 namespace XYS.Lis.Config
 {
-    [AttributeUsage(AttributeTargets.Assembly)]
+    [AttributeUsage(AttributeTargets.Assembly,AllowMultiple=false)]
     [Serializable]
     public class RepositoryAttribute:Attribute
     {
-        #region Public Instance Constructors
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepositoryAttribute" /> class.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// Default constructor.
-        /// </para>
-        /// </remarks>
+        #region  构造函数
         public RepositoryAttribute()
         {
         }
-
-        /// <summary>
-        /// Initialize a new instance of the <see cref="RepositoryAttribute" /> class 
-        /// with the name of the repository.
-        /// </summary>
-        /// <param name="name">The name of the repository.</param>
-        /// <remarks>
-        /// <para>
-        /// Initialize the attribute with the name for the assembly's repository.
-        /// </para>
-        /// </remarks>
         public RepositoryAttribute(string name)
         {
             m_name = name;
@@ -37,21 +17,7 @@ namespace XYS.Lis.Config
 
         #endregion Public Instance Constructors
 
-        #region Public Instance Properties
-
-        /// <summary>
-        /// Gets or sets the name of the logging repository.
-        /// </summary>
-        /// <value>
-        /// The string name to use as the name of the repository associated with this
-        /// assembly.
-        /// </value>
-        /// <remarks>
-        /// <para>
-        /// This value does not have to be unique. Several assemblies can share the
-        /// same repository. They will share the logging configuration of the repository.
-        /// </para>
-        /// </remarks>
+        #region 公共实例属性
         public string Name
         {
             get { return m_name; }
@@ -63,13 +29,13 @@ namespace XYS.Lis.Config
             set { m_repositoryType = value; }
         }
 
-        #endregion Public Instance Properties
+        #endregion
 
-        #region Private Instance Fields
+        #region 私有实例字段
 
         private string m_name = null;
         private Type m_repositoryType = null;
 
-        #endregion Private Instance Fields
+        #endregion
     }
 }

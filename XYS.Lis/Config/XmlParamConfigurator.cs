@@ -3,14 +3,14 @@ using System.Xml;
 
 using XYS.Lis.Core;
 using XYS.Lis.Util;
-using XYS.Lis.Model;
 using XYS.Model;
-
+using XYS.Lis.Model;
 namespace XYS.Lis.Config
 {
     public class XmlParamConfigurator
     {
         private static readonly string CONFIGURATION_TAG = "lis-param";
+        
         private static readonly string REPORT_ELEMENTS_TAG = "reportElements";
         private static readonly string REPORT_ELEMENT_TAG = "reportElement";
         private static readonly string REPORT_SECTIONS_TAG = "reportSections";
@@ -36,6 +36,21 @@ namespace XYS.Lis.Config
 
         }
 
+        public static void ConfigSectionMap(ReporterSectionMap sectionMap)
+        {
+            XmlElement sectionsElement = GetTargetElement(REPORT_SECTIONS_TAG);
+            if (sectionsElement != null)
+            {
+                foreach (XmlNode node in sectionsElement.ChildNodes)
+                {
+                    if (node.NodeType == XmlNodeType.Element)
+                    {
+                        XmlElement currentElement = (XmlElement)node;
+                        ConfigSection(currentElement, sectionMap);
+                    }
+                }
+            }
+        }
         public void ConfigSectionMap(XmlElement element, ReporterSectionMap sectionMap)
         {
             XmlElement sectionsElement = GetTargetElement(element, REPORT_SECTIONS_TAG);
@@ -51,7 +66,7 @@ namespace XYS.Lis.Config
                 }
             }
         }
-        protected void ConfigSection(XmlElement element, ReporterSectionMap sectionMap)
+        private static void ConfigSection(XmlElement element, ReporterSectionMap sectionMap)
         {
             if (element.LocalName == REPORT_SECTION_TAG)
             {
@@ -84,6 +99,21 @@ namespace XYS.Lis.Config
             }
         }
 
+        public static void ConfigReportElementMap(ReportElementTypeMap reportTypeMap)
+        {
+            XmlElement reportElementElement = GetTargetElement(REPORT_ELEMENTS_TAG);
+            if (reportElementElement != null)
+            {
+                foreach (XmlNode node in reportElementElement.ChildNodes)
+                {
+                    if (node.NodeType == XmlNodeType.Element)
+                    {
+                        XmlElement currentElement = (XmlElement)node;
+                        ConfigReportElement(currentElement, reportTypeMap);
+                    }
+                }
+            }
+        }
         public void ConfigReportElementMap(XmlElement element, ReportElementTypeMap reportTypeMap)
         {
             XmlElement reportElementElement = GetTargetElement(element, REPORT_ELEMENTS_TAG);
@@ -99,7 +129,7 @@ namespace XYS.Lis.Config
                 }
             }
         }
-        protected void ConfigReportElement(XmlElement element, ReportElementTypeMap reportTypeMap)
+        private static void ConfigReportElement(XmlElement element, ReportElementTypeMap reportTypeMap)
         {
             if (element.LocalName == REPORT_ELEMENT_TAG)
             {
@@ -117,6 +147,21 @@ namespace XYS.Lis.Config
             }
         }
 
+        public static void ConfigParItemMap(ParItemMap parItemMap)
+        {
+            XmlElement parItemElement = GetTargetElement(PAR_ITEMS_TAG);
+            if (parItemElement != null)
+            {
+                foreach (XmlNode node in parItemElement.ChildNodes)
+                {
+                    if (node.NodeType == XmlNodeType.Element)
+                    {
+                        XmlElement currentElement = (XmlElement)node;
+                        ConfigParItem(currentElement, parItemMap);
+                    }
+                }
+            }
+        }
         public void ConfigParItemMap(XmlElement element, ParItemMap parItemMap)
         {
             XmlElement parItemElement = GetTargetElement(element, PAR_ITEMS_TAG);
@@ -132,7 +177,7 @@ namespace XYS.Lis.Config
                 }
             }
         }
-        protected void ConfigParItem(XmlElement element, ParItemMap parItemMap)
+        private static void ConfigParItem(XmlElement element, ParItemMap parItemMap)
         {
             if (element.LocalName == PAR_ITEM_TAG)
             {
@@ -158,6 +203,21 @@ namespace XYS.Lis.Config
             }
         }
 
+        public static void ConfigReportModelMap(ReportModelMap modelMap)
+        {
+            XmlElement mapElement = GetTargetElement(REPORT_MODELS_TAG);
+            if (mapElement != null)
+            {
+                foreach (XmlNode node in mapElement.ChildNodes)
+                {
+                    if (node.NodeType == XmlNodeType.Element)
+                    {
+                        XmlElement currentElement = (XmlElement)node;
+                        ConfigReportModel(currentElement, modelMap);
+                    }
+                }
+            }
+        }
         public void ConfigReportModelMap(XmlElement element, ReportModelMap modelMap)
         {
             XmlElement mapElement = GetTargetElement(element, REPORT_MODELS_TAG);
@@ -173,7 +233,7 @@ namespace XYS.Lis.Config
                 }
             }
         }
-        protected void ConfigReportModel(XmlElement element, ReportModelMap modelMap)
+        private static void ConfigReportModel(XmlElement element, ReportModelMap modelMap)
         {
             if (element.LocalName == REPORT_MODEL_TAG)
             {
@@ -188,7 +248,25 @@ namespace XYS.Lis.Config
             }
         }
 
-        protected XmlElement GetTargetElement(XmlElement sourceElement, string targetTag)
+        private static XmlElement GetTargetElement(string targetTag)
+        {
+            XmlElement configElement = XmlConfigurator.GetParamConfigurationElement(CONFIGURATION_TAG);
+            if (configElement != null)
+            {
+                foreach (XmlNode node in configElement.ChildNodes)
+                {
+                    if (node.NodeType == XmlNodeType.Element)
+                    {
+                        if (node.LocalName == targetTag)
+                        {
+                            return node as XmlElement;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+        private static XmlElement GetTargetElement(XmlElement sourceElement, string targetTag)
         {
             if (sourceElement.LocalName != CONFIGURATION_TAG)
             {
@@ -208,7 +286,7 @@ namespace XYS.Lis.Config
             }
             return null;
         }
-        protected int GetIntValue(string v)
+        private static int GetIntValue(string v)
         {
             if (v == null || v.Equals(""))
             {
@@ -225,7 +303,7 @@ namespace XYS.Lis.Config
                 return -1;
             }
         }
-        protected bool GetBoolean(string b)
+        private static bool GetBoolean(string b)
         {
             if (b == null || b.Equals(""))
             {

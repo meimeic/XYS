@@ -26,9 +26,9 @@ namespace XYS.Lis.Repository
                 return null;
             }
         }
-        public List<string> HandlerList
+        public IList<string> HandlerList
         {
-            get { return this.m_handlerList; }
+            get { return this.m_handlerList.AsReadOnly(); }
         }
         public string FillerName
         {

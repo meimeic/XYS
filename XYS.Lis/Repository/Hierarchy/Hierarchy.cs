@@ -14,7 +14,6 @@ namespace XYS.Lis.Repository.Hierarchy
     public class ReporterCreationEventArgs : EventArgs
     {
         private Reporter m_reporter;
-
         public ReporterCreationEventArgs(Reporter r)
         {
             this.m_reporter = r;
@@ -25,7 +24,7 @@ namespace XYS.Lis.Repository.Hierarchy
         }
     }
 
-    public class Hierarchy : ReporterRepositorySkeleton, IXmlRepositoryConfigurator//, IBasicRepositoryConfigurator
+    public class Hierarchy : ReporterRepositorySkeleton, IXmlRepositoryConfigurator
     {
 
         #region
@@ -136,7 +135,7 @@ namespace XYS.Lis.Repository.Hierarchy
         }
         #endregion
 
-        #region
+        #region 事件处理
         protected virtual void OnReporter(Reporter reporter)
         {
             reporter.InnerConfig();
@@ -157,7 +156,7 @@ namespace XYS.Lis.Repository.Hierarchy
         protected void XmlRepositoryConfigure(XmlElement element)
         {
             ArrayList configurationMessages = new ArrayList();
-            using (new ReportReport.ReportReceivedAdapter(configurationMessages))
+            using (new ReportLog.ReportReceivedAdapter(configurationMessages))
             {
                 XmlHierarchyConfigurator config = new XmlHierarchyConfigurator(this);
                 config.Configure(element);

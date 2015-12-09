@@ -5,6 +5,7 @@ using XYS.Lis.Util;
 
 namespace XYS.Lis.Core
 {
+    //不可实例化
    public class ReporterManager
     {
        private static IRepositorySelector s_repositorySelector;
@@ -15,7 +16,9 @@ namespace XYS.Lis.Core
 		}
        static ReporterManager()
        {
+           //设置RepositorySelector
            string appRepositorySelectorTypeName = SystemInfo.GetAppSetting("lis-report.RepositorySelector");
+           //根据配置设置
            if (appRepositorySelectorTypeName != null && appRepositorySelectorTypeName.Length > 0)
            {
                // Resolve the config string into a Type
@@ -26,7 +29,7 @@ namespace XYS.Lis.Core
                }
                catch (Exception ex)
                {
-                   ReportReport.Error(declaringType, "Exception while resolving RepositorySelector Type [" + appRepositorySelectorTypeName + "]", ex);
+                   ReportLog.Error(declaringType, "Exception while resolving RepositorySelector Type [" + appRepositorySelectorTypeName + "]", ex);
                }
 
                if (appRepositorySelectorType != null)
@@ -39,7 +42,7 @@ namespace XYS.Lis.Core
                    }
                    catch (Exception ex)
                    {
-                       ReportReport.Error(declaringType, "Exception while creating RepositorySelector [" + appRepositorySelectorType.FullName + "]", ex);
+                       ReportLog.Error(declaringType, "Exception while creating RepositorySelector [" + appRepositorySelectorType.FullName + "]", ex);
                    }
 
                    if (appRepositorySelectorObj != null && appRepositorySelectorObj is IRepositorySelector)
@@ -48,10 +51,11 @@ namespace XYS.Lis.Core
                    }
                    else
                    {
-                       ReportReport.Error(declaringType, "RepositorySelector Type [" + appRepositorySelectorType.FullName + "] is not an IRepositorySelector");
+                       ReportLog.Error(declaringType, "RepositorySelector Type [" + appRepositorySelectorType.FullName + "] is not an IRepositorySelector");
                    }
                }
            }
+           //使用默认配置
            if (s_repositorySelector == null)
            {
                s_repositorySelector = new DefaultRepositorySelector(typeof(XYS.Lis.Repository.Hierarchy.Hierarchy));
