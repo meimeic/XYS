@@ -9,12 +9,10 @@ namespace XYS.Lis.Core
     {
         private readonly WrapperCreationHandler m_createWrapperHandler;
         private readonly Hashtable m_repositories = new Hashtable(3);
-
         public WrapperMap(WrapperCreationHandler createWrapperHandler)
         {
             this.m_createWrapperHandler = createWrapperHandler;
         }
-
         protected Hashtable Repositories
         {
             get { return this.m_repositories; }

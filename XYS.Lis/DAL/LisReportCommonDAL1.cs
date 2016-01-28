@@ -5,7 +5,6 @@ using System.Text;
 using System.Data;
 using System.Reflection;
 using XYS.Common;
-using XYS.Utility.DB;
 using XYS.Lis.Model;
 using XYS.Lis.Core;
 

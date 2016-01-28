@@ -158,10 +158,10 @@ namespace XYS.Lis.Config
         {
             XmlElement resultElement = null;
             string configFullFile = SystemInfo.GetFileFullName(SystemInfo.ApplicationBaseDirectory, "Lis.config");
-            XmlElement configElement = GetParamConfigurationElement(new FileInfo(configFullFile));
-            if (configElement != null)
+            XmlElement rootElement = GetRootConfigurationElement(new FileInfo(configFullFile));
+            if (rootElement != null)
             {
-                XmlNodeList configNodeList = configElement.GetElementsByTagName(tagName);
+                XmlNodeList configNodeList = rootElement.GetElementsByTagName(tagName);
                 if (configNodeList.Count == 0)
                 {
                     ReportLog.Debug(declaringType, "XmlConfigurator:XML configuration does not contain a <" + tagName + "> element. Configuration Aborted.");
@@ -178,9 +178,9 @@ namespace XYS.Lis.Config
             }
             return resultElement;
         }
-        public static XmlElement GetParamConfigurationElement(FileInfo configFile)
+        public static XmlElement GetRootConfigurationElement(FileInfo configFile)
         {
-            XmlElement resultElement = null;
+            XmlElement root = null;
             if (configFile == null)
             {
                 ReportLog.Error(declaringType, "XmlConfigurator:Configure called with null 'configFile' parameter");
@@ -213,7 +213,7 @@ namespace XYS.Lis.Config
                     {
                         try
                         {
-                            resultElement = GetParamConfigurationElement(fs);
+                            root = GetRootConfigurationElement(fs);
                         }
                         finally
                         {
@@ -226,11 +226,11 @@ namespace XYS.Lis.Config
                     ReportLog.Debug(declaringType, "XmlConfigurator:config file [" + configFile.FullName + "] not found.");
                 }
             }
-            return resultElement;
+            return root;
         }
-        public static XmlElement GetParamConfigurationElement(Stream configStream)
+        public static XmlElement GetRootConfigurationElement(Stream configStream)
         {
-            XmlElement resultElement = null;
+            XmlElement root = null;
             XmlDocument doc = new XmlDocument();
             try
             {
@@ -239,13 +239,13 @@ namespace XYS.Lis.Config
                 XmlReader xmlReader = XmlReader.Create(new XmlTextReader(configStream), xmlSettings);
                 //将文件流加载到xml文档
                 doc.Load(xmlReader);
-                resultElement = doc.FirstChild as XmlElement;
+                root = doc.DocumentElement;
             }
             catch (Exception ex)
             {
                 ReportLog.Error(declaringType, "XmlConfigurator:Error while loading XML configuration", ex);
             }
-            return resultElement;
+            return root;
         }
         #endregion
 

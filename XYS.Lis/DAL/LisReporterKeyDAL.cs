@@ -6,7 +6,6 @@ using System.Collections.Generic;
 
 using XYS.Lis;
 using XYS.Common;
-using XYS.Utility.DB;
 
 namespace XYS.Lis.DAL
 {

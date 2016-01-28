@@ -70,7 +70,6 @@ namespace XYS.Lis
             return ReporterManager.GetRepository(repositoryAssembly);
         }
 
-
         public static IReporterRepository CreateRepository(Type repositoryType)
         {
             return CreateRepository(Assembly.GetCallingAssembly(), repositoryType);
