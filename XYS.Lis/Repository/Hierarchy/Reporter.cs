@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Model;
 using XYS.Common;
 using XYS.Lis.Core;
 using XYS.Lis.Fill;
@@ -11,7 +10,7 @@ using XYS.Lis.Util;
 
 namespace XYS.Lis.Repository.Hierarchy
 {
-    public abstract class Reporter : ILisReporter
+    public abstract class Reporter : IReporter
     {
         #region 变量
         private readonly string m_reporterName;
@@ -97,21 +96,21 @@ namespace XYS.Lis.Repository.Hierarchy
             get { return this.m_hierarchy; }
         }
 
-        public virtual void FillReportElement(ILisReportElement reportElement, ReportKey key)
+        public virtual void FillReportElement(IReportElement reportElement, ReportKey key)
         {
             this.Filler.Fill(reportElement, key);
         }
-        public virtual void FillReportElement(List<ILisReportElement> reportElementList, ReportKey key, ReportElementTag elementTag)
+        public virtual void FillReportElement(List<IReportElement> reportElementList, ReportKey key, ReportElementTag elementTag)
         {
             this.Filler.Fill(reportElementList, key, elementTag);
         }
 
-        public virtual bool Option(ILisReportElement reportElement)
+        public virtual bool Option(IReportElement reportElement)
         {
             bool rs = HandlerEvent(reportElement);
             return rs;
         }
-        public virtual bool Option(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
+        public virtual bool Option(List<IReportElement> reportElementList, ReportElementTag elementTag)
         {
             bool rs = HandlerEvent(reportElementList, elementTag);
             return rs;

@@ -103,7 +103,7 @@ namespace XYS.Lis.Repository.Hierarchy
 
         #region 实现ReporterRepositorySkeleton抽象类
         //查看某个名字的reporter是否存在
-        public override ILisReporter Exists(ReporterKey key)
+        public override IReporter Exists(ReporterKey key)
         {
             if (key == null)
             {
@@ -112,7 +112,7 @@ namespace XYS.Lis.Repository.Hierarchy
             return this.m_key2ReporterMap[key] as Reporter;
         }
         //获取当前库中所有reporter
-        public override ILisReporter[] GetCurrentReporters()
+        public override IReporter[] GetCurrentReporters()
         {
             ArrayList reporters = new ArrayList(this.m_key2ReporterMap.Count);
             foreach (object node in this.m_key2ReporterMap.Values)
@@ -122,10 +122,10 @@ namespace XYS.Lis.Repository.Hierarchy
                     reporters.Add(node);
                 }
             }
-            return (ILisReporter[])reporters.ToArray(typeof(Reporter));
+            return (IReporter[])reporters.ToArray(typeof(Reporter));
         }
         //根据名称获取reporter
-        public override ILisReporter GetReporter(ReporterKey key)
+        public override IReporter GetReporter(ReporterKey key)
         {
             if (key == null)
             {

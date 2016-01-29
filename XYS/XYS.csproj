@@ -40,21 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Common\CommonPKElement.cs" />
     <Compile Include="Common\CommonReportIdentify.cs" />
     <Compile Include="Common\ExportAttribute.cs" />
     <Compile Include="Common\IOptionHandler.cs" />
-    <Compile Include="Common\IReporter.cs" />
     <Compile Include="Common\IReportRepository.cs" />
     <Compile Include="Common\KeyColumn.cs" />
     <Compile Include="Common\ReportIdentify.cs" />
     <Compile Include="Common\ReportKey.cs" />
     <Compile Include="Common\SearchRequire.cs" />
     <Compile Include="Common\TableColumnAttribute.cs" />
-    <Compile Include="Model\IPatientElement.cs" />
+    <Compile Include="Common\IPatient.cs" />
     <Compile Include="Common\IPKElement.cs" />
-    <Compile Include="Model\IReportElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

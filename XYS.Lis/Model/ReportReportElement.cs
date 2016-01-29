@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
-using XYS.Model;
 using XYS.Common;
 using XYS.Lis.Core;
 using XYS.Lis.Model;
@@ -54,13 +53,13 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实例属性
-         [Export()]
+        [Export()]
         public int OrderNo
         {
             get { return this.m_orderNo; }
             set { this.m_orderNo = value; }
         }
-         [Export()]
+        [Export()]
         public int PrintModelNo
         {
             get { return this.m_printModelNo; }
@@ -71,38 +70,38 @@ namespace XYS.Lis.Model
             get { return this.m_remarkFlag; }
             set { this.m_remarkFlag = value; }
         }
-         
+
         [Export()]
         public DateTime ReceiveDateTime
         {
             get { return this.m_receiveDateTime; }
             set { this.m_receiveDateTime = value; }
         }
-         [Export()]
+        [Export()]
         public DateTime CollectDateTime
         {
             get { return this.m_collectDateTime; }
             set { this.m_collectDateTime = value; }
         }
-         [Export()]
+        [Export()]
         public DateTime InceptDateTime
         {
             get { return m_inceptDateTime; }
             set { m_inceptDateTime = value; }
         }
-         [Export()]
+        [Export()]
         public DateTime TestDateTime
         {
             get { return m_testDateTime; }
             set { m_testDateTime = value; }
         }
-         [Export()]
+        [Export()]
         public DateTime CheckDateTime
         {
             get { return m_checkDateTime; }
             set { m_checkDateTime = value; }
         }
-         [Export()]
+        [Export()]
         public DateTime SecondeCheckDateTime
         {
             get { return m_secondCheckDateTime; }
@@ -187,12 +186,12 @@ namespace XYS.Lis.Model
             this.TechnicianImage = null;
             this.CheckerImage = null;
         }
-        public List<ILisReportElement> GetReportItem(ReportElementTag elementTag)
+        public List<IReportElement> GetReportItem(ReportElementTag elementTag)
         {
-            List<ILisReportElement> result = this.m_reportItemTable[elementTag] as List<ILisReportElement>;
+            List<IReportElement> result = this.m_reportItemTable[elementTag] as List<IReportElement>;
             if (result == null)
             {
-                result = new List<ILisReportElement>(10);
+                result = new List<IReportElement>(10);
                 lock (this.m_reportItemTable)
                 {
                     this.m_reportItemTable[elementTag] = result;
@@ -201,6 +200,5 @@ namespace XYS.Lis.Model
             return result;
         }
         #endregion
-
     }
 }

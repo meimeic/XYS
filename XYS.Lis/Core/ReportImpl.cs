@@ -17,7 +17,7 @@ namespace XYS.Lis.Core
         #endregion
 
         #region
-        public ReportImpl(ILisReporter reporter)
+        public ReportImpl(IReporter reporter)
             : base(reporter)
         {
             this.m_reportKeyDAL = new LisReporterKeyDAL();

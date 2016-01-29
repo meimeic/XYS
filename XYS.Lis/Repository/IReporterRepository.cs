@@ -20,9 +20,9 @@ namespace XYS.Lis.Repository
         #endregion
 
         #region reporter相关方法
-        ILisReporter Exists(ReporterKey key);
-        ILisReporter[] GetCurrentReporters();
-        ILisReporter GetReporter(ReporterKey key);
+        IReporter Exists(ReporterKey key);
+        IReporter[] GetCurrentReporters();
+        IReporter GetReporter(ReporterKey key);
         #endregion
 
         #region 事件

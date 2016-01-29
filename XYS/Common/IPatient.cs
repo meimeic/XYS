@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace XYS.Model
+﻿namespace XYS.Common
 {
     public enum AgeType
     {
@@ -17,7 +12,7 @@ namespace XYS.Model
     {
         male = 1, female, other, none
     }
-    public interface IPatientElement
+    public interface IPatient
     {
         string ClinicName { get; }
         string GenderName { get; }

@@ -44,11 +44,15 @@ namespace XYS.Lis.Repository
         }
         public void AddHandler(string handlerName)
         {
-            lock (this.m_handlerList)
+            if (handlerName != null)
             {
-                if (!this.m_handlerList.Contains(handlerName.ToLower()))
+                string s = handlerName.ToLower();
+                lock (this.m_handlerList)
                 {
-                    this.m_handlerList.Add(handlerName.ToLower());
+                    if (!this.m_handlerList.Contains(s))
+                    {
+                        this.m_handlerList.Add(s);
+                    }
                 }
             }
         }

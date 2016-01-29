@@ -7,12 +7,12 @@ namespace XYS.Lis.Core
 {
     public abstract class ReporterWrapperImpl : IReporterWrapper
     {
-        private readonly ILisReporter m_reporter;
-        protected ReporterWrapperImpl(ILisReporter reporter)
+        private readonly IReporter m_reporter;
+        protected ReporterWrapperImpl(IReporter reporter)
         {
             this.m_reporter = reporter;
         }
-        public virtual ILisReporter Reporter
+        public virtual IReporter Reporter
         {
             get { return this.m_reporter; }
         }

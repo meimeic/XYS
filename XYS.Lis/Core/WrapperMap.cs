@@ -4,7 +4,7 @@ using System.Collections;
 using XYS.Lis.Repository;
 namespace XYS.Lis.Core
 {
-    public delegate IReporterWrapper WrapperCreationHandler(ILisReporter reporter);
+    public delegate IReporterWrapper WrapperCreationHandler(IReporter reporter);
     public class WrapperMap
     {
         private readonly WrapperCreationHandler m_createWrapperHandler;
@@ -17,7 +17,7 @@ namespace XYS.Lis.Core
         {
             get { return this.m_repositories; }
         }
-        public virtual IReporterWrapper GetWrapper(ILisReporter reporter)
+        public virtual IReporterWrapper GetWrapper(IReporter reporter)
         {
             if (reporter == null)
             {
@@ -51,7 +51,7 @@ namespace XYS.Lis.Core
                 return wrapperObject;
             }
         }
-        protected virtual IReporterWrapper CreateNewWrapperObject(ILisReporter reporter)
+        protected virtual IReporterWrapper CreateNewWrapperObject(IReporter reporter)
         {
             if (m_createWrapperHandler != null)
             {

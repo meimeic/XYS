@@ -89,7 +89,7 @@ namespace XYS.Lis.Core
        #endregion
 
        #region 查看reporter 是否存在
-       public static ILisReporter Exists(string repository, ReporterKey key)
+       public static IReporter Exists(string repository, ReporterKey key)
        {
            if (repository == null)
            {
@@ -101,7 +101,7 @@ namespace XYS.Lis.Core
            }
            return RepositorySelector.GetRepository(repository).Exists(key);
        }
-       public static ILisReporter Exists(Assembly repositoryAssembly, ReporterKey key)
+       public static IReporter Exists(Assembly repositoryAssembly, ReporterKey key)
        {
            if (repositoryAssembly == null)
            {
@@ -116,7 +116,7 @@ namespace XYS.Lis.Core
        #endregion
 
        #region 获取reporter 若不存在，则创建
-       public static ILisReporter GetReporter(string repository, ReporterKey key)
+       public static IReporter GetReporter(string repository, ReporterKey key)
        {
            if (repository == null)
            {
@@ -128,7 +128,7 @@ namespace XYS.Lis.Core
            }
            return RepositorySelector.GetRepository(repository).GetReporter(key);
        }
-       public static ILisReporter GetReporter(string repository, Type type)
+       public static IReporter GetReporter(string repository, Type type)
        {
            if (repository == null)
            {
@@ -141,7 +141,7 @@ namespace XYS.Lis.Core
            ReporterKey key = new ReporterKey(type.FullName);
            return RepositorySelector.GetRepository(repository).GetReporter(key);
        }
-       public static ILisReporter GetReporter(string repository, Type type, string strategyName)
+       public static IReporter GetReporter(string repository, Type type, string strategyName)
        {
            if (repository == null)
            {
@@ -154,7 +154,7 @@ namespace XYS.Lis.Core
            ReporterKey key = new ReporterKey(type.FullName, strategyName);
            return RepositorySelector.GetRepository(repository).GetReporter(key);
        }
-       public static ILisReporter GetReporter(Assembly repositoryAssembly, ReporterKey key)
+       public static IReporter GetReporter(Assembly repositoryAssembly, ReporterKey key)
        {
            if (repositoryAssembly == null)
            {
@@ -166,7 +166,7 @@ namespace XYS.Lis.Core
            }
            return RepositorySelector.GetRepository(repositoryAssembly).GetReporter(key);
        }
-       public static ILisReporter GetReporter(Assembly repositoryAssembly, Type type)
+       public static IReporter GetReporter(Assembly repositoryAssembly, Type type)
        {
            if (repositoryAssembly == null)
            {
@@ -179,7 +179,7 @@ namespace XYS.Lis.Core
            ReporterKey key = new ReporterKey(type.FullName);
            return RepositorySelector.GetRepository(repositoryAssembly).GetReporter(key);
        }
-       public static ILisReporter GetReporter(Assembly repositoryAssembly, Type type, string strategyName)
+       public static IReporter GetReporter(Assembly repositoryAssembly, Type type, string strategyName)
        {
            if (repositoryAssembly == null)
            {

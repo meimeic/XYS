@@ -93,11 +93,11 @@ namespace XYS.Lis
             return ReporterManager.GetAllRepositories();
         }
 
-        private static IReport WrapReporter(ILisReporter reporter)
+        private static IReport WrapReporter(IReporter reporter)
         {
             return (IReport)s_wrapperMap.GetWrapper(reporter);
         }
-        private static IReporterWrapper WrapperCreationHandler(ILisReporter reporter)
+        private static IReporterWrapper WrapperCreationHandler(IReporter reporter)
         {
             return new ReportImpl(reporter);
         }

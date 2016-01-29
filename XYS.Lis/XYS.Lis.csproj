@@ -59,9 +59,8 @@
     <Compile Include="Config\XmlDBConfigurator.cs" />
     <Compile Include="Config\XmlParamConfigurator.cs" />
     <Compile Include="Core\DefaultRepositorySelector.cs" />
-    <Compile Include="Core\ILisReporter.cs" />
-    <Compile Include="Core\ILisPatientElement.cs" />
-    <Compile Include="Core\ILisReportElement.cs" />
+    <Compile Include="Core\IReporter.cs" />
+    <Compile Include="Core\IReportElement.cs" />
     <Compile Include="Core\IReporterWrapper.cs" />
     <Compile Include="Core\IRepositorySelector.cs" />
     <Compile Include="Core\ITriggeringEventEvaluator.cs" />
@@ -109,7 +108,6 @@
     <Compile Include="Handler\IReportHandler.cs" />
     <Compile Include="IReport.cs" />
     <Compile Include="Model\AbstractReportElement.cs" />
-    <Compile Include="Model\AbstractPatientElement.cs" />
     <Compile Include="Model\ReportElementType.cs" />
     <Compile Include="Model\ReportElementTypeCollection.cs" />
     <Compile Include="Model\ReportElementTypeMap.cs" />

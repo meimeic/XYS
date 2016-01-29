@@ -1,6 +1,6 @@
-﻿using XYS.Model;
-using System.Text;
+﻿using System.Text;
 using XYS.Common;
+using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
     public class ReportItemElement : AbstractReportElement
@@ -133,7 +133,7 @@ namespace XYS.Lis.Model
             get { return this.m_secretGrade; }
             set { this.m_secretGrade = value; }
         }
-        
+
         [TableColumn(true)]
         public int Prec
         {
@@ -153,23 +153,6 @@ namespace XYS.Lis.Model
             {
                 this.ItemResult = this.ItemDesc;
             }
-
-            ////修正查询结果
-            //if (this.Prec > 0)
-            //{
-            //    string result;
-            //    if (this.ItemResult != null && !this.ItemResult.Equals(""))
-            //    {
-
-            //        //修正检验结果
-            //        //AdjustItemResult();
-            //        result = AdjustStr(this.ItemResult, this.Prec);
-            //        if (result != null)
-            //        {
-            //            this.ItemResult = result;
-            //        }
-            //    }
-            //}
         }
         #endregion
 
@@ -185,19 +168,11 @@ namespace XYS.Lis.Model
         }
         public void AdjustItemStandard()
         {
-            //double temp;
-            //bool r = double.TryParse(this.ItemStandard, out temp);
-            //if (r)
-            //{
-            //    this.m_itemStandard = AdjustAccuracy(temp, this.Prec);
-            //}
             if (this.Prec > 0)
             {
                 string result;
                 if (this.ItemStandard != null && !this.ItemStandard.Equals(""))
                 {
-                    //修正标准值
-                    //AdjustItemStandard();
                     result = AdjustStr(this.ItemStandard, this.Prec);
                     if (result != null)
                     {

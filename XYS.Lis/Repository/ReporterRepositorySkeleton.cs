@@ -70,11 +70,11 @@ namespace XYS.Lis.Repository
         #endregion
 
         #region 实现IReporterRepository接口方法
-        public abstract ILisReporter Exists(ReporterKey key);
+        public abstract IReporter Exists(ReporterKey key);
 
-        public abstract ILisReporter[] GetCurrentReporters();
+        public abstract IReporter[] GetCurrentReporters();
 
-        public abstract ILisReporter GetReporter(ReporterKey key);
+        public abstract IReporter GetReporter(ReporterKey key);
         #endregion
 
         #region 实现IReporterRepository接口事件

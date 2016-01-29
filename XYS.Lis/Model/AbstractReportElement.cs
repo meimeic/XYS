@@ -1,9 +1,8 @@
 ﻿using XYS.Lis.Core;
-using XYS.Model;
 using XYS.Common;
 namespace XYS.Lis.Model
 {
-    public abstract class AbstractReportElement:ILisReportElement
+    public abstract class AbstractReportElement:IReportElement
     {
         #region 私有字段
         private readonly string m_searchSQL;
@@ -23,9 +22,6 @@ namespace XYS.Lis.Model
         {
             get { return this.m_elementTag; }
         }
-        #endregion
-
-        #region ILisReportElement实现
         public string SearchSQL
         {
             get { return this.m_searchSQL; }

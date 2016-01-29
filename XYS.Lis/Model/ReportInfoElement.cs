@@ -1,11 +1,12 @@
 ﻿using System;
-using XYS.Model;
+
 using XYS.Common;
+using XYS.Lis.Core;
 using XYS.Lis.Util;
 
 namespace XYS.Lis.Model
 {
-    public class ReportInfoElement : AbstractReportElement,IPatientElement
+    public class ReportInfoElement : AbstractReportElement, IPatient
     {
         #region 私有常量字段
         private const ReportElementTag m_defaultElementTag = ReportElementTag.InfoElement;
@@ -58,7 +59,7 @@ namespace XYS.Lis.Model
 
         #endregion
 
-           #region 构造函数
+        #region 构造函数
         public ReportInfoElement()
             : base(m_defaultElementTag, m_defaultEaxmSQL)
         {
@@ -70,7 +71,7 @@ namespace XYS.Lis.Model
         }
         #endregion
 
-        #region 实现IPatientElement接口
+        #region 实现IPatient接口
         [Export()]
         public string ClinicName
         {
@@ -181,7 +182,7 @@ namespace XYS.Lis.Model
             get { return m_parItemName; }
             set { m_parItemName = value; }
         }
-         
+
         [Export()]
         [TableColumn(true)]
         public int SectionNo
@@ -227,7 +228,7 @@ namespace XYS.Lis.Model
             get { return m_technician; }
             set { m_technician = value; }
         }
-        
+
         [Export()]
         [TableColumn(true)]
         public string Checker
@@ -258,14 +259,14 @@ namespace XYS.Lis.Model
             get { return this.m_cid; }
             set { this.m_cid = value; }
         }
-        
+
         [TableColumn(true)]
         public int GenderNo
         {
             get { return this.m_genderNo; }
             set { this.m_genderNo = value; }
         }
- 
+
         [Export()]
         public GenderType Gender
         {
@@ -319,7 +320,7 @@ namespace XYS.Lis.Model
             set { this.m_clinicTypeNo = value; }
         }
 
-         [Export()]
+        [Export()]
         public ClinicType ClinicType
         {
             get { return this.m_clinicType; }

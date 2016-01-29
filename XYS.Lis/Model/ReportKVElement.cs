@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 
-using XYS.Model;
 using XYS.Common;
+using XYS.Lis.Core;
 
 namespace XYS.Lis.Model
 {
@@ -19,7 +19,7 @@ namespace XYS.Lis.Model
         public ReportKVElement(ReportElementTag elementTag, string sql)
             : base(elementTag, sql)
         {
-            this.m_kvTable = new Hashtable(2);
+            this.m_kvTable = new Hashtable(4);
         }
 
         [Export()]
@@ -32,8 +32,11 @@ namespace XYS.Lis.Model
         {
             get { return this.m_kvTable; }
         }
+
+        #region 实现父类抽象方法
         protected override void Afterward()
         {
         }
+        #endregion
     }
 }

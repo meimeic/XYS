@@ -1,7 +1,7 @@
-﻿using XYS.Model;
+﻿using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
-    public class ReportPatientElement : AbstractPatientElement
+    public class ReportPatientElement :AbstractReportElement
     {
         #region 私有常量字段
         private const ReportElementTag m_defaultElementTag = ReportElementTag.InfoElement;
@@ -26,5 +26,10 @@ namespace XYS.Lis.Model
         {
         }
         #endregion
+
+        protected override void Afterward()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

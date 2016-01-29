@@ -1,5 +1,5 @@
-﻿using XYS.Model;
-using XYS.Common;
+﻿using XYS.Common;
+using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
     /// <summary>
@@ -16,7 +16,7 @@ namespace XYS.Lis.Model
         public static readonly int COLUMN_COUNT = 20;
         #endregion
 
-        #region
+        #region 私有字段
         private int m_index;
         private string m_name;
         private string m_column0;

@@ -1,5 +1,4 @@
-﻿using XYS.Common;
-namespace XYS.Model
+﻿namespace XYS.Lis.Core
 {
     public enum ReportElementTag : int
     {
@@ -14,6 +13,8 @@ namespace XYS.Model
     public interface IReportElement
     {
         ReportElementTag ElementTag { get; }
-       // ReportKey ReporterKey { get; set; }
+        string SearchSQL { get; }
+        //数据填充后操作
+        void AfterFill();
     }
 }

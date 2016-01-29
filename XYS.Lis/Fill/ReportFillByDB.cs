@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Common;
-using XYS.Model;
 using XYS.Lis.Core;
 using XYS.Lis.Model;
 using XYS.Lis.DAL;
@@ -45,11 +44,11 @@ namespace XYS.Lis.Fill
         #endregion
 
         #region 实现父类抽象方法
-        protected override void InnerFillElement(ILisReportElement reportElement, Hashtable keyTable)
+        protected override void InnerFillElement(IReportElement reportElement, Hashtable keyTable)
         {
             FillElement(reportElement, keyTable);
         }
-        protected override void InnerFillElements(List<ILisReportElement> reportElementList, Hashtable keyTable, Type elementType)
+        protected override void InnerFillElements(List<IReportElement> reportElementList, Hashtable keyTable, Type elementType)
         {
             FillElements(reportElementList, keyTable, elementType);
         }

@@ -1,6 +1,7 @@
 ﻿using System;
-using XYS.Model;
+
 using XYS.Common;
+using XYS.Lis.Core;
 using XYS.Lis.Util;
 namespace XYS.Lis.Model
 {
@@ -67,7 +68,7 @@ namespace XYS.Lis.Model
             get { return m_serialNo; }
             set { m_serialNo = value; }
         }
-        
+
         [Export()]
         [TableColumn(true)]
         public string SampleNo
@@ -75,7 +76,7 @@ namespace XYS.Lis.Model
             get { return m_sampleNo; }
             set { m_sampleNo = value; }
         }
-        
+
         [Export()]
         [TableColumn(true)]
         public string SampleTypeName
@@ -83,7 +84,7 @@ namespace XYS.Lis.Model
             get { return m_sampleTypeName; }
             set { m_sampleTypeName = value; }
         }
-        
+
         //[Convert2Xml()]
         //public string ReceiveDateTimeStr
         //{
@@ -155,7 +156,7 @@ namespace XYS.Lis.Model
             get { return m_secondCheckDateTime; }
             set { m_secondCheckDateTime = value; }
         }
-        
+
         [Export()]
         [TableColumn(true)]
         public string ParItemName

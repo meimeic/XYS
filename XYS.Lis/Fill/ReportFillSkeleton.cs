@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Common;
-using XYS.Model;
 using XYS.Lis.Core;
 using XYS.Lis.Model;
 using XYS.Lis.Util;
@@ -11,7 +10,7 @@ namespace XYS.Lis.Fill
 {
     public abstract class ReportFillSkeleton : IReportFiller
     {
-        #region 变量
+        #region 字段
         private readonly string m_fillerName;
         private ReportElementType m_defaultReportElementType;
         private readonly Hashtable m_section2ElementTypesMap;
@@ -39,13 +38,12 @@ namespace XYS.Lis.Fill
         }
         #endregion
 
-        #region 实现接口
+        #region 实现IReportFiller接口
         public virtual string FillerName
         {
             get { return this.m_fillerName.ToLower(); }
         }
-
-        public virtual void Fill(ILisReportElement reportElement, ReportKey PK)
+        public virtual void Fill(IReportElement reportElement, ReportKey PK)
         {
             //填充报告
             if (reportElement.ElementTag == ReportElementTag.ReportElement)
@@ -66,7 +64,7 @@ namespace XYS.Lis.Fill
                 return;
             }
         }
-        public virtual void Fill(List<ILisReportElement> reportElementList, ReportKey PK, ReportElementTag elementTag)
+        public virtual void Fill(List<IReportElement> reportElementList, ReportKey PK, ReportElementTag elementTag)
         {
             //不可填充的报告元素
             if (elementTag == ReportElementTag.NoneElement)
@@ -85,9 +83,9 @@ namespace XYS.Lis.Fill
         {
             Hashtable keyTable = ReportKey2Table(PK);
             //默认项填充
-            List<ILisReportElement> defaultElementList = rre.GetReportItem(DefaultReportElementType.ElementTag);
+            List<IReportElement> defaultElementList = rre.GetReportItem(DefaultReportElementType.ElementTag);
             InnerFillElements(defaultElementList, keyTable, DefaultReportElementType.ElementType);
-
+            //可选项填充
             ReportElementTypeCollection availableElements = this.GetAvailableElements(PK);
             if (availableElements != null && availableElements.Count > 0)
             {
@@ -99,7 +97,7 @@ namespace XYS.Lis.Fill
             //数据处理
             rre.AfterFill();
         }
-        protected virtual void FillElement(ILisReportElement reportElement, ReportKey PK)
+        protected virtual void FillElement(IReportElement reportElement, ReportKey PK)
         {
             //不进行填充的报告元素
             if (reportElement.ElementTag == ReportElementTag.KVElement)
@@ -109,7 +107,7 @@ namespace XYS.Lis.Fill
             Hashtable keyTable = ReportKey2Table(PK);
             InnerFillElement(reportElement, keyTable);
         }
-        protected virtual void FillElements(List<ILisReportElement> reportElementList, ReportKey PK, ReportElementTag elementTag)
+        protected virtual void FillElements(List<IReportElement> reportElementList, ReportKey PK, ReportElementTag elementTag)
         {
             //不填充处理
             if (elementTag == ReportElementTag.ReportElement||elementTag==ReportElementTag.KVElement)
@@ -127,11 +125,12 @@ namespace XYS.Lis.Fill
         #endregion
         
         #region 抽象方法
-        protected abstract void InnerFillElement(ILisReportElement reportElement, Hashtable keyTable);
-        protected abstract void InnerFillElements(List<ILisReportElement> reportElementList,Hashtable keyTable,Type elementType);
+        protected abstract void InnerFillElement(IReportElement reportElement, Hashtable keyTable);
+        protected abstract void InnerFillElements(List<IReportElement> reportElementList,Hashtable keyTable,Type elementType);
         #endregion
 
         #region 辅助方法
+        //获取每个小组特定的元素类型
         protected virtual ReportElementTypeCollection GetAvailableElements(int sectionNo)
         {
             if (this.m_section2ElementTypesMap.Count == 0)
@@ -166,6 +165,8 @@ namespace XYS.Lis.Fill
             }
             return sectionNo;
         }
+        
+        //将键对象转换成table对象
         protected virtual Hashtable ReportKey2Table(ReportKey key)
         {
             Hashtable keyTable = new Hashtable(5);
@@ -175,7 +176,6 @@ namespace XYS.Lis.Fill
             }
             return keyTable;
         }
-
         protected Type GetElementType(ReportKey key, ReportElementTag elementTag)
         {
             int sectionNo = GetSectionNo(key);

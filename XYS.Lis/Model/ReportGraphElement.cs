@@ -1,5 +1,5 @@
-﻿using XYS.Model;
-using XYS.Common;
+﻿using XYS.Common;
+using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
     public class ReportGraphElement : AbstractReportElement
@@ -32,7 +32,7 @@ namespace XYS.Lis.Model
             get { return this.m_graphName; }
             set { this.m_graphName = value; }
         }
-        
+
         [Export()]
         [TableColumn(true)]
         public byte[] GraphImage
