@@ -9,8 +9,7 @@ namespace XYS.Lis.Model
     public class ReportInfoElement : AbstractReportElement, IPatient
     {
         #region 私有常量字段
-        private const ReportElementTag m_defaultElementTag = ReportElementTag.InfoElement;
-        private static readonly string m_defaultEaxmSQL = @"select serialno,sampleno,s.CName as sampletypename,CAST(CONVERT(varchar(10), collectdate, 121) + ' ' + CONVERT(varchar(8), collecttime, 114) AS datetime) as collectdatetime,CAST(CONVERT(varchar(10), inceptdate, 121) + ' ' + CONVERT(varchar(8), incepttime, 114) AS datetime) as inceptdatetime,
+        private static readonly string m_defaultInfoSQL = @"select serialno,sampleno,s.CName as sampletypename,CAST(CONVERT(varchar(10), collectdate, 121) + ' ' + CONVERT(varchar(8), collecttime, 114) AS datetime) as collectdatetime,CAST(CONVERT(varchar(10), inceptdate, 121) + ' ' + CONVERT(varchar(8), incepttime, 114) AS datetime) as inceptdatetime,
                                                                              CAST(CONVERT(varchar(10), testdate, 121) + ' ' + CONVERT(varchar(8), testtime, 114) AS datetime) as testdatetime,CAST(CONVERT(varchar(10), checkdate, 121) + ' ' + CONVERT(varchar(8), checktime, 114) AS datetime) as checkdatetime,
                                                                              CAST(CONVERT(varchar(10), receivedate, 121) + ' ' + CONVERT(varchar(8), receivetime, 114) AS datetime) as receivedatetime,sendertime2 as secondecheckdatetime,paritemname,sectionno,r.sampletypeno,formmemo,formcomment,formcomment2,technician,checker,
                                                                              r.cname as patientname,patno as pid,id_number_patient as cid,genderno,age as agevalue,ageunitno,sicktypeno as clinictypeno,hospitalizedtimes as visittimes,d.cname as deptname,isnull(r.doctor,b.cname) as doctor,bed as bedno,zdy2 as clinicaldiagnosis,zdy5 as explanation
@@ -56,18 +55,16 @@ namespace XYS.Lis.Model
         private string m_bedNo;
         private string m_clinicalDiagnosis;
         private string m_explanation;
-
         #endregion
 
         #region 构造函数
         public ReportInfoElement()
-            : base(m_defaultElementTag, m_defaultEaxmSQL)
+            : this(m_defaultInfoSQL)
         {
         }
-        public ReportInfoElement(ReportElementTag elementTag, string sql)
-            : base(elementTag, sql)
+        public ReportInfoElement(string sql)
+            : base(sql)
         {
-
         }
         #endregion
 
@@ -443,7 +440,7 @@ namespace XYS.Lis.Model
         }
         #endregion
 
-        #region  内部类
+        #region  Age内部类
         public class Age
         {
             #region 内部类私有字段

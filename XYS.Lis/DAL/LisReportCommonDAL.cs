@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 using XYS.Common;
 using XYS.Lis.Core;
-using XYS.Model;
 using XYS.Lis.Model;
 namespace XYS.Lis.DAL
 {
@@ -15,8 +14,7 @@ namespace XYS.Lis.DAL
     {
         public LisReportCommonDAL()
         { }
-
-        public void Fill(ILisReportElement element, Hashtable equalTable)
+        public void Fill(IReportElement element, Hashtable equalTable)
         {
 
             DataTable dt = Query(element, equalTable);
@@ -26,15 +24,15 @@ namespace XYS.Lis.DAL
                 AfterFill(element);
             }
         }
-        public void FillList(List<ILisReportElement> elementList, Type elementType, Hashtable equalTable)
+        public void FillList(List<IReportElement> elementList, Type elementType, Hashtable equalTable)
         {
             DataTable dt = Query(elementType, equalTable);
             if (dt != null)
             {
-                ILisReportElement element;
+                IReportElement element;
                 foreach (DataRow dr in dt.Rows)
                 {
-                    element = (ILisReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
+                    element = (IReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
                     FillData(element, dr);
                     AfterFill(element);
                     elementList.Add(element);
@@ -46,17 +44,17 @@ namespace XYS.Lis.DAL
             DataTable dt = Query(elementType, equalTable);
             if (dt != null)
             {
-                ILisReportElement element;
+                IReportElement element;
                 foreach (DataRow dr in dt.Rows)
                 {
-                    element = (ILisReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
+                    element = (IReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
                     FillData(element, dr);
                     AfterFill(element);
                     AddElement(elementTable, element);
                 }
             }
         }
-        protected void AddElement(Hashtable elementTable, ILisReportElement element)
+        protected void AddElement(Hashtable elementTable, IReportElement element)
         {
 
             switch (element.ElementTag)
@@ -86,11 +84,11 @@ namespace XYS.Lis.DAL
                     break;
             }
         }
-        protected DataTable Query(ILisReportElement element, Hashtable equalTable)
+        protected DataTable Query(IReportElement element, Hashtable equalTable)
         {
             string sql = GenderSql(element, equalTable);
             DataTable dt = GetDataTable(sql);
-            if (dt.Rows.Count > 0)
+            if (dt!=null&&dt.Rows.Count > 0)
             {
                 return dt;
             }
@@ -147,7 +145,7 @@ namespace XYS.Lis.DAL
             sb.Remove(sb.Length - 5, 5);
             return sb.ToString();
         }
-        protected void FillData(ILisReportElement element, DataRow dr)
+        protected void FillData(IReportElement element, DataRow dr)
         {
             PropertyInfo[] props = GetProperties(element);
             if (props == null || props.Length == 0)
@@ -168,25 +166,38 @@ namespace XYS.Lis.DAL
                 }
             }
         }
-        protected void AfterFill(ILisReportElement element)
+        protected void AfterFill(IReportElement element)
         {
-            element.AfterFill();
+            AbstractReportElement e = element as AbstractReportElement;
+            if (e != null)
+            {
+                e.After();
+            }
         }
-        protected string GenderSql(ILisReportElement element, Hashtable equalTable)
+        protected string GenderSql(IReportElement element, Hashtable equalTable)
         {
-            return element.SearchSQL + GetSQLWhere(equalTable);
+            AbstractReportElement e = element as AbstractReportElement;
+            if (e == null)
+            {
+                return null;
+            }
+            return e.SearchSQL + GetSQLWhere(equalTable);
         }
         protected string GenderSql(Type elementType, Hashtable equalTable)
         {
-            ILisReportElement temp = (ILisReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
+            AbstractReportElement temp = (AbstractReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
             return temp.SearchSQL + GetSQLWhere(equalTable);
         }
         protected DataTable GetDataTable(string sql)
         {
-            DataTable dt = DbHelperSQL.Query(sql).Tables["dt"];
+            DataTable dt = null;
+            if (sql != null)
+            {
+                dt = DbHelperSQL.Query(sql).Tables["dt"];
+            }
             return dt;
         }
-        protected PropertyInfo[] GetProperties(ILisReportElement element)
+        protected PropertyInfo[] GetProperties(IReportElement element)
         {
             PropertyInfo[] props = null;
             try
@@ -199,7 +210,7 @@ namespace XYS.Lis.DAL
             }
             return props;
         }
-        protected bool FillProperty(ILisReportElement element, PropertyInfo p, DataRow dr)
+        protected bool FillProperty(IReportElement element, PropertyInfo p, DataRow dr)
         {
             try
             {

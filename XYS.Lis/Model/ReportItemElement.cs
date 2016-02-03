@@ -6,7 +6,6 @@ namespace XYS.Lis.Model
     public class ReportItemElement : AbstractReportElement
     {
         #region 私有常量字段
-        private const ReportElementTag m_defaultElementTag = ReportElementTag.ItemElement;
         private static readonly string m_defaultItemSQL = @"select r.itemno as itemno,paritemno,t.cname as itemcname,t.ename as itemename,r.reportdesc as itemdesc,r.reportvalue as itemvalue,resultstatus,ISNULL(r.unit,t.unit) as itemunit,refrange,disporder,prec,secretgrade
                                                                             from ReportItem as r left outer join TestItem as t on r.ItemNo=t.ItemNo";
         #endregion
@@ -30,11 +29,14 @@ namespace XYS.Lis.Model
 
         #region 公共构造方法
         public ReportItemElement()
-            : base(m_defaultElementTag, m_defaultItemSQL)
-        { }
-        public ReportItemElement(ReportElementTag elementTag, string sql)
-            : base(elementTag, sql)
-        { }
+            : this(m_defaultItemSQL)
+        {
+        }
+        
+        public ReportItemElement(string sql)
+            : base(sql)
+        {
+        }
         #endregion
 
         #region 公共属性

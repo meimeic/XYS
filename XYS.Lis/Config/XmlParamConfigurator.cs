@@ -3,7 +3,6 @@ using System.Xml;
 
 using XYS.Lis.Core;
 using XYS.Lis.Util;
-using XYS.Model;
 using XYS.Lis.Model;
 namespace XYS.Lis.Config
 {
@@ -78,7 +77,7 @@ namespace XYS.Lis.Config
                     string reportElementRefs = element.GetAttribute(REPORT_ELEMENT_REFS);
                     if (reportElementRefs != null && !reportElementRefs.Equals(""))
                     {
-                        string[] reportElements = reportElementRefs.Split(new char[] { ',' });
+                        string[] reportElements = reportElementRefs.Split(new char[] { ';' });
                         foreach (string s in reportElements)
                         {
                             section.AddElementName(s);

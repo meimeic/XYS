@@ -8,8 +8,8 @@ namespace XYS.Lis.Model
     public class ReportCustomElement : AbstractReportElement
     {
         #region 私有常量字段
-        private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.CustomElement;
-        private static readonly string m_defaultEaxmSQL = @"select r.sampleno as column0,r.zdy6 as column1,r.zdy7 as column2,r.zdy8 as column3,t.cname as column4,i.reportdesc as column5 
+        //private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.CustomElement;
+        private static readonly string m_defaultCustomSQL = @"select r.sampleno as column0,r.zdy6 as column1,r.zdy7 as column2,r.zdy8 as column3,t.cname as column4,i.reportdesc as column5 
                                                                                            from reportform as r  left outer join reportitem as i
                                                                                            on r.receivedate=i.receivedate and r.sectionno=i.sectionno and r.testtypeno=i.testtypeno and r.sampleno=i.sampleno
                                                                                            left outer join testitem as t on i.itemno=t.itemno";
@@ -43,14 +43,12 @@ namespace XYS.Lis.Model
 
         #region 公共构造函数
         public ReportCustomElement()
-            : this(m_defaultElementTag, m_defaultEaxmSQL)
+            : this(m_defaultCustomSQL)
         {
-
         }
-        public ReportCustomElement(ReportElementTag elementTag, string sql)
-            : base(elementTag, sql)
+        public ReportCustomElement(string sql)
+            : base(sql)
         {
-            this.m_index = 0;
         }
         #endregion
 

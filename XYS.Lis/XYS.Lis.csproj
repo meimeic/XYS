@@ -107,6 +107,7 @@
     <Compile Include="Handler\ReportHandlerSkeleton.cs" />
     <Compile Include="Handler\IReportHandler.cs" />
     <Compile Include="IReport.cs" />
+    <Compile Include="Model\AbstractInnerElement.cs" />
     <Compile Include="Model\AbstractReportElement.cs" />
     <Compile Include="Model\ReportElementType.cs" />
     <Compile Include="Model\ReportElementTypeCollection.cs" />

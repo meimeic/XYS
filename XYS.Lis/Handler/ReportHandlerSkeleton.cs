@@ -85,7 +85,7 @@ namespace XYS.Lis.Handler
             bool result = false;
             switch (elementTag)
             {
-                case ReportElementTag.ReportElement:
+                case ReportElementTag.Report:
                     result = reportElement is ReportReportElement;
                     break;
                 case ReportElementTag.InfoElement:
@@ -100,7 +100,7 @@ namespace XYS.Lis.Handler
                 case ReportElementTag.CustomElement:
                     result = reportElement is ReportCustomElement;
                     break;
-                case ReportElementTag.KVElement:
+                case ReportElementTag.Inner:
                     result = reportElement is ReportKVElement;
                     break;
                 case ReportElementTag.NoneElement:

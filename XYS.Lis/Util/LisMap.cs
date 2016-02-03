@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 
 using XYS.Lis.Config;
 using XYS.Lis.Core;
@@ -91,27 +92,32 @@ namespace XYS.Lis.Util
         }
         public static void InitSection2ElementTypeTable(Hashtable table)
         {
-            ReportElementTypeCollection retc;
+            List<Type> temp;
             ReporterSectionMap sectionMap = new ReporterSectionMap();
-            ReportElementTypeMap elementTypeMap = new ReportElementTypeMap();
             ConfigureReportSectionMap(sectionMap);
-            ConfigureReportElementMap(elementTypeMap);
             foreach (ReporterSection rs in sectionMap.AllReporterSection)
             {
-                retc = new ReportElementTypeCollection(3);
+                temp = new List<Type>(3);
                 if (rs.ElementNameList.Count > 0)
                 {
-                    ReportElementType ret;
+                    Type elementType = null;
                     foreach (string name in rs.ElementNameList)
                     {
-                        ret = elementTypeMap[name];
-                        if (ret != null)
+                        try
                         {
-                            retc.Add(ret);
+                            elementType = SystemInfo.GetTypeFromString(name, true, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            elementType = null;
+                        }
+                        if (elementType != null&&!temp.Contains(elementType))
+                        {
+                            temp.Add(elementType);
                         }
                     }
                 }
-                table[rs.SectionNo] = retc;
+                table[rs.SectionNo] = temp;
             }
         }
         #endregion

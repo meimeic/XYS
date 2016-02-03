@@ -38,7 +38,7 @@ namespace XYS.Lis.Handler
         #region 实现父类虚方法
         protected override bool OperateElement(ILisReportElement element, ReportElementTag elementTag)
         {
-            if (elementTag == ReportElementTag.ReportElement)
+            if (elementTag == ReportElementTag.Report)
             {
                 ReportReportElement rre = element as ReportReportElement;
                 return OperateReport(rre);

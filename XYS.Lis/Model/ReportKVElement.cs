@@ -6,23 +6,16 @@ using XYS.Lis.Core;
 
 namespace XYS.Lis.Model
 {
-    public class ReportKVElement : AbstractReportElement
+    public class ReportKVElement : AbstractInnerElement
     {
         private string m_name;
         private readonly Hashtable m_kvTable;
-        private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.KVElement;
-
+        private static readonly int DEFAULT_CAPACITY = 4;
         public ReportKVElement()
-            : this(m_defaultElementTag, "")
+            : base()
         {
+            this.m_kvTable = new Hashtable(DEFAULT_CAPACITY);
         }
-        public ReportKVElement(ReportElementTag elementTag, string sql)
-            : base(elementTag, sql)
-        {
-            this.m_kvTable = new Hashtable(4);
-        }
-
-        [Export()]
         public string Name
         {
             get { return this.m_name; }
@@ -32,11 +25,5 @@ namespace XYS.Lis.Model
         {
             get { return this.m_kvTable; }
         }
-
-        #region 实现父类抽象方法
-        protected override void Afterward()
-        {
-        }
-        #endregion
     }
 }

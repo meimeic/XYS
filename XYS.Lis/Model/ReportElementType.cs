@@ -18,7 +18,7 @@ namespace XYS.Lis.Model
         public static readonly ReportElementType DEFAULTITEM = new ReportElementType(typeof(ReportItemElement), ReportElementTag.ItemElement);
         public static readonly ReportElementType DEFAULTGRAPH = new ReportElementType(typeof(ReportGraphElement), ReportElementTag.GraphElement);
         public static readonly ReportElementType DEFAULTCUSTOM = new ReportElementType(typeof(ReportCustomElement), ReportElementTag.CustomElement);
-        public static readonly ReportElementType DEFAULTREPORT = new ReportElementType(typeof(ReportReportElement), ReportElementTag.ReportElement);
+        public static readonly ReportElementType DEFAULTREPORT = new ReportElementType(typeof(ReportReportElement), ReportElementTag.Report);
         public static readonly ReportElementType DEFAULTINFO = new ReportElementType(typeof(ReportInfoElement), ReportElementTag.InfoElement);
         #endregion
 

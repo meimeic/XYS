@@ -69,7 +69,7 @@ namespace XYS.Lis.Core
 
         public bool OperateReport(List<ILisReportElement> reportList)
         {
-            return this.Reporter.Option(reportList,ReportElementTag.ReportElement);
+            return this.Reporter.Option(reportList,ReportElementTag.Report);
         }
 
         public void HandleReport(LisSearchRequire require, ReportReportElement report)

@@ -27,7 +27,7 @@ namespace XYS.Lis.Handler
         #region 实现父类抽象方法
         protected override bool OperateElement(ILisReportElement element, ReportElementTag elementTag)
         {
-            if (elementTag == ReportElementTag.ReportElement)
+            if (elementTag == ReportElementTag.Report)
             {
                 ReportReportElement rre = element as ReportReportElement;
                 return OperateItemList(rre);
@@ -47,7 +47,7 @@ namespace XYS.Lis.Handler
             //item 处理
             ReportItemElement rie;
             List<ILisReportElement> itemElementList = rre.GetReportItem(ReportElementTag.ItemElement);
-            List<ILisReportElement> kvList = rre.GetReportItem(ReportElementTag.KVElement);
+            List<ILisReportElement> kvList = rre.GetReportItem(ReportElementTag.Inner);
             if (itemElementList.Count > 0)
             {
                 for (int i = itemElementList.Count - 1; i >= 0; i--)

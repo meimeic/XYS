@@ -10,30 +10,33 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 受保护的构造函数
-        protected AbstractReportElement(ReportElementTag elementTag, string sql)
+        protected AbstractReportElement(string sql)
         {
-            this.m_elementTag = elementTag;
             this.m_searchSQL = sql;
+            this.m_elementTag = ReportElementTag.Filler;
         }
         #endregion
 
-        #region IReportElement实现
-        public ReportElementTag ElementTag
-        {
-            get { return this.m_elementTag; }
-        }
+        #region 属性
         public string SearchSQL
         {
             get { return this.m_searchSQL; }
         }
-        public void AfterFill()
+        #endregion
+
+        #region IReportElement接口属性实现
+        public ReportElementTag ElementTag
         {
-            //后续操作
-            this.Afterward();
+            get { return this.m_elementTag; }
         }
         #endregion
 
         #region 实例虚方法
+        public void After()
+        {
+            //后续操作
+            this.Afterward();
+        }
         protected abstract void Afterward();
         #endregion
     }

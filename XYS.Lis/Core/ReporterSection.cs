@@ -4,7 +4,7 @@ namespace XYS.Lis.Core
 {
     public class ReporterSection
     {
-        #region
+        #region 字段
         private readonly int m_sectionNo;
         private string m_sectionName;
         private int m_ModelNo;
@@ -12,7 +12,7 @@ namespace XYS.Lis.Core
         private List<string> m_elementNameList;
         #endregion
 
-        #region 
+        #region 构造函数
         public ReporterSection(int sectionNo)
         {
             this.m_sectionNo = sectionNo;
@@ -27,7 +27,7 @@ namespace XYS.Lis.Core
         }
         #endregion
 
-        #region 
+        #region 属性
         public int SectionNo
         {
             get { return this.m_sectionNo; }
@@ -53,13 +53,12 @@ namespace XYS.Lis.Core
         }
         #endregion
 
-        #region
+        #region 方法
         public void AddElementName(string elementName)
         {
-            string name = elementName.ToLower();
-            if (!this.m_elementNameList.Contains(name))
+            if (!this.m_elementNameList.Contains(elementName))
             {
-                this.m_elementNameList.Add(name);
+                this.m_elementNameList.Add(elementName);
             }
         }
         public void ClearElementNameList()

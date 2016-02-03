@@ -12,8 +12,8 @@ namespace XYS.Lis.Fill
     public class ReportFillByDB : ReportFillSkeleton
     {
         #region 变量
-        private static readonly string m_FillerName = "DBFiller";
         private LisReportCommonDAL m_reportDAL;
+        private static readonly string m_FillerName = "DBFiller";
         #endregion
 
         #region 构造函数
@@ -55,11 +55,11 @@ namespace XYS.Lis.Fill
         #endregion
 
         #region DAL层代码访问
-        protected virtual void FillElement(ILisReportElement reportElement, Hashtable keyTable)
+        protected virtual void FillElement(IReportElement reportElement, Hashtable keyTable)
         {
             this.ReportDAL.Fill(reportElement, keyTable);
         }
-        protected virtual void FillElements(List<ILisReportElement> reportElementList, Hashtable keyTable, Type elementType)
+        protected virtual void FillElements(List<IReportElement> reportElementList, Hashtable keyTable, Type elementType)
         {
             this.ReportDAL.FillList(reportElementList, elementType, keyTable);
         }

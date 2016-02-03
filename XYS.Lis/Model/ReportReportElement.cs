@@ -10,11 +10,11 @@ using XYS.Lis.Util;
 
 namespace XYS.Lis.Model
 {
-    public class ReportReportElement : AbstractReportElement
+    public class ReportReportElement : IReportElement
     {
 
-        #region 私有常量字段
-        private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.ReportElement;
+        #region 私有只读字段
+        private readonly ReportElementTag m_elementTag;
         #endregion
 
         #region 私有实例字段
@@ -44,11 +44,21 @@ namespace XYS.Lis.Model
 
         #region 公共构造函数
         public ReportReportElement()
-            : base(m_defaultElementTag, "")
         {
+            this.m_remarkFlag = false;  
             this.m_parItemList = new List<int>(5);
             this.m_reportItemTable = new Hashtable(5);
-            this.m_remarkFlag = false;
+            this.m_elementTag = ReportElementTag.Report;
+        }
+        #endregion
+
+        #region 实现IReportElement接口属性
+        public ReportElementTag ElementTag
+        {
+            get { return this.m_elementTag; }
+        }
+        public void After()
+        { 
         }
         #endregion
 
@@ -161,12 +171,6 @@ namespace XYS.Lis.Model
         }
         #endregion
 
-        #region 实现父类抽象方法
-        protected override void Afterward()
-        {
-        }
-        #endregion
-
         #region 公共方法
         public void Init()
         {
@@ -195,6 +199,19 @@ namespace XYS.Lis.Model
                 lock (this.m_reportItemTable)
                 {
                     this.m_reportItemTable[elementTag] = result;
+                }
+            }
+            return result;
+        }
+        public List<IReportElement> GetReportItem(string typeName)
+        {
+            List<IReportElement> result = this.m_reportItemTable[typeName] as List<IReportElement>;
+            if (result == null)
+            {
+                result = new List<IReportElement>(10);
+                lock (this.m_reportItemTable)
+                {
+                    this.m_reportItemTable[typeName] = result;
                 }
             }
             return result;
