@@ -14,20 +14,28 @@ namespace XYS.Lis.DAL
     {
         public LisReportCommonDAL()
         { }
-        public void Fill(IReportElement element, Hashtable equalTable)
+        public void Fill(IReportElement element, string sql)
         {
-
-            DataTable dt = Query(element, equalTable);
-            if (dt != null)
+            DataTable dt = GetDataTable(sql);
+            if (dt != null && dt.Rows.Count > 0)
             {
                 FillData(element, dt.Rows[0]);
                 AfterFill(element);
             }
         }
-        public void FillList(List<IReportElement> elementList, Type elementType, Hashtable equalTable)
+        public void Fill(IReportElement element, Hashtable equalTable)
         {
-            DataTable dt = Query(elementType, equalTable);
-            if (dt != null)
+            string sql = GenderSql(element, equalTable);
+            if (sql != null && !sql.Equals(""))
+            {
+                Fill(element, sql);
+            }
+        }
+
+        public void FillList(List<IReportElement> elementList, Type elementType, string sql)
+        {
+            DataTable dt = GetDataTable(sql);
+            if (dt != null && dt.Rows.Count > 0)
             {
                 IReportElement element;
                 foreach (DataRow dr in dt.Rows)
@@ -39,77 +47,83 @@ namespace XYS.Lis.DAL
                 }
             }
         }
-        public void FillTable(Hashtable elementTable, Type elementType, Hashtable equalTable)
-        {
-            DataTable dt = Query(elementType, equalTable);
-            if (dt != null)
-            {
-                IReportElement element;
-                foreach (DataRow dr in dt.Rows)
-                {
-                    element = (IReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
-                    FillData(element, dr);
-                    AfterFill(element);
-                    AddElement(elementTable, element);
-                }
-            }
-        }
-        protected void AddElement(Hashtable elementTable, IReportElement element)
-        {
-
-            switch (element.ElementTag)
-            {
-                case ReportElementTag.InfoElement:
-                    ReportInfoElement infoElement = element as ReportInfoElement;
-                    if (infoElement != null)
-                    {
-                        elementTable[infoElement.SerialNo] = element;
-                    }
-                    break;
-                case ReportElementTag.ItemElement:
-                    ReportItemElement itemElement = element as ReportItemElement;
-                    if (itemElement != null)
-                    {
-                        elementTable[itemElement.ItemNo] = element;
-                    }
-                    break;
-                case ReportElementTag.GraphElement:
-                    ReportGraphElement graphElement = element as ReportGraphElement;
-                    if (graphElement != null)
-                    {
-                        elementTable[graphElement.GraphName] = element;
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
-        protected DataTable Query(IReportElement element, Hashtable equalTable)
-        {
-            string sql = GenderSql(element, equalTable);
-            DataTable dt = GetDataTable(sql);
-            if (dt!=null&&dt.Rows.Count > 0)
-            {
-                return dt;
-            }
-            else
-            {
-                return null;
-            }
-        }
-        protected DataTable Query(Type elementType, Hashtable equalTable)
+        public void FillList(List<IReportElement> elementList, Type elementType, Hashtable equalTable)
         {
             string sql = GenderSql(elementType, equalTable);
-            DataTable dt = GetDataTable(sql);
-            if (dt.Rows.Count > 0)
-            {
-                return dt;
-            }
-            else
-            {
-                return null;
-            }
+            FillList(elementList, elementType, sql);
         }
+        //public void FillTable(Hashtable elementTable, Type elementType, Hashtable equalTable)
+        //{
+        //    DataTable dt = Query(elementType, equalTable);
+        //    if (dt != null)
+        //    {
+        //        IReportElement element;
+        //        foreach (DataRow dr in dt.Rows)
+        //        {
+        //            element = (IReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
+        //            FillData(element, dr);
+        //            AfterFill(element);
+        //            AddElement(elementTable, element);
+        //        }
+        //    }
+        //}
+        //protected void AddElement(Hashtable elementTable, IReportElement element)
+        //{
+
+        //    switch (element.ElementTag)
+        //    {
+        //        case ReportElementTag.InfoElement:
+        //            ReportInfoElement infoElement = element as ReportInfoElement;
+        //            if (infoElement != null)
+        //            {
+        //                elementTable[infoElement.SerialNo] = element;
+        //            }
+        //            break;
+        //        case ReportElementTag.ItemElement:
+        //            ReportItemElement itemElement = element as ReportItemElement;
+        //            if (itemElement != null)
+        //            {
+        //                elementTable[itemElement.ItemNo] = element;
+        //            }
+        //            break;
+        //        case ReportElementTag.GraphElement:
+        //            ReportGraphElement graphElement = element as ReportGraphElement;
+        //            if (graphElement != null)
+        //            {
+        //                elementTable[graphElement.GraphName] = element;
+        //            }
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
+        //protected DataTable Query(IReportElement element, Hashtable equalTable)
+        //{
+        //    string sql = GenderSql(element, equalTable);
+        //    DataTable dt = GetDataTable(sql);
+        //    if (dt!=null&&dt.Rows.Count > 0)
+        //    {
+        //        return dt;
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
+        //protected DataTable Query(Type elementType, Hashtable equalTable)
+        //{
+        //    string sql = GenderSql(elementType, equalTable);
+        //    DataTable dt = GetDataTable(sql);
+        //    if (dt.Rows.Count > 0)
+        //    {
+        //        return dt;
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
+        
         protected string GetSQLWhere(Hashtable equalTable)
         {
             StringBuilder sb = new StringBuilder();
@@ -145,6 +159,7 @@ namespace XYS.Lis.DAL
             sb.Remove(sb.Length - 5, 5);
             return sb.ToString();
         }
+        //填充对象属性
         protected void FillData(IReportElement element, DataRow dr)
         {
             PropertyInfo[] props = GetProperties(element);
@@ -168,12 +183,10 @@ namespace XYS.Lis.DAL
         }
         protected void AfterFill(IReportElement element)
         {
-            AbstractReportElement e = element as AbstractReportElement;
-            if (e != null)
-            {
-                e.After();
-            }
+            element.After();
         }
+        
+        //生成sql语句
         protected string GenderSql(IReportElement element, Hashtable equalTable)
         {
             AbstractReportElement e = element as AbstractReportElement;
@@ -197,6 +210,7 @@ namespace XYS.Lis.DAL
             }
             return dt;
         }
+        //获取对象属性
         protected PropertyInfo[] GetProperties(IReportElement element)
         {
             PropertyInfo[] props = null;
@@ -210,6 +224,7 @@ namespace XYS.Lis.DAL
             }
             return props;
         }
+        
         protected bool FillProperty(IReportElement element, PropertyInfo p, DataRow dr)
         {
             try
