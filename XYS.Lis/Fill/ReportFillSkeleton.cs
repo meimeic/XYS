@@ -12,7 +12,6 @@ namespace XYS.Lis.Fill
     {
         #region 字段
         private readonly string m_fillerName;
-        private Type m_defaultReportElementType;
         private readonly Hashtable m_section2ElementTypesMap;
         #endregion
 
@@ -21,18 +20,13 @@ namespace XYS.Lis.Fill
         {
             this.m_fillerName = name;
             this.m_section2ElementTypesMap = new Hashtable(20);
-            this.m_defaultReportElementType = typeof(XYS.Lis.Model.ReportInfoElement);
         }
         #endregion
 
-        #region 实例属性 默认报告元素类型
-        public Type DefaultReportElementType
+        #region 属性
+        public Hashtable Section2ElementsMap
         {
-            get
-            {
-                return this.m_defaultReportElementType;
-            }
-            set { this.m_defaultReportElementType = value; }
+            get { return this.m_section2ElementTypesMap; }
         }
         #endregion
 
@@ -43,95 +37,109 @@ namespace XYS.Lis.Fill
         }
         public virtual void Fill(IReportElement reportElement, ReportKey RK)
         {
-            //填充元素
-            if (!reportElement.IsInnerElement)
+            switch (reportElement.ElementTag)
             {
-                //填充报告
-                if (reportElement.ElementTag == ReportElementTag.Report)
-                {
+                case ReportElementTag.Report:
                     ReportReportElement rre = reportElement as ReportReportElement;
                     if (rre != null)
                     {
                         FillReport(rre, RK);
                     }
-                }
-                //填充元素
-                else 
-                {
-                    FillElement(reportElement, RK);
-                }
+                    break;
+                case ReportElementTag.Filler:
+                    if (reportElement.ElementTag == ReportElementTag.Filler)
+                    {
+                        FillElement(reportElement, RK);
+                    }
+                    break;
+                case ReportElementTag.Inner:
+                    break;
             }
         }
         public virtual void Fill(List<IReportElement> reportElementList, ReportKey RK, string elementName)
         {
-            Type elementType = SystemInfo.GetTypeFromString(elementName, true, true);
-            //处理
-            Hashtable keyTable = ReportKey2Table(RK);
-            InnerFillElements(reportElementList, keyTable, elementType);
+            ElementTypeMap map = GetAvailableElements(RK);
+            string name = elementName.ToLower();
+            ElementType elementType = map[name];
+            if (elementType != null)
+            {
+                FillElements(reportElementList, RK, elementType);
+            }
         }
         #endregion
 
         #region 内部处理逻辑
         protected virtual void FillReport(ReportReportElement rre, ReportKey RK)
         {
-            Hashtable keyTable = ReportKey2Table(RK);
-            //默认项填充
-            List<IReportElement> defaultElementList = rre.GetReportItem(DefaultReportElementType.FullName);
-            InnerFillElements(defaultElementList, keyTable, DefaultReportElementType);
-            //可选项填充
-            List<Type> availableElements = this.GetAvailableElements(RK);
-            if (availableElements != null && availableElements.Count > 0)
+            ElementTypeMap availableElementMap = this.GetAvailableElements(RK);
+            if (availableElementMap != null && availableElementMap.Count > 0)
             {
-                foreach (Type elementType in availableElements)
+                List<IReportElement> tempList;
+                foreach (ElementType elementType in availableElementMap.AllElementTypes)
                 {
-                    InnerFillElements(rre.GetReportItem(elementType.FullName), keyTable, elementType);
+                    tempList = rre.GetReportItem(elementType.TypeName);
+                    FillElements(tempList, RK, elementType);
                 }
             }
         }
-        protected virtual void FillElement(IReportElement reportElement, ReportKey RK)
-        {
-            //不进行填充的报告元素
-            if (reportElement.ElementTag == ReportElementTag.Inner)
-            {
-                return;
-            }
-            Hashtable keyTable = ReportKey2Table(RK);
-            InnerFillElement(reportElement, keyTable);
-        }
+        //protected virtual void FillReport(ReportReportElement rre, ReportKey RK)
+        //{
+        //    //填充
+        //    ElementTypeCollection availableElements = this.GetAvailableElements(RK);
+        //    if (availableElements != null && availableElements.Count > 0)
+        //    {
+        //        Type tempType;
+        //        foreach (ElementType elementType in availableElements)
+        //        {
+        //            tempType = GetElementType(elementType.TypeName);
+        //            if (tempType != null)
+        //            {
+        //                InnerFillElements(rre.GetReportItem(elementType.TypeName), RK, tempType);
+        //            }
+        //        }
+        //    }
+        //}
+        //protected virtual void FillElement(IReportElement reportElement, ReportKey RK)
+        //{
+        //    //不进行填充的报告元素
+        //    if (reportElement.ElementTag == ReportElementTag.Inner)
+        //    {
+        //        return;
+        //    }
+        //    InnerFillElement(reportElement, RK);
+        //}
         #endregion
         
         #region 抽象方法
-        protected abstract void InnerFillElement(IReportElement reportElement, Hashtable keyTable);
-        protected abstract void InnerFillElements(List<IReportElement> reportElementList,Hashtable keyTable,Type elementType);
+        protected abstract void InitElementTypesTable(Hashtable table);
+        protected abstract void FillElement(IReportElement reportElement, ReportKey RK);
+        protected abstract void FillElements(List<IReportElement> reportElementList, ReportKey RK, ElementType elementType);
         #endregion
 
         #region 辅助方法
-        //获取每个小组特定的元素类型
-        //protected virtual ReportElementTypeCollection GetAvailableElements(int sectionNo)
-        //{
-        //    if (this.m_section2ElementTypesMap.Count == 0)
-        //    {
-        //        InitElementTypesTable();
-        //    }
-        //    ReportElementTypeCollection retc = this.m_section2ElementTypesMap[sectionNo] as ReportElementTypeCollection;
-        //    return retc;
-        //}
-        //protected virtual ReportElementTypeCollection GetAvailableElements(ReportKey key)
-        //{
-        //    int sectionNo = GetSectionNo(key);
-        //    return GetAvailableElements(sectionNo);
-        //}
-        
-        protected virtual List<Type> GetAvailableElements(int sectionNo)
+        protected Type GetElementType(string typeName)
         {
-            if (this.m_section2ElementTypesMap.Count == 0)
+            Type result;
+            try
             {
-                InitElementTypesTable();
+                result = SystemInfo.GetTypeFromString(typeName, true, true);
             }
-            List<Type> result = this.m_section2ElementTypesMap[sectionNo] as List<Type>;
+            catch (Exception ex)
+            {
+                result = null;
+            }
             return result;
         }
-        protected virtual List<Type> GetAvailableElements(ReportKey key)
+        protected virtual ElementTypeMap GetAvailableElements(int sectionNo)
+        {
+            if (this.Section2ElementsMap.Count == 0)
+            {
+                InitElementTypesTable(this.Section2ElementsMap);
+            }
+            ElementTypeMap result = this.Section2ElementsMap[sectionNo] as ElementTypeMap;
+            return result;
+        }
+        protected virtual ElementTypeMap GetAvailableElements(ReportKey key)
         {
             int sectionNo = GetSectionNo(key);
             return GetAvailableElements(sectionNo);
@@ -145,7 +153,7 @@ namespace XYS.Lis.Fill
                 {
                     try
                     {
-                        sectionNo = Convert.ToInt32(c.PK);
+                        sectionNo = Convert.ToInt32(c.Value);
                     }
                     catch (Exception ex)
                     {
@@ -155,55 +163,6 @@ namespace XYS.Lis.Fill
                 }
             }
             return sectionNo;
-        }
-        
-        //将键对象转换成table对象
-        protected virtual Hashtable ReportKey2Table(ReportKey key)
-        {
-            Hashtable keyTable = new Hashtable(5);
-            foreach (KeyColumn k in key.KeySet)
-            {
-                keyTable.Add(k.Name, k.PK);
-            }
-            return keyTable;
-        }
-        //protected Type GetElementType(ReportKey key, ReportElementTag elementTag)
-        //{
-        //    int sectionNo = GetSectionNo(key);
-        //    return GetElementType(sectionNo, elementTag);
-        //}
-        //protected Type GetElementType(int sectionNo, ReportElementTag elementTag)
-        //{
-        //    Type type = null;
-        //    ReportElementTypeCollection availableElements = this.GetAvailableElements(sectionNo);
-        //    foreach (ReportElementType elementType in availableElements)
-        //    {
-        //        if (elementType.ElementTag == elementTag)
-        //        {
-        //            type = elementType.ElementType;
-        //            break;
-        //        }
-        //    }
-        //    if (type == null)
-        //    {
-        //        type = GetDefaultType(elementTag);
-        //    }
-        //    return type;
-        //}
-        //protected Type GetDefaultType(ReportElementTag elementTag)
-        //{
-        //    if (this.m_defaultTag2ElementTypeMap.Count == 0)
-        //    {
-        //        InitTag2TypeTable();
-        //    }
-        //    return this.m_defaultTag2ElementTypeMap[elementTag] as Type;
-        //}
-        private void InitElementTypesTable()
-        {
-            lock (this.m_section2ElementTypesMap)
-            {
-                LisMap.InitSection2ElementTypeTable(this.m_section2ElementTypesMap);
-            }
         }
         #endregion
     }

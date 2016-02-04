@@ -98,7 +98,7 @@ namespace XYS.Lis.Config
             }
         }
 
-        public static void ConfigReportElementMap(ReportElementTypeMap reportTypeMap)
+        public static void ConfigReportElementMap(ElementTypeMap reportTypeMap)
         {
             XmlElement reportElementElement = GetTargetElement(REPORT_ELEMENTS_TAG);
             if (reportElementElement != null)
@@ -113,7 +113,7 @@ namespace XYS.Lis.Config
                 }
             }
         }
-        public void ConfigReportElementMap(XmlElement element, ReportElementTypeMap reportTypeMap)
+        public void ConfigReportElementMap(XmlElement element, ElementTypeMap reportTypeMap)
         {
             XmlElement reportElementElement = GetTargetElement(element, REPORT_ELEMENTS_TAG);
             if (reportElementElement != null)
@@ -128,7 +128,7 @@ namespace XYS.Lis.Config
                 }
             }
         }
-        private static void ConfigReportElement(XmlElement element, ReportElementTypeMap reportTypeMap)
+        private static void ConfigReportElement(XmlElement element, ElementTypeMap reportTypeMap)
         {
             if (element.LocalName == REPORT_ELEMENT_TAG)
             {
@@ -139,7 +139,7 @@ namespace XYS.Lis.Config
                 Type type = SystemInfo.GetTypeFromString(typeName, true, true);
                 if (type != null && name != null)
                 {
-                    ReportElementType elementType = new ReportElementType(name, type);
+                    ElementType elementType = new ElementType(name, type);
                     elementType.ElementTag = GetElementTag(value);
                     reportTypeMap.Add(elementType);
                 }

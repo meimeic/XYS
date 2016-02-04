@@ -130,7 +130,7 @@ namespace XYS.Lis.DAL
             foreach (DataColumn dc in dr.Table.Columns)
             {
                 temp = new KeyColumn(dc.ColumnName, dr[dc]);
-                key.AddKey(temp);
+                key.AddColumn(temp);
             }
             return key;
         }

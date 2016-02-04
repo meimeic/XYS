@@ -23,14 +23,14 @@ namespace XYS.Lis.DAL
                 AfterFill(element);
             }
         }
-        public void Fill(IReportElement element, Hashtable equalTable)
-        {
-            string sql = GenderSql(element, equalTable);
-            if (sql != null && !sql.Equals(""))
-            {
-                Fill(element, sql);
-            }
-        }
+        //public void Fill(IReportElement element, Hashtable equalTable)
+        //{
+        //    string sql = GenderSql(element, equalTable);
+        //    if (sql != null && !sql.Equals(""))
+        //    {
+        //        Fill(element, sql);
+        //    }
+        //}
 
         public void FillList(List<IReportElement> elementList, Type elementType, string sql)
         {
@@ -47,11 +47,11 @@ namespace XYS.Lis.DAL
                 }
             }
         }
-        public void FillList(List<IReportElement> elementList, Type elementType, Hashtable equalTable)
-        {
-            string sql = GenderSql(elementType, equalTable);
-            FillList(elementList, elementType, sql);
-        }
+        //public void FillList(List<IReportElement> elementList, Type elementType, Hashtable equalTable)
+        //{
+        //    string sql = GenderSql(elementType, equalTable);
+        //    FillList(elementList, elementType, sql);
+        //}
         //public void FillTable(Hashtable elementTable, Type elementType, Hashtable equalTable)
         //{
         //    DataTable dt = Query(elementType, equalTable);
@@ -124,41 +124,6 @@ namespace XYS.Lis.DAL
         //    }
         //}
         
-        protected string GetSQLWhere(Hashtable equalTable)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(" where ");
-            foreach (DictionaryEntry de in equalTable)
-            {
-                //int
-                if (de.Value.GetType().FullName == "System.Int32")
-                {
-                    sb.Append(de.Key);
-                    sb.Append("=");
-                    sb.Append(de.Value);
-                }
-                //datetime
-                else if (de.Value.GetType().FullName == "System.DateTime")
-                {
-                    DateTime dt = (DateTime)de.Value;
-                    sb.Append(de.Key);
-                    sb.Append("='");
-                    sb.Append(dt.Date.ToString("yyyy-MM-dd"));
-                    sb.Append("'");
-                }
-                //其他类型
-                else
-                {
-                    sb.Append(de.Key);
-                    sb.Append("='");
-                    sb.Append(de.Value.ToString());
-                    sb.Append("'");
-                }
-                sb.Append(" and ");
-            }
-            sb.Remove(sb.Length - 5, 5);
-            return sb.ToString();
-        }
         //填充对象属性
         protected void FillData(IReportElement element, DataRow dr)
         {
@@ -185,22 +150,7 @@ namespace XYS.Lis.DAL
         {
             element.After();
         }
-        
-        //生成sql语句
-        protected string GenderSql(IReportElement element, Hashtable equalTable)
-        {
-            AbstractReportElement e = element as AbstractReportElement;
-            if (e == null)
-            {
-                return null;
-            }
-            return e.SearchSQL + GetSQLWhere(equalTable);
-        }
-        protected string GenderSql(Type elementType, Hashtable equalTable)
-        {
-            AbstractReportElement temp = (AbstractReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
-            return temp.SearchSQL + GetSQLWhere(equalTable);
-        }
+
         protected DataTable GetDataTable(string sql)
         {
             DataTable dt = null;

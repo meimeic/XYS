@@ -128,7 +128,7 @@ namespace XYS.Lis.Util
             ReportLog.Debug(declaringType, "LisMap:configuring ReportModelMap");
             XmlParamConfigurator.ConfigReportModelMap(modelMap);
         }
-        private static void ConfigureReportElementMap(ReportElementTypeMap elementTypeMap)
+        private static void ConfigureReportElementMap(ElementTypeMap elementTypeMap)
         {
             ReportLog.Debug(declaringType, "LisMap:configuring ReportElementTypeMap");
             XmlParamConfigurator.ConfigReportElementMap(elementTypeMap);

@@ -4,48 +4,48 @@ using System.Collections;
 using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
-    public class ReportElementTypeMap
+    public class ElementTypeMap
     {
         #region 字段
         private Hashtable m_mapName2ElementType;
         #endregion
 
         #region 构造函数
-        public ReportElementTypeMap()
+        public ElementTypeMap()
         {
             this.m_mapName2ElementType = new Hashtable(6);
         }
         #endregion
 
-        public void Clear()
-        {
-            this.m_mapName2ElementType.Clear();
-        }
-        public ReportElementType this[string elementName]
-        {
-            get
-            {
-                lock (this)
-                {
-                    return this.m_mapName2ElementType[elementName] as ReportElementType;
-                }
-            }
-        }
-        public ReportElementTypeCollection AllElementTypes
-        {
-            get
-            {
-                lock (this)
-                {
-                    return new ReportElementTypeCollection(this.m_mapName2ElementType.Values);
-                }
-            }
-        }
+        #region 属性
         public int Count
         {
             get { return this.m_mapName2ElementType.Count; }
         }
-        public void Add(ReportElementType elementType)
+        public ElementType this[string name]
+        {
+            get
+            {
+                lock (this)
+                {
+                    return this.m_mapName2ElementType[name] as ElementType;
+                }
+            }
+        }
+        public ElementTypeCollection AllElementTypes
+        {
+            get
+            {
+                lock (this)
+                {
+                    return new ElementTypeCollection(this.m_mapName2ElementType.Values);
+                }
+            }
+        }
+        #endregion
+        
+        #region 方法
+        public void Add(ElementType elementType)
         {
             if (elementType == null)
             {
@@ -53,8 +53,13 @@ namespace XYS.Lis.Model
             }
             lock (this)
             {
-                this.m_mapName2ElementType[elementType.ElementName] = elementType;
+                this.m_mapName2ElementType[elementType.Name] = elementType;
             }
         }
+        public void Clear()
+        {
+            this.m_mapName2ElementType.Clear();
+        }
+        #endregion
     }
 }

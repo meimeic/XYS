@@ -3,20 +3,20 @@ using System.Collections;
 
 namespace XYS.Lis.Model
 {
-    public class ReportElementTypeCollection : ICollection, IList, IEnumerable, ICloneable
+    public class ElementTypeCollection : ICollection, IList, IEnumerable, ICloneable
     {
 
         #region 定义了一个枚举接口
 
         /// <summary>
-        /// Supports type-safe iteration over a <see cref="ReportElementTypeCollection"/>.
+        /// Supports type-safe iteration over a <see cref="ElementTypeCollection"/>.
         /// </summary>
         public interface IElementTypeCollectionEnumerator
         {
             /// <summary>
             /// 获取集合当前元素
             /// </summary>
-            ReportElementType Current { get; }
+            ElementType Current { get; }
 
             /// <summary>
             ///移动到下一元素
@@ -42,7 +42,7 @@ namespace XYS.Lis.Model
 
         #region 私有变量 用于实现elementtype 集合
 
-        private ReportElementType[] m_array;//元素容器
+        private ElementType[] m_array;//元素容器
         private int m_count = 0; //元素个数
         private int m_version = 0;
 
@@ -50,7 +50,7 @@ namespace XYS.Lis.Model
 
         #region 静态包装
         //创建一个只读实例
-        public static ReportElementTypeCollection ReadOnly(ReportElementTypeCollection list)
+        public static ElementTypeCollection ReadOnly(ElementTypeCollection list)
         {
             if (list == null)
             {
@@ -63,41 +63,41 @@ namespace XYS.Lis.Model
 
         #region 构造函数
         //默认初始化容器大小
-        public ReportElementTypeCollection()
+        public ElementTypeCollection()
         {
-            m_array = new ReportElementType[DEFAULT_CAPACITY];
+            m_array = new ElementType[DEFAULT_CAPACITY];
         }
 
-        public ReportElementTypeCollection(int capacity)
+        public ElementTypeCollection(int capacity)
         {
-            m_array = new ReportElementType[capacity];
+            m_array = new ElementType[capacity];
         }
 
-        public ReportElementTypeCollection(ReportElementTypeCollection c)
+        public ElementTypeCollection(ElementTypeCollection c)
         {
-            m_array = new ReportElementType[c.Count];
+            m_array = new ElementType[c.Count];
             AddRange(c);
         }
 
         /// <summary>
         /// Initializes a new instance of the <c>ElementTypeCollection</c> class
-        /// that contains elements copied from the specified <see cref="ReportElementType"/> array.
+        /// that contains elements copied from the specified <see cref="ElementType"/> array.
         /// </summary>
-        /// <param name="a">The <see cref="ReportElementType"/> array whose elements are copied to the new list.</param>
-        public ReportElementTypeCollection(ReportElementType[] a)
+        /// <param name="a">The <see cref="ElementType"/> array whose elements are copied to the new list.</param>
+        public ElementTypeCollection(ElementType[] a)
         {
-            m_array = new ReportElementType[a.Length];
+            m_array = new ElementType[a.Length];
             AddRange(a);
         }
 
         /// <summary>
         /// Initializes a new instance of the <c>ElementTypeCollection</c> class
-        /// that contains elements copied from the specified <see cref="ReportElementType"/> collection.
+        /// that contains elements copied from the specified <see cref="ElementType"/> collection.
         /// </summary>
-        /// <param name="col">The <see cref="ReportElementType"/> collection whose elements are copied to the new list.</param>
-        public ReportElementTypeCollection(ICollection col)
+        /// <param name="col">The <see cref="ElementType"/> collection whose elements are copied to the new list.</param>
+        public ElementTypeCollection(ICollection col)
         {
-            m_array = new ReportElementType[col.Count];
+            m_array = new ElementType[col.Count];
             AddRange(col);
         }
 
@@ -117,7 +117,7 @@ namespace XYS.Lis.Model
         /// Allow subclasses to avoid our default constructors
         /// </summary>
         /// <param name="tag"></param>
-        protected internal ReportElementTypeCollection(Tag tag)
+        protected internal ElementTypeCollection(Tag tag)
         {
             m_array = null;
         }
@@ -135,21 +135,21 @@ namespace XYS.Lis.Model
 
         /// <summary>
         /// Copies the entire <c>ElementTypeCollection</c> to a one-dimensional
-        /// <see cref="ReportElementType"/> array.
+        /// <see cref="ElementType"/> array.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="ReportElementType"/> array to copy to.</param>
-        public virtual void CopyTo(ReportElementType[] array)
+        /// <param name="array">The one-dimensional <see cref="ElementType"/> array to copy to.</param>
+        public virtual void CopyTo(ElementType[] array)
         {
             this.CopyTo(array, 0);
         }
 
         /// <summary>
         /// Copies the entire <c>ElementTypeCollection</c> to a one-dimensional
-        /// <see cref="ReportElementType"/> array, starting at the specified index of the target array.
+        /// <see cref="ElementType"/> array, starting at the specified index of the target array.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="ReportElementType"/> array to copy to.</param>
+        /// <param name="array">The one-dimensional <see cref="ElementType"/> array to copy to.</param>
         /// <param name="start">The zero-based index in <paramref name="array"/> at which copying begins.</param>
-        public virtual void CopyTo(ReportElementType[] array, int start)
+        public virtual void CopyTo(ElementType[] array, int start)
         {
             if (m_count > array.GetUpperBound(0) + 1 - start)
             {
@@ -180,15 +180,15 @@ namespace XYS.Lis.Model
         #region Operations (type-safe IList)
 
         /// <summary>
-        /// Gets or sets the <see cref="ReportElementType"/> at the specified index.
+        /// Gets or sets the <see cref="ElementType"/> at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index of the element to get or set.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="index"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="index"/> is equal to or greater than <see cref="ReportElementTypeCollection.Count"/>.</para>
+        /// <para><paramref name="index"/> is equal to or greater than <see cref="ElementTypeCollection.Count"/>.</para>
         /// </exception>
-        public virtual ReportElementType this[int index]
+        public virtual ElementType this[int index]
         {
             get
             {
@@ -204,11 +204,11 @@ namespace XYS.Lis.Model
         }
 
         /// <summary>
-        /// Adds a <see cref="ReportElementType"/> to the end of the <c>ElementTypeCollection</c>.
+        /// Adds a <see cref="ElementType"/> to the end of the <c>ElementTypeCollection</c>.
         /// </summary>
-        /// <param name="item">The <see cref="ReportElementType"/> to be added to the end of the <c>ElementTypeCollection</c>.</param>
+        /// <param name="item">The <see cref="ElementType"/> to be added to the end of the <c>ElementTypeCollection</c>.</param>
         /// <returns>The index at which the value has been added.</returns>
-        public virtual int Add(ReportElementType item)
+        public virtual int Add(ElementType item)
         {
             if (m_count == m_array.Length)
             {
@@ -226,16 +226,16 @@ namespace XYS.Lis.Model
         public virtual void Clear()
         {
             ++m_version;
-            m_array = new ReportElementType[DEFAULT_CAPACITY];
+            m_array = new ElementType[DEFAULT_CAPACITY];
             m_count = 0;
         }
         /// <summary>
-        /// Creates a shallow copy of the <see cref="ReportElementTypeCollection"/>.
+        /// Creates a shallow copy of the <see cref="ElementTypeCollection"/>.
         /// </summary>
-        /// <returns>A new <see cref="ReportElementTypeCollection"/> with a shallow copy of the collection data.</returns>
+        /// <returns>A new <see cref="ElementTypeCollection"/> with a shallow copy of the collection data.</returns>
         public virtual object Clone()
         {
-            ReportElementTypeCollection newCol = new ReportElementTypeCollection(m_count);
+            ElementTypeCollection newCol = new ElementTypeCollection(m_count);
             Array.Copy(m_array, 0, newCol.m_array, 0, m_count);
             newCol.m_count = m_count;
             newCol.m_version = m_version;
@@ -243,11 +243,11 @@ namespace XYS.Lis.Model
         }
 
         /// <summary>
-        /// Determines whether a given <see cref="ReportElementType"/> is in the <c>ElementTypeCollection</c>.
+        /// Determines whether a given <see cref="ElementType"/> is in the <c>ElementTypeCollection</c>.
         /// </summary>
-        /// <param name="item">The <see cref="ReportElementType"/> to check for.</param>
+        /// <param name="item">The <see cref="ElementType"/> to check for.</param>
         /// <returns><c>true</c> if <paramref name="item"/> is found in the <c>ElementTypeCollection</c>; otherwise, <c>false</c>.</returns>
-        public virtual bool Contains(ReportElementType item)
+        public virtual bool Contains(ElementType item)
         {
             for (int i = 0; i != m_count; ++i)
             {
@@ -260,15 +260,15 @@ namespace XYS.Lis.Model
         }
 
         /// <summary>
-        /// Returns the zero-based index of the first occurrence of a <see cref="ReportElementType"/>
+        /// Returns the zero-based index of the first occurrence of a <see cref="ElementType"/>
         /// in the <c>ElementTypeCollection</c>.
         /// </summary>
-        /// <param name="item">The <see cref="ReportElementType"/> to locate in the <c>ElementTypeCollection</c>.</param>
+        /// <param name="item">The <see cref="ElementType"/> to locate in the <c>ElementTypeCollection</c>.</param>
         /// <returns>
         /// The zero-based index of the first occurrence of <paramref name="item"/> 
         /// in the entire <c>ElementTypeCollection</c>, if found; otherwise, -1.
         ///	</returns>
-        public virtual int IndexOf(ReportElementType item)
+        public virtual int IndexOf(ElementType item)
         {
             for (int i = 0; i != m_count; ++i)
             {
@@ -284,13 +284,13 @@ namespace XYS.Lis.Model
         /// Inserts an element into the <c>ElementTypeCollection</c> at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.</param>
-        /// <param name="item">The <see cref="ReportElementType"/> to insert.</param>
+        /// <param name="item">The <see cref="ElementType"/> to insert.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="index"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="index"/> is equal to or greater than <see cref="ReportElementTypeCollection.Count"/>.</para>
+        /// <para><paramref name="index"/> is equal to or greater than <see cref="ElementTypeCollection.Count"/>.</para>
         /// </exception>
-        public virtual void Insert(int index, ReportElementType item)
+        public virtual void Insert(int index, ElementType item)
         {
             ValidateIndex(index, true); // throws
 
@@ -310,13 +310,13 @@ namespace XYS.Lis.Model
         }
 
         /// <summary>
-        /// Removes the first occurrence of a specific <see cref="ReportElementType"/> from the <c>ElementTypeCollection</c>.
+        /// Removes the first occurrence of a specific <see cref="ElementType"/> from the <c>ElementTypeCollection</c>.
         /// </summary>
-        /// <param name="item">The <see cref="ReportElementType"/> to remove from the <c>ElementTypeCollection</c>.</param>
+        /// <param name="item">The <see cref="ElementType"/> to remove from the <c>ElementTypeCollection</c>.</param>
         /// <exception cref="ArgumentException">
-        /// The specified <see cref="ReportElementType"/> was not found in the <c>ElementTypeCollection</c>.
+        /// The specified <see cref="ElementType"/> was not found in the <c>ElementTypeCollection</c>.
         /// </exception>
-        public virtual void Remove(ReportElementType item)
+        public virtual void Remove(ElementType item)
         {
             int i = IndexOf(item);
             if (i < 0)
@@ -335,7 +335,7 @@ namespace XYS.Lis.Model
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="index"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="index"/> is equal to or greater than <see cref="ReportElementTypeCollection.Count"/>.</para>
+        /// <para><paramref name="index"/> is equal to or greater than <see cref="ElementTypeCollection.Count"/>.</para>
         /// </exception>
         public virtual void RemoveAt(int index)
         {
@@ -351,7 +351,7 @@ namespace XYS.Lis.Model
             // We can't set the deleted entry equal to null, because it might be a value type.
             // Instead, we'll create an empty single-element array of the right type and copy it 
             // over the entry we want to erase.
-            ReportElementType[] temp = new ReportElementType[1];
+            ElementType[] temp = new ElementType[1];
             Array.Copy(temp, 0, m_array, m_count, 1);
             m_version++;
         }
@@ -410,13 +410,13 @@ namespace XYS.Lis.Model
                 {
                     if (value > 0)
                     {
-                        ReportElementType[] temp = new ReportElementType[value];
+                        ElementType[] temp = new ElementType[value];
                         Array.Copy(m_array, 0, temp, 0, m_count);
                         m_array = temp;
                     }
                     else
                     {
-                        m_array = new ReportElementType[DEFAULT_CAPACITY];
+                        m_array = new ElementType[DEFAULT_CAPACITY];
                     }
                 }
             }
@@ -426,8 +426,8 @@ namespace XYS.Lis.Model
         /// Adds the elements of another <c>ElementTypeCollection</c> to the current <c>ElementTypeCollection</c>.
         /// </summary>
         /// <param name="x">The <c>ElementTypeCollection</c> whose elements should be added to the end of the current <c>ElementTypeCollection</c>.</param>
-        /// <returns>The new <see cref="ReportElementTypeCollection.Count"/> of the <c>ElementTypeCollection</c>.</returns>
-        public virtual int AddRange(ReportElementTypeCollection x)
+        /// <returns>The new <see cref="ElementTypeCollection.Count"/> of the <c>ElementTypeCollection</c>.</returns>
+        public virtual int AddRange(ElementTypeCollection x)
         {
             if (m_count + x.Count >= m_array.Length)
             {
@@ -440,11 +440,11 @@ namespace XYS.Lis.Model
         }
 
         /// <summary>
-        /// Adds the elements of a <see cref="ReportElementType"/> array to the current <c>ElementTypeCollection</c>.
+        /// Adds the elements of a <see cref="ElementType"/> array to the current <c>ElementTypeCollection</c>.
         /// </summary>
-        /// <param name="x">The <see cref="ReportElementType"/> array whose elements should be added to the end of the <c>ElementTypeCollection</c>.</param>
-        /// <returns>The new <see cref="ReportElementTypeCollection.Count"/> of the <c>ElementTypeCollection</c>.</returns>
-        public virtual int AddRange(ReportElementType[] x)
+        /// <param name="x">The <see cref="ElementType"/> array whose elements should be added to the end of the <c>ElementTypeCollection</c>.</param>
+        /// <returns>The new <see cref="ElementTypeCollection.Count"/> of the <c>ElementTypeCollection</c>.</returns>
+        public virtual int AddRange(ElementType[] x)
         {
             if (m_count + x.Length >= m_array.Length)
             {
@@ -459,10 +459,10 @@ namespace XYS.Lis.Model
         }
 
         /// <summary>
-        /// Adds the elements of a <see cref="ReportElementType"/> collection to the current <c>ElementTypeCollection</c>.
+        /// Adds the elements of a <see cref="ElementType"/> collection to the current <c>ElementTypeCollection</c>.
         /// </summary>
-        /// <param name="col">The <see cref="ReportElementType"/> collection whose elements should be added to the end of the <c>ElementTypeCollection</c>.</param>
-        /// <returns>The new <see cref="ReportElementTypeCollection.Count"/> of the <c>ElementTypeCollection</c>.</returns>
+        /// <param name="col">The <see cref="ElementType"/> collection whose elements should be added to the end of the <c>ElementTypeCollection</c>.</param>
+        /// <returns>The new <see cref="ElementTypeCollection.Count"/> of the <c>ElementTypeCollection</c>.</returns>
         public virtual int AddRange(ICollection col)
         {
             if (m_count + col.Count >= m_array.Length)
@@ -471,7 +471,7 @@ namespace XYS.Lis.Model
             }
             foreach (object item in col)
             {
-                Add((ReportElementType)item);
+                Add((ElementType)item);
             }
             return m_count;
         }
@@ -491,7 +491,7 @@ namespace XYS.Lis.Model
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="i"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="i"/> is equal to or greater than <see cref="ReportElementTypeCollection.Count"/>.</para>
+        /// <para><paramref name="i"/> is equal to or greater than <see cref="ElementTypeCollection.Count"/>.</para>
         /// </exception>
         private void ValidateIndex(int i)
         {
@@ -501,7 +501,7 @@ namespace XYS.Lis.Model
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="i"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="i"/> is equal to or greater than <see cref="ReportElementTypeCollection.Count"/>.</para>
+        /// <para><paramref name="i"/> is equal to or greater than <see cref="ElementTypeCollection.Count"/>.</para>
         /// </exception>
         private void ValidateIndex(int i, bool allowEqualEnd)
         {
@@ -539,32 +539,32 @@ namespace XYS.Lis.Model
         object IList.this[int i]
         {
             get { return (object)this[i]; }
-            set { this[i] = (ReportElementType)value; }
+            set { this[i] = (ElementType)value; }
         }
 
         int IList.Add(object x)
         {
-            return this.Add((ReportElementType)x);
+            return this.Add((ElementType)x);
         }
 
         bool IList.Contains(object x)
         {
-            return this.Contains((ReportElementType)x);
+            return this.Contains((ElementType)x);
         }
 
         int IList.IndexOf(object x)
         {
-            return this.IndexOf((ReportElementType)x);
+            return this.IndexOf((ElementType)x);
         }
 
         void IList.Insert(int pos, object x)
         {
-            this.Insert(pos, (ReportElementType)x);
+            this.Insert(pos, (ElementType)x);
         }
 
         void IList.Remove(object x)
         {
-            this.Remove((ReportElementType)x);
+            this.Remove((ElementType)x);
         }
 
         void IList.RemoveAt(int pos)
@@ -586,13 +586,13 @@ namespace XYS.Lis.Model
         #region Nested enumerator class
 
         /// <summary>
-        /// Supports simple iteration over a <see cref="ReportElementTypeCollection"/>.
+        /// Supports simple iteration over a <see cref="ElementTypeCollection"/>.
         /// </summary>
         private sealed class Enumerator : IEnumerator, IElementTypeCollectionEnumerator
         {
             #region Implementation (data)
 
-            private readonly ReportElementTypeCollection m_collection;
+            private readonly ElementTypeCollection m_collection;
             private int m_index;
             private int m_version;
 
@@ -604,7 +604,7 @@ namespace XYS.Lis.Model
             /// Initializes a new instance of the <c>Enumerator</c> class.
             /// </summary>
             /// <param name="tc"></param>
-            internal Enumerator(ReportElementTypeCollection tc)
+            internal Enumerator(ElementTypeCollection tc)
             {
                 m_collection = tc;
                 m_index = -1;
@@ -618,7 +618,7 @@ namespace XYS.Lis.Model
             /// <summary>
             /// Gets the current element in the collection.
             /// </summary>
-            public ReportElementType Current
+            public ElementType Current
             {
                 get { return m_collection[m_index]; }
             }
@@ -668,17 +668,17 @@ namespace XYS.Lis.Model
 
         #region Nested Read Only Wrapper class
 
-        private sealed class ReadOnlyElementTypeCollection : ReportElementTypeCollection
+        private sealed class ReadOnlyElementTypeCollection : ElementTypeCollection
         {
             #region Implementation (data)
 
-            private readonly ReportElementTypeCollection m_collection;
+            private readonly ElementTypeCollection m_collection;
 
             #endregion
 
             #region Construction
 
-            internal ReadOnlyElementTypeCollection(ReportElementTypeCollection list)
+            internal ReadOnlyElementTypeCollection(ElementTypeCollection list)
                 : base(Tag.Default)
             {
                 m_collection = list;
@@ -688,12 +688,12 @@ namespace XYS.Lis.Model
 
             #region Type-safe ICollection
 
-            public override void CopyTo(ReportElementType[] array)
+            public override void CopyTo(ElementType[] array)
             {
                 m_collection.CopyTo(array);
             }
 
-            public override void CopyTo(ReportElementType[] array, int start)
+            public override void CopyTo(ElementType[] array, int start)
             {
                 m_collection.CopyTo(array, start);
             }
@@ -716,13 +716,13 @@ namespace XYS.Lis.Model
 
             #region Type-safe IList
 
-            public override ReportElementType this[int i]
+            public override ElementType this[int i]
             {
                 get { return m_collection[i]; }
                 set { throw new NotSupportedException("This is a Read Only Collection and can not be modified"); }
             }
 
-            public override int Add(ReportElementType x)
+            public override int Add(ElementType x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
@@ -732,22 +732,22 @@ namespace XYS.Lis.Model
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
 
-            public override bool Contains(ReportElementType x)
+            public override bool Contains(ElementType x)
             {
                 return m_collection.Contains(x);
             }
 
-            public override int IndexOf(ReportElementType x)
+            public override int IndexOf(ElementType x)
             {
                 return m_collection.IndexOf(x);
             }
 
-            public override void Insert(int pos, ReportElementType x)
+            public override void Insert(int pos, ElementType x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
 
-            public override void Remove(ReportElementType x)
+            public override void Remove(ElementType x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
@@ -787,12 +787,12 @@ namespace XYS.Lis.Model
                 set { throw new NotSupportedException("This is a Read Only Collection and can not be modified"); }
             }
 
-            public override int AddRange(ReportElementTypeCollection x)
+            public override int AddRange(ElementTypeCollection x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
 
-            public override int AddRange(ReportElementType[] x)
+            public override int AddRange(ElementType[] x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }

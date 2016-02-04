@@ -109,9 +109,9 @@
     <Compile Include="IReport.cs" />
     <Compile Include="Model\AbstractInnerElement.cs" />
     <Compile Include="Model\AbstractReportElement.cs" />
-    <Compile Include="Model\ReportElementType.cs" />
-    <Compile Include="Model\ReportElementTypeCollection.cs" />
-    <Compile Include="Model\ReportElementTypeMap.cs" />
+    <Compile Include="Model\ElementType.cs" />
+    <Compile Include="Model\ElementTypeCollection.cs" />
+    <Compile Include="Model\ElementTypeMap.cs" />
     <Compile Include="Model\ReportInfoElement.cs" />
     <Compile Include="Model\ReportKVElement.cs" />
     <Compile Include="Model\ReportPatientElement.cs" />
