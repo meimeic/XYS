@@ -2,7 +2,6 @@
 using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
-    [Table()]
     [Export()]
     public class ReportGraphElement : AbstractReportElement
     {

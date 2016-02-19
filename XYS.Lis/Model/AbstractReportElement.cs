@@ -2,7 +2,6 @@
 using XYS.Common;
 namespace XYS.Lis.Model
 {
-    [Table()]
     public abstract class AbstractReportElement : IReportElement
     {
         #region 私有字段

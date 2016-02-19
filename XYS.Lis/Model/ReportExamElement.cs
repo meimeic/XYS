@@ -5,7 +5,6 @@ using XYS.Lis.Core;
 using XYS.Lis.Util;
 namespace XYS.Lis.Model
 {
-    [Table()]
     [Export()]
     public class ReportExamElement : AbstractReportElement
     {

@@ -41,7 +41,7 @@ namespace XYS.Lis.Fill
             }
             else
             {
-                if (IsTable(reportElement))
+                if (IsFill(reportElement))
                 {
                     //填充元素
                     FillElement(reportElement, RK);
@@ -159,6 +159,10 @@ namespace XYS.Lis.Fill
         #endregion
 
         #region 私有方法
+        private bool IsFill(IReportElement element)
+        {
+            return element is AbstractReportElement;
+        }
         private bool IsTable(IReportElement element)
         {
             Type type = element.GetType();
