@@ -3,11 +3,14 @@ using XYS.Common;
 using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
+    [Table()]
+    [Export()]
     public class ReportItemElement : AbstractReportElement
     {
         #region 私有常量字段
-        private static readonly string m_defaultItemSQL = @"select r.itemno as itemno,paritemno,t.cname as itemcname,t.ename as itemename,r.reportdesc as itemdesc,r.reportvalue as itemvalue,resultstatus,ISNULL(r.unit,t.unit) as itemunit,refrange,disporder,prec,secretgrade
-                                                                            from ReportItem as r left outer join TestItem as t on r.ItemNo=t.ItemNo";
+//        private static readonly string m_defaultItemSQL = @"select r.itemno as itemno,paritemno,t.cname as itemcname,t.ename as itemename,r.reportdesc as itemdesc,r.reportvalue as itemvalue,resultstatus,ISNULL(r.unit,t.unit) as itemunit,refrange,disporder,prec,secretgrade
+//                                                                            from ReportItem as r left outer join TestItem as t on r.ItemNo=t.ItemNo";
+        private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.Item;
         #endregion
 
         #region 私有字段
@@ -29,26 +32,25 @@ namespace XYS.Lis.Model
 
         #region 公共构造方法
         public ReportItemElement()
-            : this(m_defaultItemSQL)
+            : base(m_defaultElementTag)
         {
         }
-        
         public ReportItemElement(string sql)
-            : base(sql)
+            : base(m_defaultElementTag, sql)
         {
         }
         #endregion
 
         #region 公共属性
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public int ItemNo
         {
             get { return this.m_itemNo; }
             set { this.m_itemNo = value; }
         }
 
-        [TableColumn(true)]
+        [Column(true)]
         public int ParItemNo
         {
             get { return this.m_parItemNo; }
@@ -56,7 +58,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string ItemCName
         {
             get { return this.m_itemCName; }
@@ -64,20 +66,20 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string ItemEName
         {
             get { return this.m_itemEName; }
             set { this.m_itemEName = value; }
         }
 
-        [TableColumn(true)]
+        [Column(true)]
         public double ItemValue
         {
             get { return this.m_itemValue; }
             set { this.m_itemValue = value; }
         }
-        [TableColumn(true)]
+        [Column(true)]
         public string ItemDesc
         {
             get { return this.m_itemDesc; }
@@ -87,10 +89,11 @@ namespace XYS.Lis.Model
         public string ItemResult
         {
             get { return this.m_itemResult; }
-            set { this.m_itemResult = value; }
+            protected set { this.m_itemResult = value; }
         }
 
         [Export()]
+        [Column(true)]
         public string ItemStandard
         {
             get { return this.m_itemStandard; }
@@ -98,7 +101,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string ResultStatus
         {
             get { return this.m_resultStatus; }
@@ -106,7 +109,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string ItemUnit
         {
             get { return this.m_itemUnit; }
@@ -114,7 +117,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string RefRange
         {
             get { return this.m_refRange; }
@@ -122,21 +125,21 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public int DispOrder
         {
             get { return this.m_dispOrder; }
             set { this.m_dispOrder = value; }
         }
 
-        [TableColumn(true)]
+        [Column(true)]
         public int SecretGrade
         {
             get { return this.m_secretGrade; }
             set { this.m_secretGrade = value; }
         }
 
-        [TableColumn(true)]
+        [Column(true)]
         public int Prec
         {
             get { return this.m_prec; }
@@ -145,7 +148,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实现父类抽象方法
-        protected override void Afterward()
+        public override void AfterFill()
         {
             if (this.ItemValue != 0.0D)
             {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using XYS.Common;
 using XYS.Model;
 using XYS.Lis;
-using XYS.Lis.Model;
+using XYS.Lis.Core;
 using XYS.Lis.DAL;
 
 namespace XYS.Lis.Core

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Text;
+using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Common;
-using XYS.Lis.Core;
 using XYS.Lis.Model;
+using XYS.Lis.Core;
 using XYS.Lis.DAL;
 namespace XYS.Lis.Fill
 {
@@ -44,10 +45,6 @@ namespace XYS.Lis.Fill
         #endregion
 
         #region 实现父类抽象方法
-        protected override void InitElementTypesTable(Hashtable table)
-        {
-            throw new NotImplementedException();
-        }
         protected override void FillElement(IReportElement reportElement, ReportKey RK)
         {
             string sql = GenderSql(reportElement, RK);
@@ -58,12 +55,8 @@ namespace XYS.Lis.Fill
         }
         protected override void FillElements(List<IReportElement> reportElementList, ReportKey RK, ElementType elementType)
         {
-            Type EType = GetElementType(elementType.TypeName);
             string sql = GenderSql(elementType, RK);
-            if (EType != null && sql != null)
-            {
-                this.D_FillElements(reportElementList, EType, sql);
-            }
+            this.D_FillElements(reportElementList, elementType.EType, sql);
         }
         #endregion
 
@@ -76,8 +69,9 @@ namespace XYS.Lis.Fill
         {
             this.ReportDAL.FillList(reportElementList, elementType, sql);
         }
+        #endregion
 
-        //生成sql语句  
+        #region 生成sql语句  
         protected string GenderSql(IReportElement element, ReportKey RK)
         {
             string where = GetSQLWhere(RK);
@@ -95,7 +89,7 @@ namespace XYS.Lis.Fill
         {
             string sql = null;
             string where = GetSQLWhere(RK);
-            if (elementType.SQL != null && !elementType.SQL.Equals(""))
+            if (ele)
             {
                 sql = elementType.SQL + where;
             }
@@ -103,7 +97,7 @@ namespace XYS.Lis.Fill
             {
                 try
                 {
-                    Type EType = GetElementType(elementType.TypeName);
+                    Type EType = GetElementType(elementType.EType);
                     AbstractReportElement reportElement = (AbstractReportElement)EType.Assembly.CreateInstance(EType.FullName);
                     sql = reportElement.SearchSQL + where;
                 }
@@ -184,8 +178,72 @@ namespace XYS.Lis.Fill
             sb.Remove(sb.Length - 5, 5);
             return sb.ToString();
         }
+
         #endregion
 
+        #region
+        public string GenderSQL(IReportElement element)
+        {
+            AbstractReportElement e = element as AbstractReportElement;
+            if (e != null)
+            {
+
+            }
+            else
+            {
+                return null;
+            }
+        }
+        public string GenderSQL(Type type)
+        {
+            if (IsTable(type))
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("select ");
+                PropertyInfo[] props = type.GetProperties();
+                foreach (PropertyInfo prop in props)
+                {
+                    if (IsColumn(prop))
+                    {
+                        sb.Append(prop.Name);
+                        sb.Append(',');
+                    }
+                }
+                sb.Remove(sb.Length - 1, 1);
+                sb.Append(" from ");
+                sb.Append(type.Name);
+                return sb.ToString();
+            }
+            else
+            {
+                return null;
+            }
+        }
+        private bool IsTable(Type type)
+        {
+            object[] attrs = type.GetCustomAttributes(typeof(TableAttribute), true);
+            if (attrs != null && attrs.Length > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private bool IsColumn(PropertyInfo prop)
+        {
+            object[] attrs = prop.GetCustomAttributes(typeof(ColumnAttribute), true);
+            if (attrs != null && attrs.Length > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
         //#region 辅助方法
         //protected virtual Hashtable ReportKey2Table(ReportKey key)
         //{

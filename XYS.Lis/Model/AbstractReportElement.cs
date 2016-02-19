@@ -2,18 +2,23 @@
 using XYS.Common;
 namespace XYS.Lis.Model
 {
-    public abstract class AbstractReportElement:IReportElement
+    [Table()]
+    public abstract class AbstractReportElement : IReportElement
     {
         #region 私有字段
-        private readonly string m_searchSQL;
+        private string m_searchSQL;
         private readonly ReportElementTag m_elementTag;
         #endregion
 
         #region 受保护的构造函数
-        protected AbstractReportElement(string sql)
+        protected AbstractReportElement(ReportElementTag elementTag)
+            : this(elementTag, null)
+        {
+        }
+        protected AbstractReportElement(ReportElementTag elementTag, string sql)
         {
             this.m_searchSQL = sql;
-            this.m_elementTag = ReportElementTag.Filler;
+            this.m_elementTag = elementTag;
         }
         #endregion
 
@@ -21,6 +26,7 @@ namespace XYS.Lis.Model
         public string SearchSQL
         {
             get { return this.m_searchSQL; }
+            set { this.m_searchSQL = value; }
         }
         #endregion
 
@@ -32,12 +38,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实例虚方法
-        public void After()
-        {
-            //后续操作
-            this.Afterward();
-        }
-        protected abstract void Afterward();
+        public abstract void AfterFill();
         #endregion
     }
 }

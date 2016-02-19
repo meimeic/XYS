@@ -5,11 +5,12 @@ using System.Reflection;
 
 using XYS.Common;
 using XYS.Lis.Core;
-using XYS.Lis.Model;
+using XYS.Lis.Core;
 using XYS.Lis.Util;
 
 namespace XYS.Lis.Model
 {
+    [Export()]
     public class ReportReportElement : IReportElement
     {
 
@@ -45,7 +46,7 @@ namespace XYS.Lis.Model
         #region 公共构造函数
         public ReportReportElement()
         {
-            this.m_remarkFlag = false;  
+            this.m_remarkFlag = false;
             this.m_parItemList = new List<int>(5);
             this.m_reportItemTable = new Hashtable(5);
             this.m_elementTag = ReportElementTag.Report;
@@ -56,9 +57,6 @@ namespace XYS.Lis.Model
         public ReportElementTag ElementTag
         {
             get { return this.m_elementTag; }
-        }
-        public void After()
-        { 
         }
         #endregion
 
@@ -174,7 +172,6 @@ namespace XYS.Lis.Model
         #region 公共方法
         public void Init()
         {
-
         }
         public void ReportClear()
         {

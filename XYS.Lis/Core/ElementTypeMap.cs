@@ -2,7 +2,7 @@
 using System.Collections;
 
 using XYS.Lis.Core;
-namespace XYS.Lis.Model
+namespace XYS.Lis.Core
 {
     public class ElementTypeMap
     {

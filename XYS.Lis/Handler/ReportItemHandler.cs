@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using XYS.Model;
 using XYS.Lis.Core;
-using XYS.Lis.Model;
+using XYS.Lis.Core;
 using XYS.Lis.Util;
 namespace XYS.Lis.Handler
 {
@@ -47,7 +47,7 @@ namespace XYS.Lis.Handler
             //item 处理
             ReportItemElement rie;
             List<ILisReportElement> itemElementList = rre.GetReportItem(ReportElementTag.ItemElement);
-            List<ILisReportElement> kvList = rre.GetReportItem(ReportElementTag.Inner);
+            List<ILisReportElement> kvList = rre.GetReportItem(ReportElementTag.Temp);
             if (itemElementList.Count > 0)
             {
                 for (int i = itemElementList.Count - 1; i >= 0; i--)

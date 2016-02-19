@@ -3,12 +3,15 @@
     public enum ReportElementTag : int
     {
         Report = 1,
-        Filler,
-        Inner
+        Exam,
+        Patient,
+        Item,
+        Graph,
+        Custom,
+        Temp
     }
     public interface IReportElement
     {
         ReportElementTag ElementTag { get; }
-        void After();
     }
 }

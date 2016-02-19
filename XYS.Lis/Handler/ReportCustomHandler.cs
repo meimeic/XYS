@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using XYS.Model;
 using XYS.Lis.Core;
-using XYS.Lis.Model;
+using XYS.Lis.Core;
 
 namespace XYS.Lis.Handler
 {

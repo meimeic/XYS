@@ -5,7 +5,7 @@ using System.Text;
 using System.Data;
 using System.Reflection;
 using XYS.Common;
-using XYS.Lis.Model;
+using XYS.Lis.Core;
 using XYS.Lis.Core;
 
 namespace XYS.Lis.DAL
@@ -93,10 +93,10 @@ namespace XYS.Lis.DAL
             }
             else
             {
-                TableColumnAttribute tca;
+                ColumnAttribute tca;
                 foreach (PropertyInfo p in props)
                 {
-                    tca = (TableColumnAttribute)Attribute.GetCustomAttribute(p, typeof(TableColumnAttribute));
+                    tca = (ColumnAttribute)Attribute.GetCustomAttribute(p, typeof(ColumnAttribute));
                     if (tca != null && tca.IsColumn)
                     {
                         //如果是数据库列属性

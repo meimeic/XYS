@@ -109,10 +109,10 @@ namespace XYS.Lis.DAL
             }
             else
             {
-                TableColumnAttribute tca;
+                ColumnAttribute tca;
                 foreach (PropertyInfo p in props)
                 {
-                    tca = (TableColumnAttribute)Attribute.GetCustomAttribute(p, typeof(TableColumnAttribute));
+                    tca = (ColumnAttribute)Attribute.GetCustomAttribute(p, typeof(ColumnAttribute));
                     if (tca != null && tca.IsColumn)
                     {
                         //如果是数据库列属性

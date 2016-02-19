@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-using XYS.Lis.Model;
+using XYS.Lis.Core;
 namespace XYS.Lis.DAL
 {
     public class LisReportGraphDAL:BasicDAL<ReportGraphElement>

@@ -49,7 +49,8 @@
     <Compile Include="Common\ReportIdentify.cs" />
     <Compile Include="Common\ReportKey.cs" />
     <Compile Include="Common\SearchRequire.cs" />
-    <Compile Include="Common\TableColumnAttribute.cs" />
+    <Compile Include="Common\TableAttribute.cs" />
+    <Compile Include="Common\ColumnAttribute.cs" />
     <Compile Include="Common\IPatient.cs" />
     <Compile Include="Common\IPKElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,7 +10,7 @@ namespace XYS.Lis.Model
         #region 构造函数
         protected AbstractInnerElement()
         {
-            this.m_elementTag = ReportElementTag.Inner;
+            this.m_elementTag = ReportElementTag.Temp;
         }
         #endregion
 
@@ -18,10 +18,6 @@ namespace XYS.Lis.Model
         public ReportElementTag ElementTag
         {
             get { return this.m_elementTag; }
-        }
-        
-        public void After()
-        {
         }
         #endregion
     }

@@ -2,10 +2,13 @@
 using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
+    [Table()]
+    [Export()]
     public class ReportGraphElement : AbstractReportElement
     {
         #region 私有静态字段
         private static readonly string m_defaultGraphSQL = "select graphname,Graphjpg as graphimage from RFGraphData";
+        private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.Graph;
         #endregion
 
         #region 私有字段
@@ -15,17 +18,16 @@ namespace XYS.Lis.Model
 
         #region 公共构造函数
         public ReportGraphElement()
-            : this(m_defaultGraphSQL)
+            : base(m_defaultElementTag)
         { }
         public ReportGraphElement(string sql)
-            : base(sql)
-        {
-        }
+            : base(m_defaultElementTag, sql)
+        { }
         #endregion
 
         #region 公共属性
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string GraphName
         {
             get { return this.m_graphName; }
@@ -33,7 +35,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public byte[] GraphImage
         {
             get { return this.m_graphImage; }
@@ -42,7 +44,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实现父类抽象方法
-        protected override void Afterward()
+        public override void AfterFill()
         {
         }
         #endregion

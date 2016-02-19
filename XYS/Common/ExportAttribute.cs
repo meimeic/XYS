@@ -1,8 +1,7 @@
 ﻿using System;
-
 namespace XYS.Common
 {
-    [AttributeUsage(AttributeTargets.Property, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class, Inherited = true)]
     public class ExportAttribute : Attribute
     {
         private bool flag;
@@ -14,7 +13,7 @@ namespace XYS.Common
         {
             this.flag = f;
         }
-        public bool IsConvert
+        public bool IsExport
         {
             get { return this.flag; }
         }

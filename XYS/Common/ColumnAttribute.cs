@@ -2,14 +2,14 @@
 namespace XYS.Common
 {
     [AttributeUsage(AttributeTargets.Property, Inherited=true)]
-    public sealed class TableColumnAttribute:Attribute
+    public sealed class ColumnAttribute:Attribute
     {
         private bool flag;
-        public TableColumnAttribute()
+        public ColumnAttribute()
         {
-            this.flag = false;
+            this.flag = true;
         }
-        public TableColumnAttribute(bool flag)
+        public ColumnAttribute(bool flag)
         {
             this.flag = flag;
         }

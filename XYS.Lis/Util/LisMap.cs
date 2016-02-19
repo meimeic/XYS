@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using XYS.Lis.Config;
 using XYS.Lis.Core;
-using XYS.Lis.Model;
+using XYS.Lis.Core;
 
 namespace XYS.Lis.Util
 {
@@ -56,9 +56,9 @@ namespace XYS.Lis.Util
         public static void InitSection2PrintModelTable(Hashtable table)
         {
             table.Clear();
-            ReporterSectionMap sectionMap = new ReporterSectionMap();
+            ReportSectionMap sectionMap = new ReportSectionMap();
             ConfigureReportSectionMap(sectionMap);
-            foreach (ReporterSection section in sectionMap.AllReporterSection)
+            foreach (ReportSection section in sectionMap.AllReporterSection)
             {
                 table.Add(section.SectionNo, section.ModelNo);
             }
@@ -66,9 +66,9 @@ namespace XYS.Lis.Util
         public static void InitSection2OrderNoTable(Hashtable table)
         {
             table.Clear();
-            ReporterSectionMap sectionMap = new ReporterSectionMap();
+            ReportSectionMap sectionMap = new ReportSectionMap();
             ConfigureReportSectionMap(sectionMap);
-            foreach (ReporterSection section in sectionMap.AllReporterSection)
+            foreach (ReportSection section in sectionMap.AllReporterSection)
             {
                 table.Add(section.SectionNo, section.OrderNo);
             }
@@ -93,15 +93,15 @@ namespace XYS.Lis.Util
         public static void InitSection2ElementTypeTable(Hashtable table)
         {
             List<Type> temp;
-            ReporterSectionMap sectionMap = new ReporterSectionMap();
+            ReportSectionMap sectionMap = new ReportSectionMap();
             ConfigureReportSectionMap(sectionMap);
-            foreach (ReporterSection rs in sectionMap.AllReporterSection)
+            foreach (ReportSection rs in sectionMap.AllReporterSection)
             {
                 temp = new List<Type>(3);
-                if (rs.ElementNameList.Count > 0)
+                if (rs.ElementCollection.Count > 0)
                 {
                     Type elementType = null;
-                    foreach (string name in rs.ElementNameList)
+                    foreach (string name in rs.ElementCollection)
                     {
                         try
                         {
@@ -133,7 +133,7 @@ namespace XYS.Lis.Util
             ReportLog.Debug(declaringType, "LisMap:configuring ReportElementTypeMap");
             XmlParamConfigurator.ConfigReportElementMap(elementTypeMap);
         }
-        private static void ConfigureReportSectionMap(ReporterSectionMap sectionMap)
+        private static void ConfigureReportSectionMap(ReportSectionMap sectionMap)
         {
             ReportLog.Debug(declaringType, "LisMap:configuring ReportSectionMap");
             XmlParamConfigurator.ConfigSectionMap(sectionMap);

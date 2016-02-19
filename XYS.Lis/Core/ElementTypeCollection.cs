@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace XYS.Lis.Model
+namespace XYS.Lis.Core
 {
     public class ElementTypeCollection : ICollection, IList, IEnumerable, ICloneable
     {
@@ -49,7 +49,6 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 静态包装
-        //创建一个只读实例
         public static ElementTypeCollection ReadOnly(ElementTypeCollection list)
         {
             if (list == null)

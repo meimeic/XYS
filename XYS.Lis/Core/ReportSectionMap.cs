@@ -3,14 +3,14 @@ using System.Collections;
 
 namespace XYS.Lis.Core
 {
-   public class ReporterSectionMap
+   public class ReportSectionMap
    {
        #region
        private Hashtable m_mapNo2ReporterSection;
        #endregion
 
        #region
-       public ReporterSectionMap()
+       public ReportSectionMap()
        {
            this.m_mapNo2ReporterSection = new Hashtable(30);
        }
@@ -21,13 +21,13 @@ namespace XYS.Lis.Core
        {
            this.m_mapNo2ReporterSection.Clear();
        }
-       public ReporterSection this[int no]
+       public ReportSection this[int no]
        {
            get 
            {
                lock (this)
                {
-                   return (ReporterSection)this.m_mapNo2ReporterSection[no];
+                   return (ReportSection)this.m_mapNo2ReporterSection[no];
                }
            }
        }
@@ -35,24 +35,24 @@ namespace XYS.Lis.Core
        {
            get { return this.m_mapNo2ReporterSection.Count; }
        }
-       public ReporterSectionCollection AllReporterSection
+       public ReportSectionCollection AllReporterSection
        {
            get
            {
                lock (this)
                {
-                   return new ReporterSectionCollection(this.m_mapNo2ReporterSection.Values);
+                   return new ReportSectionCollection(this.m_mapNo2ReporterSection.Values);
                }
            }
        }
        public void Add(int sectionNo, string reporterName)
        {
-           ReporterSection rs = new ReporterSection(sectionNo, reporterName);
+           ReportSection rs = new ReportSection(sectionNo, reporterName);
            this.Add(rs);
        }
-       public void Add(ReporterSection rs)
+       public void Add(ReportSection rs)
        {
-           if(rs==null)
+           if (rs == null)
            {
                throw new ArgumentNullException("rs");
            }

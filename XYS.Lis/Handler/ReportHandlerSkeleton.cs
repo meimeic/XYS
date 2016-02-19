@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using XYS.Model;
 using XYS.Lis.Core;
-using XYS.Lis.Model;
+using XYS.Lis.Core;
 namespace XYS.Lis.Handler
 {
     public abstract class ReportHandlerSkeleton : IReportHandler
@@ -100,7 +100,7 @@ namespace XYS.Lis.Handler
                 case ReportElementTag.CustomElement:
                     result = reportElement is ReportCustomElement;
                     break;
-                case ReportElementTag.Inner:
+                case ReportElementTag.Temp:
                     result = reportElement is ReportKVElement;
                     break;
                 case ReportElementTag.NoneElement:

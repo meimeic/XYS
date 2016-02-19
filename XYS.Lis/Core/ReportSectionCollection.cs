@@ -4,18 +4,18 @@ using System.Collections.Generic;
 
 namespace XYS.Lis.Core
 {
-    public class ReporterSectionCollection: ICollection, IList, IEnumerable, ICloneable
+    public class ReportSectionCollection: ICollection, IList, IEnumerable, ICloneable
     {
         #region Interfaces
         /// <summary>
-        /// Supports type-safe iteration over a <see cref="ReporterSectionCollection"/>.
+        /// Supports type-safe iteration over a <see cref="ReportSectionCollection"/>.
         /// </summary>
         public interface IReporterSectionCollectionEnumerator
         {
             /// <summary>
             /// 获取集合当前元素
             /// </summary>
-            ReporterSection Current { get; }
+            ReportSection Current { get; }
 
             /// <summary>
             ///移动到下一元素
@@ -39,7 +39,7 @@ namespace XYS.Lis.Core
         private const int DEFAULT_CAPACITY = 16;
 
         #region 私有变量 用于实现ReporterSection 集合
-        private ReporterSection[] m_array;//元素容器
+        private ReportSection[] m_array;//元素容器
         private int m_count = 0; //元素个数
         private int m_version = 0;
 
@@ -47,7 +47,7 @@ namespace XYS.Lis.Core
 
         #region 静态包装
         //创建一个只读实例
-        public static ReporterSectionCollection ReadOnly(ReporterSectionCollection list)
+        public static ReportSectionCollection ReadOnly(ReportSectionCollection list)
         {
             if (list == null)
             {
@@ -59,37 +59,37 @@ namespace XYS.Lis.Core
 
         #region 构造函数
         //默认初始化容器大小
-        public ReporterSectionCollection()
+        public ReportSectionCollection()
         {
-            m_array = new ReporterSection[DEFAULT_CAPACITY];
+            m_array = new ReportSection[DEFAULT_CAPACITY];
         }
-        public ReporterSectionCollection(int capacity)
+        public ReportSectionCollection(int capacity)
         {
-            m_array = new ReporterSection[capacity];
+            m_array = new ReportSection[capacity];
         }
-        public ReporterSectionCollection(ReporterSectionCollection c)
+        public ReportSectionCollection(ReportSectionCollection c)
         {
-            m_array = new ReporterSection[c.Count];
+            m_array = new ReportSection[c.Count];
             AddRange(c);
         }
         /// <summary>
         /// Initializes a new instance of the <c>ReporterSectionCollection</c> class
-        /// that contains elements copied from the specified <see cref="ReporterSection"/> array.
+        /// that contains elements copied from the specified <see cref="ReportSection"/> array.
         /// </summary>
-        /// <param name="a">The <see cref="ReporterSection"/> array whose elements are copied to the new list.</param>
-        public ReporterSectionCollection(ReporterSection[] a)
+        /// <param name="a">The <see cref="ReportSection"/> array whose elements are copied to the new list.</param>
+        public ReportSectionCollection(ReportSection[] a)
         {
-            m_array = new ReporterSection[a.Length];
+            m_array = new ReportSection[a.Length];
             AddRange(a);
         }
         /// <summary>
         /// Initializes a new instance of the <c>ReporterSectionCollection</c> class
-        /// that contains elements copied from the specified <see cref="ReporterSection"/> collection.
+        /// that contains elements copied from the specified <see cref="ReportSection"/> collection.
         /// </summary>
-        /// <param name="col">The <see cref="ReporterSection"/> collection whose elements are copied to the new list.</param>
-        public ReporterSectionCollection(ICollection col)
+        /// <param name="col">The <see cref="ReportSection"/> collection whose elements are copied to the new list.</param>
+        public ReportSectionCollection(ICollection col)
         {
-            m_array = new ReporterSection[col.Count];
+            m_array = new ReportSection[col.Count];
             AddRange(col);
         }
         /// <summary>
@@ -107,7 +107,7 @@ namespace XYS.Lis.Core
         /// Allow subclasses to avoid our default constructors
         /// </summary>
         /// <param name="tag"></param>
-        protected internal ReporterSectionCollection(Tag tag)
+        protected internal ReportSectionCollection(Tag tag)
         {
             m_array = null;
         }
@@ -123,20 +123,20 @@ namespace XYS.Lis.Core
         }
         /// <summary>
         /// Copies the entire <c>ReporterSectionCollection</c> to a one-dimensional
-        /// <see cref="ReporterSection"/> array.
+        /// <see cref="ReportSection"/> array.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="ReporterSection"/> array to copy to.</param>
-        public virtual void CopyTo(ReporterSection[] array)
+        /// <param name="array">The one-dimensional <see cref="ReportSection"/> array to copy to.</param>
+        public virtual void CopyTo(ReportSection[] array)
         {
             this.CopyTo(array, 0);
         }
         /// <summary>
         /// Copies the entire <c>ReporterSectionCollection</c> to a one-dimensional
-        /// <see cref="ReporterSection"/> array, starting at the specified index of the target array.
+        /// <see cref="ReportSection"/> array, starting at the specified index of the target array.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="ReporterSection"/> array to copy to.</param>
+        /// <param name="array">The one-dimensional <see cref="ReportSection"/> array to copy to.</param>
         /// <param name="start">The zero-based index in <paramref name="array"/> at which copying begins.</param>
-        public virtual void CopyTo(ReporterSection[] array, int start)
+        public virtual void CopyTo(ReportSection[] array, int start)
         {
             if (m_count > array.GetUpperBound(0) + 1 - start)
             {
@@ -164,15 +164,15 @@ namespace XYS.Lis.Core
         #region Operations (type-safe IList)
 
         /// <summary>
-        /// Gets or sets the <see cref="ReporterSection"/> at the specified index.
+        /// Gets or sets the <see cref="ReportSection"/> at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index of the element to get or set.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="index"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="index"/> is equal to or greater than <see cref="ReporterSectionCollection.Count"/>.</para>
+        /// <para><paramref name="index"/> is equal to or greater than <see cref="ReportSectionCollection.Count"/>.</para>
         /// </exception>
-        public virtual ReporterSection this[int index]
+        public virtual ReportSection this[int index]
         {
             get
             {
@@ -188,11 +188,11 @@ namespace XYS.Lis.Core
         }
 
         /// <summary>
-        /// Adds a <see cref="ReporterSection"/> to the end of the <c>ReporterSectionCollection</c>.
+        /// Adds a <see cref="ReportSection"/> to the end of the <c>ReporterSectionCollection</c>.
         /// </summary>
-        /// <param name="item">The <see cref="ReporterSection"/> to be added to the end of the <c>ReporterSectionCollection</c>.</param>
+        /// <param name="item">The <see cref="ReportSection"/> to be added to the end of the <c>ReporterSectionCollection</c>.</param>
         /// <returns>The index at which the value has been added.</returns>
-        public virtual int Add(ReporterSection item)
+        public virtual int Add(ReportSection item)
         {
             if (m_count == m_array.Length)
             {
@@ -211,17 +211,17 @@ namespace XYS.Lis.Core
         public virtual void Clear()
         {
             ++m_version;
-            m_array = new ReporterSection[DEFAULT_CAPACITY];
+            m_array = new ReportSection[DEFAULT_CAPACITY];
             m_count = 0;
         }
 
         /// <summary>
-        /// Creates a shallow copy of the <see cref="ReporterSectionCollection"/>.
+        /// Creates a shallow copy of the <see cref="ReportSectionCollection"/>.
         /// </summary>
-        /// <returns>A new <see cref="ReporterSectionCollection"/> with a shallow copy of the collection data.</returns>
+        /// <returns>A new <see cref="ReportSectionCollection"/> with a shallow copy of the collection data.</returns>
         public virtual object Clone()
         {
-            ReporterSectionCollection newCol = new ReporterSectionCollection(m_count);
+            ReportSectionCollection newCol = new ReportSectionCollection(m_count);
             Array.Copy(m_array, 0, newCol.m_array, 0, m_count);
             newCol.m_count = m_count;
             newCol.m_version = m_version;
@@ -230,11 +230,11 @@ namespace XYS.Lis.Core
         }
 
         /// <summary>
-        /// Determines whether a given <see cref="ReporterSection"/> is in the <c>ReporterSectionCollection</c>.
+        /// Determines whether a given <see cref="ReportSection"/> is in the <c>ReporterSectionCollection</c>.
         /// </summary>
-        /// <param name="item">The <see cref="ReporterSection"/> to check for.</param>
+        /// <param name="item">The <see cref="ReportSection"/> to check for.</param>
         /// <returns><c>true</c> if <paramref name="item"/> is found in the <c>ReporterSectionCollection</c>; otherwise, <c>false</c>.</returns>
-        public virtual bool Contains(ReporterSection item)
+        public virtual bool Contains(ReportSection item)
         {
             for (int i = 0; i != m_count; ++i)
             {
@@ -247,15 +247,15 @@ namespace XYS.Lis.Core
         }
 
         /// <summary>
-        /// Returns the zero-based index of the first occurrence of a <see cref="ReporterSection"/>
+        /// Returns the zero-based index of the first occurrence of a <see cref="ReportSection"/>
         /// in the <c>ReporterSectionCollection</c>.
         /// </summary>
-        /// <param name="item">The <see cref="ReporterSection"/> to locate in the <c>ReporterSectionCollection</c>.</param>
+        /// <param name="item">The <see cref="ReportSection"/> to locate in the <c>ReporterSectionCollection</c>.</param>
         /// <returns>
         /// The zero-based index of the first occurrence of <paramref name="item"/> 
         /// in the entire <c>ReporterSectionCollection</c>, if found; otherwise, -1.
         ///	</returns>
-        public virtual int IndexOf(ReporterSection item)
+        public virtual int IndexOf(ReportSection item)
         {
             for (int i = 0; i != m_count; ++i)
             {
@@ -271,13 +271,13 @@ namespace XYS.Lis.Core
         /// Inserts an element into the <c>ReporterSectionCollection</c> at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.</param>
-        /// <param name="item">The <see cref="ReporterSection"/> to insert.</param>
+        /// <param name="item">The <see cref="ReportSection"/> to insert.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="index"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="index"/> is equal to or greater than <see cref="ReporterSectionCollection.Count"/>.</para>
+        /// <para><paramref name="index"/> is equal to or greater than <see cref="ReportSectionCollection.Count"/>.</para>
         /// </exception>
-        public virtual void Insert(int index, ReporterSection item)
+        public virtual void Insert(int index, ReportSection item)
         {
             ValidateIndex(index, true); // throws
 
@@ -297,13 +297,13 @@ namespace XYS.Lis.Core
         }
 
         /// <summary>
-        /// Removes the first occurrence of a specific <see cref="ReporterSection"/> from the <c>ReporterSectionCollection</c>.
+        /// Removes the first occurrence of a specific <see cref="ReportSection"/> from the <c>ReporterSectionCollection</c>.
         /// </summary>
-        /// <param name="item">The <see cref="ReporterSection"/> to remove from the <c>ReporterSectionCollection</c>.</param>
+        /// <param name="item">The <see cref="ReportSection"/> to remove from the <c>ReporterSectionCollection</c>.</param>
         /// <exception cref="ArgumentException">
-        /// The specified <see cref="ReporterSection"/> was not found in the <c>ReporterSectionCollection</c>.
+        /// The specified <see cref="ReportSection"/> was not found in the <c>ReporterSectionCollection</c>.
         /// </exception>
-        public virtual void Remove(ReporterSection item)
+        public virtual void Remove(ReportSection item)
         {
             int i = IndexOf(item);
             if (i < 0)
@@ -322,7 +322,7 @@ namespace XYS.Lis.Core
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="index"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="index"/> is equal to or greater than <see cref="ReporterSectionCollection.Count"/>.</para>
+        /// <para><paramref name="index"/> is equal to or greater than <see cref="ReportSectionCollection.Count"/>.</para>
         /// </exception>
         public virtual void RemoveAt(int index)
         {
@@ -338,7 +338,7 @@ namespace XYS.Lis.Core
             // We can't set the deleted entry equal to null, because it might be a value type.
             // Instead, we'll create an empty single-element array of the right type and copy it 
             // over the entry we want to erase.
-            ReporterSection[] temp = new ReporterSection[1];
+            ReportSection[] temp = new ReportSection[1];
             Array.Copy(temp, 0, m_array, m_count, 1);
             m_version++;
         }
@@ -398,13 +398,13 @@ namespace XYS.Lis.Core
                 {
                     if (value > 0)
                     {
-                        ReporterSection[] temp = new ReporterSection[value];
+                        ReportSection[] temp = new ReportSection[value];
                         Array.Copy(m_array, 0, temp, 0, m_count);
                         m_array = temp;
                     }
                     else
                     {
-                        m_array = new ReporterSection[DEFAULT_CAPACITY];
+                        m_array = new ReportSection[DEFAULT_CAPACITY];
                     }
                 }
             }
@@ -414,8 +414,8 @@ namespace XYS.Lis.Core
         /// Adds the elements of another <c>ReporterSectionCollection</c> to the current <c>ReporterSectionCollection</c>.
         /// </summary>
         /// <param name="x">The <c>ReporterSectionCollection</c> whose elements should be added to the end of the current <c>ReporterSectionCollection</c>.</param>
-        /// <returns>The new <see cref="ReporterSectionCollection.Count"/> of the <c>ReporterSectionCollection</c>.</returns>
-        public virtual int AddRange(ReporterSectionCollection x)
+        /// <returns>The new <see cref="ReportSectionCollection.Count"/> of the <c>ReporterSectionCollection</c>.</returns>
+        public virtual int AddRange(ReportSectionCollection x)
         {
             if (m_count + x.Count >= m_array.Length)
             {
@@ -430,11 +430,11 @@ namespace XYS.Lis.Core
         }
 
         /// <summary>
-        /// Adds the elements of a <see cref="ReporterSection"/> array to the current <c>ReporterSectionCollection</c>.
+        /// Adds the elements of a <see cref="ReportSection"/> array to the current <c>ReporterSectionCollection</c>.
         /// </summary>
-        /// <param name="x">The <see cref="ReporterSection"/> array whose elements should be added to the end of the <c>ReporterSectionCollection</c>.</param>
-        /// <returns>The new <see cref="ReporterSectionCollection.Count"/> of the <c>ReporterSectionCollection</c>.</returns>
-        public virtual int AddRange(ReporterSection[] x)
+        /// <param name="x">The <see cref="ReportSection"/> array whose elements should be added to the end of the <c>ReporterSectionCollection</c>.</param>
+        /// <returns>The new <see cref="ReportSectionCollection.Count"/> of the <c>ReporterSectionCollection</c>.</returns>
+        public virtual int AddRange(ReportSection[] x)
         {
             if (m_count + x.Length >= m_array.Length)
             {
@@ -449,10 +449,10 @@ namespace XYS.Lis.Core
         }
 
         /// <summary>
-        /// Adds the elements of a <see cref="ReporterSection"/> collection to the current <c>ReporterSectionCollection</c>.
+        /// Adds the elements of a <see cref="ReportSection"/> collection to the current <c>ReporterSectionCollection</c>.
         /// </summary>
-        /// <param name="col">The <see cref="ReporterSection"/> collection whose elements should be added to the end of the <c>ReporterSectionCollection</c>.</param>
-        /// <returns>The new <see cref="ReporterSectionCollection.Count"/> of the <c>ReporterSectionCollection</c>.</returns>
+        /// <param name="col">The <see cref="ReportSection"/> collection whose elements should be added to the end of the <c>ReporterSectionCollection</c>.</param>
+        /// <returns>The new <see cref="ReportSectionCollection.Count"/> of the <c>ReporterSectionCollection</c>.</returns>
         public virtual int AddRange(ICollection col)
         {
             if (m_count + col.Count >= m_array.Length)
@@ -462,7 +462,7 @@ namespace XYS.Lis.Core
 
             foreach (object item in col)
             {
-                Add((ReporterSection)item);
+                Add((ReportSection)item);
             }
 
             return m_count;
@@ -483,7 +483,7 @@ namespace XYS.Lis.Core
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="i"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="i"/> is equal to or greater than <see cref="ReporterSectionCollection.Count"/>.</para>
+        /// <para><paramref name="i"/> is equal to or greater than <see cref="ReportSectionCollection.Count"/>.</para>
         /// </exception>
         private void ValidateIndex(int i)
         {
@@ -493,7 +493,7 @@ namespace XYS.Lis.Core
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="i"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="i"/> is equal to or greater than <see cref="ReporterSectionCollection.Count"/>.</para>
+        /// <para><paramref name="i"/> is equal to or greater than <see cref="ReportSectionCollection.Count"/>.</para>
         /// </exception>
         private void ValidateIndex(int i, bool allowEqualEnd)
         {
@@ -531,32 +531,32 @@ namespace XYS.Lis.Core
         object IList.this[int i]
         {
             get { return (object)this[i]; }
-            set { this[i] = (ReporterSection)value; }
+            set { this[i] = (ReportSection)value; }
         }
 
         int IList.Add(object x)
         {
-            return this.Add((ReporterSection)x);
+            return this.Add((ReportSection)x);
         }
 
         bool IList.Contains(object x)
         {
-            return this.Contains((ReporterSection)x);
+            return this.Contains((ReportSection)x);
         }
 
         int IList.IndexOf(object x)
         {
-            return this.IndexOf((ReporterSection)x);
+            return this.IndexOf((ReportSection)x);
         }
 
         void IList.Insert(int pos, object x)
         {
-            this.Insert(pos, (ReporterSection)x);
+            this.Insert(pos, (ReportSection)x);
         }
 
         void IList.Remove(object x)
         {
-            this.Remove((ReporterSection)x);
+            this.Remove((ReportSection)x);
         }
 
         void IList.RemoveAt(int pos)
@@ -578,13 +578,13 @@ namespace XYS.Lis.Core
         #region Nested enumerator class
 
         /// <summary>
-        /// Supports simple iteration over a <see cref="ReporterSectionCollection"/>.
+        /// Supports simple iteration over a <see cref="ReportSectionCollection"/>.
         /// </summary>
         private sealed class Enumerator : IEnumerator, IReporterSectionCollectionEnumerator
         {
             #region Implementation (data)
 
-            private readonly ReporterSectionCollection m_collection;
+            private readonly ReportSectionCollection m_collection;
             private int m_index;
             private int m_version;
 
@@ -596,7 +596,7 @@ namespace XYS.Lis.Core
             /// Initializes a new instance of the <c>Enumerator</c> class.
             /// </summary>
             /// <param name="tc"></param>
-            internal Enumerator(ReporterSectionCollection tc)
+            internal Enumerator(ReportSectionCollection tc)
             {
                 m_collection = tc;
                 m_index = -1;
@@ -610,7 +610,7 @@ namespace XYS.Lis.Core
             /// <summary>
             /// Gets the current element in the collection.
             /// </summary>
-            public ReporterSection Current
+            public ReportSection Current
             {
                 get { return m_collection[m_index]; }
             }
@@ -660,17 +660,17 @@ namespace XYS.Lis.Core
 
         #region Nested Read Only Wrapper class
 
-        private sealed class ReadOnlyReporterSectionCollection : ReporterSectionCollection
+        private sealed class ReadOnlyReporterSectionCollection : ReportSectionCollection
         {
             #region Implementation (data)
 
-            private readonly ReporterSectionCollection m_collection;
+            private readonly ReportSectionCollection m_collection;
 
             #endregion
 
             #region Construction
 
-            internal ReadOnlyReporterSectionCollection(ReporterSectionCollection list)
+            internal ReadOnlyReporterSectionCollection(ReportSectionCollection list)
                 : base(Tag.Default)
             {
                 m_collection = list;
@@ -679,11 +679,11 @@ namespace XYS.Lis.Core
 
             #region 类型安全ICollection重写
 
-            public override void CopyTo(ReporterSection[] array)
+            public override void CopyTo(ReportSection[] array)
             {
                 m_collection.CopyTo(array);
             }
-            public override void CopyTo(ReporterSection[] array, int start)
+            public override void CopyTo(ReportSection[] array, int start)
             {
                 m_collection.CopyTo(array, start);
             }
@@ -703,12 +703,12 @@ namespace XYS.Lis.Core
 
             #region 类型安全IList重写
 
-            public override ReporterSection this[int i]
+            public override ReportSection this[int i]
             {
                 get { return m_collection[i]; }
                 set { throw new NotSupportedException("This is a Read Only Collection and can not be modified"); }
             }
-            public override int Add(ReporterSection x)
+            public override int Add(ReportSection x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
@@ -716,19 +716,19 @@ namespace XYS.Lis.Core
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
-            public override bool Contains(ReporterSection x)
+            public override bool Contains(ReportSection x)
             {
                 return m_collection.Contains(x);
             }
-            public override int IndexOf(ReporterSection x)
+            public override int IndexOf(ReportSection x)
             {
                 return m_collection.IndexOf(x);
             }
-            public override void Insert(int pos, ReporterSection x)
+            public override void Insert(int pos, ReportSection x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
-            public override void Remove(ReporterSection x)
+            public override void Remove(ReportSection x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
@@ -761,11 +761,11 @@ namespace XYS.Lis.Core
                 get { return m_collection.Capacity; }
                 set { throw new NotSupportedException("This is a Read Only Collection and can not be modified"); }
             }
-            public override int AddRange(ReporterSectionCollection x)
+            public override int AddRange(ReportSectionCollection x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
-            public override int AddRange(ReporterSection[] x)
+            public override int AddRange(ReportSection[] x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }

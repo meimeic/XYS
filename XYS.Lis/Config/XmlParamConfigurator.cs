@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Xml;
 
-using XYS.Lis.Core;
+using XYS.Lis.Fill;
 using XYS.Lis.Util;
-using XYS.Lis.Model;
+using XYS.Lis.Core;
 namespace XYS.Lis.Config
 {
     public class XmlParamConfigurator
     {
         private static readonly string CONFIGURATION_TAG = "lis-param";
-        
+
         private static readonly string REPORT_ELEMENTS_TAG = "reportElements";
         private static readonly string REPORT_ELEMENT_TAG = "reportElement";
         private static readonly string REPORT_SECTIONS_TAG = "reportSections";
@@ -23,7 +23,7 @@ namespace XYS.Lis.Config
         private static readonly string TYPE_ATTR = "type";
         private static readonly string EXPORT_TYPE_ATTR = "exportType";
         private static readonly string VALUE_ATTR = "value";
-        private static readonly string REPORT_ELEMENT_REFS = "reportElementRefs";
+        private static readonly string FILL_TAG_ATTR = "fillTag";
         private static readonly string MODEL_NO_ATTR = "modelNo";
         private static readonly string ORDER_NO_ATTR = "orderNo";
         private static readonly string IMAGE_FLAG_ATTR = "imageFlag";
@@ -32,10 +32,9 @@ namespace XYS.Lis.Config
 
         public XmlParamConfigurator()
         {
-
         }
 
-        public static void ConfigSectionMap(ReporterSectionMap sectionMap)
+        public static void ConfigSectionMap(ReportSectionMap sectionMap)
         {
             XmlElement sectionsElement = GetTargetElement(REPORT_SECTIONS_TAG);
             if (sectionsElement != null)
@@ -50,7 +49,7 @@ namespace XYS.Lis.Config
                 }
             }
         }
-        public void ConfigSectionMap(XmlElement element, ReporterSectionMap sectionMap)
+        public void ConfigSectionMap(XmlElement element, ReportSectionMap sectionMap)
         {
             XmlElement sectionsElement = GetTargetElement(element, REPORT_SECTIONS_TAG);
             if (sectionsElement != null)
@@ -65,7 +64,7 @@ namespace XYS.Lis.Config
                 }
             }
         }
-        private static void ConfigSection(XmlElement element, ReporterSectionMap sectionMap)
+        private static void ConfigSection(XmlElement element, ReportSectionMap sectionMap)
         {
             if (element.LocalName == REPORT_SECTION_TAG)
             {
@@ -73,28 +72,31 @@ namespace XYS.Lis.Config
                 int value = GetIntValue(element.GetAttribute(VALUE_ATTR));
                 if (value != -1)
                 {
-                    ReporterSection section = new ReporterSection(value, name);
-                    string reportElementRefs = element.GetAttribute(REPORT_ELEMENT_REFS);
-                    if (reportElementRefs != null && !reportElementRefs.Equals(""))
+                    ReportSection section = new ReportSection(value, name);
+                    foreach (XmlNode node in sectionsElement.ChildNodes)
                     {
-                        string[] reportElements = reportElementRefs.Split(new char[] { ';' });
-                        foreach (string s in reportElements)
-                        {
-                            section.AddElementName(s);
-                        }
-                    }
-                    int modelNo = GetIntValue(element.GetAttribute(MODEL_NO_ATTR));
-                    int orderNo = GetIntValue(element.GetAttribute(ORDER_NO_ATTR));
-                    if (modelNo >= 0)
-                    {
-                        section.ModelNo = modelNo;
-                    }
-                    if (orderNo >= 0)
-                    {
-                        section.OrderNo = orderNo;
+ 
                     }
                     sectionMap.Add(section);
                 }
+            }
+        }
+        private static void ConfigSectionAttr(XmlElement element,ReportSection section)
+        {
+            int orderNo = GetIntValue(element.GetAttribute(ORDER_NO_ATTR));
+            if (orderNo >= 0)
+            {
+                section.OrderNo = orderNo;
+            }
+            int modelNo = GetIntValue(element.GetAttribute(MODEL_NO_ATTR));
+            if (modelNo >= 0)
+            {
+                section.ModelNo = modelNo;
+            }
+            int fillvTypeValue = GetIntValue(element.GetAttribute(FILL_TAG_ATTR));
+            if (fillvTypeValue > -1)
+            {
+
             }
         }
 
@@ -135,7 +137,7 @@ namespace XYS.Lis.Config
                 string typeName = element.GetAttribute(TYPE_ATTR);
                 string exportName = element.GetAttribute(EXPORT_TYPE_ATTR);
                 string name = element.GetAttribute(NAME_ATTR);
-                int value = GetIntValue(element.GetAttribute(VALUE_ATTR));
+                int value = GetIntValue(element.GetAttribute(fillTag));
                 Type type = SystemInfo.GetTypeFromString(typeName, true, true);
                 if (type != null && name != null)
                 {
@@ -285,6 +287,11 @@ namespace XYS.Lis.Config
             }
             return null;
         }
+        /// <summary>
+        /// 尝试将字符串转换成数字
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns>转换成功返回相应数值，失败返回-1</returns>
         private static int GetIntValue(string v)
         {
             if (v == null || v.Equals(""))
@@ -316,15 +323,11 @@ namespace XYS.Lis.Config
             }
             return false;
         }
-        private static ReportElementTag GetElementTag(int tag)
+        private static FillTypeTag GetFillTag(int tag)
         {
-            if (tag <= 0 || tag > 7)
+            if (tag <= 0 || tag > 3)
             {
-                return ReportElementTag.NoneElement;
-            }
-            else
-            {
-                return (ReportElementTag)tag;
+
             }
         }
     }

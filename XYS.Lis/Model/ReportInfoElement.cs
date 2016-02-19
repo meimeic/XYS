@@ -59,11 +59,11 @@ namespace XYS.Lis.Model
 
         #region 构造函数
         public ReportInfoElement()
-            : this(m_defaultInfoSQL)
+            : this(ReportElementTag.Temp,m_defaultInfoSQL)
         {
         }
-        public ReportInfoElement(string sql)
-            : base(sql)
+        public ReportInfoElement(ReportElementTag elementTag, string sql)
+            : base(elementTag, sql)
         {
         }
         #endregion
@@ -113,7 +113,7 @@ namespace XYS.Lis.Model
 
         #region 公共属性
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string SerialNo
         {
             get { return m_serialNo; }
@@ -121,7 +121,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string SampleNo
         {
             get { return m_sampleNo; }
@@ -129,51 +129,51 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string SampleTypeName
         {
             get { return m_sampleTypeName; }
             set { m_sampleTypeName = value; }
         }
 
-        [TableColumn(true)]
+        [Column(true)]
         public DateTime ReceiveDateTime
         {
             get { return m_receiveDateTime; }
             set { m_receiveDateTime = value; }
         }
-        [TableColumn(true)]
+        [Column(true)]
         public DateTime CollectDateTime
         {
             get { return m_collectDateTime; }
             set { m_collectDateTime = value; }
         }
-        [TableColumn(true)]
+        [Column(true)]
         public DateTime InceptDateTime
         {
             get { return m_inceptDateTime; }
             set { m_inceptDateTime = value; }
         }
-        [TableColumn(true)]
+        [Column(true)]
         public DateTime TestDateTime
         {
             get { return m_testDateTime; }
             set { m_testDateTime = value; }
         }
-        [TableColumn(true)]
+        [Column(true)]
         public DateTime CheckDateTime
         {
             get { return m_checkDateTime; }
             set { m_checkDateTime = value; }
         }
-        [TableColumn(true)]
+        [Column(true)]
         public DateTime SecondeCheckDateTime
         {
             get { return m_secondCheckDateTime; }
             set { m_secondCheckDateTime = value; }
         }
 
-        [TableColumn(true)]
+        [Column(true)]
         public string ParItemName
         {
             get { return m_parItemName; }
@@ -181,7 +181,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public int SectionNo
         {
             get { return m_sectionNo; }
@@ -189,7 +189,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public int SampleTypeNo
         {
             get { return m_sampleTypeNo; }
@@ -197,21 +197,21 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string FormMemo
         {
             get { return m_formMemo; }
             set { m_formMemo = value; }
         }
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string FormComment
         {
             get { return m_formComment; }
             set { m_formComment = value; }
         }
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string FormComment2
         {
             get { return m_formComment2; }
@@ -219,7 +219,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string Technician
         {
             get { return m_technician; }
@@ -227,7 +227,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string Checker
         {
             get { return m_checker; }
@@ -236,28 +236,28 @@ namespace XYS.Lis.Model
 
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string PatientName
         {
             get { return this.m_patientName; }
             set { this.m_patientName = value; }
         }
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string PID
         {
             get { return this.m_pid; }
             set { this.m_pid = value; }
         }
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string CID
         {
             get { return this.m_cid; }
             set { this.m_cid = value; }
         }
 
-        [TableColumn(true)]
+        [Column(true)]
         public int GenderNo
         {
             get { return this.m_genderNo; }
@@ -290,14 +290,14 @@ namespace XYS.Lis.Model
             }
         }
 
-        [TableColumn(true)]
+        [Column(true)]
         public int AgeValue
         {
             get { return this.m_ageValue; }
             set { this.m_ageValue = value; }
         }
 
-        [TableColumn(true)]
+        [Column(true)]
         public int AgeUnitNo
         {
             get { return this.m_ageUnitNo; }
@@ -310,7 +310,7 @@ namespace XYS.Lis.Model
             protected set { this.m_ageUnit = value; }
         }
 
-        [TableColumn(true)]
+        [Column(true)]
         public int ClinicTypeNo
         {
             get { return this.m_clinicTypeNo; }
@@ -325,7 +325,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public int VisitTimes
         {
             get { return this.m_visitTimes; }
@@ -333,7 +333,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string DeptName
         {
             get { return this.m_deptName; }
@@ -341,7 +341,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string Doctor
         {
             get { return this.m_doctor; }
@@ -349,7 +349,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string BedNo
         {
             get { return this.m_bedNo; }
@@ -357,7 +357,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string ClinicalDiagnosis
         {
             get { return this.m_clinicalDiagnosis; }
@@ -365,7 +365,7 @@ namespace XYS.Lis.Model
         }
 
         [Export()]
-        [TableColumn(true)]
+        [Column(true)]
         public string Explanation
         {
             get { return this.m_explanation; }
@@ -374,7 +374,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实现父类抽象方法
-        protected override void Afterward()
+        protected override void AfterFill()
         {
             this.ConvertGender();
             this.ConvertClinic();

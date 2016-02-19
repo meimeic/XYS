@@ -6,7 +6,7 @@ using System.Reflection;
 
 using XYS.Model;
 using XYS.Lis.Core;
-using XYS.Lis.Model;
+using XYS.Lis.Core;
 using XYS.Lis.Util;
 namespace XYS.Lis.Handler
 {

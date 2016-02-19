@@ -11,7 +11,7 @@ using XYS.Lis.Repository;
 using XYS.Lis.Util;
 using XYS.Lis;
 using XYS.Lis.Core;
-using XYS.Lis.Model;
+using XYS.Lis.Core;
 namespace XYS.Lis.Config
 {
     public sealed class XmlConfigurator
