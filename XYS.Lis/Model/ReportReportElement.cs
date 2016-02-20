@@ -23,7 +23,7 @@ namespace XYS.Lis.Model
         private int m_printModelNo;
         private string m_reportTitle;
         private string m_remark;
-        private bool m_remarkFlag;
+        private int m_remarkFlag;
         private string m_parItemName;
 
         private byte[] m_technicianImage;
@@ -46,7 +46,7 @@ namespace XYS.Lis.Model
         #region 公共构造函数
         public ReportReportElement()
         {
-            this.m_remarkFlag = false;
+            this.m_remarkFlag = 0;
             this.m_parItemList = new List<int>(5);
             this.m_reportItemTable = new Hashtable(5);
             this.m_elementTag = ReportElementTag.Report;
@@ -73,10 +73,18 @@ namespace XYS.Lis.Model
             get { return this.m_printModelNo; }
             set { this.m_printModelNo = value; }
         }
-        public bool RemarkFlag
+        //备注标识 0表示没有备注 1 表示备注已设置  2 表示备注未设置
+        public int RemarkFlag
         {
             get { return this.m_remarkFlag; }
             set { this.m_remarkFlag = value; }
+        }
+
+        [Export()]
+        public string Remark
+        {
+            get { return this.m_remark; }
+            set { this.m_remark = value; }
         }
 
         [Export()]
@@ -121,13 +129,6 @@ namespace XYS.Lis.Model
         {
             get { return this.m_reportTitle; }
             set { this.m_reportTitle = value; }
-        }
-
-        [Export()]
-        public string Remark
-        {
-            get { return this.m_remark; }
-            set { this.m_remark = value; }
         }
 
         [Export()]
@@ -180,7 +181,7 @@ namespace XYS.Lis.Model
             this.OrderNo = 0;
             this.PrintModelNo = -1;
             this.ReportTitle = "";
-            this.RemarkFlag = false;
+            this.RemarkFlag = 0;
             this.Remark = "";
             this.ClinicType = ClinicType.none;
             this.ParItemName = null;
@@ -202,16 +203,21 @@ namespace XYS.Lis.Model
         }
         public List<IReportElement> GetReportItem(string typeName)
         {
-            List<IReportElement> result = this.m_reportItemTable[typeName] as List<IReportElement>;
-            if (result == null)
+            if (!string.IsNullOrEmpty(typeName))
             {
-                result = new List<IReportElement>(10);
-                lock (this.m_reportItemTable)
+                string name = typeName.ToLower();
+                List<IReportElement> result = this.m_reportItemTable[name] as List<IReportElement>;
+                if (result == null)
                 {
-                    this.m_reportItemTable[typeName] = result;
+                    result = new List<IReportElement>(10);
+                    lock (this.m_reportItemTable)
+                    {
+                        this.m_reportItemTable[name] = result;
+                    }
                 }
+                return result;
             }
-            return result;
+            return null;
         }
         #endregion
     }

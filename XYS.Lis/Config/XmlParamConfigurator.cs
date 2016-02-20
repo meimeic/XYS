@@ -14,6 +14,7 @@ namespace XYS.Lis.Config
         private static readonly string REPORT_ELEMENT_TAG = "reportElement";
         private static readonly string REPORT_SECTIONS_TAG = "reportSections";
         private static readonly string REPORT_SECTION_TAG = "reportSection";
+        private static readonly string FILL_ELEMENTS_TAG = "fillElements";
         private static readonly string PAR_ITEMS_TAG = "parItems";
         private static readonly string PAR_ITEM_TAG = "parItem";
         private static readonly string REPORT_MODELS_TAG = "reportModels";
@@ -21,7 +22,7 @@ namespace XYS.Lis.Config
 
         private static readonly string NAME_ATTR = "name";
         private static readonly string TYPE_ATTR = "type";
-        private static readonly string EXPORT_TYPE_ATTR = "exportType";
+        private static readonly string JSON_TYPE_ATTR = "jsonType";
         private static readonly string VALUE_ATTR = "value";
         private static readonly string FILL_TAG_ATTR = "fillTag";
         private static readonly string MODEL_NO_ATTR = "modelNo";
@@ -29,6 +30,8 @@ namespace XYS.Lis.Config
         private static readonly string IMAGE_FLAG_ATTR = "imageFlag";
         private static readonly string IMAGE_PATH_ATTR = "imagePath";
         private static readonly string MODEL_PATH_ATTR = "modelPath";
+        private static readonly string INNER_ELEMENTS_ATTR = "innerElements";
+        private static readonly string EXTEND_ELEMENTS_ATTR = "extendElements";
 
         public XmlParamConfigurator()
         {
@@ -73,15 +76,30 @@ namespace XYS.Lis.Config
                 if (value != -1)
                 {
                     ReportSection section = new ReportSection(value, name);
-                    foreach (XmlNode node in sectionsElement.ChildNodes)
+                    //配置属性
+                    ConfigSectionAttr(element, section);
+                    //配置子元素
+                    foreach (XmlNode node in element.ChildNodes)
                     {
- 
+                        if (node.NodeType == XmlNodeType.Element)
+                        {
+                            XmlElement e = (XmlElement)node;
+                            //fillElements元素
+                            if (e.LocalName == FILL_ELEMENTS_TAG)
+                            {
+                                ConfigFillElementsAttr(e, section);
+                            }
+                            //其他元素
+                            else
+                            {
+                            }
+                        }
                     }
                     sectionMap.Add(section);
                 }
             }
         }
-        private static void ConfigSectionAttr(XmlElement element,ReportSection section)
+        private static void ConfigSectionAttr(XmlElement element, ReportSection section)
         {
             int orderNo = GetIntValue(element.GetAttribute(ORDER_NO_ATTR));
             if (orderNo >= 0)
@@ -93,14 +111,30 @@ namespace XYS.Lis.Config
             {
                 section.ModelNo = modelNo;
             }
-            int fillvTypeValue = GetIntValue(element.GetAttribute(FILL_TAG_ATTR));
-            if (fillvTypeValue > -1)
+            FillTypeTag fillTag = GetFillTag(GetIntValue(element.GetAttribute(FILL_TAG_ATTR)));
+            if (fillTag != FillTypeTag.None)
             {
+                section.FillTag = fillTag;
+            }
+        }
+        private static void ConfigFillElementsAttr(XmlElement element, ReportSection section)
+        {
+            string innerElementsStr = element.GetAttribute(INNER_ELEMENTS_ATTR);
+            string[] innerElements = innerElementsStr.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string str in innerElements)
+            {
+                section.AddInnerElement(str);
+            }
 
+            string extendElementsStr = element.GetAttribute(EXTEND_ELEMENTS_ATTR);
+            string[] extendElements = extendElementsStr.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string str in extendElements)
+            {
+                section.AddExtendElement(str);
             }
         }
 
-        public static void ConfigReportElementMap(ElementTypeMap reportTypeMap)
+        public static void ConfigReportElementMap(ElementTypeMap elementTypeMap)
         {
             XmlElement reportElementElement = GetTargetElement(REPORT_ELEMENTS_TAG);
             if (reportElementElement != null)
@@ -110,12 +144,12 @@ namespace XYS.Lis.Config
                     if (node.NodeType == XmlNodeType.Element)
                     {
                         XmlElement currentElement = (XmlElement)node;
-                        ConfigReportElement(currentElement, reportTypeMap);
+                        ConfigReportElement(currentElement, elementTypeMap);
                     }
                 }
             }
         }
-        public void ConfigReportElementMap(XmlElement element, ElementTypeMap reportTypeMap)
+        public void ConfigReportElementMap(XmlElement element, ElementTypeMap elementTypeMap)
         {
             XmlElement reportElementElement = GetTargetElement(element, REPORT_ELEMENTS_TAG);
             if (reportElementElement != null)
@@ -125,25 +159,22 @@ namespace XYS.Lis.Config
                     if (node.NodeType == XmlNodeType.Element)
                     {
                         XmlElement currentElement = (XmlElement)node;
-                        ConfigReportElement(currentElement, reportTypeMap);
+                        ConfigReportElement(currentElement, elementTypeMap);
                     }
                 }
             }
         }
-        private static void ConfigReportElement(XmlElement element, ElementTypeMap reportTypeMap)
+        private static void ConfigReportElement(XmlElement element, ElementTypeMap elementTypeMap)
         {
             if (element.LocalName == REPORT_ELEMENT_TAG)
             {
-                string typeName = element.GetAttribute(TYPE_ATTR);
-                string exportName = element.GetAttribute(EXPORT_TYPE_ATTR);
                 string name = element.GetAttribute(NAME_ATTR);
-                int value = GetIntValue(element.GetAttribute(fillTag));
-                Type type = SystemInfo.GetTypeFromString(typeName, true, true);
-                if (type != null && name != null)
+                string typeName = element.GetAttribute(TYPE_ATTR);
+                string jsonName = element.GetAttribute(JSON_TYPE_ATTR);
+                if (!string.IsNullOrEmpty(typeName))
                 {
-                    ElementType elementType = new ElementType(name, type);
-                    elementType.ElementTag = GetElementTag(value);
-                    reportTypeMap.Add(elementType);
+                    ElementType elementType = new ElementType(name, typeName);
+                    elementTypeMap.Add(elementType);
                 }
             }
         }
@@ -327,7 +358,11 @@ namespace XYS.Lis.Config
         {
             if (tag <= 0 || tag > 3)
             {
-
+                return FillTypeTag.None;
+            }
+            else
+            {
+                return (FillTypeTag)tag;
             }
         }
     }

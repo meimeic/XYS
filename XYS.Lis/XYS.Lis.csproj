@@ -74,8 +74,10 @@
     <Compile Include="Fill\ReportListFillByDB.cs" />
     <Compile Include="Handler\DefaultReport2Export.cs" />
     <Compile Include="Handler\ReportCustomHandler.cs" />
+    <Compile Include="Handler\ReportExamHandler.cs" />
     <Compile Include="Handler\ReportInfoHandler.cs" />
     <Compile Include="Handler\ReportKVHandler.cs" />
+    <Compile Include="Handler\ReportPatientHandler.cs" />
     <Compile Include="Handler\ReportReportHandler.cs" />
     <Compile Include="LisSearchRequire.cs" />
     <Compile Include="Core\ParItem.cs" />
@@ -94,10 +96,6 @@
     <Compile Include="DAL\ILisReportDAL.cs" />
     <Compile Include="DAL\LisReportCommonDAL.cs" />
     <Compile Include="DAL\LisReportCommonDAL1.cs" />
-    <Compile Include="DAL\LisReportExamDAL.cs" />
-    <Compile Include="DAL\LisReportGraphDAL.cs" />
-    <Compile Include="DAL\LisReportItemDAL.cs" />
-    <Compile Include="DAL\LisReportPatientDAL.cs" />
     <Compile Include="DAL\LisReporterKeyDAL.cs" />
     <Compile Include="Filter\IReportFilter.cs" />
     <Compile Include="Handler\HeaderDefaultHandler.cs" />

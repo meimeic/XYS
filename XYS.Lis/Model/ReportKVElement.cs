@@ -28,10 +28,62 @@ namespace XYS.Lis.Model
             get { return this.m_name; }
             set { this.m_name = value; }
         }
-        public Hashtable KVTable
+        public NVItem this[string key]
         {
-            get { return this.m_kvTable; }
+            get
+            {
+                lock (this)
+                {
+                    return this.m_kvTable[key] as NVItem;
+                }
+            }
+        }
+        public ICollection AllNVItem
+        {
+            get { return this.m_kvTable.Values; }
+        }
+        public int Count
+        {
+            get { return this.m_kvTable.Count; }
         }
         #endregion
+
+        #region
+        public void Add(string key, NVItem item)
+        {
+            if (item != null)
+            {
+                lock (this.m_kvTable)
+                {
+                    this.m_kvTable[key] = item;
+                }
+            }
+        }
+        #endregion
+
+        public class NVItem
+        {
+            private string m_name;
+            private string m_value;
+
+            public NVItem()
+            { 
+            }
+            public NVItem(string name, string value)
+            {
+                this.m_name = name;
+                this.m_value = value;
+            }
+            public string Name
+            {
+                get { return this.m_name; }
+                set { this.m_name = value; }
+            }
+            public string Value
+            {
+                get { return this.m_value; }
+                set { this.m_value = value; }
+            }
+        }
     }
 }

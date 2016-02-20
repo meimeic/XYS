@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
-
-using XYS.Lis.Core;
-using XYS.Model;
+﻿using XYS.Lis.Model;
 using XYS.Lis.Core;
 using XYS.Lis.Util;
 namespace XYS.Lis.Handler
@@ -22,17 +16,15 @@ namespace XYS.Lis.Handler
         public HeaderDefaultHandler()
             : this(m_defaultHandlerName)
         {
-
         }
         public HeaderDefaultHandler(string handlerName)
             : base(handlerName)
         {
-
         }
         #endregion
 
         #region 实现父类受保护的抽象方法
-        protected override bool OperateElement(ILisReportElement element, ReportElementTag elementTag)
+        protected override bool OperateElement(IReportElement element, ReportElementTag elementTag)
         {
             return true;
         }

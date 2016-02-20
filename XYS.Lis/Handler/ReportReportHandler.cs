@@ -4,10 +4,11 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
-using XYS.Model;
-using XYS.Lis.Core;
+using XYS.Common;
+using XYS.Lis.Model;
 using XYS.Lis.Core;
 using XYS.Lis.Util;
+
 namespace XYS.Lis.Handler
 {
     public class ReportReportHandler : ReportHandlerSkeleton
@@ -36,9 +37,9 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region 实现父类虚方法
-        protected override bool OperateElement(ILisReportElement element, ReportElementTag elementTag)
+        protected override bool OperateElement(IReportElement element)
         {
-            if (elementTag == ReportElementTag.Report)
+            if (element.ElementTag == ReportElementTag.Report)
             {
                 ReportReportElement rre = element as ReportReportElement;
                 return OperateReport(rre);
@@ -54,7 +55,7 @@ namespace XYS.Lis.Handler
             SetReportOrder(rre);
             //设置模板号
             SetReportModel(rre);
-            //remark
+            //设置备注
             SetRemark(rre);
             return true;
         }
@@ -63,7 +64,7 @@ namespace XYS.Lis.Handler
         #region 备注设置
         protected virtual void SetRemark(ReportReportElement rre)
         {
-            if (rre.RemarkFlag && rre.ClinicType == ClinicType.clinic)
+            if (rre.RemarkFlag==2 && rre.ClinicType == ClinicType.clinic)
             {
                 rre.Remark = "带*为天津市临床检测中心认定的相互认可检验项目";
             }

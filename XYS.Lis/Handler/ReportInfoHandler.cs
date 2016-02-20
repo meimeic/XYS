@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XYS.Model;
-using XYS.Lis.Core;
+using XYS.Lis.Model;
 using XYS.Lis.Core;
 using XYS.Lis.Util;
-
 namespace XYS.Lis.Handler
 {
     public class ReportInfoHandler : ReportHandlerSkeleton
@@ -14,7 +12,7 @@ namespace XYS.Lis.Handler
         public static readonly string m_defaultHandlerName = "ReportInfoHandler";
         #endregion
 
-          #region 构造函数
+        #region 构造函数
         public ReportInfoHandler()
             : this(m_defaultHandlerName)
         {
@@ -26,14 +24,14 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateElement(ILisReportElement element, ReportElementTag elementTag)
+        protected override bool OperateElement(IReportElement element)
         {
-            if (elementTag == ReportElementTag.Report)
+            if (element.ElementTag == ReportElementTag.Report)
             {
                 ReportReportElement rre = element as ReportReportElement;
                 return OperateInfoList(rre);
             }
-            if (elementTag == ReportElementTag.InfoElement)
+            if (element.ElementTag == ReportElementTag.Custom)
             {
                 ReportInfoElement rie = element as ReportInfoElement;
                 return OperateInfo(rie);
@@ -47,8 +45,8 @@ namespace XYS.Lis.Handler
         {
             //info 处理
             ReportInfoElement rie;
-            List<ILisReportElement> infoList = rre.GetReportItem(ReportElementTag.InfoElement);
-            OperateElementList(infoList, ReportElementTag.InfoElement);
+            List<IReportElement> infoList = rre.GetReportItem(ReportElementTag.Temp);
+            OperateElementList(infoList,typeof(ReportCustomElement));
             if (infoList.Count > 0)
             {
                 rie = infoList[0] as ReportInfoElement;
@@ -89,7 +87,7 @@ namespace XYS.Lis.Handler
             return true;
         }
         #endregion
-        
+
         #region
         private void SetRemarkFlagByInfo(ReportReportElement rre, ReportInfoElement rie)
         {

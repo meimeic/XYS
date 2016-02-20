@@ -2,8 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Lis.Core;
-using XYS.Model;
+using XYS.Lis.Model;
 using XYS.Lis.Core;
 using XYS.Lis.Util;
 
@@ -13,7 +12,7 @@ namespace XYS.Lis.Handler
     {
         #region 字段
         private static readonly string m_defaultHandlerName = "ReportGraphHandler";
-        private readonly Hashtable m_parItem2NormalImage;
+        private readonly Hashtable m_parItemNo2NormalImage;
         #endregion
 
         #region 构造函数
@@ -24,19 +23,19 @@ namespace XYS.Lis.Handler
         public ReportGraphHandler(string handlerName)
             : base(handlerName)
         {
-            this.m_parItem2NormalImage = new Hashtable(20);
+            this.m_parItemNo2NormalImage = new Hashtable(20);
         }
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateElement(ILisReportElement element, ReportElementTag elementTag)
+        protected override bool OperateElement(IReportElement element)
         {
-            if (elementTag == ReportElementTag.Report)
+            if (element.ElementTag == ReportElementTag.Report)
             {
                 ReportReportElement rre = element as ReportReportElement;
                 return OperateGraphList(rre);
             }
-            if (elementTag == ReportElementTag.GraphElement)
+            if (element.ElementTag == ReportElementTag.Graph)
             {
                 ReportGraphElement rge = element as ReportGraphElement;
                 return OperateGraph(rge);
@@ -50,7 +49,7 @@ namespace XYS.Lis.Handler
         {
             if (rre.SectionNo == 11)
             {
-                List<ILisReportElement> graphList = rre.GetReportItem(ReportElementTag.GraphElement);
+                List<IReportElement> graphList = rre.GetReportItem(typeof(ReportGraphElement).Name);
                 AddImageByParItem(rre.ParItemList, graphList);
             }
             return true;
@@ -62,17 +61,17 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region 图片项添加处理
-        private void AddImageByParItem(List<int> parItemList, List<ILisReportElement> graphElementList)
+        private void AddImageByParItem(List<int> parItemList, List<IReportElement> graphElementList)
         {
             byte[] imageValue;
             ReportGraphElement rge;
-            if (this.m_parItem2NormalImage.Count == 0)
+            if (this.m_parItemNo2NormalImage.Count == 0)
             {
                 this.InitParItem2NormalImage();
             }
             foreach (int parItemNo in parItemList)
             {
-                imageValue = this.m_parItem2NormalImage[parItemNo] as byte[];
+                imageValue = this.m_parItemNo2NormalImage[parItemNo] as byte[];
                 if (imageValue != null)
                 {
                     rge = new ReportGraphElement();
@@ -84,9 +83,9 @@ namespace XYS.Lis.Handler
         }
         private void InitParItem2NormalImage()
         {
-            lock (this.m_parItem2NormalImage)
+            lock (this.m_parItemNo2NormalImage)
             {
-                LisMap.InitParItem2NormalImageTable(this.m_parItem2NormalImage);
+                LisMap.InitParItem2NormalImageTable(this.m_parItemNo2NormalImage);
             }
         }
         #endregion

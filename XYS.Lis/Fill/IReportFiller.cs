@@ -9,7 +9,8 @@ namespace XYS.Lis.Fill
     {
         DB = 1,
         WebService,
-        WebAPI
+        WebAPI,
+        None
     }
     public interface IReportFiller
     {

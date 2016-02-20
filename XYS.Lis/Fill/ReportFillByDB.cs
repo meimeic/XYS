@@ -55,7 +55,7 @@ namespace XYS.Lis.Fill
         }
         protected override void FillElements(List<IReportElement> reportElementList, ReportKey RK, ElementType elementType)
         {
-            string sql = GenderSql(elementType, RK);
+            string sql = GenderSql(elementType.EType, RK);
             this.D_FillElements(reportElementList, elementType.EType, sql);
         }
         #endregion
@@ -65,50 +65,69 @@ namespace XYS.Lis.Fill
         {
             this.ReportDAL.Fill(reportElement, sql);
         }
-        protected virtual void D_FillElements(List<IReportElement> reportElementList,Type elementType,string sql)
+        protected virtual void D_FillElements(List<IReportElement> reportElementList,Type type,string sql)
         {
-            this.ReportDAL.FillList(reportElementList, elementType, sql);
+            this.ReportDAL.FillList(reportElementList, type, sql);
         }
         #endregion
 
         #region 生成sql语句  
         protected string GenderSql(IReportElement element, ReportKey RK)
         {
-            string where = GetSQLWhere(RK);
+            string where = GenderWhere(RK);
             AbstractReportElement e = element as AbstractReportElement;
             if (e != null)
             {
-                return e.SearchSQL + where;
+                //
+                if (string.IsNullOrEmpty(e.SearchSQL))
+                {
+                    return GenderPreSQL(element.GetType()) + GenderWhere(RK);
+                }
+                else
+                {
+                    return e.SearchSQL + GenderWhere(RK);
+                }
             }
             else
             {
                 return null;
             }
         }
-        protected string GenderSql(ElementType elementType, ReportKey RK)
+        protected string GenderSql(Type type, ReportKey RK)
         {
-            string sql = null;
-            string where = GetSQLWhere(RK);
-            if (ele)
+            return GenderPreSQL(type) + GenderWhere(RK);
+        }
+        protected string GenderPreSQL(Type type)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("select ");
+            PropertyInfo[] props = type.GetProperties();
+            foreach (PropertyInfo prop in props)
             {
-                sql = elementType.SQL + where;
+                if (IsColumn(prop))
+                {
+                    sb.Append(prop.Name);
+                    sb.Append(',');
+                }
+            }
+            sb.Remove(sb.Length - 1, 1);
+            sb.Append(" from ");
+            sb.Append(type.Name);
+            return sb.ToString();
+        }
+        private bool IsColumn(PropertyInfo prop)
+        {
+            object[] attrs = prop.GetCustomAttributes(typeof(ColumnAttribute), true);
+            if (attrs != null && attrs.Length > 0)
+            {
+                return true;
             }
             else
             {
-                try
-                {
-                    Type EType = GetElementType(elementType.EType);
-                    AbstractReportElement reportElement = (AbstractReportElement)EType.Assembly.CreateInstance(EType.FullName);
-                    sql = reportElement.SearchSQL + where;
-                }
-                catch (Exception ex)
-                {
-                    sql = null;
-                }
+                return false;
             }
-            return sql;
-        }
-        protected string GetSQLWhere(Hashtable equalTable)
+        }  
+        protected string GenderWhere(Hashtable equalTable)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(" where ");
@@ -143,7 +162,7 @@ namespace XYS.Lis.Fill
             sb.Remove(sb.Length - 5, 5);
             return sb.ToString();
         }
-        protected string GetSQLWhere(ReportKey RK)
+        protected string GenderWhere(ReportKey RK)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(" where ");
@@ -181,69 +200,6 @@ namespace XYS.Lis.Fill
 
         #endregion
 
-        #region
-        public string GenderSQL(IReportElement element)
-        {
-            AbstractReportElement e = element as AbstractReportElement;
-            if (e != null)
-            {
-
-            }
-            else
-            {
-                return null;
-            }
-        }
-        public string GenderSQL(Type type)
-        {
-            if (IsTable(type))
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("select ");
-                PropertyInfo[] props = type.GetProperties();
-                foreach (PropertyInfo prop in props)
-                {
-                    if (IsColumn(prop))
-                    {
-                        sb.Append(prop.Name);
-                        sb.Append(',');
-                    }
-                }
-                sb.Remove(sb.Length - 1, 1);
-                sb.Append(" from ");
-                sb.Append(type.Name);
-                return sb.ToString();
-            }
-            else
-            {
-                return null;
-            }
-        }
-        private bool IsTable(Type type)
-        {
-            object[] attrs = type.GetCustomAttributes(typeof(TableAttribute), true);
-            if (attrs != null && attrs.Length > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        private bool IsColumn(PropertyInfo prop)
-        {
-            object[] attrs = prop.GetCustomAttributes(typeof(ColumnAttribute), true);
-            if (attrs != null && attrs.Length > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        #endregion
         //#region 辅助方法
         //protected virtual Hashtable ReportKey2Table(ReportKey key)
         //{
@@ -253,6 +209,18 @@ namespace XYS.Lis.Fill
         //        keyTable.Add(k.Name, k.Value);
         //    }
         //    return keyTable;
+        //}
+        //private bool IsTable(Type type)
+        //{
+        //    object[] attrs = type.GetCustomAttributes(typeof(TableAttribute), true);
+        //    if (attrs != null && attrs.Length > 0)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
         //}
         //#endregion
     }

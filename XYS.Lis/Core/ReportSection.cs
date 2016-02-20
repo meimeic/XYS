@@ -12,8 +12,9 @@ namespace XYS.Lis.Core
         private FillTypeTag m_fillTag;
         private string m_sectionName;
         private readonly int m_sectionNo;
-        private readonly List<string> m_insideElementList;
-        private ElementTypeCollection m_elementCollection;
+        private readonly List<string> m_innerElementList;
+        private readonly List<string> m_extendElementList;
+        //private ElementTypeCollection m_elementCollection;
         #endregion
 
         #region 构造函数
@@ -23,7 +24,8 @@ namespace XYS.Lis.Core
             this.m_ModelNo = -1;
             this.m_sectionNo = sectionNo;
             this.m_fillTag = FillTypeTag.DB;
-            this.m_insideElementList = new List<string>(3);
+            this.m_innerElementList = new List<string>(3);
+            this.m_extendElementList = new List<string>(2);
             //this.m_elementCollection = new ElementTypeCollection(3);
         }
         public ReportSection(int sectionNo, string sectionName)
@@ -58,39 +60,54 @@ namespace XYS.Lis.Core
             get { return this.m_sectionName; }
             set { this.m_sectionName = value; }
         }
-        public List<string> InsideElementList
+        public List<string> InnerElementList
         {
-            get { return this.m_insideElementList; }
+            get { return this.m_innerElementList; }
         }
-        public ElementTypeCollection ElementCollection
+        public List<string> ExtendElementList
         {
-            get { return this.m_elementCollection; }
+            get { return this.m_extendElementList; }
         }
+        //public ElementTypeCollection ElementCollection
+        //{
+        //    get { return this.m_elementCollection; }
+        //}
         #endregion
 
         #region 方法
-        public void AddElement(ElementType element)
-        {
-            if (!this.m_elementCollection.Contains(element))
-            {
-                this.m_elementCollection.Add(element);
-            }
-        }
-        public void AddElement(string elementName)
+        //public void AddElement(ElementType element)
+        //{
+        //    if (!this.m_elementCollection.Contains(element))
+        //    {
+        //        this.m_elementCollection.Add(element);
+        //    }
+        //}
+        public void AddInnerElement(string elementName)
         {
             if (!string.IsNullOrEmpty(elementName))
             {
                 string name = elementName.ToLower();
-                if (!this.m_insideElementList.Contains(name))
+                if (!this.m_innerElementList.Contains(name))
                 {
-                    this.m_insideElementList.Add(name);
+                    this.m_innerElementList.Add(name);
                 }
             }
         }
-        public void ClearElementCollection()
+        public void AddExtendElement(string elementName)
         {
-            this.m_elementCollection.Clear();
+            if (!string.IsNullOrEmpty(elementName))
+            {
+                string name = elementName.ToLower();
+                if (!this.m_extendElementList.Contains(name))
+                {
+                    this.m_extendElementList.Add(name);
+                }
+            }
         }
+        //public void ClearElementCollection()
+        //{
+        //    this.m_elementCollection.Clear();
+        //}
         #endregion
     }
 }

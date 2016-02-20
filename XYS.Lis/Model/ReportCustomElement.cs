@@ -4,7 +4,7 @@ using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
     [Export()]
-    public class ReportCustomElement : IReportElement
+    public class ReportCustomElement : AbstractReportElement
     {
         #region 私有常量字段
         private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.Custom;
@@ -36,8 +36,18 @@ namespace XYS.Lis.Model
 
         #region 公共构造函数
         public ReportCustomElement()
+            : this(m_defaultElementTag)
         {
 
+        }
+        public ReportCustomElement(ReportElementTag elementTag)
+            : base(elementTag)
+        {
+ 
+        }
+        public ReportCustomElement(string sql)
+            : base(m_defaultElementTag, sql)
+        {
         }
         #endregion
 
@@ -170,11 +180,13 @@ namespace XYS.Lis.Model
         }
         #endregion
 
-        #region 实现IReportElement属性
-        public ReportElementTag ElementTag
+        #region 实现父类抽象方法
+        public override void AfterFill()
         {
-            get { return m_defaultElementTag; }
+            throw new System.NotImplementedException();
         }
         #endregion
+
+     
     }
 }

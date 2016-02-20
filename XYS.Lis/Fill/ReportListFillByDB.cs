@@ -8,6 +8,5 @@ namespace XYS.Lis.Fill
 {
     public class ReportListFillByDB
     {
-
     }
 }

@@ -1,13 +1,12 @@
 ﻿using System;
-using System.Collections;
-using System.Text;
 using System.Data;
 using System.Reflection;
+using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Common;
 using XYS.Lis.Core;
-using XYS.Lis.Core;
+using XYS.Lis.Model;
 namespace XYS.Lis.DAL
 {
     public class LisReportCommonDAL : ILisReportDAL
@@ -19,19 +18,10 @@ namespace XYS.Lis.DAL
             DataTable dt = GetDataTable(sql);
             if (dt != null && dt.Rows.Count > 0)
             {
-                FillData(element, dt.Rows[0]);
+                FillData(element, element.GetType(), dt.Rows[0], dt.Columns);
                 AfterFill(element);
             }
         }
-        //public void Fill(IReportElement element, Hashtable equalTable)
-        //{
-        //    string sql = GenderSql(element, equalTable);
-        //    if (sql != null && !sql.Equals(""))
-        //    {
-        //        Fill(element, sql);
-        //    }
-        //}
-
         public void FillList(List<IReportElement> elementList, Type elementType, string sql)
         {
             DataTable dt = GetDataTable(sql);
@@ -40,13 +30,150 @@ namespace XYS.Lis.DAL
                 IReportElement element;
                 foreach (DataRow dr in dt.Rows)
                 {
-                    element = (IReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
-                    FillData(element, dr);
-                    AfterFill(element);
-                    elementList.Add(element);
+                    try
+                    {
+                        element = (IReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
+                        FillData(element, dr,dt.Columns);
+                        AfterFill(element);
+                        elementList.Add(element);
+                    }
+                    catch (Exception ex)
+                    {
+                        continue;
+                    }
                 }
             }
         }
+
+        //填充对象属性
+        protected void FillData(IReportElement element, DataRow dr, DataColumnCollection columns)
+        {
+            PropertyInfo prop = null;
+            PropertyInfo[] props = element.GetType().GetProperties();
+            foreach (DataColumn dc in columns)
+            {
+                prop = GetProperty(props, dc.ColumnName);
+                if (IsColumn(prop))
+                {
+                    FillProperty(element, prop, dr[dc]);
+                }
+            }
+        }
+        protected void FillData(IReportElement element, Type type, DataRow dr, DataColumnCollection columns)
+        {
+            PropertyInfo prop = null;
+            foreach (DataColumn dc in columns)
+            {
+                prop = type.GetProperty(dc.ColumnName);
+                if (IsColumn(prop))
+                {
+                    FillProperty(element, prop, dr[dc]);
+                }
+            }
+        }
+        protected bool FillProperty(IReportElement element, PropertyInfo p, DataRow dr)
+        {
+            try
+            {
+                if (dr[p.Name] != null)
+                {
+                    if (dr[p.Name] != DBNull.Value)
+                    {
+                        object value = Convert.ChangeType(dr[p.Name], p.PropertyType);
+                        p.SetValue(element, value, null);
+                    }
+                    else
+                    {
+                        p.SetValue(element, DefaultForType(p.PropertyType), null);
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        protected bool FillProperty(IReportElement element, PropertyInfo p, object v)
+        {
+            try
+            {
+                if (v != DBNull.Value)
+                {
+                    object value = Convert.ChangeType(v, p.PropertyType);
+                    p.SetValue(element, value, null);
+                }
+                else
+                {
+                    p.SetValue(element, DefaultForType(p.PropertyType), null);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+        protected object DefaultForType(Type targetType)
+        {
+            return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
+        }
+        protected DataTable GetDataTable(string sql)
+        {
+            DataTable dt = null;
+            if (!string.IsNullOrEmpty(sql))
+            {
+                dt = DbHelperSQL.Query(sql).Tables["dt"];
+            }
+            return dt;
+        }
+        //获取对象属性
+        protected PropertyInfo GetProperty(PropertyInfo[] props, string propName)
+        {
+            PropertyInfo p = null;
+            foreach (PropertyInfo prop in props)
+            {
+                if (StrEqual(prop.Name, propName))
+                {
+                    p = prop;
+                    break;
+                }
+            }
+            return p;
+        }
+        protected void AfterFill(IReportElement element)
+        {
+            AbstractReportElement e = element as AbstractReportElement;
+            if (e != null)
+            {
+                e.AfterFill();
+            }
+        }
+        private bool IsColumn(PropertyInfo prop)
+        {
+            if (prop != null)
+            {
+                object[] attrs = prop.GetCustomAttributes(typeof(ColumnAttribute), true);
+                if (attrs != null && attrs.Length > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        private bool StrEqual(string str1, string str2)
+        {
+            return str1.ToLower().Equals(str2.ToLower());
+        }
+
+        //public void Fill(IReportElement element, Hashtable equalTable)
+        //{
+        //    string sql = GenderSql(element, equalTable);
+        //    if (sql != null && !sql.Equals(""))
+        //    {
+        //        Fill(element, sql);
+        //    }
+        //}
         //public void FillList(List<IReportElement> elementList, Type elementType, Hashtable equalTable)
         //{
         //    string sql = GenderSql(elementType, equalTable);
@@ -123,85 +250,5 @@ namespace XYS.Lis.DAL
         //        return null;
         //    }
         //}
-        
-        //填充对象属性
-        protected void FillData(IReportElement element, DataRow dr)
-        {
-            PropertyInfo[] props = GetProperties(element);
-            if (props == null || props.Length == 0)
-            {
-                //不存在属性 弹出异常
-            }
-            else
-            {
-                ColumnAttribute tca;
-                foreach (PropertyInfo p in props)
-                {
-                    tca = (ColumnAttribute)Attribute.GetCustomAttribute(p, typeof(ColumnAttribute));
-                    if (tca != null && tca.IsColumn)
-                    {
-                        //如果是数据库列属性
-                        FillProperty(element, p, dr);
-                    }
-                }
-            }
-        }
-        protected void AfterFill(IReportElement element)
-        {
-            element.After();
-        }
-
-        protected DataTable GetDataTable(string sql)
-        {
-            DataTable dt = null;
-            if (sql != null)
-            {
-                dt = DbHelperSQL.Query(sql).Tables["dt"];
-            }
-            return dt;
-        }
-        //获取对象属性
-        protected PropertyInfo[] GetProperties(IReportElement element)
-        {
-            PropertyInfo[] props = null;
-            try
-            {
-                Type type = element.GetType();
-                props = type.GetProperties();
-            }
-            catch (Exception ex)
-            {
-            }
-            return props;
-        }
-        
-        protected bool FillProperty(IReportElement element, PropertyInfo p, DataRow dr)
-        {
-            try
-            {
-                if (dr[p.Name.ToLower()] == null)
-                {
-                    throw new Exception("LisReportCommonDAL:does not exsit the["+p.Name.ToLower()+"] column in the row");
-                }
-                if (dr[p.Name.ToLower()] != DBNull.Value)
-                {
-                    object value = Convert.ChangeType(dr[p.Name.ToLower()], p.PropertyType);
-                    p.SetValue(element, value, null);
-                }
-                else
-                {
-                    p.SetValue(element, DefaultForType(p.PropertyType), null);
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-        protected object DefaultForType(Type targetType)
-        {
-            return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
-        }
     }
 }

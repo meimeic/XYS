@@ -10,12 +10,12 @@ namespace XYS.Lis.Core
     public class ElementType
     {
         private static readonly string m_defaultElementName = "defaultElementName";
-        #region
+        #region 私有字段
         private string m_name;
         private Type m_type;
         #endregion
 
-        #region
+        #region 静态字段
         public static readonly ElementType DEFAULTEXAM = new ElementType(typeof(ReportInfoElement));
         public static readonly ElementType DEFAULTPATIENT = new ElementType(typeof(ReportInfoElement));
         public static readonly ElementType DEFAULTITEM = new ElementType(typeof(ReportItemElement));
@@ -25,7 +25,7 @@ namespace XYS.Lis.Core
         public static readonly ElementType DEFAULTINFO = new ElementType(typeof(ReportInfoElement));
         #endregion
 
-        #region
+        #region 构造函数
         public ElementType(string typeName)
             : this(null, typeName)
         {

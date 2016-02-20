@@ -4,19 +4,25 @@ using System.Collections.Generic;
 
 using XYS.Lis.Config;
 using XYS.Lis.Core;
-using XYS.Lis.Core;
-
 namespace XYS.Lis.Util
 {
     public class LisMap
     {
         #region
         private static readonly Type declaringType = typeof(LisMap);
+        private static readonly ReportSectionMap SECTION_MAP = new ReportSectionMap();
+        private static readonly ElementTypeMap ELEMENT_MAP = new ElementTypeMap();
         #endregion
 
         #region
         private LisMap()
         { }
+        #endregion
+
+        #region
+        static LisMap()
+        {
+        }
         #endregion
 
         #region
@@ -90,34 +96,30 @@ namespace XYS.Lis.Util
                 }
             }
         }
-        public static void InitSection2ElementTypeTable(Hashtable table)
+        public static void InitSection2InnerElementTable(Hashtable table)
         {
-            List<Type> temp;
+            table.Clear();
+            ElementTypeMap elementMap = new ElementTypeMap();
+            ConfigureReportElementMap(elementMap);
             ReportSectionMap sectionMap = new ReportSectionMap();
             ConfigureReportSectionMap(sectionMap);
+            ElementType eType = null;
+            ElementTypeMap eMap = null;
             foreach (ReportSection rs in sectionMap.AllReporterSection)
             {
-                temp = new List<Type>(3);
-                if (rs.ElementCollection.Count > 0)
+                if (rs.InnerElementList.Count > 0)
                 {
-                    Type elementType = null;
-                    foreach (string name in rs.ElementCollection)
+                    eMap = new ElementTypeMap();
+                    foreach (string name in rs.InnerElementList)
                     {
-                        try
+                        eType = elementMap[name];
+                        if (eType != null)
                         {
-                            elementType = SystemInfo.GetTypeFromString(name, true, true);
-                        }
-                        catch (Exception ex)
-                        {
-                            elementType = null;
-                        }
-                        if (elementType != null&&!temp.Contains(elementType))
-                        {
-                            temp.Add(elementType);
+                            eMap.Add(eType);
                         }
                     }
+                    table[rs.SectionNo] = eMap;
                 }
-                table[rs.SectionNo] = temp;
             }
         }
         #endregion
@@ -128,17 +130,29 @@ namespace XYS.Lis.Util
             ReportLog.Debug(declaringType, "LisMap:configuring ReportModelMap");
             XmlParamConfigurator.ConfigReportModelMap(modelMap);
         }
+        
+        private static void ConfigureReportElementMap()
+        {
+            ReportLog.Debug(declaringType, "LisMap:configuring ReportElementTypeMap");
+            XmlParamConfigurator.ConfigReportElementMap(ELEMENT_MAP);
+        }
         private static void ConfigureReportElementMap(ElementTypeMap elementTypeMap)
         {
             ReportLog.Debug(declaringType, "LisMap:configuring ReportElementTypeMap");
             XmlParamConfigurator.ConfigReportElementMap(elementTypeMap);
         }
+        
+        private static void ConfigureReportSectionMap()
+        {
+            ReportLog.Debug(declaringType, "LisMap:configuring ReportSectionMap");
+            XmlParamConfigurator.ConfigSectionMap(SECTION_MAP);
+        }
         private static void ConfigureReportSectionMap(ReportSectionMap sectionMap)
         {
             ReportLog.Debug(declaringType, "LisMap:configuring ReportSectionMap");
             XmlParamConfigurator.ConfigSectionMap(sectionMap);
-
         }
+
         public static void ConfigureParItemMap(ParItemMap parItemMap)
         {
             ReportLog.Debug(declaringType, "LisMap:configuring ParItemMap");

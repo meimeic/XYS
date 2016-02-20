@@ -13,7 +13,7 @@ namespace XYS.Lis.Core
         #region 构造函数
         public ElementTypeMap()
         {
-            this.m_mapName2ElementType = new Hashtable(6);
+            this.m_mapName2ElementType = new Hashtable(3);
         }
         #endregion
 

@@ -25,7 +25,7 @@ namespace XYS.Lis.Fill
         #endregion
 
         #region 实现IReportFiller接口
-        public virtual string FillerName
+        public string FillerName
         {
             get { return this.m_fillerName.ToLower(); }
         }
@@ -56,7 +56,7 @@ namespace XYS.Lis.Fill
                 if (map != null && map.Count > 0)
                 {
                     ElementType elementType = map[elementName.ToLower()];
-                    if (elementType != null && IsTable(elementType.EType))
+                    if (elementType != null && IsFill(elementType.EType))
                     {
                         FillElements(reportElementList, RK, elementType);
                     }
@@ -74,7 +74,7 @@ namespace XYS.Lis.Fill
                 List<IReportElement> tempList = null;
                 foreach (ElementType elementType in availableElementMap.AllElementTypes)
                 {
-                    if (IsTable(elementType.EType))
+                    if (IsFill(elementType.EType))
                     {
                         tempList = rre.GetReportItem(elementType.Name);
                         FillElements(tempList, RK, elementType);
@@ -89,9 +89,27 @@ namespace XYS.Lis.Fill
         protected abstract void FillElements(List<IReportElement> reportElementList, ReportKey RK, ElementType elementType);
         #endregion
 
-
-
         #region 辅助方法
+        protected virtual int GetSectionNo(ReportKey RK)
+        {
+            int sectionNo = 0;
+            foreach (KeyColumn c in RK.KeySet)
+            {
+                if (c.Name.ToLower().Equals("sectionno") || c.Name.ToLower().Equals("r.sectionno"))
+                {
+                    try
+                    {
+                        sectionNo = Convert.ToInt32(c.Value);
+                    }
+                    catch (Exception ex)
+                    {
+                        return -1;
+                    }
+                    break;
+                }
+            }
+            return sectionNo;
+        }
         protected Type GetElementType(string typeName)
         {
             Type result;
@@ -109,7 +127,7 @@ namespace XYS.Lis.Fill
         {
             if (this.m_section2InsideElementMap.Count == 0)
             {
-                InitInsideElementTable(this.m_section2InsideElementMap);
+                InitInsideElementTable();
             }
             ElementTypeMap result = this.m_section2InsideElementMap[sectionNo] as ElementTypeMap;
             return result;
@@ -123,63 +141,48 @@ namespace XYS.Lis.Fill
         {
             if (this.m_section2InsideElementMap.Count == 0)
             {
-                InitExtendElementTable(this.m_section2InsideElementMap);
+                InitExtendElementTable();
             }
             ElementTypeMap result = this.m_section2InsideElementMap[sectionNo] as ElementTypeMap;
             return result;
         }
-        protected virtual int GetSectionNo(ReportKey key)
-        {
-            int sectionNo = 0;
-            foreach (KeyColumn c in key.KeySet)
-            {
-                if (c.Name.ToLower().Equals("sectionno") || c.Name.ToLower().Equals("r.sectionno"))
-                {
-                    try
-                    {
-                        sectionNo = Convert.ToInt32(c.Value);
-                    }
-                    catch (Exception ex)
-                    {
-                        return -1;
-                    }
-                    break;
-                }
-            }
-            return sectionNo;
-        }
-        protected virtual void InitExtendElementTable(Hashtable table)
-        {
 
-        }
-        protected virtual void InitInsideElementTable(Hashtable table)
-        {
-
-        }
         #endregion
 
         #region 私有方法
+        private void InitExtendElementTable()
+        {
+        }
+        private void InitInsideElementTable()
+        {
+            lock (this.m_section2InsideElementMap)
+            {
+                LisMap.InitSection2InnerElementTable(this.m_section2InsideElementMap);
+            }
+        }
         private bool IsFill(IReportElement element)
         {
             return element is AbstractReportElement;
         }
-        private bool IsTable(IReportElement element)
+        private bool IsFill(Type elementType)
         {
-            Type type = element.GetType();
-            return IsTable(type);
+            return typeof(AbstractReportElement).IsAssignableFrom(elementType);
         }
-        private bool IsTable(Type elementType)
-        {
-            object[] attrs = elementType.GetCustomAttributes(typeof(TableAttribute), true);
-            if (attrs != null && attrs.Length > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+        #endregion
+
+        #region
+        //private bool IsTable(Type elementType)
+        //{
+        //    object[] attrs = elementType.GetCustomAttributes(typeof(TableAttribute), true);
+        //    if (attrs != null && attrs.Length > 0)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
         #endregion
     }
 }
