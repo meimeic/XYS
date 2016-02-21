@@ -13,6 +13,7 @@ namespace XYS.Lis.Repository
         Hashtable FillerMap { get; }
         Hashtable HandlerMap { get; }
         Hashtable StrategyMap { get; }
+
         bool Configured { get; set; }
         string RepositoryName { get; set; }
         ICollection ConfigurationMessages { get; set; }

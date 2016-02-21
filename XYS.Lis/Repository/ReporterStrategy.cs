@@ -8,7 +8,7 @@ namespace XYS.Lis.Repository
     public class ReporterStrategy
     {
         private string m_fillerName;
-        private string m_strategyName;
+        private readonly string m_strategyName;
         private readonly List<string> m_handlerList;
         public ReporterStrategy(string name)
         {
@@ -19,7 +19,7 @@ namespace XYS.Lis.Repository
         {
             get
             {
-                if (this.m_strategyName != null)
+                if (!string.IsNullOrEmpty(this.m_strategyName))
                 {
                     return this.m_strategyName.ToLower();
                 }
@@ -34,7 +34,7 @@ namespace XYS.Lis.Repository
         {
             get
             {
-                if (this.m_fillerName != null)
+                if (!string.IsNullOrEmpty(this.m_fillerName))
                 {
                     return this.m_fillerName.ToLower();
                 }
@@ -44,15 +44,12 @@ namespace XYS.Lis.Repository
         }
         public void AddHandler(string handlerName)
         {
-            if (handlerName != null)
+            if (!string.IsNullOrEmpty(handlerName))
             {
                 string s = handlerName.ToLower();
-                lock (this.m_handlerList)
+                if (!this.m_handlerList.Contains(s))
                 {
-                    if (!this.m_handlerList.Contains(s))
-                    {
-                        this.m_handlerList.Add(s);
-                    }
+                    this.m_handlerList.Add(s);
                 }
             }
         }

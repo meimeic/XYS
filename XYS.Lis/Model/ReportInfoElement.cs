@@ -374,7 +374,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实现父类抽象方法
-        protected override void AfterFill()
+        public override void AfterFill()
         {
             this.ConvertGender();
             this.ConvertClinic();

@@ -41,6 +41,7 @@ namespace XYS.Lis.Repository
             get { return this.m_repositoryName; }
             set { this.m_repositoryName = value; }
         }
+        
         public virtual Hashtable FillerMap
         {
             get { return this.m_name2FillerMap; }
@@ -53,6 +54,7 @@ namespace XYS.Lis.Repository
         {
             get { return this.m_name2StrategyMap; }
         }
+        
         public virtual bool Configured
         {
             get { return m_configured; }
@@ -71,9 +73,7 @@ namespace XYS.Lis.Repository
 
         #region 实现IReporterRepository接口方法
         public abstract IReporter Exists(ReporterKey key);
-
         public abstract IReporter[] GetCurrentReporters();
-
         public abstract IReporter GetReporter(ReporterKey key);
         #endregion
 
@@ -85,7 +85,7 @@ namespace XYS.Lis.Repository
         }
         #endregion
 
-        #region
+        #region 触发器
         public void RaiseConfigurationChanged(EventArgs e)
         {
             OnConfigurationChanged(e);
@@ -126,6 +126,7 @@ namespace XYS.Lis.Repository
                 this.m_name2StrategyMap[strategy.StrategyName] = strategy;
             }
         }
+        
         public virtual void ClearFiller()
         {
             lock (this.m_name2FillerMap)

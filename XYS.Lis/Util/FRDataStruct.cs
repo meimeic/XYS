@@ -7,10 +7,10 @@ using System.Reflection;
 using XYS.Common;
 namespace XYS.Lis.Util
 {
-    public class XMLTools
+    public class FRDataStruct
     {
         #region
-        private static readonly Type declaringType = typeof(XMLTools);
+        private static readonly Type declaringType = typeof(FRDataStruct);
 
         private static readonly string TABLE_TAG = "TableDataSource";
         private static readonly string COLUMN_TAG = "Column";
@@ -65,7 +65,8 @@ namespace XYS.Lis.Util
         }
 
         #endregion
-        #region 静态私有方法
+        
+        #region 私有静态方法
 
         //设置数据表
         private static DataTable ConvertXml2DataTable(XmlNode node)

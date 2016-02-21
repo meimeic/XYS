@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections;
-using System.Reflection;
 using System.IO;
+using System.Reflection;
+using System.Collections;
 
 using XYS.Lis.Util;
 using XYS.Lis.Repository;
 using XYS.Lis.Repository.Hierarchy;
-
 namespace XYS.Lis.Config
 {
     [AttributeUsage(AttributeTargets.Assembly)]
@@ -18,11 +17,14 @@ namespace XYS.Lis.Config
         private bool m_configureAndWatch = false;
         private readonly static Type declaringType = typeof(XmlConfiguratorAttribute);
 
+        #region 构造函数
         public XmlConfiguratorAttribute()
             : base(0) /* configurator priority 0 */
         {
         }
-        #region 属性
+        #endregion
+
+        #region 特性的属性
         public string ConfigFile
         {
             get { return m_configFile; }
@@ -40,7 +42,7 @@ namespace XYS.Lis.Config
         }
         #endregion
 
-        #region
+        #region  实例方法
         public override void Configure(Assembly sourceAssembly, IReporterRepository targetRepository)
         {
             IList configurationMessages = new ArrayList();
@@ -71,7 +73,7 @@ namespace XYS.Lis.Config
         }
         #endregion
 
-        #region
+        #region 私有方法
         private void ConfigureFromFile(Assembly sourceAssembly, IReporterRepository targetRepository)
         {
             // Work out the full path to the config file

@@ -48,19 +48,11 @@ namespace XYS.Lis.Fill
                 }
             }
         }
-        public virtual void Fill(List<IReportElement> reportElementList, ReportKey RK, string elementName)
+        public virtual void Fill(List<IReportElement> reportElementList, ReportKey RK, Type type)
         {
-            if (!string.IsNullOrEmpty(elementName))
+            if (IsFill(type))
             {
-                ElementTypeMap map = GetAvailableInsideElements(RK);
-                if (map != null && map.Count > 0)
-                {
-                    ElementType elementType = map[elementName.ToLower()];
-                    if (elementType != null && IsFill(elementType.EType))
-                    {
-                        FillElements(reportElementList, RK, elementType);
-                    }
-                }
+                FillElements(reportElementList, RK, type);
             }
         }
         #endregion
@@ -68,16 +60,16 @@ namespace XYS.Lis.Fill
         #region 内部处理逻辑
         protected virtual void FillReport(ReportReportElement rre, ReportKey RK)
         {
-            ElementTypeMap availableElementMap = this.GetAvailableInsideElements(RK);
-            if (availableElementMap != null && availableElementMap.Count > 0)
+            List<Type> availableElementList = this.GetAvailableInsideElements(RK);
+            if (availableElementList != null && availableElementList.Count > 0)
             {
                 List<IReportElement> tempList = null;
-                foreach (ElementType elementType in availableElementMap.AllElementTypes)
+                foreach (Type type in availableElementList)
                 {
-                    if (IsFill(elementType.EType))
+                    if (IsFill(type))
                     {
-                        tempList = rre.GetReportItem(elementType.Name);
-                        FillElements(tempList, RK, elementType);
+                        tempList = rre.GetReportItem(type.Name);
+                        FillElements(tempList, RK, type);
                     }
                 }
             }
@@ -86,7 +78,7 @@ namespace XYS.Lis.Fill
 
         #region 抽象方法
         protected abstract void FillElement(IReportElement reportElement, ReportKey RK);
-        protected abstract void FillElements(List<IReportElement> reportElementList, ReportKey RK, ElementType elementType);
+        protected abstract void FillElements(List<IReportElement> reportElementList, ReportKey RK, Type type);
         #endregion
 
         #region 辅助方法
@@ -110,29 +102,15 @@ namespace XYS.Lis.Fill
             }
             return sectionNo;
         }
-        protected Type GetElementType(string typeName)
-        {
-            Type result;
-            try
-            {
-                result = SystemInfo.GetTypeFromString(typeName, true, true);
-            }
-            catch (Exception ex)
-            {
-                result = null;
-            }
-            return result;
-        }
-        protected virtual ElementTypeMap GetAvailableInsideElements(int sectionNo)
+        protected virtual List<Type> GetAvailableInsideElements(int sectionNo)
         {
             if (this.m_section2InsideElementMap.Count == 0)
             {
                 InitInsideElementTable();
             }
-            ElementTypeMap result = this.m_section2InsideElementMap[sectionNo] as ElementTypeMap;
-            return result;
+            return this.m_section2InsideElementMap[sectionNo] as List<Type>;
         }
-        protected virtual ElementTypeMap GetAvailableInsideElements(ReportKey key)
+        protected virtual List<Type> GetAvailableInsideElements(ReportKey key)
         {
             int sectionNo = GetSectionNo(key);
             return GetAvailableInsideElements(sectionNo);
@@ -164,9 +142,13 @@ namespace XYS.Lis.Fill
         {
             return element is AbstractReportElement;
         }
-        private bool IsFill(Type elementType)
+        private bool IsFill(Type type)
         {
-            return typeof(AbstractReportElement).IsAssignableFrom(elementType);
+            if (type != null)
+            {
+                return typeof(AbstractReportElement).IsAssignableFrom(type);
+            }
+            return false;
         }
         #endregion
 
@@ -182,6 +164,33 @@ namespace XYS.Lis.Fill
         //    {
         //        return false;
         //    }
+        //}
+        //protected virtual ElementTypeMap GetAvailableInsideElements(int sectionNo)
+        //{
+        //    if (this.m_section2InsideElementMap.Count == 0)
+        //    {
+        //        InitInsideElementTable();
+        //    }
+        //    ElementTypeMap result = this.m_section2InsideElementMap[sectionNo] as ElementTypeMap;
+        //    return result;
+        //}
+        //protected virtual ElementTypeMap GetAvailableInsideElements(ReportKey key)
+        //{
+        //    int sectionNo = GetSectionNo(key);
+        //    return GetAvailableInsideElements(sectionNo);
+        //}
+        //protected Type GetElementType(string typeName)
+        //{
+        //    Type result;
+        //    try
+        //    {
+        //        result = SystemInfo.GetTypeFromString(typeName, true, true);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        result = null;
+        //    }
+        //    return result;
         //}
         #endregion
     }

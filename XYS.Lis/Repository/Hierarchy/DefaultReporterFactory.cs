@@ -19,15 +19,15 @@ namespace XYS.Lis.Repository.Hierarchy
             {
                 return new DefaultReporter();
             }
-            return new ReporterImpl(key.ReporterName, key.StrategyName);
+            return new ReporterImpl(key.CallerName, key.StrategyName);
         }
         #endregion
 
         #region 内部类
         public sealed class ReporterImpl : Reporter
         {
-            public ReporterImpl(string name, string strategyName)
-                : base(name, strategyName)
+            public ReporterImpl(string callerName, string strategyName)
+                : base(callerName, strategyName)
             {
             }
         }

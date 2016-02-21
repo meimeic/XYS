@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XYS.Model;
 using XYS.Lis.Core;
 
 namespace XYS.Lis.Handler
@@ -24,13 +23,12 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateElement(ILisReportElement element, ReportElementTag elementTag)
+        protected override bool OperateElement(IReportElement element)
         {
             return true;
         }
         #endregion
 
         //添加KV项的内部处理逻辑
-
     }
 }

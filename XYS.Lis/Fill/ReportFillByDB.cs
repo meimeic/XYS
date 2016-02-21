@@ -13,7 +13,7 @@ namespace XYS.Lis.Fill
     public class ReportFillByDB : ReportFillSkeleton
     {
         #region 变量
-        private LisReportCommonDAL m_reportDAL;
+        private ReportCommonDAL m_reportDAL;
         private static readonly string m_FillerName = "DBFiller";
         #endregion
 
@@ -25,18 +25,18 @@ namespace XYS.Lis.Fill
         public ReportFillByDB(string name)
             : base(name)
         {
-            this.m_reportDAL = new LisReportCommonDAL();
+            this.m_reportDAL = new ReportCommonDAL();
         }
         #endregion
 
         #region 实例属性
-        public virtual LisReportCommonDAL ReportDAL
+        public virtual ReportCommonDAL ReportDAL
         {
             get
             {
                 if (this.m_reportDAL == null)
                 {
-                    this.m_reportDAL = new LisReportCommonDAL();
+                    this.m_reportDAL = new ReportCommonDAL();
                 }
                 return this.m_reportDAL;
             }
@@ -53,10 +53,10 @@ namespace XYS.Lis.Fill
                 this.D_FillElement(reportElement, sql);
             }
         }
-        protected override void FillElements(List<IReportElement> reportElementList, ReportKey RK, ElementType elementType)
+        protected override void FillElements(List<IReportElement> reportElementList, ReportKey RK, Type type)
         {
-            string sql = GenderSql(elementType.EType, RK);
-            this.D_FillElements(reportElementList, elementType.EType, sql);
+            string sql = GenderSql(type, RK);
+            this.D_FillElements(reportElementList, type, sql);
         }
         #endregion
 
@@ -79,19 +79,13 @@ namespace XYS.Lis.Fill
             if (e != null)
             {
                 //
-                if (string.IsNullOrEmpty(e.SearchSQL))
+                if (!string.IsNullOrEmpty(e.SearchSQL))
                 {
                     return GenderPreSQL(element.GetType()) + GenderWhere(RK);
                 }
-                else
-                {
-                    return e.SearchSQL + GenderWhere(RK);
-                }
+                return e.SearchSQL + GenderWhere(RK);
             }
-            else
-            {
-                return null;
-            }
+            return null;
         }
         protected string GenderSql(Type type, ReportKey RK)
         {
@@ -117,16 +111,16 @@ namespace XYS.Lis.Fill
         }
         private bool IsColumn(PropertyInfo prop)
         {
-            object[] attrs = prop.GetCustomAttributes(typeof(ColumnAttribute), true);
-            if (attrs != null && attrs.Length > 0)
+            if (prop != null)
             {
-                return true;
+                object[] attrs = prop.GetCustomAttributes(typeof(ColumnAttribute), true);
+                if (attrs != null && attrs.Length > 0)
+                {
+                    return true;
+                }
             }
-            else
-            {
-                return false;
-            }
-        }  
+            return false;
+        }
         protected string GenderWhere(Hashtable equalTable)
         {
             StringBuilder sb = new StringBuilder();

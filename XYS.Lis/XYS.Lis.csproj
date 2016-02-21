@@ -63,7 +63,6 @@
     <Compile Include="Core\IReportElement.cs" />
     <Compile Include="Core\IReporterWrapper.cs" />
     <Compile Include="Core\IRepositorySelector.cs" />
-    <Compile Include="Core\ITriggeringEventEvaluator.cs" />
     <Compile Include="Core\ReporterManager.cs" />
     <Compile Include="Core\WrapperMap.cs" />
     <Compile Include="DAL\DbHelperOleDb.cs" />
@@ -93,8 +92,8 @@
     <Compile Include="Core\ReporterWrapperImpl.cs" />
     <Compile Include="DAL\BasicDAL.cs" />
     <Compile Include="DAL\CommonDAL.cs" />
-    <Compile Include="DAL\ILisReportDAL.cs" />
-    <Compile Include="DAL\LisReportCommonDAL.cs" />
+    <Compile Include="DAL\IReportDAL.cs" />
+    <Compile Include="DAL\ReportCommonDAL.cs" />
     <Compile Include="DAL\LisReportCommonDAL1.cs" />
     <Compile Include="DAL\LisReporterKeyDAL.cs" />
     <Compile Include="Filter\IReportFilter.cs" />
@@ -160,7 +159,7 @@
     <Compile Include="Util\TypeConverters\PatternStringConverter.cs" />
     <Compile Include="Util\TypeConverters\TypeConverter.cs" />
     <Compile Include="Util\TypeConverters\TypeConverterAttribute.cs" />
-    <Compile Include="Util\XMLTools.cs" />
+    <Compile Include="Util\FRDataStruct.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XYS\XYS.csproj">

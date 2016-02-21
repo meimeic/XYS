@@ -163,7 +163,6 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             Configured = true;
             ConfigurationMessages = configurationMessages;
-
             // Notify listeners
             OnConfigurationChanged(new ConfigurationChangedEventArgs(configurationMessages));
         }
@@ -171,9 +170,9 @@ namespace XYS.Lis.Repository.Hierarchy
 
         #region  公共方法
         //从缓存中根据reporterName获取reporter,如果reporter不存在，则创建
-        public Reporter GetReporter(ReporterKey reporterKey, IReporterFactory factory)
+        public Reporter GetReporter(ReporterKey key, IReporterFactory factory)
         {
-            if (reporterKey == null)
+            if (key == null)
             {
                 throw new ArgumentNullException("reportkey");
             }
@@ -184,12 +183,12 @@ namespace XYS.Lis.Repository.Hierarchy
             lock (this.m_key2ReporterMap)
             {
                 Reporter reporter = null;
-                object node = this.m_key2ReporterMap[reporterKey];
+                object node = this.m_key2ReporterMap[key];
                 if (node == null)
                 {
-                    reporter = factory.CreateReporter(this, reporterKey);
+                    reporter = factory.CreateReporter(this, key);
                     reporter.Hierarchy = this;
-                    this.m_key2ReporterMap[reporterKey] = reporter;
+                    this.m_key2ReporterMap[key] = reporter;
                     OnReporter(reporter);
                     return reporter;
                 }

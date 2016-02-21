@@ -9,13 +9,13 @@ namespace XYS.Lis.Repository.Hierarchy
 {
     public class XmlHierarchyConfigurator
     {
-        #region
-        private static Type declaringType = typeof(XmlHierarchyConfigurator);
+        #region 字段
         private Hierarchy m_hierarchy;
         private Hashtable m_reporterBag;
+        private static Type declaringType = typeof(XmlHierarchyConfigurator);
         #endregion
 
-        #region Private Constants
+        #region 私有常量
 
         // String constants used while parsing the XML data
         private static readonly string CONFIGURATION_TAG = "lis-report";
@@ -37,13 +37,15 @@ namespace XYS.Lis.Repository.Hierarchy
 
         #endregion
 
-        #region
+        #region 构造函数
         public XmlHierarchyConfigurator(Hierarchy hierarchy)
         {
             this.m_hierarchy = hierarchy;
             this.m_reporterBag = new Hashtable();
         }
         #endregion
+
+        #region 方法
         public void Configure(XmlElement element)
         {
             if (element == null || m_hierarchy == null)
@@ -236,5 +238,6 @@ namespace XYS.Lis.Repository.Hierarchy
                 return;
             }
         }
+        #endregion
     }
 }

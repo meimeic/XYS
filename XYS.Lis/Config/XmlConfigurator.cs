@@ -7,17 +7,15 @@ using System.Reflection;
 using System.Net;
 using System.Threading;
 
-using XYS.Lis.Repository;
 using XYS.Lis.Util;
-using XYS.Lis;
 using XYS.Lis.Core;
-using XYS.Lis.Core;
+using XYS.Lis.Repository;
 namespace XYS.Lis.Config
 {
     public sealed class XmlConfigurator
     {
 
-        #region
+        #region 私有常量
         private static readonly Type declaringType = typeof(XmlConfigurator);
         private static readonly Hashtable m_repositoryName2ConfigAndWatchHandler = new Hashtable(2);
         #endregion
@@ -28,7 +26,7 @@ namespace XYS.Lis.Config
         }
         #endregion
 
-        #region
+        #region 静态方法
         public static ICollection Configure()
         {
             return Configure(ReportManager.GetRepository(Assembly.GetCallingAssembly()));
@@ -43,6 +41,7 @@ namespace XYS.Lis.Config
             repository.ConfigurationMessages = configurationMessages;
             return configurationMessages;
         }
+        
         public static ICollection Configure(XmlElement element)
         {
             ArrayList configurationMessages = new ArrayList();
@@ -65,6 +64,7 @@ namespace XYS.Lis.Config
             repository.ConfigurationMessages = configurationMessages;
             return configurationMessages;
         }
+        
         public static ICollection Configure(FileInfo configFile)
         {
             ArrayList configurationMessages = new ArrayList();
@@ -74,7 +74,6 @@ namespace XYS.Lis.Config
             }
             return configurationMessages;
         }
-        
         public static ICollection Configure(IReporterRepository repository, FileInfo configFile)
         {
             ArrayList configurationMessages = new ArrayList();
@@ -85,6 +84,7 @@ namespace XYS.Lis.Config
             repository.ConfigurationMessages = configurationMessages;
             return configurationMessages;
         }
+       
         public static ICollection Configure(Uri configUri)
         {
             ArrayList configurationMessages = new ArrayList();
@@ -96,7 +96,6 @@ namespace XYS.Lis.Config
             repository.ConfigurationMessages = configurationMessages;
             return configurationMessages;
         }
-        
         public static ICollection Configure(IReporterRepository repository, Uri configUri)
         {
             ArrayList configurationMessages = new ArrayList();
@@ -107,6 +106,7 @@ namespace XYS.Lis.Config
             repository.ConfigurationMessages = configurationMessages;
             return configurationMessages;
         }
+        
         public static ICollection Configure(Stream configStream)
         {
             ArrayList configurationMessages = new ArrayList();
@@ -128,6 +128,7 @@ namespace XYS.Lis.Config
             repository.ConfigurationMessages = configurationMessages;
             return configurationMessages;
         }
+        
         public static ICollection ConfigureAndWatch(FileInfo configFile)
         {
             ArrayList configurationMessages = new ArrayList();
@@ -139,7 +140,6 @@ namespace XYS.Lis.Config
             repository.ConfigurationMessages = configurationMessages;
             return configurationMessages;
         }
-        
         public static ICollection ConfigureAndWatch(IReporterRepository repository, FileInfo configFile)
         {
             ArrayList configurationMessages = new ArrayList();
@@ -153,7 +153,7 @@ namespace XYS.Lis.Config
         }
         #endregion
 
-        #region 
+        #region 获取指定元素
         public static XmlElement GetParamConfigurationElement(string tagName)
         {
             XmlElement resultElement = null;
@@ -270,7 +270,7 @@ namespace XYS.Lis.Config
             {
                 XmlElement configElement = null;
 #if NET_2_0
-				configElement = System.Configuration.ConfigurationManager.GetSection("log4net") as XmlElement;
+				configElement = System.Configuration.ConfigurationManager.GetSection("lis-report") as XmlElement;
 #else
                 configElement = System.Configuration.ConfigurationManager.GetSection("lis-report") as XmlElement;
 #endif
@@ -515,6 +515,7 @@ namespace XYS.Lis.Config
                 }
             }
         }
+        
         private static void InternalConfigureAndWatch(IReporterRepository repository, FileInfo configFile)
         {
             ReportLog.Debug(declaringType, "XmlConfigurator:configuring repository [" + repository.RepositoryName + "] using file [" + configFile + "] watching for file updates");

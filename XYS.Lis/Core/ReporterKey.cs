@@ -3,51 +3,48 @@ namespace XYS.Lis.Core
 {
     public class ReporterKey
     {
-        #region
+        #region 字段
         private static readonly string DefaultStrategy = "DefaultStrategy";
-        private readonly string m_name;
+        private readonly string m_callerName;
         private readonly string m_strategyName;
         private readonly int m_hashCache;
         #endregion
 
-        #region
-        public ReporterKey(string name)
+        #region 构造函数
+        public ReporterKey(string callerName)
+            : this(callerName, DefaultStrategy)
         {
-            if (name == null || name.Equals(""))
-            {
-                throw new ArgumentNullException("reporterName");
-            }
-            this.m_name = string.Intern(name);
-            this.m_strategyName = string.Intern(DefaultStrategy.ToLower());
-            this.m_hashCache = this.m_name.GetHashCode() + this.m_strategyName.GetHashCode();
         }
-        public ReporterKey(string name, string strategyName)
-            : this(name)
+        public ReporterKey(string callerName, string strategyName)
         {
-            if (strategyName != null && !strategyName.Equals(""))
+            if (!string.IsNullOrEmpty(callerName)&&!string.IsNullOrEmpty(strategyName))
             {
-                this.m_strategyName = string.Intern(strategyName.ToLower());
-                this.m_hashCache = this.m_name.GetHashCode() + this.m_strategyName.GetHashCode();
+                this.m_callerName = string.Intern(callerName);
+                this.m_strategyName = string.Intern(strategyName);
+                this.m_hashCache = this.m_callerName.GetHashCode() + this.m_strategyName.GetHashCode();
             }
             else
             {
-                throw new ArgumentNullException("strategyName");
+                throw new ArgumentNullException("callerName or strategyName is empty!");
             }
         }
         #endregion
 
-        #region
-        public string ReporterName
+        #region 实例属性
+        public string CallerName
         {
-            get { return this.m_name; }
+            get { return this.m_callerName; }
         }
         public string StrategyName
         {
-            get { return this.m_strategyName; }
+            get
+            {
+                return this.m_strategyName.ToLower();
+            }
         }
         #endregion
 
-        #region
+        #region 重写object方法
         public override int GetHashCode()
         {
             return this.m_hashCache;
@@ -61,7 +58,7 @@ namespace XYS.Lis.Core
             ReporterKey rk = obj as ReporterKey;
             if (rk != null)
             {
-                return (((object)m_name) == ((object)rk.m_name)&&((object)m_strategyName)==((object)rk.m_strategyName));
+                return (((object)m_callerName) == ((object)rk.m_callerName)&&((object)m_strategyName)==((object)rk.m_strategyName));
             }
             return false;
         }

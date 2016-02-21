@@ -41,12 +41,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\CommonPKElement.cs" />
-    <Compile Include="Common\CommonReportIdentify.cs" />
     <Compile Include="Common\ExportAttribute.cs" />
     <Compile Include="Common\IOptionHandler.cs" />
     <Compile Include="Common\IReportRepository.cs" />
     <Compile Include="Common\KeyColumn.cs" />
-    <Compile Include="Common\ReportIdentify.cs" />
     <Compile Include="Common\ReportKey.cs" />
     <Compile Include="Common\SearchRequire.cs" />
     <Compile Include="Common\TableAttribute.cs" />

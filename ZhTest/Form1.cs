@@ -36,16 +36,11 @@ namespace ZhTest
         private void button3_Click(object sender, EventArgs e)
         {
             ReportKey searchKey = new LisDBKeyImpl();
-            KeyColumn kc = new KeyColumn();
-            kc.Name = "patno";
-            kc.Value = "396039";
+            KeyColumn kc = new KeyColumn("patno", "396039");
             searchKey.AddColumn(kc);
-            KeyColumn kc2 = new KeyColumn();
-            kc2.Name = "r.receivedate";
-            kc2.Value = "2015-02-05";
+            KeyColumn kc2 = new KeyColumn("receivedate", "2015-02-05");
             searchKey.AddColumn(kc2);
-            KeyColumn kc3 = new KeyColumn();
-            kc3.Name = "r.sectionno";
+            KeyColumn kc3 = new KeyColumn("sectionno", 45);
             kc3.Value = 45;
             searchKey.AddColumn(kc3);
         }

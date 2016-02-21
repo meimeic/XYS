@@ -9,9 +9,9 @@ using XYS.Lis.Core;
 using XYS.Lis.Model;
 namespace XYS.Lis.DAL
 {
-    public class LisReportCommonDAL : ILisReportDAL
+    public class ReportCommonDAL : IReportDAL
     {
-        public LisReportCommonDAL()
+        public ReportCommonDAL()
         { }
         public void Fill(IReportElement element, string sql)
         {

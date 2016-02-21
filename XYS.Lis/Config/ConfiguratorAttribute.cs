@@ -2,7 +2,6 @@
 using System.Reflection;
 
 using XYS.Lis.Repository;
-
 namespace XYS.Lis.Config
 {
     [AttributeUsage(AttributeTargets.Assembly)]

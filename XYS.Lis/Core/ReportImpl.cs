@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Common;
-using XYS.Model;
 using XYS.Lis;
-using XYS.Lis.Core;
+using XYS.Lis.Model;
 using XYS.Lis.DAL;
 
 namespace XYS.Lis.Core
@@ -43,12 +42,12 @@ namespace XYS.Lis.Core
             this.InitReport(key, report);
         }
 
-        public void InitReports(LisSearchRequire require, List<ILisReportElement> reportList)
+        public void InitReports(LisSearchRequire require, List<IReportElement> reportList)
         {
             List<ReportKey> keyList = GetReportKeyList(require);
             this.InitReports(keyList, reportList);
         }
-        public void InitReports(List<ReportKey> keyList, List<ILisReportElement> reportList)
+        public void InitReports(List<ReportKey> keyList, List<IReportElement> reportList)
         {
             ReportReportElement rre;
             if (keyList != null && keyList.Count > 0)
@@ -67,9 +66,10 @@ namespace XYS.Lis.Core
             return this.Reporter.Option(report);
         }
 
-        public bool OperateReport(List<ILisReportElement> reportList)
+        public bool OperateReport(List<IReportElement> reportList)
         {
-            return this.Reporter.Option(reportList,ReportElementTag.Report);
+            //return this.Reporter.Option(reportList,ReportElementTag.Report);
+            return true;
         }
 
         public void HandleReport(LisSearchRequire require, ReportReportElement report)
@@ -78,13 +78,13 @@ namespace XYS.Lis.Core
             this.OperateReport(report);
         }
 
-        public void HandleReports(List<ReportKey> keyList, List<ILisReportElement> reportList)
+        public void HandleReports(List<ReportKey> keyList, List<IReportElement> reportList)
         {
             this.InitReports(keyList, reportList);
             this.OperateReport(reportList);
         }
 
-        public void HandleReports(LisSearchRequire require, List<ILisReportElement> reportList)
+        public void HandleReports(LisSearchRequire require, List<IReportElement> reportList)
         {
             List<ReportKey> keyList = GetReportKeyList(require);
             this.HandleReports(keyList, reportList);

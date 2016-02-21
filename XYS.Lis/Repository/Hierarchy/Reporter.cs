@@ -13,8 +13,8 @@ namespace XYS.Lis.Repository.Hierarchy
     public abstract class Reporter : IReporter
     {
         #region 变量
-        private readonly string m_reporterName;
-        private string m_strategyName;
+        private readonly string m_callerName;
+        private readonly string m_strategyName;
         private Hierarchy m_hierarchy;
 
         private IReportFiller m_defaultFill;
@@ -25,13 +25,9 @@ namespace XYS.Lis.Repository.Hierarchy
         #endregion
 
         #region 构造函数
-        protected Reporter(string name)
+        protected Reporter(string callerName, string strategyName)
         {
-            this.m_reporterName = name;
-        }
-        protected Reporter(string name, string strategyName)
-            : this(name)
-        {
+            this.m_callerName = callerName;
             this.m_strategyName = strategyName;
         }
         #endregion
@@ -75,34 +71,26 @@ namespace XYS.Lis.Repository.Hierarchy
         #endregion
 
         #region 实现ILisReport接口
-        public string ReporterName
-        {
-            get { return this.m_reporterName; }
-        }
-        public virtual string StrategyName
-        {
-            get
-            {
-                if (this.m_strategyName != null)
-                {
-                    return this.m_strategyName.ToLower();
-                }
-                return null;
-            }
-            protected set { this.m_strategyName = value; }
-        }
+        //public string CallerName
+        //{
+        //    get { return this.m_callerName; }
+        //}
+        //public virtual string StrategyName
+        //{
+        //    get { return this.m_strategyName; }
+        //}
         public IReporterRepository Repository
         {
             get { return this.m_hierarchy; }
         }
 
-        public virtual void FillReportElement(IReportElement reportElement, ReportKey key)
+        public virtual void FillReportElement(IReportElement reportElement, ReportKey RK)
         {
-            this.Filler.Fill(reportElement, key);
+            this.Filler.Fill(reportElement, RK);
         }
-        public virtual void FillReportElement(List<IReportElement> reportElementList, ReportKey key, ReportElementTag elementTag)
+        public virtual void FillReportElement(List<IReportElement> reportElementList, ReportKey RK, Type type)
         {
-            this.Filler.Fill(reportElementList, key, elementTag);
+            this.Filler.Fill(reportElementList, RK,type);
         }
 
         public virtual bool Option(IReportElement reportElement)
@@ -110,15 +98,15 @@ namespace XYS.Lis.Repository.Hierarchy
             bool rs = HandlerEvent(reportElement);
             return rs;
         }
-        public virtual bool Option(List<IReportElement> reportElementList, ReportElementTag elementTag)
+        public virtual bool Option(List<IReportElement> reportElementList, Type type)
         {
-            bool rs = HandlerEvent(reportElementList, elementTag);
+            bool rs = HandlerEvent(reportElementList, type);
             return rs;
         }
         #endregion
 
         #region 受保护的虚方法
-        protected virtual bool HandlerEvent(ILisReportElement element)
+        protected virtual bool HandlerEvent(IReportElement element)
         {
             IReportHandler handler = this.HandlerHead;
             while (handler != null)
@@ -142,12 +130,12 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             return true;
         }
-        protected virtual bool HandlerEvent(List<ILisReportElement> reportElementList, ReportElementTag elementTag)
+        protected virtual bool HandlerEvent(List<IReportElement> reportElementList, Type type)
         {
             IReportHandler handler = this.HandlerHead;
             while (handler != null)
             {
-                switch (handler.ReportOptions(reportElementList, elementTag))
+                switch (handler.ReportOptions(reportElementList, type))
                 {
                     case HandlerResult.Fail:
                         return false;
@@ -170,6 +158,8 @@ namespace XYS.Lis.Repository.Hierarchy
         protected virtual void AddHandler(Hashtable handlerTable, IList<string> handlerNameList)
         {
             IReportHandler handler;
+            //清空
+            this.m_headHandler = this.m_tailHandler = null;
             foreach (string name in handlerNameList)
             {
                 handler = handlerTable[name] as IReportHandler;
@@ -195,7 +185,6 @@ namespace XYS.Lis.Repository.Hierarchy
                 this.m_tailHandler = handler;
             }
         }
-
         protected virtual void SetFiller(Hashtable fillerTable, string fillerName)
         {
             IReportFiller filler = fillerTable[fillerName] as IReportFiller;
@@ -206,7 +195,7 @@ namespace XYS.Lis.Repository.Hierarchy
         }
         #endregion
 
-        #region
+        #region 私有方法
         private void InitDefault()
         {
             if (this.Hierarchy == null)
@@ -220,6 +209,7 @@ namespace XYS.Lis.Repository.Hierarchy
         }
         #endregion
 
+
         #region
         public virtual void InnerConfig()
         {
@@ -227,10 +217,10 @@ namespace XYS.Lis.Repository.Hierarchy
             {
                 throw new ArgumentNullException("Hierarchy");
             }
-            ReporterStrategy stratrgy = this.Hierarchy.StrategyMap[this.StrategyName] as ReporterStrategy;
+            ReporterStrategy stratrgy = this.Hierarchy.StrategyMap[this.m_strategyName] as ReporterStrategy;
             if (stratrgy == null)
             {
-                throw new ArgumentNullException("can not find the stratrgy [" + this.StrategyName + "]");
+                throw new ArgumentNullException("can not find the stratrgy [" + this.m_strategyName + "]");
             }
             SetFiller(this.Hierarchy.FillerMap, stratrgy.FillerName);
             AddHandler(this.Hierarchy.HandlerMap, stratrgy.HandlerList);

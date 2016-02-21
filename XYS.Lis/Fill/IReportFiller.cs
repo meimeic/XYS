@@ -16,6 +16,6 @@ namespace XYS.Lis.Fill
     {
         string FillerName { get; }
         void Fill(IReportElement reportElement, ReportKey RK);
-        void Fill(List<IReportElement> reportElementList, ReportKey RK, string elementName);
+        void Fill(List<IReportElement> reportElementList, ReportKey RK, Type type);
     }
 }
