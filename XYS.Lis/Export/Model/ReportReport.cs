@@ -25,20 +25,22 @@ namespace XYS.Lis.Export.Model
         private object m_checkerImage;
         private object m_technicianImage;
 
+        private ReportExam m_reportExam;
+        private ReportPatient m_reportPatient;
+        private ReportGraph m_reportGraph;
+        private List<ReportItem> m_reportItemList;
+        private List<ReportCustom> m_reportCustomList;
         private readonly List<int> m_parItemList;
-
-
-        private List<ReportItem> m_itemList;
-        private List<ReportGraph> m_graphList;
-        private List<ReportCustom> m_customList;
-
 
         public ReportReport()
         {
             this.m_parItemList = new List<int>(3);
-            this.m_itemList = null;
-            this.m_graphList = null;
-            this.m_customList = null;
+            this.m_reportExam = null;
+            this.m_reportPatient = null;
+            this.m_reportGraph = null;
+
+            this.m_reportItemList = null;
+            this.m_reportCustomList = null;
         }
 
         #region
@@ -116,34 +118,34 @@ namespace XYS.Lis.Export.Model
 
         public List<ReportItem> ItemList
         {
-            get { return this.m_itemList; }
+            get { return this.m_reportItemList; }
             set
             {
                 lock (this)
                 {
-                    this.m_itemList = value;
+                    this.m_reportItemList = value;
                 }
             }
         }
         public List<ReportGraph> GraphList
         {
-            get { return this.m_graphList; }
+            get { return this.m_reportGraph; }
             set
             {
                 lock (this)
                 {
-                    this.m_graphList = value;
+                    this.m_reportGraph = value;
                 }
             }
         }
         public List<ReportCustom> CustomList
         {
-            get { return this.m_customList; }
+            get { return this.m_reportCustomList; }
             set
             {
                 lock (this)
                 {
-                    this.m_customList = value;
+                    this.m_reportCustomList = value;
                 }
             }
         }

@@ -202,14 +202,13 @@ namespace XYS.Lis.Model
         {
             if (!string.IsNullOrEmpty(typeName))
             {
-                string name = typeName.ToLower();
-                List<IReportElement> result = this.m_reportItemTable[name] as List<IReportElement>;
+                List<IReportElement> result = this.m_reportItemTable[typeName] as List<IReportElement>;
                 if (result == null)
                 {
                     result = new List<IReportElement>(10);
                     lock (this.m_reportItemTable)
                     {
-                        this.m_reportItemTable[name] = result;
+                        this.m_reportItemTable[typeName] = result;
                     }
                 }
                 return result;

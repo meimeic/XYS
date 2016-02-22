@@ -6,5 +6,6 @@ namespace XYS.Lis.Export.Model
     [Export()]
    public class ReportExam
     {
+
     }
 }

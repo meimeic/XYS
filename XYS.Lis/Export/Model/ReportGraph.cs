@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
-using XYS.Lis.Core;
 
+using XYS.Lis.Core;
 namespace XYS.Lis.Export.Model
 {
     public class ReportGraph : IExportElement
