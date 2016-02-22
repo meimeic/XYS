@@ -4,12 +4,12 @@ using System.Collections;
 using XYS.Lis.Core;
 namespace XYS.Lis.Export.Model
 {
-    public class ReportGraph : IExportElement
+    public class ReportImage : IExportElement
     {
         private readonly string m_name;
         private readonly Hashtable m_imageTable;
 
-        public ReportGraph()
+        public ReportImage()
         { }
 
         public string Name

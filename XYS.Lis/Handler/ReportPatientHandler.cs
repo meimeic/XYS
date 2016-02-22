@@ -11,7 +11,7 @@ namespace XYS.Lis.Handler
        public static readonly string m_defaultHandlerName = "ReportPatientHandler";
        #endregion
 
-       #region
+       #region 构造函数
        public ReportPatientHandler()
            : this(m_defaultHandlerName)
        { }
@@ -26,7 +26,7 @@ namespace XYS.Lis.Handler
            if (element.ElementTag == ReportElementTag.Report)
            {
                ReportReportElement rre = element as ReportReportElement;
-               return OperatePatientList(rre);
+               return OperateReport(rre);
            }
            if (element.ElementTag == ReportElementTag.Patient)
            {
@@ -38,17 +38,18 @@ namespace XYS.Lis.Handler
        #endregion
 
         #region
-       protected virtual bool OperatePatientList(ReportReportElement rre)
+       protected virtual bool OperateReport(ReportReportElement rre)
        {
-           List<IReportElement> patientList = rre.GetReportItem(typeof(ReportPatientElement).Name);
-           OperateElementList(patientList, typeof(ReportPatientElement));
-           if (patientList.Count > 0)
-           {
-               ReportPatientElement rpe = patientList[0] as ReportPatientElement;
-               rre.ClinicType = rpe.ClinicType;
-               return true;
-           }
-           return false;
+           //List<IReportElement> patientList = rre.GetReportItem(typeof(ReportPatientElement).Name);
+           //OperateElementList(patientList, typeof(ReportPatientElement));
+           //if (patientList.Count > 0)
+           //{
+           //    ReportPatientElement rpe = patientList[0] as ReportPatientElement;
+           //    rre.ClinicType = rpe.ClinicType;
+           //    return true;
+           //}
+           //return false;
+           return OperatePatient(rre.ReportPatient);
        }
        protected virtual bool OperatePatient(ReportPatientElement rpe)
        {

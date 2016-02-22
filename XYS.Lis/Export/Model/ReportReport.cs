@@ -27,7 +27,7 @@ namespace XYS.Lis.Export.Model
 
         private ReportExam m_reportExam;
         private ReportPatient m_reportPatient;
-        private ReportGraph m_reportGraph;
+        private ReportImage m_reportGraph;
         private List<ReportItem> m_reportItemList;
         private List<ReportCustom> m_reportCustomList;
         private readonly List<int> m_parItemList;
@@ -127,7 +127,7 @@ namespace XYS.Lis.Export.Model
                 }
             }
         }
-        public List<ReportGraph> GraphList
+        public List<ReportImage> GraphList
         {
             get { return this.m_reportGraph; }
             set

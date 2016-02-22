@@ -28,19 +28,23 @@ namespace XYS.Lis.Model
             get { return this.m_name; }
             set { this.m_name = value; }
         }
-        public NVItem this[string key]
+        //public NVItem this[string key]
+        //{
+        //    get
+        //    {
+        //        lock (this)
+        //        {
+        //            return this.m_kvTable[key] as NVItem;
+        //        }
+        //    }
+        //}
+        //public ICollection AllNVItem
+        //{
+        //    get { return this.m_kvTable.Values; }
+        //}
+        public Hashtable KVTable
         {
-            get
-            {
-                lock (this)
-                {
-                    return this.m_kvTable[key] as NVItem;
-                }
-            }
-        }
-        public ICollection AllNVItem
-        {
-            get { return this.m_kvTable.Values; }
+            get { return this.m_kvTable; }
         }
         public int Count
         {
@@ -49,41 +53,41 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 方法
-        public void Add(string key, NVItem item)
+        public void Add(string key, object value)
         {
-            if (item != null)
+            if (value != null)
             {
                 lock (this.m_kvTable)
                 {
-                    this.m_kvTable[key] = item;
+                    this.m_kvTable[key] = value;
                 }
             }
         }
         #endregion
 
-        public class NVItem
-        {
-            private string m_name;
-            private string m_value;
+        //public class NVItem
+        //{
+        //    private string m_name;
+        //    private string m_value;
 
-            public NVItem()
-            { 
-            }
-            public NVItem(string name, string value)
-            {
-                this.m_name = name;
-                this.m_value = value;
-            }
-            public string Name
-            {
-                get { return this.m_name; }
-                set { this.m_name = value; }
-            }
-            public string Value
-            {
-                get { return this.m_value; }
-                set { this.m_value = value; }
-            }
-        }
+        //    public NVItem()
+        //    { 
+        //    }
+        //    public NVItem(string name, string value)
+        //    {
+        //        this.m_name = name;
+        //        this.m_value = value;
+        //    }
+        //    public string Name
+        //    {
+        //        get { return this.m_name; }
+        //        set { this.m_name = value; }
+        //    }
+        //    public string Value
+        //    {
+        //        get { return this.m_value; }
+        //        set { this.m_value = value; }
+        //    }
+        //}
     }
 }

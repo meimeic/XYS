@@ -60,6 +60,10 @@ namespace XYS.Lis.Fill
         #region 内部处理逻辑
         protected virtual void FillReport(ReportReportElement rre, ReportKey RK)
         {
+            //设置默认元素
+            FillElement(rre.ReportExam, RK);
+            FillElement(rre.ReportPatient, RK);
+
             List<Type> availableElementList = this.GetAvailableInsideElements(RK);
             if (availableElementList != null && availableElementList.Count > 0)
             {
@@ -115,16 +119,6 @@ namespace XYS.Lis.Fill
             int sectionNo = GetSectionNo(key);
             return GetAvailableInsideElements(sectionNo);
         }
-        protected virtual ElementTypeMap GetAvailableExtendElements(int sectionNo)
-        {
-            if (this.m_section2InsideElementMap.Count == 0)
-            {
-                InitExtendElementTable();
-            }
-            ElementTypeMap result = this.m_section2InsideElementMap[sectionNo] as ElementTypeMap;
-            return result;
-        }
-
         #endregion
 
         #region 私有方法
@@ -152,7 +146,16 @@ namespace XYS.Lis.Fill
         }
         #endregion
 
-        #region
+        #region 未调用的方法
+        //protected virtual ElementTypeMap GetAvailableExtendElements(int sectionNo)
+        //{
+        //    if (this.m_section2InsideElementMap.Count == 0)
+        //    {
+        //        InitExtendElementTable();
+        //    }
+        //    ElementTypeMap result = this.m_section2InsideElementMap[sectionNo] as ElementTypeMap;
+        //    return result;
+        //}
         //private bool IsTable(Type elementType)
         //{
         //    object[] attrs = elementType.GetCustomAttributes(typeof(TableAttribute), true);

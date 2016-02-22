@@ -47,7 +47,7 @@ namespace XYS.Lis.Handler
         #region graph项的内部处理逻辑
         protected virtual bool OperateGraphList(ReportReportElement rre)
         {
-            if (rre.SectionNo == 11)
+            if (rre.ReportExam.SectionNo == 11)
             {
                 List<IReportElement> graphList = rre.GetReportItem(typeof(ReportGraphElement).Name);
                 AddImageByParItem(rre.ParItemList, graphList);

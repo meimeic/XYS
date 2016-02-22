@@ -65,13 +65,13 @@ namespace XYS.Lis.Fill
         {
             this.ReportDAL.Fill(reportElement, sql);
         }
-        protected virtual void D_FillElements(List<IReportElement> reportElementList,Type type,string sql)
+        protected virtual void D_FillElements(List<IReportElement> reportElementList, Type type, string sql)
         {
             this.ReportDAL.FillList(reportElementList, type, sql);
         }
         #endregion
 
-        #region 生成sql语句  
+        #region 生成sql语句
         protected string GenderSql(IReportElement element, ReportKey RK)
         {
             string where = GenderWhere(RK);
@@ -191,10 +191,9 @@ namespace XYS.Lis.Fill
             sb.Remove(sb.Length - 5, 5);
             return sb.ToString();
         }
-
         #endregion
 
-        //#region 辅助方法
+        #region 辅助方法
         //protected virtual Hashtable ReportKey2Table(ReportKey key)
         //{
         //    Hashtable keyTable = new Hashtable(5);
@@ -216,6 +215,6 @@ namespace XYS.Lis.Fill
         //        return false;
         //    }
         //}
-        //#endregion
+        #endregion
     }
 }

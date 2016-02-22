@@ -43,31 +43,27 @@ namespace XYS.Lis.Handler
         #region 内部处理逻辑
         protected virtual bool OperateExamList(ReportReportElement rre)
         {
-            List<IReportElement> examList = rre.GetReportItem(typeof(ReportExamElement).Name);
-            OperateElementList(examList, typeof(ReportExamElement));
-            if (examList.Count > 0)
+            rre.ParItemName = rre.ReportExam.ParItemName;
+
+            rre.ReceiveDateTime = rre.ReportExam.ReceiveDateTime;
+            rre.CollectDateTime = rre.ReportExam.CollectDateTime;
+            rre.InceptDateTime = rre.ReportExam.InceptDateTime;
+            rre.CheckDateTime = rre.ReportExam.CheckDateTime;
+            rre.SecondeCheckDateTime = rre.ReportExam.SecondeCheckDateTime;
+
+            rre.TestDateTime = rre.ReportExam.TestDateTime;
+
+            //设置签名图片
+            if (!string.IsNullOrEmpty(rre.ReportExam.Checker))
             {
-                ReportExamElement ree = examList[0] as ReportExamElement;
-                rre.SectionNo = ree.SectionNo;
-                rre.ParItemName = ree.ParItemName;
-                rre.ReceiveDateTime = ree.ReceiveDateTime;
-                rre.CollectDateTime = ree.CollectDateTime;
-                rre.InceptDateTime = ree.InceptDateTime;
-                rre.TestDateTime = ree.TestDateTime;
-                rre.CheckDateTime = ree.CheckDateTime;
-                rre.SecondeCheckDateTime = ree.SecondeCheckDateTime;
-                //设置签名图片
-                if (!string.IsNullOrEmpty(ree.Checker))
-                {
-                    rre.CheckerImage = LisPUser.GetSignImage(ree.Checker);
-                }
-                if (string.IsNullOrEmpty(ree.Technician))
-                {
-                    rre.TechnicianImage = LisPUser.GetSignImage(ree.Technician);
-                }
-                return true;
+                rre.CheckerImage = LisPUser.GetSignImage(rre.ReportExam.Checker);
             }
-            return false;
+            if (string.IsNullOrEmpty(rre.ReportExam.Technician))
+            {
+                rre.TechnicianImage = LisPUser.GetSignImage(rre.ReportExam.Technician);
+            }
+
+            return OperateExam(rre.ReportExam);
         }
         protected virtual bool OperateExam(ReportExamElement ree)
         {

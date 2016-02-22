@@ -13,12 +13,14 @@ namespace XYS.Lis.Export
     {
         #region
         private readonly string m_exportName;
+        private readonly Hashtable m_kv2Custom;
         #endregion
 
         #region 构造函数
         protected ReportExportSkeleton(string name)
         {
             this.m_exportName = name;
+            this.m_kv2Custom = new Hashtable(10);
         }
         #endregion
 
@@ -43,23 +45,6 @@ namespace XYS.Lis.Export
         {
             throw new System.NotImplementedException();
         }
-        //public string export(IReportElement element)
-        //{
-        //    if (element.ElementTag == ReportElementTag.Report)
-        //    {
-        //        ReportReportElement report = element as ReportReportElement;
-        //        if (report != null)
-        //        {
-        //            OperateReport(report);
-        //        }
-        //    }
-        //    return InnerExport(element);
-        //}
-        //public string export(List<IReportElement> exportElementList)
-        //{
-        //    PreFilter(exportElementList);
-        //    return InnerExport(exportElementList, elementTag);
-        //}
         #endregion
 
         #region
@@ -88,7 +73,7 @@ namespace XYS.Lis.Export
         #region
         protected virtual void ExportReport(ReportReportElement reportReport, ReportReport exportReport)
         {
-
+            foreach(DictionaryEntry de in )
         }
         protected virtual void ExportElement(IReportElement reportElement, IExportElement exportElement)
         {
@@ -119,12 +104,49 @@ namespace XYS.Lis.Export
                 }
             }
         }
+        protected void ConvertKV2Custom(ReportKVElement rkv,ReportCustom rc)
+        {
+            PropertyInfo exportProperty = null;
+            string propertyName = null;
+            foreach (DictionaryEntry de in rkv.KVTable)
+            {
+                propertyName = this.m_kv2Custom[de.Key] as string;
+                if (!string.IsNullOrEmpty(propertyName))
+                {
+                    exportProperty = rc.GetType().GetProperty(propertyName);
+                    if (exportProperty != null)
+                    {
+                        SetProp(exportProperty,rc,de.Value);
+                    }
+                }
+            }
+        }
+        protected void ConvertGraph2Image(List<IReportElement> graphList,ReportImage reportImage)
+        {
+            ReportGraphElement rge = null;
+            foreach (IReportElement re in graphList)
+            {
+                rge = re as ReportGraphElement;
+                if (rge != null)
+                {
+                    reportImage.Add(rge.GraphName, rge.GraphImage);
+                }
+            }
+        }
+        protected void ConvertGraph2Image(ReportGraphElement rge, ReportImage reportImage)
+        {
+            reportImage.Add(rge.GraphName, rge.GraphImage);
+        }
         #endregion
 
         #region
         private void SetProp(PropertyInfo rp, IReportElement element, PropertyInfo ep, IExportElement exportElement)
         {
             ep.SetValue(exportElement, rp.GetValue(element, null), null);
+        }
+        private void SetProp(PropertyInfo ep, IExportElement exportElement,object value)
+        {
+            ep.SetValue(exportElement, value, null);
         }
         #endregion
 
@@ -139,6 +161,14 @@ namespace XYS.Lis.Export
                 {
                     return true;
                 }
+            }
+            return false;
+        }
+        private bool IsExist(List<IReportElement> itemList)
+        {
+            if (itemList != null && itemList.Count > 0)
+            {
+                return true;
             }
             return false;
         }

@@ -9,8 +9,11 @@ namespace XYS.Lis.Handler
 {
     public class ReportItemHandler : ReportHandlerSkeleton
     {
+        #region
         private static readonly string m_defaultHandlerName = "ReportItemHandler";
         private readonly Hashtable m_convertItemMap;
+        #endregion
+
         #region 构造函数
         public ReportItemHandler()
             : this(m_defaultHandlerName)
@@ -44,9 +47,9 @@ namespace XYS.Lis.Handler
         protected virtual bool OperateItemList(ReportReportElement rre)
         {
             //item 处理
-            ReportItemElement rie;
+            ReportItemElement rie=null;
             List<IReportElement> itemElementList = rre.GetReportItem(typeof(ReportItemElement).Name);
-            ReportKVElement kve = GetKVElement(rre.SectionNo);
+            ReportKVElement kve = GetKVElement(rre.ReportExam.SectionNo);
             for (int i = itemElementList.Count - 1; i >= 0; i--)
             {
                 rie = itemElementList[i] as ReportItemElement;
@@ -55,10 +58,13 @@ namespace XYS.Lis.Handler
                     itemElementList.RemoveAt(i);
                     continue;
                 }
+
                 //设置ParItemList 检验大项集合
                 SetParItemListByItem(rre.ParItemList, rie);
+
                 //通过item设置备注
                 SetRemarkFlagByItem(rre, rie);
+                
                 //item是否转换为kv
                 if (IsConvert2KVElement(rie, kve))
                 {
@@ -100,51 +106,7 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region item项转换成KV项
-        //private bool IsConvert2KVElement(ReportItemElement rie, List<IReportElement> kvList)
-        //{
-        //    bool result = false;
-        //    ReportKVElement rkv = null;
-        //    if (kvList!=null&&kvList.Count == 0)
-        //    {
-        //        kvList.Add(new ReportKVElement());
-        //    }
-        //    //
-        //    rkv = kvList[0] as ReportKVElement;
-        //    if (rkv == null)
-        //    {
-        //        return false;
-        //    }
-        //    switch (rie.ItemNo)
-        //    {
-        //        case 90009288:     //血常规项目c8
-        //        case 90009289:      //c9
-        //        case 90009290:     //c10
-        //        case 90009291:     //c11
-        //        case 90009292:     //c12
-        //        case 90009293:    //c13
-        //        case 90009294:    //c14
-        //        case 90009300:    //c0  
-        //        case 90009295:    //c15
-        //        case 90009296:    //c16
-        //        case 90009297:   //c17
-        //        case 90009301:   //c1
-        //            rkv.Name = "ManTable";
-        //            Item2KVTable(rie, rkv.KVTable);
-        //            result = true;
-        //            break;
-        //        case 90008528:    //染色体
-        //        case 90008797:
-        //        case 90008798:
-        //        case 90008799:
-        //            rkv.Name = "RanTable";
-        //            Item2KVTable(rie, rkv.KVTable);
-        //            result = true;
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //    return result;
-        //}
+   
         private bool IsConvert2KVElement(ReportItemElement rie, ReportKVElement rkve)
         {
             string key = this.m_convertItemMap[rie.ItemNo] as string;
@@ -153,9 +115,9 @@ namespace XYS.Lis.Handler
                 //抛出异常
                 if (rkve == null)
                 {
-                    throw new Exception("");
+                    throw new ArgumentNullException("");
                 }
-                rkve.Add(key, new ReportKVElement.NVItem(rie.ItemCName, rie.ItemResult));
+                rkve.Add(key,rie.ItemResult);
                 return true;
             }
             return false;
@@ -180,13 +142,41 @@ namespace XYS.Lis.Handler
             }
             return kve;
         }
-        //private void Item2KVTable(ReportItemElement item, Hashtable kvTable)
-        //{
-        //    kvTable.Add(item.ItemCName, item.ItemResult);
-        //}
         #endregion
 
-        //#region item转换成custom
+        #region 是否删除
+        private bool ItemIsDelete(ReportItemElement rie)
+        {
+            return IsRemoveBySecret(rie.SecretGrade);
+        }
+        protected bool IsRemoveBySecret(int secretGrade)
+        {
+            if (secretGrade > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region 通过item设置检验大项集合以及备注标记
+        private void SetRemarkFlagByItem(ReportReportElement rre,ReportItemElement rie)
+        {
+            //
+        }
+        private void SetParItemListByItem(List<int> parItemList, ReportItemElement rie)
+        {
+            if (!parItemList.Contains(rie.ParItemNo))
+            {
+                parItemList.Add(rie.ParItemNo);
+            }
+        }
+        #endregion
+
+        #region 未调用的方法
         //private bool ItemConvert2Custom(ReportItemElement rie, List<ILisReportElement> customList)
         //{
         //    bool result = false;
@@ -254,41 +244,51 @@ namespace XYS.Lis.Handler
         //    int m = itemNo % ReportCustomElement.COLUMN_COUNT;
         //    return "Column" + m;
         //}
-        //#endregion
-
-        #region 是否删除
-        private bool ItemIsDelete(ReportItemElement rie)
-        {
-            return IsRemoveBySecret(rie.SecretGrade);
-        }
-        protected bool IsRemoveBySecret(int secretGrade)
-        {
-            if (secretGrade > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        #endregion
-
-        #region 通过item设置检验大项集合以及备注标记
-        private void SetRemarkFlagByItem(ReportReportElement rre,ReportItemElement rie)
-        {
-            //
-        }
-        private void SetParItemListByItem(List<int> parItemList, ReportItemElement rie)
-        {
-            if (!parItemList.Contains(rie.ParItemNo))
-            {
-                parItemList.Add(rie.ParItemNo);
-            }
-        }
-        #endregion
-
-        #region 未调用的方法
+        //private bool IsConvert2KVElement(ReportItemElement rie, List<IReportElement> kvList)
+        //{
+        //    bool result = false;
+        //    ReportKVElement rkv = null;
+        //    if (kvList!=null&&kvList.Count == 0)
+        //    {
+        //        kvList.Add(new ReportKVElement());
+        //    }
+        //    //
+        //    rkv = kvList[0] as ReportKVElement;
+        //    if (rkv == null)
+        //    {
+        //        return false;
+        //    }
+        //    switch (rie.ItemNo)
+        //    {
+        //        case 90009288:     //血常规项目c8
+        //        case 90009289:      //c9
+        //        case 90009290:     //c10
+        //        case 90009291:     //c11
+        //        case 90009292:     //c12
+        //        case 90009293:    //c13
+        //        case 90009294:    //c14
+        //        case 90009300:    //c0  
+        //        case 90009295:    //c15
+        //        case 90009296:    //c16
+        //        case 90009297:   //c17
+        //        case 90009301:   //c1
+        //            rkv.Name = "ManTable";
+        //            Item2KVTable(rie, rkv.KVTable);
+        //            result = true;
+        //            break;
+        //        case 90008528:    //染色体
+        //        case 90008797:
+        //        case 90008798:
+        //        case 90008799:
+        //            rkv.Name = "RanTable";
+        //            Item2KVTable(rie, rkv.KVTable);
+        //            result = true;
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //    return result;
+        //}
         //public override HandlerResult ReportOptions(Hashtable reportElementTable, ReportElementTag elementTag)
         //{
         //    if (elementTag == ReportElementTag.ReportElement)

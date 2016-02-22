@@ -18,6 +18,7 @@ namespace XYS.Lis.Model
         #region 私有实例字段
         private int m_orderNo;
         private int m_printModelNo;
+
         private string m_reportTitle;
         private string m_remark;
         private int m_remarkFlag;
@@ -32,12 +33,14 @@ namespace XYS.Lis.Model
         private DateTime m_testDateTime;
         private DateTime m_checkDateTime;
         private DateTime m_secondCheckDateTime;
-
-        private int m_sectionNo;
-        private ClinicType m_clinicType;
+        //private int m_sectionNo;
+        //private ClinicType m_clinicType;
 
         private readonly List<int> m_parItemList;
         private readonly Hashtable m_reportItemTable;
+
+        private readonly ReportExamElement m_reportExam;
+        private readonly ReportPatientElement m_reportPatient;
         #endregion
 
         #region 公共构造函数
@@ -45,8 +48,10 @@ namespace XYS.Lis.Model
         {
             this.m_remarkFlag = 0;
             this.m_parItemList = new List<int>(5);
-            this.m_reportItemTable = new Hashtable(5);
+            this.m_reportItemTable = new Hashtable(3);
             this.m_elementTag = ReportElementTag.Report;
+            this.m_reportExam = new ReportExamElement();
+            this.m_reportPatient = new ReportPatientElement();
         }
         #endregion
 
@@ -76,12 +81,17 @@ namespace XYS.Lis.Model
             get { return this.m_remarkFlag; }
             set { this.m_remarkFlag = value; }
         }
-
         [Convert()]
         public string Remark
         {
             get { return this.m_remark; }
             set { this.m_remark = value; }
+        }
+
+        public string ParItemName
+        {
+            get { return this.m_parItemName; }
+            set { this.m_parItemName = value; }
         }
 
         [Convert()]
@@ -129,12 +139,6 @@ namespace XYS.Lis.Model
         }
 
         [Convert()]
-        public string ParItemName
-        {
-            get { return this.m_parItemName; }
-            set { this.m_parItemName = value; }
-        }
-        [Convert()]
         public byte[] TechnicianImage
         {
             get { return this.m_technicianImage; }
@@ -146,17 +150,6 @@ namespace XYS.Lis.Model
             get { return this.m_checkerImage; }
             set { this.m_checkerImage = value; }
         }
-
-        public int SectionNo
-        {
-            get { return this.m_sectionNo; }
-            set { this.m_sectionNo = value; }
-        }
-        public ClinicType ClinicType
-        {
-            get { return this.m_clinicType; }
-            set { this.m_clinicType = value; }
-        }
         public List<int> ParItemList
         {
             get { return this.m_parItemList; }
@@ -164,6 +157,14 @@ namespace XYS.Lis.Model
         public Hashtable ReportItemTable
         {
             get { return this.m_reportItemTable; }
+        }
+        public ReportExamElement ReportExam
+        {
+            get { return this.m_reportExam; }
+        }
+        public ReportPatientElement ReportPatient
+        {
+            get { return this.m_reportPatient; }
         }
         #endregion
 
@@ -180,23 +181,8 @@ namespace XYS.Lis.Model
             this.ReportTitle = "";
             this.RemarkFlag = 0;
             this.Remark = "";
-            this.ClinicType = ClinicType.none;
-            this.ParItemName = null;
             this.TechnicianImage = null;
             this.CheckerImage = null;
-        }
-        public List<IReportElement> GetReportItem(ReportElementTag elementTag)
-        {
-            List<IReportElement> result = this.m_reportItemTable[elementTag] as List<IReportElement>;
-            if (result == null)
-            {
-                result = new List<IReportElement>(10);
-                lock (this.m_reportItemTable)
-                {
-                    this.m_reportItemTable[elementTag] = result;
-                }
-            }
-            return result;
         }
         public List<IReportElement> GetReportItem(string typeName)
         {

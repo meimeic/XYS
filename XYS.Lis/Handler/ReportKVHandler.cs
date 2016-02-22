@@ -28,7 +28,5 @@ namespace XYS.Lis.Handler
             return true;
         }
         #endregion
-
-        //添加KV项的内部处理逻辑
     }
 }

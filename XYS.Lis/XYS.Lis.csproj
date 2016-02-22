@@ -70,7 +70,7 @@
     <Compile Include="DAL\DbHelperSQL.cs" />
     <Compile Include="Export\IReportExport.cs" />
     <Compile Include="Export\Model\ReportCustom.cs" />
-    <Compile Include="Export\Model\ReportGraph.cs" />
+    <Compile Include="Export\Model\ReportImage.cs" />
     <Compile Include="Export\Model\ReportItem.cs" />
     <Compile Include="Export\Model\ReportReport.cs" />
     <Compile Include="Export\Model\ReportExam.cs" />

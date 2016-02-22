@@ -20,6 +20,23 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region 实现IReportHandler接口
+        public IReportHandler Next
+        {
+            get { return this.m_nextHandler; }
+            set { this.m_nextHandler = value; }
+        }
+        public virtual string HandlerName
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(this.m_handlerName))
+                {
+                    return null;
+                }
+                return this.m_handlerName.ToLower();
+            }
+        }
+
         public virtual HandlerResult ReportOptions(IReportElement reportElement)
         {
             bool result = OperateElement(reportElement);
@@ -51,26 +68,6 @@ namespace XYS.Lis.Handler
             else
             {
                 return HandlerResult.Fail;
-            }
-        }
-        
-        public IReportHandler Next
-        {
-            get { return this.m_nextHandler; }
-            set { this.m_nextHandler = value; }
-        }
-        public virtual string HandlerName
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(this.m_handlerName))
-                {
-                    return null;
-                }
-                else
-                {
-                    return this.m_handlerName.ToLower();
-                }
             }
         }
         #endregion
@@ -114,39 +111,6 @@ namespace XYS.Lis.Handler
                     }
                 }
             }
-        }
-       
-        protected virtual bool IsElement(IReportElement reportElement, ReportElementTag elementTag)
-        {
-            bool result = false;
-            switch (elementTag)
-            {
-                case ReportElementTag.Report:
-                    result = reportElement is ReportReportElement;
-                    break;
-                case ReportElementTag.Exam:
-                    result = reportElement is ReportExamElement;
-                    break;
-                case ReportElementTag.Patient:
-                    result = reportElement is ReportPatientElement;
-                    break;
-                case ReportElementTag.Item:
-                    result = reportElement is ReportItemElement;
-                    break;
-                case ReportElementTag.Graph:
-                    result = reportElement is ReportGraphElement;
-                    break;
-                case ReportElementTag.Custom:
-                    result = reportElement is ReportCustomElement;
-                    break;
-                case ReportElementTag.Temp:
-                    result = reportElement is ReportKVElement;
-                    break;
-                default:
-                    result = false;
-                    break;
-            }
-            return result;
         }
         protected virtual bool IsElement(IReportElement reportElement, Type type)
         {
