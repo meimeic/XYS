@@ -41,6 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\CommonPKElement.cs" />
+    <Compile Include="Common\ConvertAttribute.cs" />
     <Compile Include="Common\ExportAttribute.cs" />
     <Compile Include="Common\IOptionHandler.cs" />
     <Compile Include="Common\IReportRepository.cs" />

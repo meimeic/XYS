@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.His", "XYS.His\XYS.His.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhTest", "ZhTest\ZhTest.csproj", "{66F2AAB8-2193-47CF-BC70-6CDFC4434364}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Lis.Service", "XYS.Lis.Service\XYS.Lis.Service.csproj", "{043CFAB9-EACF-4B25-BA60-2FFC1561EA90}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{66F2AAB8-2193-47CF-BC70-6CDFC4434364}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66F2AAB8-2193-47CF-BC70-6CDFC4434364}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66F2AAB8-2193-47CF-BC70-6CDFC4434364}.Release|Any CPU.Build.0 = Release|Any CPU
+		{043CFAB9-EACF-4B25-BA60-2FFC1561EA90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{043CFAB9-EACF-4B25-BA60-2FFC1561EA90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{043CFAB9-EACF-4B25-BA60-2FFC1561EA90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{043CFAB9-EACF-4B25-BA60-2FFC1561EA90}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

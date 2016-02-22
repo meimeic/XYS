@@ -22,7 +22,7 @@ namespace XYS.Lis.Config
 
         private static readonly string NAME_ATTR = "name";
         private static readonly string TYPE_ATTR = "type";
-        private static readonly string JSON_TYPE_ATTR = "jsonType";
+        private static readonly string EXPORT_TYPE_ATTR = "exportType";
         private static readonly string VALUE_ATTR = "value";
         private static readonly string FILL_TAG_ATTR = "fillTag";
         private static readonly string MODEL_NO_ATTR = "modelNo";
@@ -170,7 +170,7 @@ namespace XYS.Lis.Config
             {
                 string name = element.GetAttribute(NAME_ATTR);
                 string typeName = element.GetAttribute(TYPE_ATTR);
-                string jsonName = element.GetAttribute(JSON_TYPE_ATTR);
+                string exportName = element.GetAttribute(EXPORT_TYPE_ATTR);
                 if (!string.IsNullOrEmpty(typeName))
                 {
                     ElementType elementType = new ElementType(name, typeName);

@@ -1,10 +1,11 @@
 ﻿using System;
 
 using XYS.Common;
+using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
     [Export()]
-    public class FRImageElement : AbstractInnerElement
+    public class FRImageElement:IExportElement
     {
         private byte[] m_image1;
         private byte[] m_image2;
@@ -16,7 +17,6 @@ namespace XYS.Lis.Model
         private byte[] m_image8;
 
         public FRImageElement()
-            : base()
         {
             this.m_image1 = null;
             this.m_image2 = null;

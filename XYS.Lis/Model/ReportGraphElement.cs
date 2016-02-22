@@ -24,7 +24,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 公共属性
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string GraphName
         {
@@ -32,7 +32,7 @@ namespace XYS.Lis.Model
             set { this.m_graphName = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public byte[] GraphImage
         {

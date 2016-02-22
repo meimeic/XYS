@@ -3,7 +3,6 @@ using XYS.Common;
 using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
-    [Export()]
     public class ReportItemElement : AbstractReportElement
     {
         #region 私有常量字段
@@ -41,7 +40,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 公共属性
-        [Export()]
+        [Convert()]
         [Column(true)]
         public int ItemNo
         {
@@ -56,7 +55,7 @@ namespace XYS.Lis.Model
             set { this.m_parItemNo = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string ItemCName
         {
@@ -64,7 +63,7 @@ namespace XYS.Lis.Model
             set { this.m_itemCName = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string ItemEName
         {
@@ -84,14 +83,14 @@ namespace XYS.Lis.Model
             get { return this.m_itemDesc; }
             set { this.m_itemDesc = value; }
         }
-        [Export()]
+        [Convert()]
         public string ItemResult
         {
             get { return this.m_itemResult; }
             protected set { this.m_itemResult = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string ItemStandard
         {
@@ -99,7 +98,7 @@ namespace XYS.Lis.Model
             set { this.m_itemStandard = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string ResultStatus
         {
@@ -107,7 +106,7 @@ namespace XYS.Lis.Model
             set { this.m_resultStatus = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string ItemUnit
         {
@@ -115,7 +114,7 @@ namespace XYS.Lis.Model
             set { this.m_itemUnit = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string RefRange
         {
@@ -123,7 +122,7 @@ namespace XYS.Lis.Model
             set { this.m_refRange = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public int DispOrder
         {

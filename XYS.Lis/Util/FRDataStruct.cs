@@ -160,7 +160,7 @@ namespace XYS.Lis.Util
             }
             foreach (PropertyInfo pro in props)
             {
-                xAttrs = pro.GetCustomAttributes(typeof(ExportAttribute),true);
+                xAttrs = pro.GetCustomAttributes(typeof(ConvertAttribute),true);
                 if (xAttrs != null && xAttrs.Length > 0)
                 {
                     attrDic = GenderColumnAttrDic(pro);
@@ -203,7 +203,7 @@ namespace XYS.Lis.Util
             XmlNode root = doc.CreateNode(XmlNodeType.Element, ROOT_TAG, null);
             foreach (ElementType element in typeMap.AllElementTypes)
             {
-                xAttrs = element.EType.GetCustomAttributes(typeof(ExportAttribute), true);
+                xAttrs = element.EType.GetCustomAttributes(typeof(ConvertAttribute), true);
                 if (xAttrs != null && xAttrs.Length > 0)
                 {
                     ConvertObj2Table(ds, element.EType);
@@ -245,7 +245,7 @@ namespace XYS.Lis.Util
             }
             foreach (PropertyInfo pro in props)
             {
-                xAttrs = pro.GetCustomAttributes(typeof(ExportAttribute), true);
+                xAttrs = pro.GetCustomAttributes(typeof(ConvertAttribute), true);
                 if (xAttrs != null && xAttrs.Length > 0)
                 {
                     dt.Columns.Add(pro.Name, pro.PropertyType);

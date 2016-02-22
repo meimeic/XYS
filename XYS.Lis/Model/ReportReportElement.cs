@@ -8,7 +8,6 @@ using XYS.Lis.Core;
 using XYS.Lis.Util;
 namespace XYS.Lis.Model
 {
-    [Export()]
     public class ReportReportElement : IReportElement
     {
 
@@ -59,13 +58,13 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实例属性
-        [Export()]
+        [Convert()]
         public int OrderNo
         {
             get { return this.m_orderNo; }
             set { this.m_orderNo = value; }
         }
-        [Export()]
+        [Convert()]
         public int PrintModelNo
         {
             get { return this.m_printModelNo; }
@@ -78,70 +77,70 @@ namespace XYS.Lis.Model
             set { this.m_remarkFlag = value; }
         }
 
-        [Export()]
+        [Convert()]
         public string Remark
         {
             get { return this.m_remark; }
             set { this.m_remark = value; }
         }
 
-        [Export()]
+        [Convert()]
         public DateTime ReceiveDateTime
         {
             get { return this.m_receiveDateTime; }
             set { this.m_receiveDateTime = value; }
         }
-        [Export()]
+        [Convert()]
         public DateTime CollectDateTime
         {
             get { return this.m_collectDateTime; }
             set { this.m_collectDateTime = value; }
         }
-        [Export()]
+        [Convert()]
         public DateTime InceptDateTime
         {
             get { return m_inceptDateTime; }
             set { m_inceptDateTime = value; }
         }
-        [Export()]
+        [Convert()]
         public DateTime TestDateTime
         {
             get { return m_testDateTime; }
             set { m_testDateTime = value; }
         }
-        [Export()]
+        [Convert()]
         public DateTime CheckDateTime
         {
             get { return m_checkDateTime; }
             set { m_checkDateTime = value; }
         }
-        [Export()]
+        [Convert()]
         public DateTime SecondeCheckDateTime
         {
             get { return m_secondCheckDateTime; }
             set { m_secondCheckDateTime = value; }
         }
 
-        [Export()]
+        [Convert()]
         public string ReportTitle
         {
             get { return this.m_reportTitle; }
             set { this.m_reportTitle = value; }
         }
 
-        [Export()]
+        [Convert()]
         public string ParItemName
         {
             get { return this.m_parItemName; }
             set { this.m_parItemName = value; }
         }
-        [Export()]
+        [Convert()]
         public byte[] TechnicianImage
         {
             get { return this.m_technicianImage; }
             set { this.m_technicianImage = value; }
         }
-        [Export()]
+        [Convert()]
         public byte[] CheckerImage
         {
             get { return this.m_checkerImage; }

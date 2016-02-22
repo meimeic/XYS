@@ -2,7 +2,6 @@
 using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
-    [Export()]
     public class ReportPatientElement : AbstractReportElement, IPatient
     {
         #region 私有常量字段
@@ -45,7 +44,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实现IPatient接口
-        [Export()]
+        [Convert()]
         public string ClinicName
         {
             get
@@ -65,7 +64,7 @@ namespace XYS.Lis.Model
                 }
             }
         }
-        [Export()]
+        [Convert()]
         public string GenderName
         {
             get
@@ -99,21 +98,21 @@ namespace XYS.Lis.Model
 
         #region 公共属性
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string PatientName
         {
             get { return this.m_patientName; }
             set { this.m_patientName = value; }
         }
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string PID
         {
             get { return this.m_pid; }
             set { this.m_pid = value; }
         }
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string CID
         {
@@ -134,7 +133,7 @@ namespace XYS.Lis.Model
             protected set { this.m_gender = value; }
         }
 
-        [Export()]
+        [Convert()]
         public string AgeStr
         {
             get
@@ -181,7 +180,7 @@ namespace XYS.Lis.Model
             protected set { this.m_clinicType = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public int VisitTimes
         {
@@ -189,7 +188,7 @@ namespace XYS.Lis.Model
             set { this.m_visitTimes = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string DeptName
         {
@@ -197,7 +196,7 @@ namespace XYS.Lis.Model
             set { this.m_deptName = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string Doctor
         {
@@ -205,7 +204,7 @@ namespace XYS.Lis.Model
             set { this.m_doctor = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string BedNo
         {
@@ -213,7 +212,7 @@ namespace XYS.Lis.Model
             set { this.m_bedNo = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string ClinicalDiagnosis
         {
@@ -221,7 +220,7 @@ namespace XYS.Lis.Model
             set { this.m_clinicalDiagnosis = value; }
         }
 
-        [Export()]
+        [Convert()]
         [Column(true)]
         public string Explanation
         {
