@@ -48,7 +48,7 @@ namespace XYS.Lis.Model
         }
         #endregion
 
-        #region
+        #region 方法
         public void Add(string key, NVItem item)
         {
             if (item != null)

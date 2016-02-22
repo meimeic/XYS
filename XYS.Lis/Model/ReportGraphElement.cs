@@ -2,11 +2,10 @@
 using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
-    [Export()]
     public class ReportGraphElement : AbstractReportElement
     {
         #region 私有静态字段
-        private static readonly string m_defaultGraphSQL = "select graphname,Graphjpg as graphimage from RFGraphData";
+        //private static readonly string m_defaultGraphSQL = "select graphname,Graphjpg as graphimage from RFGraphData";
         private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.Graph;
         #endregion
 

@@ -6,19 +6,19 @@ using System.Text;
 
 namespace XYS.Lis.Util
 {
-    public class ReportModelCollection : ICollection, IList, IEnumerable, ICloneable
+    public class PrintModelCollection : ICollection, IList, IEnumerable, ICloneable
     {
           #region Interfaces
 
         /// <summary>
-        /// Supports type-safe iteration over a <see cref="ReportModelCollection"/>.
+        /// Supports type-safe iteration over a <see cref="PrintModelCollection"/>.
         /// </summary>
         public interface IPdfModelCollectionEnumerator
         {
             /// <summary>
             /// 获取集合当前元素
             /// </summary>
-            ReportModel Current { get; }
+            PrintModel Current { get; }
 
             /// <summary>
             ///移动到下一元素
@@ -44,7 +44,7 @@ namespace XYS.Lis.Util
 
         #region 私有变量 用于实现PdfModel 集合
 
-        private ReportModel[] m_array;//元素容器
+        private PrintModel[] m_array;//元素容器
         private int m_count = 0; //元素个数
         private int m_version = 0;
 
@@ -52,7 +52,7 @@ namespace XYS.Lis.Util
 
         #region 静态包装
         //创建一个只读实例
-        public static ReportModelCollection ReadOnly(ReportModelCollection list)
+        public static PrintModelCollection ReadOnly(PrintModelCollection list)
         {
             if (list == null)
             {
@@ -64,40 +64,40 @@ namespace XYS.Lis.Util
 
         #region 构造函数
         //默认初始化容器大小
-        public ReportModelCollection()
+        public PrintModelCollection()
         {
-            m_array = new ReportModel[DEFAULT_CAPACITY];
+            m_array = new PrintModel[DEFAULT_CAPACITY];
         }
 
-        public ReportModelCollection(int capacity)
+        public PrintModelCollection(int capacity)
         {
-            m_array = new ReportModel[capacity];
+            m_array = new PrintModel[capacity];
         }
 
-        public ReportModelCollection(ReportModelCollection c)
+        public PrintModelCollection(PrintModelCollection c)
         {
-            m_array = new ReportModel[c.Count];
+            m_array = new PrintModel[c.Count];
             AddRange(c);
         }
         /// <summary>
         /// Initializes a new instance of the <c>PdfModelCollection</c> class
-        /// that contains elements copied from the specified <see cref="ReportModel"/> array.
+        /// that contains elements copied from the specified <see cref="PrintModel"/> array.
         /// </summary>
-        /// <param name="a">The <see cref="ReportModel"/> array whose elements are copied to the new list.</param>
-        public ReportModelCollection(ReportModel[] a)
+        /// <param name="a">The <see cref="PrintModel"/> array whose elements are copied to the new list.</param>
+        public PrintModelCollection(PrintModel[] a)
         {
-            m_array = new ReportModel[a.Length];
+            m_array = new PrintModel[a.Length];
             AddRange(a);
         }
 
         /// <summary>
         /// Initializes a new instance of the <c>PdfModelCollection</c> class
-        /// that contains elements copied from the specified <see cref="ReportModel"/> collection.
+        /// that contains elements copied from the specified <see cref="PrintModel"/> collection.
         /// </summary>
-        /// <param name="col">The <see cref="ReportModel"/> collection whose elements are copied to the new list.</param>
-        public ReportModelCollection(ICollection col)
+        /// <param name="col">The <see cref="PrintModel"/> collection whose elements are copied to the new list.</param>
+        public PrintModelCollection(ICollection col)
         {
-            m_array = new ReportModel[col.Count];
+            m_array = new PrintModel[col.Count];
             AddRange(col);
         }
 
@@ -117,7 +117,7 @@ namespace XYS.Lis.Util
         /// Allow subclasses to avoid our default constructors
         /// </summary>
         /// <param name="tag"></param>
-        protected internal ReportModelCollection(Tag tag)
+        protected internal PrintModelCollection(Tag tag)
         {
             m_array = null;
         }
@@ -135,21 +135,21 @@ namespace XYS.Lis.Util
 
         /// <summary>
         /// Copies the entire <c>PdfModelCollection</c> to a one-dimensional
-        /// <see cref="ReportModel"/> array.
+        /// <see cref="PrintModel"/> array.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="ReportModel"/> array to copy to.</param>
-        public virtual void CopyTo(ReportModel[] array)
+        /// <param name="array">The one-dimensional <see cref="PrintModel"/> array to copy to.</param>
+        public virtual void CopyTo(PrintModel[] array)
         {
             this.CopyTo(array, 0);
         }
 
         /// <summary>
         /// Copies the entire <c>PdfModelCollection</c> to a one-dimensional
-        /// <see cref="ReportModel"/> array, starting at the specified index of the target array.
+        /// <see cref="PrintModel"/> array, starting at the specified index of the target array.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="ReportModel"/> array to copy to.</param>
+        /// <param name="array">The one-dimensional <see cref="PrintModel"/> array to copy to.</param>
         /// <param name="start">The zero-based index in <paramref name="array"/> at which copying begins.</param>
-        public virtual void CopyTo(ReportModel[] array, int start)
+        public virtual void CopyTo(PrintModel[] array, int start)
         {
             if (m_count > array.GetUpperBound(0) + 1 - start)
             {
@@ -181,15 +181,15 @@ namespace XYS.Lis.Util
         #region Operations (type-safe IList)
 
         /// <summary>
-        /// Gets or sets the <see cref="ReportModel"/> at the specified index.
+        /// Gets or sets the <see cref="PrintModel"/> at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index of the element to get or set.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="index"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="index"/> is equal to or greater than <see cref="ReportModelCollection.Count"/>.</para>
+        /// <para><paramref name="index"/> is equal to or greater than <see cref="PrintModelCollection.Count"/>.</para>
         /// </exception>
-        public virtual ReportModel this[int index]
+        public virtual PrintModel this[int index]
         {
             get
             {
@@ -205,11 +205,11 @@ namespace XYS.Lis.Util
         }
 
         /// <summary>
-        /// Adds a <see cref="ReportModel"/> to the end of the <c>PdfModelCollection</c>.
+        /// Adds a <see cref="PrintModel"/> to the end of the <c>PdfModelCollection</c>.
         /// </summary>
-        /// <param name="item">The <see cref="ReportModel"/> to be added to the end of the <c>PdfModelCollection</c>.</param>
+        /// <param name="item">The <see cref="PrintModel"/> to be added to the end of the <c>PdfModelCollection</c>.</param>
         /// <returns>The index at which the value has been added.</returns>
-        public virtual int Add(ReportModel item)
+        public virtual int Add(PrintModel item)
         {
             if (m_count == m_array.Length)
             {
@@ -228,17 +228,17 @@ namespace XYS.Lis.Util
         public virtual void Clear()
         {
             ++m_version;
-            m_array = new ReportModel[DEFAULT_CAPACITY];
+            m_array = new PrintModel[DEFAULT_CAPACITY];
             m_count = 0;
         }
 
         /// <summary>
-        /// Creates a shallow copy of the <see cref="ReportModelCollection"/>.
+        /// Creates a shallow copy of the <see cref="PrintModelCollection"/>.
         /// </summary>
-        /// <returns>A new <see cref="ReportModelCollection"/> with a shallow copy of the collection data.</returns>
+        /// <returns>A new <see cref="PrintModelCollection"/> with a shallow copy of the collection data.</returns>
         public virtual object Clone()
         {
-            ReportModelCollection newCol = new ReportModelCollection(m_count);
+            PrintModelCollection newCol = new PrintModelCollection(m_count);
             Array.Copy(m_array, 0, newCol.m_array, 0, m_count);
             newCol.m_count = m_count;
             newCol.m_version = m_version;
@@ -247,11 +247,11 @@ namespace XYS.Lis.Util
         }
 
         /// <summary>
-        /// Determines whether a given <see cref="ReportModel"/> is in the <c>PdfModelCollection</c>.
+        /// Determines whether a given <see cref="PrintModel"/> is in the <c>PdfModelCollection</c>.
         /// </summary>
-        /// <param name="item">The <see cref="ReportModel"/> to check for.</param>
+        /// <param name="item">The <see cref="PrintModel"/> to check for.</param>
         /// <returns><c>true</c> if <paramref name="item"/> is found in the <c>PdfModelCollection</c>; otherwise, <c>false</c>.</returns>
-        public virtual bool Contains(ReportModel item)
+        public virtual bool Contains(PrintModel item)
         {
             for (int i = 0; i != m_count; ++i)
             {
@@ -264,15 +264,15 @@ namespace XYS.Lis.Util
         }
 
         /// <summary>
-        /// Returns the zero-based index of the first occurrence of a <see cref="ReportModel"/>
+        /// Returns the zero-based index of the first occurrence of a <see cref="PrintModel"/>
         /// in the <c>PdfModelCollection</c>.
         /// </summary>
-        /// <param name="item">The <see cref="ReportModel"/> to locate in the <c>PdfModelCollection</c>.</param>
+        /// <param name="item">The <see cref="PrintModel"/> to locate in the <c>PdfModelCollection</c>.</param>
         /// <returns>
         /// The zero-based index of the first occurrence of <paramref name="item"/> 
         /// in the entire <c>PdfModelCollection</c>, if found; otherwise, -1.
         ///	</returns>
-        public virtual int IndexOf(ReportModel item)
+        public virtual int IndexOf(PrintModel item)
         {
             for (int i = 0; i != m_count; ++i)
             {
@@ -288,13 +288,13 @@ namespace XYS.Lis.Util
         /// Inserts an element into the <c>PdfModelCollection</c> at the specified index.
         /// </summary>
         /// <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.</param>
-        /// <param name="item">The <see cref="ReportModel"/> to insert.</param>
+        /// <param name="item">The <see cref="PrintModel"/> to insert.</param>
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="index"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="index"/> is equal to or greater than <see cref="ReportModelCollection.Count"/>.</para>
+        /// <para><paramref name="index"/> is equal to or greater than <see cref="PrintModelCollection.Count"/>.</para>
         /// </exception>
-        public virtual void Insert(int index, ReportModel item)
+        public virtual void Insert(int index, PrintModel item)
         {
             ValidateIndex(index, true); // throws
             if (m_count == m_array.Length)
@@ -311,13 +311,13 @@ namespace XYS.Lis.Util
         }
 
         /// <summary>
-        /// Removes the first occurrence of a specific <see cref="ReportModel"/> from the <c>PdfModelCollection</c>.
+        /// Removes the first occurrence of a specific <see cref="PrintModel"/> from the <c>PdfModelCollection</c>.
         /// </summary>
-        /// <param name="item">The <see cref="ReportModel"/> to remove from the <c>PdfModelCollection</c>.</param>
+        /// <param name="item">The <see cref="PrintModel"/> to remove from the <c>PdfModelCollection</c>.</param>
         /// <exception cref="ArgumentException">
-        /// The specified <see cref="ReportModel"/> was not found in the <c>PdfModelCollection</c>.
+        /// The specified <see cref="PrintModel"/> was not found in the <c>PdfModelCollection</c>.
         /// </exception>
-        public virtual void Remove(ReportModel item)
+        public virtual void Remove(PrintModel item)
         {
             int i = IndexOf(item);
             if (i < 0)
@@ -335,7 +335,7 @@ namespace XYS.Lis.Util
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="index"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="index"/> is equal to or greater than <see cref="ReportModelCollection.Count"/>.</para>
+        /// <para><paramref name="index"/> is equal to or greater than <see cref="PrintModelCollection.Count"/>.</para>
         /// </exception>
         public virtual void RemoveAt(int index)
         {
@@ -351,7 +351,7 @@ namespace XYS.Lis.Util
             // We can't set the deleted entry equal to null, because it might be a value type.
             // Instead, we'll create an empty single-element array of the right type and copy it 
             // over the entry we want to erase.
-            ReportModel[] temp = new ReportModel[1];
+            PrintModel[] temp = new PrintModel[1];
             Array.Copy(temp, 0, m_array, m_count, 1);
             m_version++;
         }
@@ -411,13 +411,13 @@ namespace XYS.Lis.Util
                 {
                     if (value > 0)
                     {
-                        ReportModel[] temp = new ReportModel[value];
+                        PrintModel[] temp = new PrintModel[value];
                         Array.Copy(m_array, 0, temp, 0, m_count);
                         m_array = temp;
                     }
                     else
                     {
-                        m_array = new ReportModel[DEFAULT_CAPACITY];
+                        m_array = new PrintModel[DEFAULT_CAPACITY];
                     }
                 }
             }
@@ -427,8 +427,8 @@ namespace XYS.Lis.Util
         /// Adds the elements of another <c>PdfModelCollection</c> to the current <c>PdfModelCollection</c>.
         /// </summary>
         /// <param name="x">The <c>PdfModelCollection</c> whose elements should be added to the end of the current <c>PdfModelCollection</c>.</param>
-        /// <returns>The new <see cref="ReportModelCollection.Count"/> of the <c>PdfModelCollection</c>.</returns>
-        public virtual int AddRange(ReportModelCollection x)
+        /// <returns>The new <see cref="PrintModelCollection.Count"/> of the <c>PdfModelCollection</c>.</returns>
+        public virtual int AddRange(PrintModelCollection x)
         {
             if (m_count + x.Count >= m_array.Length)
             {
@@ -443,11 +443,11 @@ namespace XYS.Lis.Util
         }
 
         /// <summary>
-        /// Adds the elements of a <see cref="ReportModel"/> array to the current <c>PdfModelCollection</c>.
+        /// Adds the elements of a <see cref="PrintModel"/> array to the current <c>PdfModelCollection</c>.
         /// </summary>
-        /// <param name="x">The <see cref="ReportModel"/> array whose elements should be added to the end of the <c>PdfModelCollection</c>.</param>
-        /// <returns>The new <see cref="ReportModelCollection.Count"/> of the <c>PdfModelCollection</c>.</returns>
-        public virtual int AddRange(ReportModel[] x)
+        /// <param name="x">The <see cref="PrintModel"/> array whose elements should be added to the end of the <c>PdfModelCollection</c>.</param>
+        /// <returns>The new <see cref="PrintModelCollection.Count"/> of the <c>PdfModelCollection</c>.</returns>
+        public virtual int AddRange(PrintModel[] x)
         {
             if (m_count + x.Length >= m_array.Length)
             {
@@ -462,10 +462,10 @@ namespace XYS.Lis.Util
         }
 
         /// <summary>
-        /// Adds the elements of a <see cref="ReportModel"/> collection to the current <c>PdfModelCollection</c>.
+        /// Adds the elements of a <see cref="PrintModel"/> collection to the current <c>PdfModelCollection</c>.
         /// </summary>
-        /// <param name="col">The <see cref="ReportModel"/> collection whose elements should be added to the end of the <c>PdfModelCollection</c>.</param>
-        /// <returns>The new <see cref="ReportModelCollection.Count"/> of the <c>PdfModelCollection</c>.</returns>
+        /// <param name="col">The <see cref="PrintModel"/> collection whose elements should be added to the end of the <c>PdfModelCollection</c>.</param>
+        /// <returns>The new <see cref="PrintModelCollection.Count"/> of the <c>PdfModelCollection</c>.</returns>
         public virtual int AddRange(ICollection col)
         {
             if (m_count + col.Count >= m_array.Length)
@@ -475,7 +475,7 @@ namespace XYS.Lis.Util
 
             foreach (object item in col)
             {
-                Add((ReportModel)item);
+                Add((PrintModel)item);
             }
 
             return m_count;
@@ -496,7 +496,7 @@ namespace XYS.Lis.Util
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="i"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="i"/> is equal to or greater than <see cref="ReportModelCollection.Count"/>.</para>
+        /// <para><paramref name="i"/> is equal to or greater than <see cref="PrintModelCollection.Count"/>.</para>
         /// </exception>
         private void ValidateIndex(int i)
         {
@@ -506,7 +506,7 @@ namespace XYS.Lis.Util
         /// <exception cref="ArgumentOutOfRangeException">
         /// <para><paramref name="i"/> is less than zero</para>
         /// <para>-or-</para>
-        /// <para><paramref name="i"/> is equal to or greater than <see cref="ReportModelCollection.Count"/>.</para>
+        /// <para><paramref name="i"/> is equal to or greater than <see cref="PrintModelCollection.Count"/>.</para>
         /// </exception>
         private void ValidateIndex(int i, bool allowEqualEnd)
         {
@@ -544,32 +544,32 @@ namespace XYS.Lis.Util
         object IList.this[int i]
         {
             get { return (object)this[i]; }
-            set { this[i] = (ReportModel)value; }
+            set { this[i] = (PrintModel)value; }
         }
 
         int IList.Add(object x)
         {
-            return this.Add((ReportModel)x);
+            return this.Add((PrintModel)x);
         }
 
         bool IList.Contains(object x)
         {
-            return this.Contains((ReportModel)x);
+            return this.Contains((PrintModel)x);
         }
 
         int IList.IndexOf(object x)
         {
-            return this.IndexOf((ReportModel)x);
+            return this.IndexOf((PrintModel)x);
         }
 
         void IList.Insert(int pos, object x)
         {
-            this.Insert(pos, (ReportModel)x);
+            this.Insert(pos, (PrintModel)x);
         }
 
         void IList.Remove(object x)
         {
-            this.Remove((ReportModel)x);
+            this.Remove((PrintModel)x);
         }
 
         void IList.RemoveAt(int pos)
@@ -591,13 +591,13 @@ namespace XYS.Lis.Util
         #region Nested enumerator class
 
         /// <summary>
-        /// Supports simple iteration over a <see cref="ReportModelCollection"/>.
+        /// Supports simple iteration over a <see cref="PrintModelCollection"/>.
         /// </summary>
         private sealed class Enumerator : IEnumerator, IPdfModelCollectionEnumerator
         {
             #region Implementation (data)
 
-            private readonly ReportModelCollection m_collection;
+            private readonly PrintModelCollection m_collection;
             private int m_index;
             private int m_version;
 
@@ -609,7 +609,7 @@ namespace XYS.Lis.Util
             /// Initializes a new instance of the <c>Enumerator</c> class.
             /// </summary>
             /// <param name="tc"></param>
-            internal Enumerator(ReportModelCollection tc)
+            internal Enumerator(PrintModelCollection tc)
             {
                 m_collection = tc;
                 m_index = -1;
@@ -623,7 +623,7 @@ namespace XYS.Lis.Util
             /// <summary>
             /// Gets the current element in the collection.
             /// </summary>
-            public ReportModel Current
+            public PrintModel Current
             {
                 get { return m_collection[m_index]; }
             }
@@ -673,17 +673,17 @@ namespace XYS.Lis.Util
 
         #region Nested Read Only Wrapper class
 
-        private sealed class ReadOnlyPdfModelCollection : ReportModelCollection
+        private sealed class ReadOnlyPdfModelCollection : PrintModelCollection
         {
             #region Implementation (data)
 
-            private readonly ReportModelCollection m_collection;
+            private readonly PrintModelCollection m_collection;
 
             #endregion
 
             #region Construction
 
-            internal ReadOnlyPdfModelCollection(ReportModelCollection list)
+            internal ReadOnlyPdfModelCollection(PrintModelCollection list)
                 : base(Tag.Default)
             {
                 m_collection = list;
@@ -692,11 +692,11 @@ namespace XYS.Lis.Util
 
             #region 类型安全ICollection重写
 
-            public override void CopyTo(ReportModel[] array)
+            public override void CopyTo(PrintModel[] array)
             {
                 m_collection.CopyTo(array);
             }
-            public override void CopyTo(ReportModel[] array, int start)
+            public override void CopyTo(PrintModel[] array, int start)
             {
                 m_collection.CopyTo(array, start);
             }
@@ -716,12 +716,12 @@ namespace XYS.Lis.Util
 
             #region 类型安全IList重写
 
-            public override ReportModel this[int i]
+            public override PrintModel this[int i]
             {
                 get { return m_collection[i]; }
                 set { throw new NotSupportedException("This is a Read Only Collection and can not be modified"); }
             }
-            public override int Add(ReportModel x)
+            public override int Add(PrintModel x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
@@ -729,19 +729,19 @@ namespace XYS.Lis.Util
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
-            public override bool Contains(ReportModel x)
+            public override bool Contains(PrintModel x)
             {
                 return m_collection.Contains(x);
             }
-            public override int IndexOf(ReportModel x)
+            public override int IndexOf(PrintModel x)
             {
                 return m_collection.IndexOf(x);
             }
-            public override void Insert(int pos, ReportModel x)
+            public override void Insert(int pos, PrintModel x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
-            public override void Remove(ReportModel x)
+            public override void Remove(PrintModel x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
@@ -774,11 +774,11 @@ namespace XYS.Lis.Util
                 get { return m_collection.Capacity; }
                 set { throw new NotSupportedException("This is a Read Only Collection and can not be modified"); }
             }
-            public override int AddRange(ReportModelCollection x)
+            public override int AddRange(PrintModelCollection x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }
-            public override int AddRange(ReportModel[] x)
+            public override int AddRange(PrintModel[] x)
             {
                 throw new NotSupportedException("This is a Read Only Collection and can not be modified");
             }

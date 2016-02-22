@@ -235,7 +235,7 @@ namespace XYS.Lis.Config
             }
         }
 
-        public static void ConfigReportModelMap(ReportModelMap modelMap)
+        public static void ConfigReportModelMap(PrintModelMap modelMap)
         {
             XmlElement mapElement = GetTargetElement(REPORT_MODELS_TAG);
             if (mapElement != null)
@@ -250,7 +250,7 @@ namespace XYS.Lis.Config
                 }
             }
         }
-        public void ConfigReportModelMap(XmlElement element, ReportModelMap modelMap)
+        public void ConfigReportModelMap(XmlElement element, PrintModelMap modelMap)
         {
             XmlElement mapElement = GetTargetElement(element, REPORT_MODELS_TAG);
             if (mapElement != null)
@@ -265,7 +265,7 @@ namespace XYS.Lis.Config
                 }
             }
         }
-        private static void ConfigReportModel(XmlElement element, ReportModelMap modelMap)
+        private static void ConfigReportModel(XmlElement element, PrintModelMap modelMap)
         {
             if (element.LocalName == REPORT_MODEL_TAG)
             {
@@ -273,7 +273,7 @@ namespace XYS.Lis.Config
                 string path = element.GetAttribute(MODEL_PATH_ATTR);
                 if (value > 0)
                 {
-                    ReportModel model = new ReportModel(value, path);
+                    PrintModel model = new PrintModel(value, path);
                     model.ModelName = element.GetAttribute(NAME_ATTR);
                     modelMap.Add(model);
                 }

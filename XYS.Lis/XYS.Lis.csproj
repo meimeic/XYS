@@ -109,6 +109,7 @@
     <Compile Include="Core\ElementType.cs" />
     <Compile Include="Core\ElementTypeCollection.cs" />
     <Compile Include="Core\ElementTypeMap.cs" />
+    <Compile Include="Model\FRImageElement.cs" />
     <Compile Include="Model\ReportInfoElement.cs" />
     <Compile Include="Model\ReportKVElement.cs" />
     <Compile Include="Model\ReportPatientElement.cs" />
@@ -138,10 +139,10 @@
     <Compile Include="Util\LisPUser.cs" />
     <Compile Include="Util\NullEnumerator.cs" />
     <Compile Include="Util\OptionConverter.cs" />
-    <Compile Include="Util\ReportModel.cs" />
+    <Compile Include="Util\PrintModel.cs" />
     <Compile Include="Util\PDFModel1.cs" />
-    <Compile Include="Util\ReportModelCollection.cs" />
-    <Compile Include="Util\ReportModelMap.cs" />
+    <Compile Include="Util\PrintModelCollection.cs" />
+    <Compile Include="Util\PrintModelMap.cs" />
     <Compile Include="Util\PropertiesDictionary.cs" />
     <Compile Include="Util\PropertyEntry.cs" />
     <Compile Include="Util\ReadOnlyPropertiesDictionary.cs" />

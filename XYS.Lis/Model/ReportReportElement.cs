@@ -5,9 +5,7 @@ using System.Reflection;
 
 using XYS.Common;
 using XYS.Lis.Core;
-using XYS.Lis.Core;
 using XYS.Lis.Util;
-
 namespace XYS.Lis.Model
 {
     [Export()]

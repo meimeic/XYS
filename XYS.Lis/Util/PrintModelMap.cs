@@ -5,37 +5,37 @@ using System.Text;
 
 namespace XYS.Lis.Util
 {
-   public class ReportModelMap
+   public class PrintModelMap
    {
        #region
        private Hashtable m_mapNo2PdfModel;
        #endregion
 
        #region
-       public ReportModelMap()
+       public PrintModelMap()
        {
            this.m_mapNo2PdfModel = new Hashtable(20);
        }
        #endregion
 
        #region
-       public ReportModel this[int modelNo]
+       public PrintModel this[int modelNo]
        {
            get
            {
                lock (this)
                {
-                   return this.m_mapNo2PdfModel[modelNo] as ReportModel;
+                   return this.m_mapNo2PdfModel[modelNo] as PrintModel;
                }
            }
        }
-       public ReportModelCollection AllModels
+       public PrintModelCollection AllModels
        {
            get 
            {
                lock (this)
                {
-                   return new ReportModelCollection(this.m_mapNo2PdfModel.Values);
+                   return new PrintModelCollection(this.m_mapNo2PdfModel.Values);
                }
            }
        }
@@ -50,7 +50,7 @@ namespace XYS.Lis.Util
        {
            this.m_mapNo2PdfModel.Clear();
        }
-       public void Add(ReportModel model)
+       public void Add(PrintModel model)
        {
            if (model == null)
            {

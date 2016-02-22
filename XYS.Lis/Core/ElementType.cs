@@ -9,7 +9,6 @@ namespace XYS.Lis.Core
 {
     public class ElementType
     {
-        private static readonly string m_defaultElementName = "defaultElementName";
         #region 私有字段
         private string m_name;
         private Type m_type;

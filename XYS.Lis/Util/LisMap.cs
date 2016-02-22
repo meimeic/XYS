@@ -31,9 +31,9 @@ namespace XYS.Lis.Util
         {
             table.Clear();
             string modelFileName;
-            ReportModelMap modelMap = new ReportModelMap();
+            PrintModelMap modelMap = new PrintModelMap();
             ConfigureReportModelMap(modelMap);
-            foreach (ReportModel rm in modelMap.AllModels)
+            foreach (PrintModel rm in modelMap.AllModels)
             {
                 modelFileName = SystemInfo.GetFileFullName(SystemInfo.GetReportModelFilePath(), rm.ModelPath);
                 table.Add(rm.ModelNo, modelFileName);
@@ -125,7 +125,7 @@ namespace XYS.Lis.Util
         #endregion
 
         #region
-        private static void ConfigureReportModelMap(ReportModelMap modelMap)
+        private static void ConfigureReportModelMap(PrintModelMap modelMap)
         {
             ReportLog.Debug(declaringType, "LisMap:configuring ReportModelMap");
             XmlParamConfigurator.ConfigReportModelMap(modelMap);

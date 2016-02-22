@@ -5,7 +5,7 @@ using System.Text;
 
 namespace XYS.Lis.Util
 {
-    public class ReportModel
+    public class PrintModel
     {
         #region
         private readonly int m_modelNo;
@@ -14,12 +14,12 @@ namespace XYS.Lis.Util
         #endregion
 
         #region
-        public ReportModel(int modelNo, string modelPath)
+        public PrintModel(int modelNo, string modelPath)
         {
             this.m_modelNo = modelNo;
             this.m_modelPath = modelPath;
         }
-        public ReportModel(int modelNo, string modelPath, string modelName)
+        public PrintModel(int modelNo, string modelPath, string modelName)
             : this(modelNo, modelPath)
         {
             this.m_modelName = modelName;

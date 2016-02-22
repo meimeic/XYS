@@ -1,17 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.IO;
 using System.Xml;
 using System.Data;
 using System.Reflection;
+using System.Collections.Generic;
 
 using XYS.Common;
+using XYS.Lis.Core;
+
 namespace XYS.Lis.Util
 {
     public class FRDataStruct
     {
-        #region
+        #region 字段常量
         private static readonly Type declaringType = typeof(FRDataStruct);
 
+        private static readonly string ROOT_TAG = "Dictionary";
         private static readonly string TABLE_TAG = "TableDataSource";
         private static readonly string COLUMN_TAG = "Column";
         private static readonly string NAME_ATTR = "Name";
@@ -23,17 +27,6 @@ namespace XYS.Lis.Util
 
         private static readonly string DEFAULT_DATA_TYPE_ATTR_VALUE = "System.Int32";
         private static readonly string DEFAULT_ENABLE_ATTR = "true";
-
-        public static readonly int Image_Column_Count = 20;
-        public static readonly string Image_Table_Name = "ReportGraph";
-        public static readonly string Image_Column_Prex = "Image";
-        public static readonly string Image_Column_DataType = "System.Byte[]";
-
-        //public static readonly int Man_Column_Count=15;
-        //public static readonly int Man_Column_Start = 9288;
-        //public static readonly string Man_Table_Name = "ReportManItem";
-        //public static readonly string Man_Column_Prex = "Item";
-        //public static readonly string Man_Column_DataType = "System.String";
 
         #endregion
 
@@ -109,6 +102,7 @@ namespace XYS.Lis.Util
         }
         #endregion
 
+        #region xml相关操作
         public static void ConvertObj2Xml(XmlDocument xmlDoc, XmlNode parentNode, Type elementType)
         {
             ReportLog.Debug(declaringType, "XMLTools:make table element by "+elementType.Name);
@@ -117,34 +111,7 @@ namespace XYS.Lis.Util
             InitColumnXmlNodeAttr(xmlDoc, tableElement, elementType);
             parentNode.AppendChild(tableElement);
         }
-        public static void Image2Xml(XmlDocument xmlDoc, XmlNode parentNode)
-        {
-            XmlElement columnElement;
-            ReportLog.Debug(declaringType, "XMLTools:make image table element by " + Image_Table_Name);
-            Dictionary<string, string> attrDic = GenderTableAttrDic(Image_Table_Name);
-            XmlElement tableElement = CreateElement(xmlDoc, TABLE_TAG, attrDic);
-            for (int i = 0; i < Image_Column_Count; i++)
-            {
-                attrDic = GenderColumnAttrDic(Image_Column_Prex + i, Image_Column_DataType);
-                columnElement = CreateElement(xmlDoc, COLUMN_TAG, attrDic);
-                tableElement.AppendChild(columnElement);
-            }
-            parentNode.AppendChild(tableElement);
-        }
-        //public static void ReportManItem2Xml(XmlDocument xmlDoc, XmlNode parentNode)
-        //{
-        //    XmlElement columnElement;
-        //    Dictionary<string, string> attrDic = GenderTableAttrDic(Man_Table_Name);
-        //    XmlElement tableElement = CreateElement(xmlDoc, TABLE_TAG, attrDic);
-        //    for (int i = Man_Column_Start; i <= Man_Column_Count; i++)
-        //    {
-        //        attrDic = GenderColumnAttrDic(Man_Column_Prex + i, Image_Column_DataType);
-        //        columnElement = CreateElement(xmlDoc, COLUMN_TAG, attrDic);
-        //        tableElement.AppendChild(columnElement);
-        //    }
-        //    parentNode.AppendChild(tableElement);
-        //}
-        
+
         private static Dictionary<string, string> GenderTableAttrDic(Type elementType)
         {
             return GenderTableAttrDic(elementType.Name);
@@ -183,7 +150,7 @@ namespace XYS.Lis.Util
         }
         private static void InitColumnXmlNodeAttr(XmlDocument xmlDoc, XmlElement tableElement, Type elementType)
         {
-            //ExportAttribute cxa;
+            object[] xAttrs = null;
             XmlElement columnElement;
             Dictionary<string, string> attrDic;
             PropertyInfo[] props = elementType.GetProperties();
@@ -193,9 +160,8 @@ namespace XYS.Lis.Util
             }
             foreach (PropertyInfo pro in props)
             {
-                //cxa = (ExportAttribute)Attribute.GetCustomAttribute(pro, typeof(ExportAttribute));
-                //if (cxa != null && cxa.IsConvert)
-                if(pro.PropertyType==typeof(string)||pro.PropertyType==typeof(int)||pro.PropertyType==typeof(DateTime)||pro.PropertyType==typeof(byte[]))
+                xAttrs = pro.GetCustomAttributes(typeof(ExportAttribute),true);
+                if (xAttrs != null && xAttrs.Length > 0)
                 {
                     attrDic = GenderColumnAttrDic(pro);
                     columnElement = CreateElement(xmlDoc, COLUMN_TAG, attrDic);
@@ -203,5 +169,90 @@ namespace XYS.Lis.Util
                 }
             }
         }
+
+        public static string GetDataStructFilePath()
+        {
+            try
+            {
+                string applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
+                string filePath = Path.Combine(applicationBaseDirectory, "dataset");
+                if (!Directory.Exists(filePath))
+                {
+                    Directory.CreateDirectory(filePath);
+                }
+                return filePath;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+
+        #region 创建导出的dataset以及xml模板结构
+        public static void InitDataStruct(DataSet ds)
+        {
+            object[] xAttrs = null;
+            ElementTypeMap typeMap = new ElementTypeMap();
+
+            string fileFullName = SystemInfo.GetFileFullName(GetDataStructFilePath(), "ReportTables.frd");
+            ReportLog.Debug(declaringType, "FRDataStruct:Start--make the data struct xml file " + fileFullName + " by report elemnt");
+            XmlDocument doc = new XmlDocument();
+            XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "utf-8", null);
+            doc.AppendChild(dec);
+            XmlNode root = doc.CreateNode(XmlNodeType.Element, ROOT_TAG, null);
+            foreach (ElementType element in typeMap.AllElementTypes)
+            {
+                xAttrs = element.EType.GetCustomAttributes(typeof(ExportAttribute), true);
+                if (xAttrs != null && xAttrs.Length > 0)
+                {
+                    ConvertObj2Table(ds, element.EType);
+                    ConvertObj2Xml(doc, root, element.EType);
+                }
+            }
+
+            doc.AppendChild(root);
+            if (SystemInfo.IsFileExist(fileFullName))
+            {
+                if (!SystemInfo.DeleteFile(fileFullName))
+                {
+                    throw new Exception("can not delete the file " + fileFullName);
+                }
+            }
+            try
+            {
+                doc.Save(fileFullName);
+                ReportLog.Debug(declaringType, "FRDataStruct:End--make the data struct xml file " + fileFullName + " by reportelements");
+            }
+            catch (Exception ex)
+            {
+                ReportLog.Error(declaringType, "FRDataStruct:" + ex.Message);
+                throw ex;
+            }
+        }
+        #endregion
+
+        #region dataset相关操作
+        private static void ConvertObj2Table(DataSet ds, Type elementType)
+        {
+            object[] xAttrs = null;
+            DataTable dt = new DataTable();
+            dt.TableName = elementType.Name;
+            PropertyInfo[] props = elementType.GetProperties();
+            if (props == null || props.Length == 0)
+            {
+                return;
+            }
+            foreach (PropertyInfo pro in props)
+            {
+                xAttrs = pro.GetCustomAttributes(typeof(ExportAttribute), true);
+                if (xAttrs != null && xAttrs.Length > 0)
+                {
+                    dt.Columns.Add(pro.Name, pro.PropertyType);
+                }
+            }
+            ds.Tables.Add(dt);
+        }
+        #endregion
     }
 }

@@ -808,23 +808,6 @@ namespace XYS.Lis.Util
             }
             return Path.GetFullPath(path);
         }
-        public static string GetDataStructFilePath()
-        {
-            try
-            {
-                string applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
-                string filePath = Path.Combine(applicationBaseDirectory, "dataset");
-                if (!Directory.Exists(filePath))
-                {
-                    Directory.CreateDirectory(filePath);
-                }
-                return filePath;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
         public static string GetNormalImageFilePath()
         {
             try
