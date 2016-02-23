@@ -4,8 +4,8 @@ using XYS.Common;
 using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
-    [Export()]
-    public class FRImageElement:IExportElement
+    [FRExport()]
+    public class FRImage:IExportElement
     {
         private byte[] m_image1;
         private byte[] m_image2;
@@ -16,7 +16,7 @@ namespace XYS.Lis.Model
         private byte[] m_image7;
         private byte[] m_image8;
 
-        public FRImageElement()
+        public FRImage()
         {
             this.m_image1 = null;
             this.m_image2 = null;
@@ -28,49 +28,49 @@ namespace XYS.Lis.Model
             this.m_image8 = null;
         }
 
-        [Export()]
+        [FRExport()]
         public byte[] Image1
         {
             get { return this.m_image1; }
             set { this.m_image1 = value; }
         }
-        [Export()]
+        [FRExport()]
         public byte[] Image2
         {
             get { return this.m_image2; }
             set { this.m_image2 = value; }
         }
-        [Export()]
+        [FRExport()]
         public byte[] Image3
         {
             get { return this.m_image3; }
             set { this.m_image3 = value; }
         }
-        [Export()]
+        [FRExport()]
         public byte[] Image4
         {
             get { return this.m_image4; }
             set { this.m_image4 = value; }
         }
-        [Export()]
+        [FRExport()]
         public byte[] Image5
         {
             get { return this.m_image5; }
             set { this.m_image5 = value; }
         }
-        [Export()]
+        [FRExport()]
         public byte[] Image6
         {
             get { return this.m_image6; }
             set { this.m_image6 = value; }
         }
-        [Export()]
+        [FRExport()]
         public byte[] Image7
         {
             get { return this.m_image7; }
             set { this.m_image7 = value; }
         }
-        [Export()]
+        [FRExport()]
         public byte[] Image8
         {
             get { return this.m_image8; }

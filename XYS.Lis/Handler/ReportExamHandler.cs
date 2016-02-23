@@ -24,25 +24,35 @@ namespace XYS.Lis.Handler
         #endregion
         
         #region 实现父类抽象方法
+        protected override bool OperateReport(ReportReportElement report)
+        {
+            return OperateExam(report);
+        }
         protected override bool OperateElement(IReportElement element)
         {
-            if (element.ElementTag == ReportElementTag.Report)
+            ReportExamElement ree = element as ReportExamElement;
+            if (ree != null)
             {
-                ReportReportElement rre = element as ReportReportElement;
-                return OperateExamList(rre);
+                //此处可以添加判断是否删除代码
+
+                //处理代码
+                if (ree.SectionNo == 10)
+                {
+                    if (ree.FormMemo != null)
+                    {
+                        ree.FormMemo = ree.FormMemo.Replace(";", SystemInfo.NewLine);
+                    }
+                }
+                return true;
             }
-            if (element.ElementTag == ReportElementTag.Exam)
-            {
-                ReportExamElement ree = element as ReportExamElement;
-                return OperateExam(ree);
-            }
-            return true;
+            return false;
         }
         #endregion
 
         #region 内部处理逻辑
-        protected virtual bool OperateExamList(ReportReportElement rre)
+        protected virtual bool OperateExam(ReportReportElement rre)
         {
+            rre.SectionNo = rre.ReportExam.SectionNo;
             rre.ParItemName = rre.ReportExam.ParItemName;
 
             rre.ReceiveDateTime = rre.ReportExam.ReceiveDateTime;
@@ -50,7 +60,6 @@ namespace XYS.Lis.Handler
             rre.InceptDateTime = rre.ReportExam.InceptDateTime;
             rre.CheckDateTime = rre.ReportExam.CheckDateTime;
             rre.SecondeCheckDateTime = rre.ReportExam.SecondeCheckDateTime;
-
             rre.TestDateTime = rre.ReportExam.TestDateTime;
 
             //设置签名图片
@@ -63,21 +72,7 @@ namespace XYS.Lis.Handler
                 rre.TechnicianImage = LisPUser.GetSignImage(rre.ReportExam.Technician);
             }
 
-            return OperateExam(rre.ReportExam);
-        }
-        protected virtual bool OperateExam(ReportExamElement ree)
-        {
-            //此处可以添加判断是否删除代码
-
-            //处理代码
-            if (ree.SectionNo == 10)
-            {
-                if (ree.FormMemo != null)
-                {
-                    ree.FormMemo = ree.FormMemo.Replace(";", SystemInfo.NewLine);
-                }
-            }
-            return true;
+            return OperateElement(rre.ReportExam);
         }
         #endregion
     }

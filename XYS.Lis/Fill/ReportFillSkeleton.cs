@@ -29,30 +29,11 @@ namespace XYS.Lis.Fill
         {
             get { return this.m_fillerName.ToLower(); }
         }
-        public virtual void Fill(IReportElement reportElement, ReportKey RK)
+        public virtual void Fill(ReportReportElement reportElement, ReportKey RK)
         {
-            if (reportElement.ElementTag == ReportElementTag.Report)
+            if (reportElement != null)
             {
-                ReportReportElement rre = reportElement as ReportReportElement;
-                if (rre != null)
-                {
-                    FillReport(rre, RK);
-                }
-            }
-            else
-            {
-                if (IsFill(reportElement))
-                {
-                    //填充元素
-                    FillElement(reportElement, RK);
-                }
-            }
-        }
-        public virtual void Fill(List<IReportElement> reportElementList, ReportKey RK, Type type)
-        {
-            if (IsFill(type))
-            {
-                FillElements(reportElementList, RK, type);
+                FillReport(reportElement, RK);
             }
         }
         #endregion

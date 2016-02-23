@@ -1,7 +1,7 @@
 ﻿using System;
 namespace XYS.Common
 {
-    [AttributeUsage(AttributeTargets.Property|AttributeTargets.Class, Inherited = true)]
+    [AttributeUsage(AttributeTargets.Property, Inherited = true)]
     public class ConvertAttribute : Attribute
     {
         private bool flag;

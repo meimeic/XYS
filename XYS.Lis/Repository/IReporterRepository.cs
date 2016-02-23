@@ -12,6 +12,7 @@ namespace XYS.Lis.Repository
         #region
         Hashtable FillerMap { get; }
         Hashtable HandlerMap { get; }
+        Hashtable ExporterMap { get; }
         Hashtable StrategyMap { get; }
 
         bool Configured { get; set; }

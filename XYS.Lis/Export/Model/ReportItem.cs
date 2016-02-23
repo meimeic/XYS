@@ -4,7 +4,7 @@ using XYS.Common;
 using XYS.Lis.Core;
 namespace XYS.Lis.Export.Model
 {
-    [Export()]
+    [FRExport()]
     public class ReportItem : IExportElement
     {
         private int m_itemNo;
@@ -19,7 +19,6 @@ namespace XYS.Lis.Export.Model
 
         public ReportItem()
         {
- 
         }
 
         public int ItemNo

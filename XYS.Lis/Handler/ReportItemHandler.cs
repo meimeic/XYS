@@ -27,24 +27,36 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
+        protected override bool OperateReport(ReportReportElement report)
+        {
+            return OperateItem(report);
+        }
         protected override bool OperateElement(IReportElement element)
         {
-            if (element.ElementTag == ReportElementTag.Report)
+            ReportItemElement rie = element as ReportItemElement;
+            if (rie != null)
             {
-                ReportReportElement rre = element as ReportReportElement;
-                return OperateItemList(rre);
+                //删除
+                if (ItemIsDelete(rie))
+                {
+                    return false;
+                }
+                //不删除，执行处理代码
+                if (rie.ItemNo == 50004360 || rie.ItemNo == 50004370)
+                {
+                    if (rie.RefRange != null)
+                    {
+                        rie.RefRange = rie.RefRange.Replace(";", SystemInfo.NewLine);
+                    }
+                }
+                return true;
             }
-            if (element.ElementTag == ReportElementTag.Item)
-            {
-                ReportItemElement rie = element as ReportItemElement;
-                return OperateItem(rie);
-            }
-            return true;
+            return false;
         }
         #endregion
 
-        #region item项的内部处理逻辑
-        protected virtual bool OperateItemList(ReportReportElement rre)
+        #region item内部处理逻辑
+        protected virtual bool OperateItem(ReportReportElement rre)
         {
             //item 处理
             ReportItemElement rie=null;
@@ -72,7 +84,7 @@ namespace XYS.Lis.Handler
                     continue;
                 }
                 //是否删除
-                if (!OperateItem(rie))
+                if (!OperateElement(rie))
                 {
                     itemElementList.RemoveAt(i);
                     continue;
@@ -85,24 +97,6 @@ namespace XYS.Lis.Handler
             }
             return true;
         }
-        protected virtual bool OperateItem(ReportItemElement rie)
-        {
-            //删除
-            if (ItemIsDelete(rie))
-            {
-                return false;
-            }
-            //不删除，执行处理代码
-            if (rie.ItemNo == 50004360 || rie.ItemNo == 50004370)
-            {
-                if (rie.RefRange != null)
-                {
-                    rie.RefRange = rie.RefRange.Replace(";", SystemInfo.NewLine);
-                }
-            }
-            return true;
-        }
-
         #endregion
 
         #region item项转换成KV项
@@ -144,7 +138,7 @@ namespace XYS.Lis.Handler
         }
         #endregion
 
-        #region 是否删除
+        #region 是否删除检验项
         private bool ItemIsDelete(ReportItemElement rie)
         {
             return IsRemoveBySecret(rie.SecretGrade);
@@ -162,10 +156,14 @@ namespace XYS.Lis.Handler
         }
         #endregion
 
-        #region 通过item设置检验大项集合以及备注标记
+        #region 通过项设置检验大项集合以及备注标记
         private void SetRemarkFlagByItem(ReportReportElement rre,ReportItemElement rie)
         {
             //
+            if (rie.ItemNo == 123)
+            {
+                rre.RemarkFlag = 2;
+            }
         }
         private void SetParItemListByItem(List<int> parItemList, ReportItemElement rie)
         {

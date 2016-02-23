@@ -28,34 +28,30 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
+        protected override bool OperateReport(ReportReportElement report)
+        {
+            return OperateGraph(report);
+        }
         protected override bool OperateElement(IReportElement element)
         {
-            if (element.ElementTag == ReportElementTag.Report)
+            ReportGraphElement rge = element as ReportGraphElement;
+            if (rge != null)
             {
-                ReportReportElement rre = element as ReportReportElement;
-                return OperateGraphList(rre);
+                return true;
             }
-            if (element.ElementTag == ReportElementTag.Graph)
-            {
-                ReportGraphElement rge = element as ReportGraphElement;
-                return OperateGraph(rge);
-            }
-            return true;
+            return false;
         }
         #endregion
 
         #region graph项的内部处理逻辑
-        protected virtual bool OperateGraphList(ReportReportElement rre)
+        protected virtual bool OperateGraph(ReportReportElement rre)
         {
             if (rre.ReportExam.SectionNo == 11)
             {
                 List<IReportElement> graphList = rre.GetReportItem(typeof(ReportGraphElement).Name);
                 AddImageByParItem(rre.ParItemList, graphList);
             }
-            return true;
-        }
-        protected virtual bool OperateGraph(ReportGraphElement rge)
-        {
+            OperateElementList(rre.GetReportItem(typeof(ReportGraphElement).Name));
             return true;
         }
         #endregion

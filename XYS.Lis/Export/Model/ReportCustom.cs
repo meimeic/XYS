@@ -4,7 +4,7 @@ using XYS.Common;
 using XYS.Lis.Core;
 namespace XYS.Lis.Export.Model
 {
-    [Export()]
+    [FRExport()]
     public class ReportCustom : IExportElement
     {
         private string m_name;

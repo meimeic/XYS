@@ -173,7 +173,7 @@ namespace XYS.Lis.Config
                 string exportName = element.GetAttribute(EXPORT_TYPE_ATTR);
                 if (!string.IsNullOrEmpty(typeName))
                 {
-                    ElementType elementType = new ElementType(name, typeName);
+                    ElementType elementType = new ElementType(name, typeName, exportName);
                     elementTypeMap.Add(elementType);
                 }
             }

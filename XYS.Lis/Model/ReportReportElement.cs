@@ -16,12 +16,10 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 私有实例字段
-        private int m_orderNo;
-        private int m_printModelNo;
-
+        private int m_sectionNo;
         private string m_reportTitle;
-        private string m_remark;
         private int m_remarkFlag;
+        private string m_remark;
         private string m_parItemName;
 
         private byte[] m_technicianImage;
@@ -33,8 +31,6 @@ namespace XYS.Lis.Model
         private DateTime m_testDateTime;
         private DateTime m_checkDateTime;
         private DateTime m_secondCheckDateTime;
-        //private int m_sectionNo;
-        //private ClinicType m_clinicType;
 
         private readonly List<int> m_parItemList;
         private readonly Hashtable m_reportItemTable;
@@ -64,16 +60,16 @@ namespace XYS.Lis.Model
 
         #region 实例属性
         [Convert()]
-        public int OrderNo
+        public int SectionNo
         {
-            get { return this.m_orderNo; }
-            set { this.m_orderNo = value; }
+            get { return this.m_sectionNo; }
+            set { this.m_sectionNo = value; }
         }
         [Convert()]
-        public int PrintModelNo
+        public string ReportTitle
         {
-            get { return this.m_printModelNo; }
-            set { this.m_printModelNo = value; }
+            get { return this.m_reportTitle; }
+            set { this.m_reportTitle = value; }
         }
         //备注标识 0表示没有备注 1 表示备注已设置  2 表示备注未设置
         public int RemarkFlag
@@ -87,7 +83,7 @@ namespace XYS.Lis.Model
             get { return this.m_remark; }
             set { this.m_remark = value; }
         }
-
+         [Convert()]
         public string ParItemName
         {
             get { return this.m_parItemName; }
@@ -132,13 +128,6 @@ namespace XYS.Lis.Model
         }
 
         [Convert()]
-        public string ReportTitle
-        {
-            get { return this.m_reportTitle; }
-            set { this.m_reportTitle = value; }
-        }
-
-        [Convert()]
         public byte[] TechnicianImage
         {
             get { return this.m_technicianImage; }
@@ -150,6 +139,7 @@ namespace XYS.Lis.Model
             get { return this.m_checkerImage; }
             set { this.m_checkerImage = value; }
         }
+
         public List<int> ParItemList
         {
             get { return this.m_parItemList; }
@@ -176,8 +166,6 @@ namespace XYS.Lis.Model
         {
             this.ParItemList.Clear();
             this.ReportItemTable.Clear();
-            this.OrderNo = 0;
-            this.PrintModelNo = -1;
             this.ReportTitle = "";
             this.RemarkFlag = 0;
             this.Remark = "";

@@ -69,12 +69,14 @@
     <Compile Include="DAL\DbHelperOleDb.cs" />
     <Compile Include="DAL\DbHelperSQL.cs" />
     <Compile Include="Export\IReportExport.cs" />
+    <Compile Include="Export\JsonExport.cs" />
     <Compile Include="Export\Model\ReportCustom.cs" />
     <Compile Include="Export\Model\ReportImage.cs" />
     <Compile Include="Export\Model\ReportItem.cs" />
     <Compile Include="Export\Model\ReportReport.cs" />
     <Compile Include="Export\Model\ReportExam.cs" />
     <Compile Include="Export\Model\ReportPatient.cs" />
+    <Compile Include="Export\PDFExport.cs" />
     <Compile Include="Export\ReportExportSkeleton.cs" />
     <Compile Include="Fill\IReportFiller.cs" />
     <Compile Include="Fill\ReportFillByDB.cs" />
@@ -118,7 +120,7 @@
     <Compile Include="Core\ElementType.cs" />
     <Compile Include="Core\ElementTypeCollection.cs" />
     <Compile Include="Core\ElementTypeMap.cs" />
-    <Compile Include="Export\Model\FRImageElement.cs" />
+    <Compile Include="Export\Model\FRImage.cs" />
     <Compile Include="Model\ReportInfoElement.cs" />
     <Compile Include="Model\ReportKVElement.cs" />
     <Compile Include="Model\ReportPatientElement.cs" />

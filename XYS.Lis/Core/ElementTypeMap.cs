@@ -15,6 +15,10 @@ namespace XYS.Lis.Core
         {
             this.m_mapName2ElementType = new Hashtable(3);
         }
+        public ElementTypeMap(int d)
+        {
+            this.m_mapName2ElementType = new Hashtable(d);
+        }
         #endregion
 
         #region 属性

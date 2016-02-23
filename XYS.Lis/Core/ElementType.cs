@@ -11,7 +11,8 @@ namespace XYS.Lis.Core
     {
         #region 私有字段
         private string m_name;
-        private Type m_type;
+        private readonly Type m_type;
+        private Type m_exportType;
         #endregion
 
         #region 静态字段
@@ -26,22 +27,27 @@ namespace XYS.Lis.Core
 
         #region 构造函数
         public ElementType(string typeName)
-            : this(null, typeName)
+            : this(null, typeName,null)
         {
         }
-        public ElementType(string name, string typeName)
+        public ElementType(string name, string typeName, string exportTypeName)
         {
             this.m_name = name;
             this.m_type = SystemInfo.GetTypeFromString(typeName, true, true);
+            if (!string.IsNullOrEmpty(exportTypeName))
+            {
+                this.m_exportType = SystemInfo.GetTypeFromString(exportTypeName, true, true);
+            }
         }
         public ElementType(Type type)
-            : this(null, type)
+            : this(null, type,null)
         {
         }
-        public ElementType(string name, Type type)
+        public ElementType(string name, Type type,Type exportType)
         {
             this.m_type = type;
             this.m_name = name;
+            this.m_exportType = exportType;
         }
         #endregion
 
@@ -64,9 +70,10 @@ namespace XYS.Lis.Core
         {
             get { return this.m_type; }
         }
-        public string TypeSql
+        public Type ExportType
         {
-            get { return GenderSQL(this.m_type); }
+            get { return this.m_exportType; }
+            set { this.m_exportType = value; }
         }
         #endregion
 

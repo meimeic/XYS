@@ -1,15 +1,15 @@
 ﻿using System;
 namespace XYS.Common
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class, Inherited = true)]
-    public class ExportAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Class|AttributeTargets.Property, Inherited = true)]
+    public class FRExportAttribute : Attribute
     {
         private bool flag;
-        public ExportAttribute()
+        public FRExportAttribute()
         {
             this.flag = true;
         }
-        public ExportAttribute(bool f)
+        public FRExportAttribute(bool f)
         {
             this.flag = f;
         }

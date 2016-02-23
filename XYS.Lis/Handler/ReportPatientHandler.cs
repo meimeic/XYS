@@ -23,23 +23,20 @@ namespace XYS.Lis.Handler
        #region 实现父类抽象方法
        protected override bool OperateElement(IReportElement element)
        {
-           if (element.ElementTag == ReportElementTag.Report)
+           //二级操作
+           ReportPatientElement rpe = element as ReportPatientElement;
+           if (rpe != null)
            {
-               ReportReportElement rre = element as ReportReportElement;
-               return OperateReport(rre);
+               return true;
            }
-           if (element.ElementTag == ReportElementTag.Patient)
-           {
-               ReportPatientElement rpe = element as ReportPatientElement;
-               return OperatePatient(rpe);
-           }
-           return true;
+           return false;
        }
-       #endregion
-
-        #region
-       protected virtual bool OperateReport(ReportReportElement rre)
+       protected override bool OperateReport(ReportReportElement rre)
        {
+           //顶级操作
+
+
+
            //List<IReportElement> patientList = rre.GetReportItem(typeof(ReportPatientElement).Name);
            //OperateElementList(patientList, typeof(ReportPatientElement));
            //if (patientList.Count > 0)
@@ -49,11 +46,15 @@ namespace XYS.Lis.Handler
            //    return true;
            //}
            //return false;
-           return OperatePatient(rre.ReportPatient);
+           return OperatePatient(rre);
        }
-       protected virtual bool OperatePatient(ReportPatientElement rpe)
+       #endregion
+
+        #region
+       protected virtual bool OperatePatient(ReportReportElement rre)
        {
-           return true;
+           //一级操作
+           return OperateElement(rre.ReportPatient);
        }
         #endregion
     }

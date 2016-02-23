@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 
-using XYS.Lis.Core;
+using XYS.Lis.Model;
+using XYS.Lis.Export.Model;
 namespace XYS.Lis.Export
 {
     public interface IReportExport
     {
         string ExportName { get; }
-        void export(IReportElement reportElement, IExportElement exportElement);
-        void export(List<IReportElement> reportElements, List<IExportElement> exportElements);
+        void export(ReportReportElement report, ReportReport export);
+        //void export(List<IReportElement> reportElements, List<IExportElement> exportElements);
     }
 }

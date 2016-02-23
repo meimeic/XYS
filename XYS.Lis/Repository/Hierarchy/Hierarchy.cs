@@ -6,7 +6,7 @@ using XYS.Lis.Repository;
 using XYS.Lis.Core;
 using XYS.Lis.Util;
 using XYS.Lis.Fill;
-
+using XYS.Lis.Export;
 namespace XYS.Lis.Repository.Hierarchy
 {
     public delegate void ReporterCreationEventHandler(object sender, ReporterCreationEventArgs e);
@@ -29,6 +29,7 @@ namespace XYS.Lis.Repository.Hierarchy
 
         #region
         private IReportFiller m_defaultFiller;
+        private IReportExport m_defaultExport;
         private IReporterFactory m_defaultFactory;
         private Reporter m_defaultReporter;
         private Hashtable m_key2ReporterMap;
@@ -70,6 +71,18 @@ namespace XYS.Lis.Repository.Hierarchy
                 return this.m_defaultFiller;
             }
             set { this.m_defaultFiller = value; }
+        }
+        public virtual IReportExport DefaultExporter
+        {
+            get
+            {
+                if (this.m_defaultExport == null)
+                {
+                    this.m_defaultExport = new PDFExport();
+                }
+                return this.m_defaultExport;
+            }
+            set { this.m_defaultExport = value; }
         }
         //获取默认reporter
         public Reporter DefaultReporter

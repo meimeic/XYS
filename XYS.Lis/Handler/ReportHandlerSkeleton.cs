@@ -37,50 +37,55 @@ namespace XYS.Lis.Handler
             }
         }
 
-        public virtual HandlerResult ReportOptions(IReportElement reportElement)
+        public virtual HandlerResult ReportOptions(ReportReportElement reportElement)
         {
-            bool result = OperateElement(reportElement);
+            bool result = OperateReport(reportElement);
             if (result)
             {
                 return HandlerResult.Continue;
             }
             return HandlerResult.Fail;
         }
-        public virtual HandlerResult ReportOptions(List<IReportElement> reportElementList)
+        public virtual HandlerResult ReportOptions(List<ReportReportElement> reportElementList)
         {
-            OperateElementList(reportElementList);
-            if (reportElementList.Count > 0)
+            bool result = false;
+            if (reportElementList != null && reportElementList.Count > 0)
             {
-                return HandlerResult.Continue;
+                for (int i = reportElementList.Count - 1; i >= 0; i--)
+                {
+                    result = OperateReport(reportElementList[i]);
+                    if (!result)
+                    {
+                        reportElementList.RemoveAt(i);
+                    }
+                }
             }
-            else
-            {
-                return HandlerResult.Fail;
-            }
+            return HandlerResult.Continue;
         }
-        public virtual HandlerResult ReportOptions(List<IReportElement> reportElementList, Type type)
-        {
-            OperateElementList(reportElementList, type);
-            if (reportElementList.Count > 0)
-            {
-                return HandlerResult.Continue;
-            }
-            else
-            {
-                return HandlerResult.Fail;
-            }
-        }
+        //public virtual HandlerResult ReportOptions(List<IReportElement> reportElementList, Type type)
+        //{
+        //    OperateElementList(reportElementList, type);
+        //    if (reportElementList.Count > 0)
+        //    {
+        //        return HandlerResult.Continue;
+        //    }
+        //    else
+        //    {
+        //        return HandlerResult.Fail;
+        //    }
+        //}
         #endregion
 
         #region 抽象方法(处理元素)
         protected abstract bool OperateElement(IReportElement element);
+         protected abstract bool OperateReport(ReportReportElement report);
         #endregion
 
-        #region 受保护的虚方法
-        protected virtual void OperateElementList(List<IReportElement> reportElementList)
+         #region 受保护的虚方法
+         protected virtual void OperateElementList(List<IReportElement> reportElementList)
         {
             bool result = false;
-            if (reportElementList.Count > 0)
+            if (IsExist(reportElementList))
             {
                 for (int i = reportElementList.Count - 1; i >= 0; i--)
                 {
@@ -115,6 +120,17 @@ namespace XYS.Lis.Handler
         protected virtual bool IsElement(IReportElement reportElement, Type type)
         {
             return reportElement.GetType().Equals(type);
+        }
+        #endregion
+
+        #region 私有方法
+        private bool IsExist(List<IReportElement> elementList)
+        {
+            if (elementList != null && elementList.Count > 0)
+            {
+                return true;
+            }
+            return false;
         }
         #endregion
     }
