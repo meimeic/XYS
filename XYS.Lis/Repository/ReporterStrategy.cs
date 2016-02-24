@@ -18,14 +18,7 @@ namespace XYS.Lis.Repository
         }
         public string StrategyName
         {
-            get
-            {
-                if (!string.IsNullOrEmpty(this.m_strategyName))
-                {
-                    return this.m_strategyName.ToLower();
-                }
-                return null;
-            }
+            get { return this.m_strategyName.ToLower(); }
         }
         public IList<string> HandlerList
         {
@@ -33,26 +26,12 @@ namespace XYS.Lis.Repository
         }
         public string FillerName
         {
-            get
-            {
-                if (!string.IsNullOrEmpty(this.m_fillerName))
-                {
-                    return this.m_fillerName.ToLower();
-                }
-                return null;
-            }
+            get { return this.m_fillerName.ToLower(); }
             set { this.m_fillerName = value; }
         }
         public string ExporterName
         {
-            get
-            {
-                if (!string.IsNullOrEmpty(this.m_exporterName))
-                {
-                    return this.m_exporterName.ToLower();
-                }
-                return null;
-            }
+            get { return this.m_exporterName.ToLower(); }
             set { this.m_exporterName = value; }
         }
         public void AddHandler(string handlerName)

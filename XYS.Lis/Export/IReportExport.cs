@@ -8,6 +8,6 @@ namespace XYS.Lis.Export
     {
         string ExportName { get; }
         void export(ReportReportElement report, ReportReport export);
-        //void export(List<IReportElement> reportElements, List<IExportElement> exportElements);
+        void export(List<ReportReportElement> reportElements, List<ReportReport> exportElements);
     }
 }

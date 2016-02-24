@@ -35,8 +35,6 @@ namespace XYS.Lis.Handler
        {
            //顶级操作
 
-
-
            //List<IReportElement> patientList = rre.GetReportItem(typeof(ReportPatientElement).Name);
            //OperateElementList(patientList, typeof(ReportPatientElement));
            //if (patientList.Count > 0)

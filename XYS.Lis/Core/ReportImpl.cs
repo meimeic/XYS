@@ -4,9 +4,8 @@ using System.Collections.Generic;
 
 using XYS.Common;
 using XYS.Lis;
-using XYS.Lis.Model;
 using XYS.Lis.DAL;
-
+using XYS.Lis.Export.Model;
 namespace XYS.Lis.Core
 {
     public class ReportImpl : ReporterWrapperImpl, IReport
@@ -15,82 +14,105 @@ namespace XYS.Lis.Core
         private LisReporterKeyDAL m_reportKeyDAL;
         #endregion
 
-        #region
+        #region 构造函数
         public ReportImpl(IReporter reporter)
             : base(reporter)
         {
             this.m_reportKeyDAL = new LisReporterKeyDAL();
         }
         #endregion
+
+        #region 属性
         public LisReporterKeyDAL ReportKeyDAL
         {
             get { return this.m_reportKeyDAL; }
             set { this.m_reportKeyDAL = value; }
         }
-        #region
-         
         #endregion
 
         #region 实现IReport接口
-        public void InitReport(ReportKey key, ReportReportElement report)
-        {
-            this.Reporter.FillReportElement(report, key);
-        }
-        public void InitReport(LisSearchRequire require, ReportReportElement report)
-        {
-            ReportKey key = GetReportKey(require);
-            this.InitReport(key, report);
-        }
+        //public void InitReport(ReportKey key, ReportReportElement report)
+        //{
+        //    this.Reporter.FillReportElement(report, key);
+        //}
+        //public void InitReport(LisSearchRequire require, ReportReportElement report)
+        //{
+        //    ReportKey key = GetReportKey(require);
+        //    this.InitReport(key, report);
+        //}
 
-        public void InitReports(LisSearchRequire require, List<IReportElement> reportList)
+        //public void InitReports(LisSearchRequire require, List<IReportElement> reportList)
+        //{
+        //    List<ReportKey> keyList = GetReportKeyList(require);
+        //    this.InitReports(keyList, reportList);
+        //}
+        //public void InitReports(List<ReportKey> keyList, List<IReportElement> reportList)
+        //{
+        //    ReportReportElement rre;
+        //    if (keyList != null && keyList.Count > 0)
+        //    {
+        //        foreach (ReportKey key in keyList)
+        //        {
+        //            rre = new ReportReportElement();
+        //            InitReport(key, rre);
+        //            reportList.Add(rre);
+        //        }
+        //    }
+        //}
+
+        //public bool OperateReport(ReportReportElement report)
+        //{
+        //    return this.Reporter.Option(report);
+        //}
+
+        //public bool OperateReport(List<IReportElement> reportList)
+        //{
+        //    //return this.Reporter.Option(reportList,ReportElementTag.Report);
+        //    return true;
+        //}
+
+        //public void HandleReport(LisSearchRequire require, ReportReportElement report)
+        //{
+        //    this.InitReport(require, report);
+        //    this.OperateReport(report);
+        //}
+
+        //public void HandleReports(List<ReportKey> keyList, List<IReportElement> reportList)
+        //{
+        //    this.InitReports(keyList, reportList);
+        //    this.OperateReport(reportList);
+        //}
+
+        //public void HandleReports(LisSearchRequire require, List<IReportElement> reportList)
+        //{
+        //    List<ReportKey> keyList = GetReportKeyList(require);
+        //    this.HandleReports(keyList, reportList);
+        //}
+
+        public void InitReport(ReportReport export, ReportKey key)
         {
-            List<ReportKey> keyList = GetReportKeyList(require);
-            this.InitReports(keyList, reportList);
-        }
-        public void InitReports(List<ReportKey> keyList, List<IReportElement> reportList)
-        {
-            ReportReportElement rre;
-            if (keyList != null && keyList.Count > 0)
+            if (key != null)
             {
-                foreach (ReportKey key in keyList)
-                {
-                    rre = new ReportReportElement();
-                    InitReport(key, rre);
-                    reportList.Add(rre);
-                }
+                this.Reporter.InitExport(export, key);
             }
         }
-
-        public bool OperateReport(ReportReportElement report)
+        public void InitReport(ReportReport export, LisSearchRequire require)
         {
-            return this.Reporter.Option(report);
+            ReportKey key = this.GetReportKey(require);
+            InitReport(export, key);
         }
 
-        public bool OperateReport(List<IReportElement> reportList)
+        public void InitReports(List<ReportReport> exportList, List<ReportKey> keyList)
         {
-            //return this.Reporter.Option(reportList,ReportElementTag.Report);
-            return true;
+            this.Reporter.InitExport(exportList, keyList);
         }
-
-        public void HandleReport(LisSearchRequire require, ReportReportElement report)
-        {
-            this.InitReport(require, report);
-            this.OperateReport(report);
-        }
-
-        public void HandleReports(List<ReportKey> keyList, List<IReportElement> reportList)
-        {
-            this.InitReports(keyList, reportList);
-            this.OperateReport(reportList);
-        }
-
-        public void HandleReports(LisSearchRequire require, List<IReportElement> reportList)
+        public void InitReports(List<ReportReport> exportList, LisSearchRequire require)
         {
             List<ReportKey> keyList = GetReportKeyList(require);
-            this.HandleReports(keyList, reportList);
+            InitReports(exportList, keyList);
         }
         #endregion
-       
+
         #region
         protected virtual List<ReportKey> GetReportKeyList(LisSearchRequire require)
         {
@@ -105,8 +127,6 @@ namespace XYS.Lis.Core
             }
             return null;
         }
-        
         #endregion
-
     }
 }

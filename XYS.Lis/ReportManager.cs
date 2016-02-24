@@ -19,6 +19,7 @@ namespace XYS.Lis
             return WrapReporter(ReporterManager.Exists(repositoryAssembly, key));
         }
 
+        #region
         public static IReport GetReporter(ReporterKey key)
         {
             return GetReporter(Assembly.GetCallingAssembly(), key);
@@ -56,6 +57,7 @@ namespace XYS.Lis
         {
             return WrapReporter(ReporterManager.GetReporter(repositoryAssembly, type,strategyName));
         }
+        #endregion
 
         public static IReporterRepository GetRepository()
         {
@@ -74,7 +76,6 @@ namespace XYS.Lis
         {
             return CreateRepository(Assembly.GetCallingAssembly(), repositoryType);
         }
-
         public static IReporterRepository CreateRepository(string repository)
         {
             return ReporterManager.CreateRepository(repository);
@@ -87,12 +88,10 @@ namespace XYS.Lis
         {
             return ReporterManager.CreateRepository(repositoryAssembly, repositoryType);
         }
-
         public static IReporterRepository[] GetAllRepositories()
         {
             return ReporterManager.GetAllRepositories();
         }
-
         private static IReport WrapReporter(IReporter reporter)
         {
             return (IReport)s_wrapperMap.GetWrapper(reporter);

@@ -101,14 +101,6 @@ namespace XYS.Lis.Repository.Hierarchy
         #endregion
 
         #region 实现ILisReport接口
-        //public string CallerName
-        //{
-        //    get { return this.m_callerName; }
-        //}
-        //public virtual string StrategyName
-        //{
-        //    get { return this.m_strategyName; }
-        //}
         public IReporterRepository Repository
         {
             get { return this.m_hierarchy; }
@@ -116,7 +108,7 @@ namespace XYS.Lis.Repository.Hierarchy
         public void InitExport(ReportReport export, ReportKey RK)
         {
             ReportReportElement rre = new ReportReportElement();
-            this.Filler.Fill(rre,RK);
+            this.Filler.Fill(rre, RK);
             bool result = HandlerEvent(rre);
             if (result)
             {
@@ -124,7 +116,7 @@ namespace XYS.Lis.Repository.Hierarchy
             }
         }
 
-        public void InitExport(List<ReportReport> export, List<ReportKey> RKList)
+        public void InitExport(List<ReportReport> exportList, List<ReportKey> RKList)
         {
             ReportReportElement rre = null;
             List<ReportReportElement> reportList = new List<ReportReportElement>(RKList.Count);
@@ -134,26 +126,12 @@ namespace XYS.Lis.Repository.Hierarchy
                 this.Filler.Fill(rre, rk);
                 reportList.Add(rre);
             }
+            bool result = HandlerEvent(reportList);
+            if (result)
+            {
+                this.Exporter.export(reportList, exportList);
+            }
         }
-        //public virtual void FillReportElement(IReportElement reportElement, ReportKey RK)
-        //{
-        //    this.Filler.Fill(reportElement, RK);
-        //}
-        //public virtual void FillReportElement(List<IReportElement> reportElementList, ReportKey RK, Type type)
-        //{
-        //    this.Filler.Fill(reportElementList, RK,type);
-        //}
-
-        //public virtual bool Option(IReportElement reportElement)
-        //{
-        //    bool rs = HandlerEvent(reportElement);
-        //    return rs;
-        //}
-        //public virtual bool Option(List<IReportElement> reportElementList, Type type)
-        //{
-        //    bool rs = HandlerEvent(reportElementList, type);
-        //    return rs;
-        //}
         #endregion
 
         #region 受保护的虚方法
@@ -181,12 +159,12 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             return true;
         }
-        protected virtual bool HandlerEvent(List<IReportElement> reportElementList, Type type)
+        protected virtual bool HandlerEvent(List<ReportReportElement> reportElementList)
         {
             IReportHandler handler = this.HandlerHead;
             while (handler != null)
             {
-                switch (handler.ReportOptions(reportElementList, type))
+                switch (handler.ReportOptions(reportElementList))
                 {
                     case HandlerResult.Fail:
                         return false;

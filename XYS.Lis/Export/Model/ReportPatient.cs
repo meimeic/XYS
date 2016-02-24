@@ -5,7 +5,7 @@ using XYS.Lis.Core;
 namespace XYS.Lis.Export.Model
 {
     [FRExport()]
-    public class ReportPatient:IExportElement
+    public class ReportPatient : IExportElement
     {
         private string m_patientName;
         private string m_genderName;
@@ -23,62 +23,73 @@ namespace XYS.Lis.Export.Model
 
         public ReportPatient()
         { }
-
+        [FRExport()]
         public string PatientName
         {
             get { return this.m_patientName; }
             set { this.m_patientName = value; }
         }
+        [FRExport()]
         public string GenderName
         {
             get { return this.m_genderName; }
             set { this.m_genderName = value; }
         }
+        [FRExport()]
         public string AgeStr
         {
             get { return this.m_ageStr; }
             set { this.m_ageStr = value; }
         }
+        [FRExport()]
         public string CID
         {
             get { return this.m_cid; }
             set { this.m_cid = value; }
         }
+        [FRExport()]
         public string PID
         {
             get { return this.m_pid; }
             set { this.m_pid = value; }
         }
+        [FRExport()]
         public string ClinicName
         {
             get { return this.m_clinicName; }
             set { this.m_clinicName = value; }
         }
+        [FRExport()]
         public int VisitTimes
         {
             get { return this.m_visitTimes; }
             set { this.m_visitTimes = value; }
         }
+        [FRExport()]
         public string DeptName
         {
             get { return this.m_deptName; }
             set { this.m_deptName = value; }
         }
+        [FRExport()]
         public string Doctor
         {
             get { return this.m_doctor; }
             set { this.m_doctor = value; }
         }
+        [FRExport()]
         public string BedNo
         {
             get { return this.m_bedNo; }
             set { this.m_bedNo = value; }
         }
+        [FRExport()]
         public string ClinicalDiagnosis
         {
             get { return this.m_clinicalDiagnosis; }
             set { this.m_clinicalDiagnosis = value; }
         }
+        [FRExport()]
         public string Explanation
         {
             get { return this.m_explanation; }

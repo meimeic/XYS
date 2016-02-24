@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 namespace XYS.Common
 {
-    public  class ReportKey
+    public class ReportKey
     {
         #region 私有只读字段
         private readonly HashSet<KeyColumn> m_KeySet;
@@ -17,7 +17,7 @@ namespace XYS.Common
             this.m_KeySet = ketSet;
         }
         #endregion
-       
+
         #region 实例属性
         public int Count
         {
@@ -29,7 +29,7 @@ namespace XYS.Common
         }
         #endregion
 
-        #region
+        #region 方法
         public ReportKey AddColumn(KeyColumn key)
         {
             this.m_KeySet.Add(key);

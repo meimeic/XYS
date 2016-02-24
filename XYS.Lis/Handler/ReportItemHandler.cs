@@ -100,9 +100,12 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region item项转换成KV项
-   
         private bool IsConvert2KVElement(ReportItemElement rie, ReportKVElement rkve)
         {
+            if (this.m_convertItemMap.Count == 0)
+            {
+                InitItem2CustomMap();
+            }
             string key = this.m_convertItemMap[rie.ItemNo] as string;
             if (!string.IsNullOrEmpty(key))
             {
@@ -111,7 +114,7 @@ namespace XYS.Lis.Handler
                 {
                     throw new ArgumentNullException("");
                 }
-                rkve.Add(key,rie.ItemResult);
+                rkve.Add(key, rie.ItemResult);
                 return true;
             }
             return false;
@@ -175,6 +178,30 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region 未调用的方法
+        private void InitItem2CustomMap()
+        {
+            this.m_convertItemMap.Clear();
+            lock (this.m_convertItemMap)
+            {
+                this.m_convertItemMap.Add(90009288, "Column0");
+                this.m_convertItemMap.Add(90009289, "Column1");
+                this.m_convertItemMap.Add(90009290, "Column2");
+                this.m_convertItemMap.Add(90009291, "Column3");
+                this.m_convertItemMap.Add(90009292, "Column4");
+                this.m_convertItemMap.Add(90009293, "Column5");
+                this.m_convertItemMap.Add(90009294, "Column6");
+                this.m_convertItemMap.Add(90009295, "Column7");
+                this.m_convertItemMap.Add(90009296, "Column8");
+                this.m_convertItemMap.Add(90009297, "Column9");
+                this.m_convertItemMap.Add(90009300, "Column10");
+                this.m_convertItemMap.Add(90009301, "Column11");
+
+                this.m_convertItemMap.Add(90008528, "Column8");
+                this.m_convertItemMap.Add(90008797, "Column9");
+                this.m_convertItemMap.Add(90008798, "Column10");
+                this.m_convertItemMap.Add(90008799, "Column11");
+            }
+        }
         //private bool ItemConvert2Custom(ReportItemElement rie, List<ILisReportElement> customList)
         //{
         //    bool result = false;

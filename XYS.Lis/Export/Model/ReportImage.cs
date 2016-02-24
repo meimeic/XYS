@@ -6,15 +6,20 @@ namespace XYS.Lis.Export.Model
 {
     public class ReportImage : IExportElement
     {
-        private readonly string m_name;
+        private static readonly string m_defaultName = "ReportImage";
+        private string m_name;
         private readonly Hashtable m_imageTable;
 
         public ReportImage()
-        { }
+        {
+            this.m_name = m_defaultName;
+            this.m_imageTable = new Hashtable(3);
+        }
 
         public string Name
         {
             get { return this.m_name; }
+            set { this.m_name = value; }
         }
         public Hashtable ImageTable
         {

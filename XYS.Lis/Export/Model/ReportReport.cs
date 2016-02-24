@@ -45,32 +45,38 @@ namespace XYS.Lis.Export.Model
             this.m_parItemList = new List<int>(3);
         }
 
-        #region
+        #region 属性
+        [FRExport()]
         public DateTime ReceiveDateTime
         {
             get { return m_receiveDateTime; }
             set { m_receiveDateTime = value; }
         }
+        [FRExport()]
         public DateTime CollectDateTime
         {
             get { return m_collectDateTime; }
             set { m_collectDateTime = value; }
         }
+        [FRExport()]
         public DateTime InceptDateTime
         {
             get { return m_inceptDateTime; }
             set { m_inceptDateTime = value; }
         }
+        [FRExport()]
         public DateTime TestDateTime
         {
             get { return m_testDateTime; }
             set { m_testDateTime = value; }
         }
+        [FRExport()]
         public DateTime CheckDateTime
         {
             get { return m_checkDateTime; }
             set { m_checkDateTime = value; }
         }
+        [FRExport()]
         public DateTime SecondeCheckDateTime
         {
             get { return m_secondCheckDateTime; }
@@ -92,27 +98,32 @@ namespace XYS.Lis.Export.Model
             get { return this.m_printModelNo; }
             set { this.m_printModelNo = value; }
         }
+        [FRExport()]
         public string Remark
         {
             get { return this.m_remark; }
             set { this.m_remark = value; }
         }
+        [FRExport()]
         public string ReportTitle
         {
             get { return this.m_reportTitle; }
             set { this.m_reportTitle = value; }
         }
+        [FRExport()]
         public string ParItemName
         {
             get { return this.m_parItemName; }
             set { this.m_parItemName = value; }
         }
 
+        [FRExport()]
         public object TechnicianImage
         {
             get { return this.m_technicianImage; }
             set { this.m_technicianImage = value; }
         }
+        [FRExport()]
         public object CheckerImage
         {
             get { return this.m_checkerImage; }

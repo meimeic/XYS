@@ -26,22 +26,21 @@ namespace XYS.Lis.Handler
         #region 实现父类抽象方法
         protected override bool OperateElement(IReportElement element)
         {
-            if (element.ElementTag == ReportElementTag.Report)
+            ReportCustomElement rce = element as ReportCustomElement;
+            if (rce != null)
             {
-                ReportReportElement rre = element as ReportReportElement;
-                return OperateCustomList(rre);
+                return true;
             }
-            if (element.ElementTag == ReportElementTag.Custom)
-            {
-                ReportCustomElement rce = element as ReportCustomElement;
-                return OperateCustom(rce);
-            }
-            return true;
+            return false;
+        }
+        protected override bool OperateReport(ReportReportElement report)
+        {
+            return OperateCustom(report);
         }
         #endregion
         //可以添加一些custom项的内部处理逻辑
         #region
-        protected virtual bool OperateCustomList(ReportReportElement rre)
+        protected virtual bool OperateCustom(ReportReportElement rre)
         {
             //if (rre.SectionNo == 45)
             //{
@@ -64,10 +63,7 @@ namespace XYS.Lis.Handler
             //        MergeCustomList(tempList, customList, searchList);
             //    }
             //}
-            return true;
-        }
-        protected virtual bool OperateCustom(ReportCustomElement rce)
-        {
+            OperateElementList(rre.GetReportItem(typeof(ReportCustomElement).Name));
             return true;
         }
         #endregion

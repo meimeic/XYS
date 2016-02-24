@@ -13,7 +13,7 @@ namespace XYS.Lis.Core
         IReporterRepository Repository { get; }
 
         void InitExport(ReportReport export,ReportKey RK);
-        void InitExport(List<ReportReport> export, List<ReportKey> RKList);
+        void InitExport(List<ReportReport> exportList, List<ReportKey> RKList);
         //报告元素填充
         //#region
         //void FillReportElement(reportreport reportElement, ReportKey key);

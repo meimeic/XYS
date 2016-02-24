@@ -20,47 +20,55 @@ namespace XYS.Lis.Export.Model
         public ReportItem()
         {
         }
-
+        [FRExport()]
         public int ItemNo
         {
             get { return this.m_itemNo; }
             set { this.m_itemNo = value; }
         }
+        [FRExport()]
         public string ItemCName
         {
             get { return this.m_itemCName; }
             set { this.m_itemCName = value; }
         }
+        [FRExport()]
         public string ItemEName
         {
             get { return this.m_itemEName; }
             set { this.m_itemEName = value; }
         }
+        [FRExport()]
         public string ItemResult
         {
             get { return this.m_itemResult; }
             set { this.m_itemResult = value; }
         }
+        [FRExport()]
         public string ItemStandard
         {
             get { return this.m_itemStandard; }
             set { this.m_itemStandard = value; }
         }
+        [FRExport()]
         public string ResultStatus
         {
             get { return this.m_resultStatus; }
             set { this.m_resultStatus = value; }
         }
+        [FRExport()]
         public string ItemUnit
         {
             get { return this.m_itemUnit; }
             set { this.m_itemUnit = value; }
         }
+        [FRExport()]
         public string RefRange
         {
             get { return this.m_refRange; }
             set { this.m_refRange = value; }
         }
+        [FRExport()]
         public int DispOrder
         {
             get { return this.m_dispOrder; }

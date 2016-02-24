@@ -82,7 +82,7 @@ namespace XYS.Lis.DAL
             }
             //
             StringBuilder sb = new StringBuilder();
-            if (dic != null && dic.Count > 0)
+            if (IsExist(dic))
             {
                 foreach (KeyValuePair<string, object> item in dic)
                 {
@@ -122,7 +122,6 @@ namespace XYS.Lis.DAL
                 return "";
             }
         }
-
         protected ReportKey SetReportKey(DataRow dr)
         {
             KeyColumn temp;
@@ -138,6 +137,14 @@ namespace XYS.Lis.DAL
         {
             DataTable dt = DbHelperSQL.Query(sql).Tables["dt"];
             return dt;
+        }
+        private bool IsExist(Dictionary<string, object> dic)
+        {
+            if (dic != null && dic.Count > 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

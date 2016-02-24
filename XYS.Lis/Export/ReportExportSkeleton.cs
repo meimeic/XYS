@@ -29,14 +29,7 @@ namespace XYS.Lis.Export
         #region 实现IReportExport接口
         public virtual string ExportName
         {
-            get
-            {
-                if (!string.IsNullOrEmpty(this.m_exportName))
-                {
-                    return this.m_exportName.ToLower();
-                }
-                return null;
-            }
+            get { return this.m_exportName.ToLower(); }
         }
         public void export(ReportReportElement report, ReportReport export)
         {
@@ -44,10 +37,15 @@ namespace XYS.Lis.Export
             AfterExport(export);
         }
 
-        //public void export(List<IReportElement> reportElements, List<IExportElement> exportElements)
-        //{
-        //    throw new System.NotImplementedException();
-        //}
+        public void export(List<ReportReportElement> reportElements, List<ReportReport> exportElements)
+        {
+            ReportReport er = null;
+            foreach (ReportReportElement rre in reportElements)
+            {
+                er = new ReportReport();
+                export(rre, er);
+            }
+        }
         #endregion
 
         #region
@@ -61,6 +59,7 @@ namespace XYS.Lis.Export
             ExportElement(reportReport, exportReport);
             ExportElement(reportReport.ReportExam, exportReport.ReportExam);
             ExportElement(reportReport.ReportPatient, exportReport.ReportPatient);
+            ConvertPatItemList(reportReport.ParItemList, exportReport.ParItemList);
 
             //
             string rName = null;
@@ -97,7 +96,7 @@ namespace XYS.Lis.Export
                 try
                 {
                     exportElement = (IExportElement)exportType.Assembly.CreateInstance(exportType.FullName);
-                    ConvertElement(re, exportElement);
+                    ExportElement(re, exportElement);
                 }
                 catch (Exception ex)
                 {
@@ -105,14 +104,10 @@ namespace XYS.Lis.Export
                 }
             }
         }
-        protected virtual void ExportElement(IReportElement reportElement, IExportElement exportElement)
-        {
-
-        }
         #endregion
 
         #region
-        protected void ConvertElement(IReportElement reportElement, IExportElement exportElement)
+        protected virtual void ExportElement(IReportElement reportElement, IExportElement exportElement)
         {
             Type reportType = reportElement.GetType();
             Type exportType = exportElement.GetType();
@@ -135,21 +130,30 @@ namespace XYS.Lis.Export
                 }
             }
         }
-        protected void ConvertKV2Custom(ReportKVElement rkv,ReportCustom rc)
+        protected void ConvertKV2Custom(ReportKVElement rkv, ReportCustom rc)
         {
+            rc.Name = rkv.Name;
             PropertyInfo exportProperty = null;
             string propertyName = null;
             foreach (DictionaryEntry de in rkv.KVTable)
             {
-                propertyName = this.m_kv2Custom[de.Key] as string;
+                propertyName = de.Key as string;
                 if (!string.IsNullOrEmpty(propertyName))
                 {
                     exportProperty = rc.GetType().GetProperty(propertyName);
                     if (exportProperty != null)
                     {
-                        SetProp(exportProperty,rc,de.Value);
+                        SetProp(exportProperty, rc, de.Value);
                     }
                 }
+            }
+        }
+        protected void ConvertPatItemList(List<int> rList, List<int> eList)
+        {
+            eList.Clear();
+            foreach (int re in rList)
+            {
+                eList.Add(re);
             }
         }
         //{
@@ -217,6 +221,10 @@ namespace XYS.Lis.Export
                 }
             }
             return null;
+        }
+        private bool IsReport(Type type)
+        {
+            return typeof(ReportReport).Equals(type);
         }
         #endregion
     }

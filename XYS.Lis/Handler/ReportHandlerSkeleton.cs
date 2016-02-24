@@ -27,14 +27,7 @@ namespace XYS.Lis.Handler
         }
         public virtual string HandlerName
         {
-            get
-            {
-                if (string.IsNullOrEmpty(this.m_handlerName))
-                {
-                    return null;
-                }
-                return this.m_handlerName.ToLower();
-            }
+            get { return this.m_handlerName.ToLower(); }
         }
 
         public virtual HandlerResult ReportOptions(ReportReportElement reportElement)
@@ -48,9 +41,10 @@ namespace XYS.Lis.Handler
         }
         public virtual HandlerResult ReportOptions(List<ReportReportElement> reportElementList)
         {
-            bool result = false;
-            if (reportElementList != null && reportElementList.Count > 0)
+
+            if (IsExist(reportElementList))
             {
+                bool result = false;
                 for (int i = reportElementList.Count - 1; i >= 0; i--)
                 {
                     result = OperateReport(reportElementList[i]);
@@ -60,7 +54,11 @@ namespace XYS.Lis.Handler
                     }
                 }
             }
-            return HandlerResult.Continue;
+            if (IsExist(reportElementList))
+            {
+                return HandlerResult.Continue;
+            }
+            return HandlerResult.Fail;
         }
         //public virtual HandlerResult ReportOptions(List<IReportElement> reportElementList, Type type)
         //{
@@ -125,6 +123,14 @@ namespace XYS.Lis.Handler
 
         #region 私有方法
         private bool IsExist(List<IReportElement> elementList)
+        {
+            if (elementList != null && elementList.Count > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        private bool IsExist(List<ReportReportElement> elementList)
         {
             if (elementList != null && elementList.Count > 0)
             {

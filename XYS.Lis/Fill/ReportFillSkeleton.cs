@@ -21,6 +21,7 @@ namespace XYS.Lis.Fill
         {
             this.m_fillerName = name;
             this.m_section2InsideElementMap = new Hashtable(20);
+            this.m_section2ExtendElementMap = new Hashtable(2);
         }
         #endregion
 

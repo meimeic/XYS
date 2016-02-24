@@ -13,7 +13,7 @@ namespace XYS.Lis
         private bool m_dateLimit; //是否启用时间限制
         private DateTime m_startDateTime; //起始日期
         private DateTime m_endDateTime; // 终止日期
-      
+
         private Dictionary<string, object> m_equalDictionary;
         private Dictionary<string, object> m_notEqualDictionary;
         private Dictionary<string, object> m_likeDictionary;
@@ -84,6 +84,5 @@ namespace XYS.Lis
         {
             get { return this.m_likeDictionary; }
         }
-
     }
 }

@@ -7,7 +7,6 @@ using System.Collections.Generic;
 
 using XYS.Common;
 using XYS.Lis.Core;
-
 namespace XYS.Lis.Util
 {
     public class FRDataStruct
@@ -150,9 +149,8 @@ namespace XYS.Lis.Util
         }
         private static void InitColumnXmlNodeAttr(XmlDocument xmlDoc, XmlElement tableElement, Type elementType)
         {
-            object[] xAttrs = null;
-            XmlElement columnElement;
-            Dictionary<string, string> attrDic;
+            XmlElement columnElement=null;
+            Dictionary<string, string> attrDic=null;
             PropertyInfo[] props = elementType.GetProperties();
             if (props == null || props.Length == 0)
             {
@@ -160,8 +158,7 @@ namespace XYS.Lis.Util
             }
             foreach (PropertyInfo pro in props)
             {
-                xAttrs = pro.GetCustomAttributes(typeof(ConvertAttribute),true);
-                if (xAttrs != null && xAttrs.Length > 0)
+                if (IsExport(pro))
                 {
                     attrDic = GenderColumnAttrDic(pro);
                     columnElement = CreateElement(xmlDoc, COLUMN_TAG, attrDic);
@@ -192,7 +189,6 @@ namespace XYS.Lis.Util
         #region 创建导出的dataset以及xml模板结构
         public static void InitDataStruct(DataSet ds)
         {
-            object[] xAttrs = null;
             ElementTypeMap typeMap = new ElementTypeMap();
 
             string fileFullName = SystemInfo.GetFileFullName(GetDataStructFilePath(), "ReportTables.frd");
@@ -203,8 +199,7 @@ namespace XYS.Lis.Util
             XmlNode root = doc.CreateNode(XmlNodeType.Element, ROOT_TAG, null);
             foreach (ElementType element in typeMap.AllElementTypes)
             {
-                xAttrs = element.EType.GetCustomAttributes(typeof(ConvertAttribute), true);
-                if (xAttrs != null && xAttrs.Length > 0)
+                if (IsExport(element.ExportType))
                 {
                     ConvertObj2Table(ds, element.EType);
                     ConvertObj2Xml(doc, root, element.EType);
@@ -252,6 +247,24 @@ namespace XYS.Lis.Util
                 }
             }
             ds.Tables.Add(dt);
+        }
+        private static bool IsExport(Type type)
+        {
+            object[] xAttrs = type.GetCustomAttributes(typeof(FRExportAttribute), true);
+            if (xAttrs != null && xAttrs.Length > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        private static bool IsExport(PropertyInfo prop)
+        {
+            object[] xAttrs = prop.GetCustomAttributes(typeof(FRExportAttribute), true);
+            if (xAttrs != null && xAttrs.Length > 0)
+            {
+                return true;
+            }
+            return false;
         }
         #endregion
     }

@@ -71,7 +71,7 @@ namespace XYS.Lis.Handler
                 if (imageValue != null)
                 {
                     rge = new ReportGraphElement();
-                    rge.GraphName = parItemNo.ToString();
+                    rge.GraphName = "normal";
                     rge.GraphImage = imageValue;
                     graphElementList.Add(rge);
                 }
