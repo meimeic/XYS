@@ -23,7 +23,6 @@ namespace XYS.Lis.Util
         private static readonly string ENABLE_ATTR = "Enabled";
         private static readonly string PROP_NAME_ATTR = "PropName";
         private static readonly string PROP_NAME_ATTR_VALUE = "Column";
-
         private static readonly string DEFAULT_DATA_TYPE_ATTR_VALUE = "System.Int32";
         private static readonly string DEFAULT_ENABLE_ATTR = "true";
 
@@ -57,7 +56,7 @@ namespace XYS.Lis.Util
         }
 
         #endregion
-        
+
         #region 私有静态方法
 
         //设置数据表
@@ -104,7 +103,7 @@ namespace XYS.Lis.Util
         #region xml相关操作
         public static void ConvertObj2Xml(XmlDocument xmlDoc, XmlNode parentNode, Type elementType)
         {
-            ReportLog.Debug(declaringType, "XMLTools:make table element by "+elementType.Name);
+            ReportLog.Debug(declaringType, "XMLTools:make table element by " + elementType.Name);
             Dictionary<string, string> attrDic = GenderTableAttrDic(elementType);
             XmlElement tableElement = CreateElement(xmlDoc, TABLE_TAG, attrDic);
             InitColumnXmlNodeAttr(xmlDoc, tableElement, elementType);
@@ -123,8 +122,8 @@ namespace XYS.Lis.Util
             result.Add(DATA_TYPE_ATTR, DEFAULT_DATA_TYPE_ATTR_VALUE);
             result.Add(ENABLE_ATTR, DEFAULT_ENABLE_ATTR);
             return result;
-        } 
-        
+        }
+
         private static Dictionary<string, string> GenderColumnAttrDic(PropertyInfo p)
         {
             return GenderColumnAttrDic(p.Name, p.PropertyType.FullName);
@@ -137,7 +136,7 @@ namespace XYS.Lis.Util
             result.Add(PROP_NAME_ATTR, PROP_NAME_ATTR_VALUE);
             return result;
         }
-        
+
         public static XmlElement CreateElement(XmlDocument xmlDoc, string name, Dictionary<string, string> attrDic)
         {
             XmlElement element = xmlDoc.CreateElement(name);
@@ -149,8 +148,8 @@ namespace XYS.Lis.Util
         }
         private static void InitColumnXmlNodeAttr(XmlDocument xmlDoc, XmlElement tableElement, Type elementType)
         {
-            XmlElement columnElement=null;
-            Dictionary<string, string> attrDic=null;
+            XmlElement columnElement = null;
+            Dictionary<string, string> attrDic = null;
             PropertyInfo[] props = elementType.GetProperties();
             if (props == null || props.Length == 0)
             {
@@ -248,7 +247,7 @@ namespace XYS.Lis.Util
             }
             ds.Tables.Add(dt);
         }
-        private static bool IsExport(Type type)
+        public static bool IsExport(Type type)
         {
             object[] xAttrs = type.GetCustomAttributes(typeof(FRExportAttribute), true);
             if (xAttrs != null && xAttrs.Length > 0)
@@ -257,7 +256,7 @@ namespace XYS.Lis.Util
             }
             return false;
         }
-        private static bool IsExport(PropertyInfo prop)
+        public static bool IsExport(PropertyInfo prop)
         {
             object[] xAttrs = prop.GetCustomAttributes(typeof(FRExportAttribute), true);
             if (xAttrs != null && xAttrs.Length > 0)

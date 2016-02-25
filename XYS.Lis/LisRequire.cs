@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace XYS.Lis
 {
-    public class LisSearchRequire
+    public class LisRequire
     {
         private readonly static int TOP = 100;
         private readonly static int m_defaultInterval = 30;
@@ -18,14 +18,14 @@ namespace XYS.Lis
         private Dictionary<string, object> m_notEqualDictionary;
         private Dictionary<string, object> m_likeDictionary;
         private string m_orderByField;
-        public LisSearchRequire()
+        public LisRequire()
             : this(TOP)
         { }
-        public LisSearchRequire(int max)
+        public LisRequire(int max)
             : this(max, m_defaultInterval)
         {
         }
-        public LisSearchRequire(int max, int interval)
+        public LisRequire(int max, int interval)
         {
             this.m_max = max;
             this.m_dateLimit = true;

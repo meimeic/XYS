@@ -2,7 +2,7 @@
 
 using XYS.Common;
 using XYS.Lis.Core;
-namespace XYS.Lis.Model
+namespace XYS.Lis.Export.Model
 {
     [FRExport()]
     public class FRImage:IExportElement

@@ -8,15 +8,10 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Windows.Forms;
-
-using XYS.Lis;
-using XYS.Lis.Util;
-using XYS.Common;
 namespace ZhTest
 {
     public partial class Form1 : Form
     {
-        static IReport report = ReportManager.GetReporter(typeof(Form1), "jsonStrategy");
         public Form1()
         {
             InitializeComponent();
@@ -24,8 +19,7 @@ namespace ZhTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            LisSearchRequire re = new LisSearchRequire(5);
-            re.EqualFields.Add("SerialNo", textBox1.Text);
+            PDFService.GetPDF("12345");
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -35,14 +29,6 @@ namespace ZhTest
 
         private void button3_Click(object sender, EventArgs e)
         {
-            ReportKey searchKey = new LisDBKeyImpl();
-            KeyColumn kc = new KeyColumn("patno", "396039");
-            searchKey.AddColumn(kc);
-            KeyColumn kc2 = new KeyColumn("receivedate", "2015-02-05");
-            searchKey.AddColumn(kc2);
-            KeyColumn kc3 = new KeyColumn("sectionno", 45);
-            kc3.Value = 45;
-            searchKey.AddColumn(kc3);
         }
 
         private void button4_Click(object sender, EventArgs e)

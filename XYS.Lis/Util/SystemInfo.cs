@@ -825,7 +825,7 @@ namespace XYS.Lis.Util
                 throw ex;
             }
         }
-        public static string GetReportModelFilePath()
+        public static string GetPrintModelFilePath()
         {
             try
             {

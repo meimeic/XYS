@@ -274,7 +274,7 @@ namespace XYS.Lis.Config
                 if (value > 0)
                 {
                     PrintModel model = new PrintModel(value, path);
-                    model.ModelName = element.GetAttribute(NAME_ATTR);
+                    model.Name = element.GetAttribute(NAME_ATTR);
                     modelMap.Add(model);
                 }
             }

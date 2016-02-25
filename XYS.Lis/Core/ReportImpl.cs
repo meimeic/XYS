@@ -96,7 +96,7 @@ namespace XYS.Lis.Core
                 this.Reporter.InitExport(export, key);
             }
         }
-        public void InitReport(ReportReport export, LisSearchRequire require)
+        public void InitReport(ReportReport export, LisRequire require)
         {
             ReportKey key = this.GetReportKey(require);
             InitReport(export, key);
@@ -106,7 +106,7 @@ namespace XYS.Lis.Core
         {
             this.Reporter.InitExport(exportList, keyList);
         }
-        public void InitReports(List<ReportReport> exportList, LisSearchRequire require)
+        public void InitReports(List<ReportReport> exportList, LisRequire require)
         {
             List<ReportKey> keyList = GetReportKeyList(require);
             InitReports(exportList, keyList);
@@ -114,11 +114,11 @@ namespace XYS.Lis.Core
         #endregion
 
         #region
-        protected virtual List<ReportKey> GetReportKeyList(LisSearchRequire require)
+        protected virtual List<ReportKey> GetReportKeyList(LisRequire require)
         {
             return this.ReportKeyDAL.GetReportKey(require);
         }
-        protected virtual ReportKey GetReportKey(LisSearchRequire require)
+        protected virtual ReportKey GetReportKey(LisRequire require)
         {
             List<ReportKey> result = this.ReportKeyDAL.GetReportKey(require);
             if (result.Count > 0)

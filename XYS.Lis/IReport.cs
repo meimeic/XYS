@@ -19,8 +19,8 @@ namespace XYS.Lis
         //void HandleReports(LisSearchRequire require, List<IReportElement> reportList);
         //void HandleReports(List<ReportKey> keyList, List<IReportElement> reportList);
         void InitReport(ReportReport export, ReportKey key);
-        void InitReport(ReportReport export, LisSearchRequire require);
+        void InitReport(ReportReport export, LisRequire require);
         void InitReports(List<ReportReport> exportList, List<ReportKey> keyList);
-        void InitReports(List<ReportReport> exportList, LisSearchRequire require);
+        void InitReports(List<ReportReport> exportList, LisRequire require);
     }
 }

@@ -24,11 +24,9 @@ namespace XYS.Lis.Export.Model
         private string m_reportTitle;
         private string m_parItemName;
 
-        private object m_checkerImage;
-        private object m_technicianImage;
+        private byte[] m_checkerImage;
+        private byte[] m_technicianImage;
 
-        //private List<ReportItem> m_reportItemList;
-        //private List<ReportCustom> m_reportCustomList;
         private readonly Hashtable m_reportItemTable;
 
         private readonly ReportExam m_reportExam;
@@ -118,13 +116,13 @@ namespace XYS.Lis.Export.Model
         }
 
         [FRExport()]
-        public object TechnicianImage
+        public byte[] TechnicianImage
         {
             get { return this.m_technicianImage; }
             set { this.m_technicianImage = value; }
         }
         [FRExport()]
-        public object CheckerImage
+        public byte[] CheckerImage
         {
             get { return this.m_checkerImage; }
             set { this.m_checkerImage = value; }
@@ -143,6 +141,10 @@ namespace XYS.Lis.Export.Model
             get { return this.m_reportImage; }
             set { this.m_reportImage = value; }
         }
+        public Hashtable ReportItemTable
+        {
+            get { return this.m_reportItemTable; }
+        }
         public List<int> ParItemList
         {
             get { return this.m_parItemList; }
@@ -150,7 +152,7 @@ namespace XYS.Lis.Export.Model
         #endregion
 
         #region
-        public void ReportClear()
+        public void Clear()
         {
  
         }

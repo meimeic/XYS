@@ -89,7 +89,7 @@
     <Compile Include="Handler\ReportKVHandler.cs" />
     <Compile Include="Handler\ReportPatientHandler.cs" />
     <Compile Include="Handler\ReportReportHandler.cs" />
-    <Compile Include="LisSearchRequire.cs" />
+    <Compile Include="LisRequire.cs" />
     <Compile Include="Core\ParItem.cs" />
     <Compile Include="Core\ParItemCollection.cs" />
     <Compile Include="Core\ParItemMap.cs" />

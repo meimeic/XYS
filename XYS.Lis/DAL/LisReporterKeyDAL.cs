@@ -11,7 +11,7 @@ namespace XYS.Lis.DAL
 {
     public class LisReporterKeyDAL
     {
-        public List<ReportKey> GetReportKey(LisSearchRequire require)
+        public List<ReportKey> GetReportKey(LisRequire require)
         {
             ReportKey temp;
             List<ReportKey> result = new List<ReportKey>();
@@ -27,7 +27,7 @@ namespace XYS.Lis.DAL
             }
             return result;
         }
-        protected string GetSQLString(LisSearchRequire require)
+        protected string GetSQLString(LisRequire require)
         {
             StringBuilder sb = new StringBuilder();
             string temp;

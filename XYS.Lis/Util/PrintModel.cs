@@ -9,20 +9,20 @@ namespace XYS.Lis.Util
     {
         #region
         private readonly int m_modelNo;
-        private string m_modelName;
-        private string m_modelPath;
+        private readonly string m_modelName;
+        private string m_name;
         #endregion
 
         #region
-        public PrintModel(int modelNo, string modelPath)
+        public PrintModel(int modelNo, string modelName)
         {
             this.m_modelNo = modelNo;
-            this.m_modelPath = modelPath;
-        }
-        public PrintModel(int modelNo, string modelPath, string modelName)
-            : this(modelNo, modelPath)
-        {
             this.m_modelName = modelName;
+        }
+        public PrintModel(int modelNo, string modelName, string name)
+            : this(modelNo, modelName)
+        {
+            this.m_name = name;
         }
         #endregion
 
@@ -31,15 +31,14 @@ namespace XYS.Lis.Util
         {
             get { return this.m_modelNo; }
         }
+        public string Name
+        {
+            get { return this.m_name; }
+            set { this.m_name = value; }
+        }
         public string ModelName
         {
             get { return this.m_modelName; }
-            set { this.m_modelName = value; }
-        }
-        public string ModelPath
-        {
-            get { return this.m_modelPath; }
-            set { this.m_modelPath = value; }
         }
         #endregion
     }

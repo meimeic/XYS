@@ -72,10 +72,12 @@ namespace XYS.Lis.Export
                 tempList = de.Value as List<IReportElement>;
                 if (rName != null&&IsExist(tempList))
                 {
+                    //图片项处理
                     if (rName.Equals(typeof(ReportGraphElement).Name))
                     {
                         ConvertGraph2Image(tempList, exportReport);
                     }
+                   // 其他项处理
                     else
                     {
                         exportType=GetExportType(rName);

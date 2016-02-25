@@ -35,7 +35,7 @@ namespace XYS.Lis.Util
             ConfigureReportModelMap(modelMap);
             foreach (PrintModel rm in modelMap.AllModels)
             {
-                modelFileName = SystemInfo.GetFileFullName(SystemInfo.GetReportModelFilePath(), rm.ModelPath);
+                modelFileName = SystemInfo.GetFileFullName(SystemInfo.GetPrintModelFilePath(), rm.ModelName);
                 table.Add(rm.ModelNo, modelFileName);
             }
         }

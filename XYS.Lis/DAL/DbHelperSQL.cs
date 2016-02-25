@@ -9,16 +9,16 @@ namespace XYS.Lis.DAL
 {
     public abstract class DbHelperSQL
     {
-        private static string connectionstring = "";
+        private static string connectionStr=
 
-        static DbHelperSQL()
-        {
-            connectionstring = XmlDBConfigurator.GetConnectionString();
-            if (connectionstring == null || connectionstring.Equals(""))
-            {
-                throw new Exception("connection string can not be null or empty");
-            }
-        }
+        //static DbHelperSQL()
+        //{
+        //    connectionStr = XmlDBConfigurator.GetConnectionString();
+        //    if (string.IsNullOrEmpty(connectionStr))
+        //    {
+        //        throw new Exception("connection string can not be null or empty");
+        //    }
+        //}
         public DbHelperSQL()
         { }
         public static bool ColumnExsits(string tableName, string columnName)
@@ -113,7 +113,7 @@ namespace XYS.Lis.DAL
         }
         public static int ExecuteSql(string SQLString)
         {
-            using (SqlConnection con = new SqlConnection(connectionstring))
+            using (SqlConnection con = new SqlConnection(connectionStr))
             {
                 using (SqlCommand cmd = new SqlCommand(SQLString, con))
                 {
@@ -133,7 +133,7 @@ namespace XYS.Lis.DAL
         }
         public static int ExecuteSql(string SQLString, params SqlParameter[] cmdParms)
         {
-            using (SqlConnection con = new SqlConnection(connectionstring))
+            using (SqlConnection con = new SqlConnection(connectionStr))
             {
                 using (SqlCommand cmd = new SqlCommand())
                 {
@@ -153,7 +153,7 @@ namespace XYS.Lis.DAL
         }
         public static int ExecuteSqlByTime(string SQLString, int times)
         {
-            using (SqlConnection con = new SqlConnection(connectionstring))
+            using (SqlConnection con = new SqlConnection(connectionStr))
             {
                 using (SqlCommand cmd = new SqlCommand(SQLString, con))
                 {
@@ -174,7 +174,7 @@ namespace XYS.Lis.DAL
         }
         public static int ExecuteSql(string SQLString, string content)
         {
-            using (SqlConnection con = new SqlConnection(connectionstring))
+            using (SqlConnection con = new SqlConnection(connectionStr))
             {
                 SqlCommand cmd = new SqlCommand(SQLString, con);
                 System.Data.SqlClient.SqlParameter parameter = new SqlParameter("@content", SqlDbType.NText);
@@ -200,7 +200,7 @@ namespace XYS.Lis.DAL
         //插入文本
         public static object ExecuteSqlGet(string SQLString, string content)
         {
-            using (SqlConnection con = new SqlConnection(connectionstring))
+            using (SqlConnection con = new SqlConnection(connectionStr))
             {
                 SqlCommand cmd = new SqlCommand(SQLString, con);
                 System.Data.SqlClient.SqlParameter parameter = new SqlParameter("@content", SqlDbType.NText);
@@ -232,7 +232,7 @@ namespace XYS.Lis.DAL
         }
         public static int ExecuteSqlInsertImg(string SQLString, byte[] fs)
         {
-            using (SqlConnection connection = new SqlConnection(connectionstring))
+            using (SqlConnection connection = new SqlConnection(connectionStr))
             {
                 SqlCommand cmd = new SqlCommand(SQLString, connection);
                 System.Data.SqlClient.SqlParameter myParameter = new System.Data.SqlClient.SqlParameter("@fs", SqlDbType.Image);
@@ -257,7 +257,7 @@ namespace XYS.Lis.DAL
         }
         public static SqlDataReader ExecuteReader(string SQLString)
         {
-            SqlConnection con = new SqlConnection(connectionstring);
+            SqlConnection con = new SqlConnection(connectionStr);
             SqlCommand cmd = new SqlCommand(SQLString, con);
             try
             {
@@ -272,7 +272,7 @@ namespace XYS.Lis.DAL
         }
         public static SqlDataReader ExecuteReader(string SQLString, params SqlParameter[] cmdParms)
         {
-            SqlConnection con = new SqlConnection(connectionstring);
+            SqlConnection con = new SqlConnection(connectionStr);
             SqlCommand cmd = new SqlCommand();
             try
             {
@@ -289,7 +289,7 @@ namespace XYS.Lis.DAL
         //返回数据集
         public static DataSet Query(string SQLString)
         {
-            using (SqlConnection con = new SqlConnection(connectionstring))
+            using (SqlConnection con = new SqlConnection(connectionStr))
             {
                 DataSet ds = new DataSet();
                 try
@@ -307,7 +307,7 @@ namespace XYS.Lis.DAL
         }
         public static DataSet Query(string SQLString, int times)
         {
-            using (SqlConnection con = new SqlConnection(connectionstring))
+            using (SqlConnection con = new SqlConnection(connectionStr))
             {
                 DataSet ds = new DataSet();
                 try
@@ -326,7 +326,7 @@ namespace XYS.Lis.DAL
         }
         public static DataSet Query(string SQLString, params SqlParameter[] cmdParams)
         {
-            using (SqlConnection con = new SqlConnection(connectionstring))
+            using (SqlConnection con = new SqlConnection(connectionStr))
             {
                 SqlCommand cmd = new SqlCommand();
                 PrepareCommand(SQLString, cmd, null, con, cmdParams);
@@ -349,7 +349,7 @@ namespace XYS.Lis.DAL
         //返回结果的第一行第一列
         public static object GetSingle(string SQLString)
         {
-            using (SqlConnection connection = new SqlConnection(connectionstring))
+            using (SqlConnection connection = new SqlConnection(connectionStr))
             {
                 using (SqlCommand cmd = new SqlCommand(SQLString, connection))
                 {
@@ -376,7 +376,7 @@ namespace XYS.Lis.DAL
         }
         public static object GetSingle(string SQLString, int times)
         {
-            using (SqlConnection connection = new SqlConnection(connectionstring))
+            using (SqlConnection connection = new SqlConnection(connectionStr))
             {
                 using (SqlCommand cmd = new SqlCommand(SQLString, connection))
                 {
@@ -404,7 +404,7 @@ namespace XYS.Lis.DAL
         }
         public static object GetSingle(string SQLString, params SqlParameter[] cmdParms)
         {
-            using (SqlConnection connection = new SqlConnection(connectionstring))
+            using (SqlConnection connection = new SqlConnection(connectionStr))
             {
                 using (SqlCommand cmd = new SqlCommand())
                 {
