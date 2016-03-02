@@ -58,11 +58,11 @@ namespace XYS.Lis.Core
             {
                 if (!string.IsNullOrEmpty(this.m_name))
                 {
-                    return this.m_name.ToLower();
+                    return this.m_name;
                 }
                 else
                 {
-                    return this.m_type.Name.ToLower();
+                    return this.m_type.Name;
                 }
             }
         }

@@ -31,7 +31,7 @@ namespace XYS.Lis.Handler
         {
             return OperateItem(report);
         }
-        protected override bool OperateElement(IReportElement element)
+        protected override bool OperateElement(ILisReportElement element)
         {
             ReportItemElement rie = element as ReportItemElement;
             if (rie != null)
@@ -60,7 +60,7 @@ namespace XYS.Lis.Handler
         {
             //item 处理
             ReportItemElement rie=null;
-            List<IReportElement> itemElementList = rre.GetReportItem(typeof(ReportItemElement).Name);
+            List<ILisReportElement> itemElementList = rre.GetReportItem(typeof(ReportItemElement).Name);
             ReportKVElement kve = GetKVElement(rre.ReportExam.SectionNo);
             for (int i = itemElementList.Count - 1; i >= 0; i--)
             {
@@ -92,7 +92,7 @@ namespace XYS.Lis.Handler
             }
             if (kve != null)
             {
-                List<IReportElement> kveList = rre.GetReportItem(typeof(ReportKVElement).Name);
+                List<ILisReportElement> kveList = rre.GetReportItem(typeof(ReportKVElement).Name);
                 kveList.Add(kve);
             }
             return true;
@@ -177,7 +177,7 @@ namespace XYS.Lis.Handler
         }
         #endregion
 
-        #region 未调用的方法
+        #region 调用的方法
         private void InitItem2CustomMap()
         {
             this.m_convertItemMap.Clear();

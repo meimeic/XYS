@@ -27,7 +27,7 @@ namespace XYS.Lis.Handler
         {
             return true;
         }
-        protected override bool OperateElement(IReportElement element)
+        protected override bool OperateElement(ILisReportElement element)
         {
             return true;
         }

@@ -32,7 +32,7 @@ namespace XYS.Lis.Handler
         {
             return OperateGraph(report);
         }
-        protected override bool OperateElement(IReportElement element)
+        protected override bool OperateElement(ILisReportElement element)
         {
             ReportGraphElement rge = element as ReportGraphElement;
             if (rge != null)
@@ -48,7 +48,7 @@ namespace XYS.Lis.Handler
         {
             if (rre.ReportExam.SectionNo == 11)
             {
-                List<IReportElement> graphList = rre.GetReportItem(typeof(ReportGraphElement).Name);
+                List<ILisReportElement> graphList = rre.GetReportItem(typeof(ReportGraphElement).Name);
                 AddImageByParItem(rre.ParItemList, graphList);
             }
             OperateElementList(rre.GetReportItem(typeof(ReportGraphElement).Name));
@@ -57,7 +57,7 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region 图片项添加处理
-        private void AddImageByParItem(List<int> parItemList, List<IReportElement> graphElementList)
+        private void AddImageByParItem(List<int> parItemList, List<ILisReportElement> graphElementList)
         {
             byte[] imageValue;
             ReportGraphElement rge;

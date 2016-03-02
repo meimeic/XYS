@@ -8,7 +8,6 @@ namespace XYS.Lis.Repository
     public class ReporterStrategy
     {
         private string m_fillerName;
-        private string m_exporterName;
         private readonly string m_strategyName;
         private readonly List<string> m_handlerList;
         public ReporterStrategy(string name)
@@ -28,11 +27,6 @@ namespace XYS.Lis.Repository
         {
             get { return this.m_fillerName.ToLower(); }
             set { this.m_fillerName = value; }
-        }
-        public string ExporterName
-        {
-            get { return this.m_exporterName.ToLower(); }
-            set { this.m_exporterName = value; }
         }
         public void AddHandler(string handlerName)
         {

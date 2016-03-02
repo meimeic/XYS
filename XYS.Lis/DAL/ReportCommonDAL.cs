@@ -13,7 +13,7 @@ namespace XYS.Lis.DAL
     {
         public ReportCommonDAL()
         { }
-        public void Fill(IReportElement element, string sql)
+        public void Fill(ILisReportElement element, string sql)
         {
             DataTable dt = GetDataTable(sql);
             if (dt != null && dt.Rows.Count > 0)
@@ -22,17 +22,17 @@ namespace XYS.Lis.DAL
                 AfterFill(element);
             }
         }
-        public void FillList(List<IReportElement> elementList, Type elementType, string sql)
+        public void FillList(List<ILisReportElement> elementList, Type elementType, string sql)
         {
             DataTable dt = GetDataTable(sql);
             if (dt != null && dt.Rows.Count > 0)
             {
-                IReportElement element;
+                ILisReportElement element;
                 foreach (DataRow dr in dt.Rows)
                 {
                     try
                     {
-                        element = (IReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
+                        element = (ILisReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
                         FillData(element, dr,dt.Columns);
                         AfterFill(element);
                         elementList.Add(element);
@@ -46,7 +46,7 @@ namespace XYS.Lis.DAL
         }
 
         //填充对象属性
-        protected void FillData(IReportElement element, DataRow dr, DataColumnCollection columns)
+        protected void FillData(ILisReportElement element, DataRow dr, DataColumnCollection columns)
         {
             PropertyInfo prop = null;
             PropertyInfo[] props = element.GetType().GetProperties();
@@ -59,7 +59,7 @@ namespace XYS.Lis.DAL
                 }
             }
         }
-        protected void FillData(IReportElement element, Type type, DataRow dr, DataColumnCollection columns)
+        protected void FillData(ILisReportElement element, Type type, DataRow dr, DataColumnCollection columns)
         {
             PropertyInfo prop = null;
             foreach (DataColumn dc in columns)
@@ -71,7 +71,7 @@ namespace XYS.Lis.DAL
                 }
             }
         }
-        protected bool FillProperty(IReportElement element, PropertyInfo p, DataRow dr)
+        protected bool FillProperty(ILisReportElement element, PropertyInfo p, DataRow dr)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace XYS.Lis.DAL
                 return false;
             }
         }
-        protected bool FillProperty(IReportElement element, PropertyInfo p, object v)
+        protected bool FillProperty(ILisReportElement element, PropertyInfo p, object v)
         {
             try
             {
@@ -141,7 +141,7 @@ namespace XYS.Lis.DAL
             }
             return p;
         }
-        protected void AfterFill(IReportElement element)
+        protected void AfterFill(ILisReportElement element)
         {
             AbstractReportElement e = element as AbstractReportElement;
             if (e != null)

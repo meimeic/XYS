@@ -69,7 +69,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实现IPatient接口
-        [Convert()]
+        [FRConvert()]
         public string ClinicName
         {
             get
@@ -89,7 +89,7 @@ namespace XYS.Lis.Model
                 }
             }
         }
-        [Convert()]
+        [FRConvert()]
         public string GenderName
         {
             get
@@ -112,7 +112,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 公共属性
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string SerialNo
         {
@@ -120,7 +120,7 @@ namespace XYS.Lis.Model
             set { m_serialNo = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string SampleNo
         {
@@ -128,7 +128,7 @@ namespace XYS.Lis.Model
             set { m_sampleNo = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string SampleTypeName
         {
@@ -180,7 +180,7 @@ namespace XYS.Lis.Model
             set { m_parItemName = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public int SectionNo
         {
@@ -188,7 +188,7 @@ namespace XYS.Lis.Model
             set { m_sectionNo = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public int SampleTypeNo
         {
@@ -196,21 +196,21 @@ namespace XYS.Lis.Model
             set { m_sampleTypeNo = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string FormMemo
         {
             get { return m_formMemo; }
             set { m_formMemo = value; }
         }
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string FormComment
         {
             get { return m_formComment; }
             set { m_formComment = value; }
         }
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string FormComment2
         {
@@ -218,7 +218,7 @@ namespace XYS.Lis.Model
             set { m_formComment2 = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string Technician
         {
@@ -226,7 +226,7 @@ namespace XYS.Lis.Model
             set { m_technician = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string Checker
         {
@@ -235,21 +235,21 @@ namespace XYS.Lis.Model
         }
 
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string PatientName
         {
             get { return this.m_patientName; }
             set { this.m_patientName = value; }
         }
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string PID
         {
             get { return this.m_pid; }
             set { this.m_pid = value; }
         }
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string CID
         {
@@ -264,7 +264,7 @@ namespace XYS.Lis.Model
             set { this.m_genderNo = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         public GenderType Gender
         {
             get { return this.m_gender; }
@@ -277,7 +277,7 @@ namespace XYS.Lis.Model
             protected set { this.m_age = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         public string AgeStr
         {
             get
@@ -317,14 +317,14 @@ namespace XYS.Lis.Model
             set { this.m_clinicTypeNo = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         public ClinicType ClinicType
         {
             get { return this.m_clinicType; }
             protected set { this.m_clinicType = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public int VisitTimes
         {
@@ -332,7 +332,7 @@ namespace XYS.Lis.Model
             set { this.m_visitTimes = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string DeptName
         {
@@ -340,7 +340,7 @@ namespace XYS.Lis.Model
             set { this.m_deptName = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string Doctor
         {
@@ -348,7 +348,7 @@ namespace XYS.Lis.Model
             set { this.m_doctor = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string BedNo
         {
@@ -356,7 +356,7 @@ namespace XYS.Lis.Model
             set { this.m_bedNo = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string ClinicalDiagnosis
         {
@@ -364,7 +364,7 @@ namespace XYS.Lis.Model
             set { this.m_clinicalDiagnosis = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string Explanation
         {

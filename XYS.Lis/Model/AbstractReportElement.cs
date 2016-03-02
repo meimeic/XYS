@@ -2,7 +2,7 @@
 using XYS.Common;
 namespace XYS.Lis.Model
 {
-    public abstract class AbstractReportElement : IReportElement
+    public abstract class AbstractReportElement : ILisReportElement
     {
         #region 私有字段
         private string m_searchSQL;

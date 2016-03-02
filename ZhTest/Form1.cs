@@ -19,7 +19,7 @@ namespace ZhTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            PDFService.GetPDF("12345");
+            PDFService.GetPDF("1602237378");
         }
 
         private void button2_Click(object sender, EventArgs e)

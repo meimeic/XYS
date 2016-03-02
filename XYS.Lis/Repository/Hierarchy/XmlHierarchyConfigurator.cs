@@ -208,7 +208,7 @@ namespace XYS.Lis.Repository.Hierarchy
         protected void ParseFill(XmlElement fillElement)
         {
             string fillName = fillElement.GetAttribute(NAME_ATTR);
-            ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Configure Filler [" + fillName + "]");
+            ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Configuring Filler [" + fillName + "]");
             object[] param = new object[] { fillName };
             string typeName = fillElement.GetAttribute(TYPE_ATTR);
             try
@@ -217,6 +217,7 @@ namespace XYS.Lis.Repository.Hierarchy
                 if (filler != null)
                 {
                     this.m_hierarchy.AddFiller(filler);
+                    ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Configured Filler [" + fillName + "]");
                 }
             }
             catch (Exception ex)
@@ -241,7 +242,7 @@ namespace XYS.Lis.Repository.Hierarchy
         protected void ParseHandler(XmlElement handlerElement)
         {
             string handlerName = handlerElement.GetAttribute(NAME_ATTR);
-            ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Configure Handler [" + handlerName + "]");
+            ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Configuring Handler [" + handlerName + "]");
             object[] param = new object[] { handlerName };
             string typeName = handlerElement.GetAttribute(TYPE_ATTR);
             try
@@ -250,6 +251,7 @@ namespace XYS.Lis.Repository.Hierarchy
                 if (handler != null)
                 {
                     this.m_hierarchy.AddHandler(handler);
+                    ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Configured Handler [" + handlerName + "]");
                 }
             }
             catch (Exception ex)
@@ -275,7 +277,7 @@ namespace XYS.Lis.Repository.Hierarchy
         protected void ParseExport(XmlElement exportElement)
         {
             string exportName = exportElement.GetAttribute(NAME_ATTR);
-            ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Configure Export [" + exportName + "]");
+            ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Configuring Export [" + exportName + "]");
             object[] param = new object[] { exportName };
             string typeName = exportElement.GetAttribute(TYPE_ATTR);
             try
@@ -284,6 +286,7 @@ namespace XYS.Lis.Repository.Hierarchy
                 if (reportExport != null)
                 {
                     this.m_hierarchy.AddExporter(reportExport);
+                    ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Configured Export [" + exportName + "]");
                 }
             }
             catch (Exception ex)

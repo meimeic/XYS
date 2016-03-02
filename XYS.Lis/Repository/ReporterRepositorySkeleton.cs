@@ -15,7 +15,6 @@ namespace XYS.Lis.Repository
         private string m_repositoryName;
         private Hashtable m_name2FillerMap;
         private Hashtable m_name2HandlerMap;
-        private Hashtable m_name2ExporterMap;
         private Hashtable m_name2StrategyMap;
         private ICollection m_configurationMessages;
         private PropertiesDictionary m_properties;
@@ -33,7 +32,6 @@ namespace XYS.Lis.Repository
             this.m_properties = properties;
             this.m_name2FillerMap = new Hashtable(2);
             this.m_name2HandlerMap = new Hashtable(5);
-            this.m_name2ExporterMap = new Hashtable(2);
             this.m_name2StrategyMap = new Hashtable(5);
         }
         #endregion
@@ -52,10 +50,6 @@ namespace XYS.Lis.Repository
         public virtual Hashtable HandlerMap
         {
             get { return this.m_name2HandlerMap; }
-        }
-        public virtual Hashtable ExporterMap
-        {
-            get { return this.m_name2ExporterMap; }
         }
         public virtual Hashtable StrategyMap
         {
@@ -126,13 +120,6 @@ namespace XYS.Lis.Repository
                 this.m_name2HandlerMap[handler.HandlerName] = handler;
             }
         }
-        public virtual void AddExporter(IReportExport export)
-        {
-            lock (this.m_name2ExporterMap)
-            {
-                this.m_name2ExporterMap[export.ExportName] = export;
-            }
-        }
         public virtual void AddStrategy(ReporterStrategy strategy)
         {
             lock (this.m_name2StrategyMap)
@@ -153,13 +140,6 @@ namespace XYS.Lis.Repository
             lock (this.m_name2HandlerMap)
             {
                 this.m_name2HandlerMap.Clear();
-            }
-        }
-        public virtual void ClearExporter()
-        {
-            lock (this.m_name2ExporterMap)
-            {
-                this.m_name2ExporterMap.Clear();
             }
         }
         public virtual void ClearStrategy()

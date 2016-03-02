@@ -11,17 +11,21 @@ namespace XYS.Lis.Export
     {
         private readonly static string m_defaultExportName = "JsonExport";
         public JsonExport()
-            : base(m_defaultExportName)
+            : this(m_defaultExportName)
         {
         }
-        protected override void ConvertGraph2Image(List<IReportElement> graphList, ReportReport exportReport)
+        public JsonExport(string name)
+            : base(name)
+        {
+        }
+        protected override void ConvertGraph2Image(List<ILisReportElement> graphList, List<IExportElement> imageList)
         {
             throw new NotImplementedException();
         }
 
         protected override void AfterExport(ReportReport export)
         {
-            throw new NotImplementedException();
+
         }
     }
 }

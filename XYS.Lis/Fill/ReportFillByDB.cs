@@ -45,7 +45,7 @@ namespace XYS.Lis.Fill
         #endregion
 
         #region 实现父类抽象方法
-        protected override void FillElement(IReportElement reportElement, ReportKey RK)
+        protected override void FillElement(ILisReportElement reportElement, ReportKey RK)
         {
             string sql = GenderSql(reportElement, RK);
             if (sql != null)
@@ -53,7 +53,7 @@ namespace XYS.Lis.Fill
                 this.D_FillElement(reportElement, sql);
             }
         }
-        protected override void FillElements(List<IReportElement> reportElementList, ReportKey RK, Type type)
+        protected override void FillElements(List<ILisReportElement> reportElementList, ReportKey RK, Type type)
         {
             string sql = GenderSql(type, RK);
             this.D_FillElements(reportElementList, type, sql);
@@ -61,25 +61,25 @@ namespace XYS.Lis.Fill
         #endregion
 
         #region DAL层代码访问
-        protected virtual void D_FillElement(IReportElement reportElement, string sql)
+        protected virtual void D_FillElement(ILisReportElement reportElement, string sql)
         {
             this.ReportDAL.Fill(reportElement, sql);
         }
-        protected virtual void D_FillElements(List<IReportElement> reportElementList, Type type, string sql)
+        protected virtual void D_FillElements(List<ILisReportElement> reportElementList, Type type, string sql)
         {
             this.ReportDAL.FillList(reportElementList, type, sql);
         }
         #endregion
 
         #region 生成sql语句
-        protected string GenderSql(IReportElement element, ReportKey RK)
+        protected string GenderSql(ILisReportElement element, ReportKey RK)
         {
             string where = GenderWhere(RK);
             AbstractReportElement e = element as AbstractReportElement;
             if (e != null)
             {
                 //
-                if (!string.IsNullOrEmpty(e.SearchSQL))
+                if (string.IsNullOrEmpty(e.SearchSQL))
                 {
                     return GenderPreSQL(element.GetType()) + GenderWhere(RK);
                 }
@@ -108,18 +108,6 @@ namespace XYS.Lis.Fill
             sb.Append(" from ");
             sb.Append(type.Name);
             return sb.ToString();
-        }
-        private bool IsColumn(PropertyInfo prop)
-        {
-            if (prop != null)
-            {
-                object[] attrs = prop.GetCustomAttributes(typeof(ColumnAttribute), true);
-                if (attrs != null && attrs.Length > 0)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
         protected string GenderWhere(Hashtable equalTable)
         {
@@ -190,6 +178,18 @@ namespace XYS.Lis.Fill
             }
             sb.Remove(sb.Length - 5, 5);
             return sb.ToString();
+        }
+        private bool IsColumn(PropertyInfo prop)
+        {
+            if (prop != null)
+            {
+                object[] attrs = prop.GetCustomAttributes(typeof(ColumnAttribute), true);
+                if (attrs != null && attrs.Length > 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
         #endregion
 

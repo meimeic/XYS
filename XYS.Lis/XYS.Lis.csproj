@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>XYS.Lis</RootNamespace>
     <AssemblyName>XYS.Lis</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -59,16 +59,14 @@
     <Compile Include="Config\XmlDBConfigurator.cs" />
     <Compile Include="Config\XmlParamConfigurator.cs" />
     <Compile Include="Core\DefaultRepositorySelector.cs" />
-    <Compile Include="Core\IExportElement.cs" />
     <Compile Include="Core\IReporter.cs" />
-    <Compile Include="Core\IReportElement.cs" />
+    <Compile Include="Core\ILisReportElement.cs" />
     <Compile Include="Core\IReporterWrapper.cs" />
     <Compile Include="Core\IRepositorySelector.cs" />
     <Compile Include="Core\ReporterManager.cs" />
     <Compile Include="Core\WrapperMap.cs" />
     <Compile Include="DAL\DbHelperOleDb.cs" />
     <Compile Include="DAL\DbHelperSQL.cs" />
-    <Compile Include="Export\IReportExport.cs" />
     <Compile Include="Export\JsonExport.cs" />
     <Compile Include="Export\Model\ReportCustom.cs" />
     <Compile Include="Export\Model\ReportImage.cs" />
@@ -158,7 +156,6 @@
     <Compile Include="Util\PropertyEntry.cs" />
     <Compile Include="Util\ReadOnlyPropertiesDictionary.cs" />
     <Compile Include="Util\ReportLog.cs" />
-    <Compile Include="Util\SystemInfo.cs" />
     <Compile Include="Util\TestItem.cs" />
     <Compile Include="Util\TypeConverters\BooleanConverter.cs" />
     <Compile Include="Util\TypeConverters\ConversionNotSupportedException.cs" />

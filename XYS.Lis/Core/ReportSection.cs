@@ -86,10 +86,9 @@ namespace XYS.Lis.Core
         {
             if (!string.IsNullOrEmpty(elementName))
             {
-                string name = elementName.ToLower();
-                if (!this.m_innerElementList.Contains(name))
+                if (!this.m_innerElementList.Contains(elementName))
                 {
-                    this.m_innerElementList.Add(name);
+                    this.m_innerElementList.Add(elementName);
                 }
             }
         }
@@ -97,10 +96,9 @@ namespace XYS.Lis.Core
         {
             if (!string.IsNullOrEmpty(elementName))
             {
-                string name = elementName.ToLower();
-                if (!this.m_extendElementList.Contains(name))
+                if (!this.m_extendElementList.Contains(elementName))
                 {
-                    this.m_extendElementList.Add(name);
+                    this.m_extendElementList.Add(elementName);
                 }
             }
         }

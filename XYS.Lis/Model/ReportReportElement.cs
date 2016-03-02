@@ -8,7 +8,7 @@ using XYS.Lis.Core;
 using XYS.Lis.Util;
 namespace XYS.Lis.Model
 {
-    public class ReportReportElement : IReportElement
+    public class ReportReportElement : ILisReportElement
     {
 
         #region 私有只读字段
@@ -59,13 +59,13 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实例属性
-        [Convert()]
+        [FRConvert()]
         public int SectionNo
         {
             get { return this.m_sectionNo; }
             set { this.m_sectionNo = value; }
         }
-        [Convert()]
+        [FRConvert()]
         public string ReportTitle
         {
             get { return this.m_reportTitle; }
@@ -77,63 +77,63 @@ namespace XYS.Lis.Model
             get { return this.m_remarkFlag; }
             set { this.m_remarkFlag = value; }
         }
-        [Convert()]
+        [FRConvert()]
         public string Remark
         {
             get { return this.m_remark; }
             set { this.m_remark = value; }
         }
-         [Convert()]
+         [FRConvert()]
         public string ParItemName
         {
             get { return this.m_parItemName; }
             set { this.m_parItemName = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         public DateTime ReceiveDateTime
         {
             get { return this.m_receiveDateTime; }
             set { this.m_receiveDateTime = value; }
         }
-        [Convert()]
+        [FRConvert()]
         public DateTime CollectDateTime
         {
             get { return this.m_collectDateTime; }
             set { this.m_collectDateTime = value; }
         }
-        [Convert()]
+        [FRConvert()]
         public DateTime InceptDateTime
         {
             get { return m_inceptDateTime; }
             set { m_inceptDateTime = value; }
         }
-        [Convert()]
+        [FRConvert()]
         public DateTime TestDateTime
         {
             get { return m_testDateTime; }
             set { m_testDateTime = value; }
         }
-        [Convert()]
+        [FRConvert()]
         public DateTime CheckDateTime
         {
             get { return m_checkDateTime; }
             set { m_checkDateTime = value; }
         }
-        [Convert()]
+        [FRConvert()]
         public DateTime SecondeCheckDateTime
         {
             get { return m_secondCheckDateTime; }
             set { m_secondCheckDateTime = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         public byte[] TechnicianImage
         {
             get { return this.m_technicianImage; }
             set { this.m_technicianImage = value; }
         }
-        [Convert()]
+        [FRConvert()]
         public byte[] CheckerImage
         {
             get { return this.m_checkerImage; }
@@ -172,14 +172,14 @@ namespace XYS.Lis.Model
             this.TechnicianImage = null;
             this.CheckerImage = null;
         }
-        public List<IReportElement> GetReportItem(string typeName)
+        public List<ILisReportElement> GetReportItem(string typeName)
         {
             if (!string.IsNullOrEmpty(typeName))
             {
-                List<IReportElement> result = this.m_reportItemTable[typeName] as List<IReportElement>;
+                List<ILisReportElement> result = this.m_reportItemTable[typeName] as List<ILisReportElement>;
                 if (result == null)
                 {
-                    result = new List<IReportElement>(10);
+                    result = new List<ILisReportElement>(10);
                     lock (this.m_reportItemTable)
                     {
                         this.m_reportItemTable[typeName] = result;

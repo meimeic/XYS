@@ -6,7 +6,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Collections;
 
-namespace XYS.Lis.Util
+namespace XYS.Util
 {
     public sealed class SystemInfo
     {
@@ -34,14 +34,14 @@ namespace XYS.Lis.Util
             string nullTextAppSettingsKey = SystemInfo.GetAppSetting("lis-report.NullText");
             if (nullTextAppSettingsKey != null && nullTextAppSettingsKey.Length > 0)
             {
-                ReportLog.Debug(declaringType, "Initializing NullText value to [" + nullTextAppSettingsKey + "].");
+                //ReportLog.Debug(declaringType, "Initializing NullText value to [" + nullTextAppSettingsKey + "].");
                 nullText = nullTextAppSettingsKey;
             }
             // Look for log4net.NotAvailableText in AppSettings
             string notAvailableTextAppSettingsKey = SystemInfo.GetAppSetting("lis-report.NotAvailableText");
             if (notAvailableTextAppSettingsKey != null && notAvailableTextAppSettingsKey.Length > 0)
             {
-                ReportLog.Debug(declaringType, "Initializing NotAvailableText value to [" + notAvailableTextAppSettingsKey + "].");
+                //ReportLog.Debug(declaringType, "Initializing NotAvailableText value to [" + notAvailableTextAppSettingsKey + "].");
                 notAvailableText = notAvailableTextAppSettingsKey;
             }
 #endif
@@ -861,6 +861,10 @@ namespace XYS.Lis.Util
         public static bool IsFileExist(string filePath)
         {
             return File.Exists(filePath);
+        }
+        public static bool IsType(Type type1,Type type2)
+        {
+            return type1.Equals(type2);
         }
         public static bool DeleteFile(string filePath)
         {

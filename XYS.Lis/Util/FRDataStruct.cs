@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Collections.Generic;
 
 using XYS.Common;
-using XYS.Lis.Core;
 namespace XYS.Lis.Util
 {
     public class FRDataStruct
@@ -103,10 +102,11 @@ namespace XYS.Lis.Util
         #region xml相关操作
         public static void ConvertObj2Xml(XmlDocument xmlDoc, XmlNode parentNode, Type elementType)
         {
-            ReportLog.Debug(declaringType, "XMLTools:make table element by " + elementType.Name);
+            ReportLog.Debug(declaringType, "making xml table struct by " + elementType.Name);
             Dictionary<string, string> attrDic = GenderTableAttrDic(elementType);
             XmlElement tableElement = CreateElement(xmlDoc, TABLE_TAG, attrDic);
             InitColumnXmlNodeAttr(xmlDoc, tableElement, elementType);
+            ReportLog.Debug(declaringType, "maked xml table struct by " + elementType.Name);
             parentNode.AppendChild(tableElement);
         }
 
@@ -188,23 +188,28 @@ namespace XYS.Lis.Util
         #region 创建导出的dataset以及xml模板结构
         public static void InitDataStruct(DataSet ds)
         {
-            ElementTypeMap typeMap = new ElementTypeMap();
-
+            List<Type> typeList = new List<Type>(10);
+            LisMap.InitAllElementTypes(typeList);
+            InitDataStruct(ds, typeList);
+        }
+        public static void InitDataStruct(DataSet ds, List<Type> typeList)
+        {
             string fileFullName = SystemInfo.GetFileFullName(GetDataStructFilePath(), "ReportTables.frd");
-            ReportLog.Debug(declaringType, "FRDataStruct:Start--make the data struct xml file " + fileFullName + " by report elemnt");
+            ReportLog.Debug(declaringType, "FRDataStruct:Start--make the data struct xml file " + fileFullName + " by reportelemnts");
+
             XmlDocument doc = new XmlDocument();
             XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "utf-8", null);
             doc.AppendChild(dec);
             XmlNode root = doc.CreateNode(XmlNodeType.Element, ROOT_TAG, null);
-            foreach (ElementType element in typeMap.AllElementTypes)
+
+            foreach (Type type in typeList)
             {
-                if (IsExport(element.ExportType))
+                if (IsExport(type))
                 {
-                    ConvertObj2Table(ds, element.EType);
-                    ConvertObj2Xml(doc, root, element.EType);
+                    ConvertObj2Table(ds, type);
+                    ConvertObj2Xml(doc, root, type);
                 }
             }
-
             doc.AppendChild(root);
             if (SystemInfo.IsFileExist(fileFullName))
             {
@@ -229,7 +234,7 @@ namespace XYS.Lis.Util
         #region dataset相关操作
         private static void ConvertObj2Table(DataSet ds, Type elementType)
         {
-            object[] xAttrs = null;
+            ReportLog.Debug(declaringType, "making RAM table by " + elementType.Name);
             DataTable dt = new DataTable();
             dt.TableName = elementType.Name;
             PropertyInfo[] props = elementType.GetProperties();
@@ -239,29 +244,35 @@ namespace XYS.Lis.Util
             }
             foreach (PropertyInfo pro in props)
             {
-                xAttrs = pro.GetCustomAttributes(typeof(ConvertAttribute), true);
-                if (xAttrs != null && xAttrs.Length > 0)
+                if (IsExport(pro))
                 {
-                    dt.Columns.Add(pro.Name, pro.PropertyType);
+                    dt.Columns.Add(pro.Name,pro.PropertyType);
                 }
             }
+            ReportLog.Debug(declaringType, "maked RAM table by " + elementType.Name);
             ds.Tables.Add(dt);
         }
         public static bool IsExport(Type type)
         {
-            object[] xAttrs = type.GetCustomAttributes(typeof(FRExportAttribute), true);
-            if (xAttrs != null && xAttrs.Length > 0)
+            if (type != null)
             {
-                return true;
+                object[] xAttrs = type.GetCustomAttributes(typeof(FRExportAttribute), true);
+                if (xAttrs != null && xAttrs.Length > 0)
+                {
+                    return true;
+                }
             }
             return false;
         }
         public static bool IsExport(PropertyInfo prop)
         {
-            object[] xAttrs = prop.GetCustomAttributes(typeof(FRExportAttribute), true);
-            if (xAttrs != null && xAttrs.Length > 0)
+            if (prop != null)
             {
-                return true;
+                object[] xAttrs = prop.GetCustomAttributes(typeof(FRExportAttribute), true);
+                if (xAttrs != null && xAttrs.Length > 0)
+                {
+                    return true;
+                }
             }
             return false;
         }

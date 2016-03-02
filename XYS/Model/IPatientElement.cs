@@ -1,8 +1,8 @@
-﻿namespace XYS.Common
+﻿namespace XYS.Model
 {
     public enum AgeType
     {
-        year = 1, month, day,hours,none
+        year = 1, month, day, hours, none
     }
     public enum ClinicType
     {
@@ -12,7 +12,7 @@
     {
         male = 1, female, other, none
     }
-    public interface IPatient
+    public interface IPatientElement
     {
         string ClinicName { get; }
         string GenderName { get; }

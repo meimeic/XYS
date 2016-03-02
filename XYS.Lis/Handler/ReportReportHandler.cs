@@ -29,7 +29,7 @@ namespace XYS.Lis.Handler
         #endregion
 
         #region 实现父类虚方法
-        protected override bool OperateElement(IReportElement element)
+        protected override bool OperateElement(ILisReportElement element)
         {
             return true;
         }

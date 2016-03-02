@@ -24,11 +24,7 @@ namespace XYS.Lis.Handler
         #endregion
         
         #region 实现父类抽象方法
-        protected override bool OperateReport(ReportReportElement report)
-        {
-            return OperateExam(report);
-        }
-        protected override bool OperateElement(IReportElement element)
+        protected override bool OperateElement(ILisReportElement element)
         {
             ReportExamElement ree = element as ReportExamElement;
             if (ree != null)
@@ -46,6 +42,10 @@ namespace XYS.Lis.Handler
                 return true;
             }
             return false;
+        }
+        protected override bool OperateReport(ReportReportElement report)
+        {
+            return OperateExam(report);
         }
         #endregion
 

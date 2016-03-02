@@ -44,7 +44,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 实现IPatient接口
-        [Convert()]
+        [FRConvert()]
         public string ClinicName
         {
             get
@@ -64,7 +64,7 @@ namespace XYS.Lis.Model
                 }
             }
         }
-        [Convert()]
+        [FRConvert()]
         public string GenderName
         {
             get
@@ -98,21 +98,21 @@ namespace XYS.Lis.Model
 
         #region 公共属性
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string PatientName
         {
             get { return this.m_patientName; }
             set { this.m_patientName = value; }
         }
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string PID
         {
             get { return this.m_pid; }
             set { this.m_pid = value; }
         }
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string CID
         {
@@ -133,7 +133,7 @@ namespace XYS.Lis.Model
             protected set { this.m_gender = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         public string AgeStr
         {
             get
@@ -180,7 +180,7 @@ namespace XYS.Lis.Model
             protected set { this.m_clinicType = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public int VisitTimes
         {
@@ -188,7 +188,7 @@ namespace XYS.Lis.Model
             set { this.m_visitTimes = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string DeptName
         {
@@ -196,7 +196,7 @@ namespace XYS.Lis.Model
             set { this.m_deptName = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string Doctor
         {
@@ -204,7 +204,7 @@ namespace XYS.Lis.Model
             set { this.m_doctor = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string BedNo
         {
@@ -212,7 +212,7 @@ namespace XYS.Lis.Model
             set { this.m_bedNo = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string ClinicalDiagnosis
         {
@@ -220,7 +220,7 @@ namespace XYS.Lis.Model
             set { this.m_clinicalDiagnosis = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string Explanation
         {

@@ -29,58 +29,67 @@ namespace XYS.Lis.Handler
         {
             get { return this.m_handlerName.ToLower(); }
         }
-
-        public virtual HandlerResult ReportOptions(ReportReportElement reportElement)
+        public virtual HandlerResult ReportOptions(ILisReportElement reportElement)
         {
-            bool result = OperateReport(reportElement);
+            bool result = false;
+            if (IsReport(reportElement))
+            {
+                result = OperateReport(reportElement);
+            }
+            else
+            {
+                result = OperateElement(reportElement);
+            }
+            //
             if (result)
             {
                 return HandlerResult.Continue;
             }
             return HandlerResult.Fail;
         }
-        public virtual HandlerResult ReportOptions(List<ReportReportElement> reportElementList)
-        {
-
-            if (IsExist(reportElementList))
-            {
-                bool result = false;
-                for (int i = reportElementList.Count - 1; i >= 0; i--)
-                {
-                    result = OperateReport(reportElementList[i]);
-                    if (!result)
-                    {
-                        reportElementList.RemoveAt(i);
-                    }
-                }
-            }
-            if (IsExist(reportElementList))
-            {
-                return HandlerResult.Continue;
-            }
-            return HandlerResult.Fail;
-        }
-        //public virtual HandlerResult ReportOptions(List<IReportElement> reportElementList, Type type)
+        //public virtual HandlerResult ReportOptions(List<ILisReportElement> reportElementList)
         //{
-        //    OperateElementList(reportElementList, type);
-        //    if (reportElementList.Count > 0)
+
+        //    if (IsExist(reportElementList))
+        //    {
+        //        bool result = false;
+        //        for (int i = reportElementList.Count - 1; i >= 0; i--)
+        //        {
+        //            result = OperateReport(reportElementList[i]);
+        //            if (!result)
+        //            {
+        //                reportElementList.RemoveAt(i);
+        //            }
+        //        }
+        //    }
+        //    if (IsExist(reportElementList))
         //    {
         //        return HandlerResult.Continue;
         //    }
-        //    else
-        //    {
-        //        return HandlerResult.Fail;
-        //    }
+        //    return HandlerResult.Fail;
         //}
+        public virtual HandlerResult ReportOptions(List<ILisReportElement> reportElementList, Type type)
+        {
+            OperateElementList(reportElementList, type);
+
+            if (reportElementList.Count > 0)
+            {
+                return HandlerResult.Continue;
+            }
+            else
+            {
+                return HandlerResult.Fail;
+            }
+        }
         #endregion
 
         #region 抽象方法(处理元素)
-        protected abstract bool OperateElement(IReportElement element);
-         protected abstract bool OperateReport(ReportReportElement report);
+        protected abstract bool OperateElement(ILisReportElement element);
+        protected abstract bool OperateReport(ILisReportElement report);
         #endregion
 
-         #region 受保护的虚方法
-         protected virtual void OperateElementList(List<IReportElement> reportElementList)
+        #region 受保护的虚方法
+        protected virtual void OperateElementList(List<ILisReportElement> reportElementList)
         {
             bool result = false;
             if (IsExist(reportElementList))
@@ -95,7 +104,7 @@ namespace XYS.Lis.Handler
                 }
             }
         }
-        protected virtual void OperateElementList(List<IReportElement> reportElementList, Type type)
+        protected virtual void OperateElementList(List<ILisReportElement> reportElementList, Type type)
         {
             bool flag = false;
             bool result = false;
@@ -115,14 +124,10 @@ namespace XYS.Lis.Handler
                 }
             }
         }
-        protected virtual bool IsElement(IReportElement reportElement, Type type)
-        {
-            return reportElement.GetType().Equals(type);
-        }
         #endregion
 
         #region 私有方法
-        private bool IsExist(List<IReportElement> elementList)
+        private bool IsExist(List<ILisReportElement> elementList)
         {
             if (elementList != null && elementList.Count > 0)
             {
@@ -130,13 +135,13 @@ namespace XYS.Lis.Handler
             }
             return false;
         }
-        private bool IsExist(List<ReportReportElement> elementList)
+        private bool IsReport(ILisReportElement reportElement)
         {
-            if (elementList != null && elementList.Count > 0)
-            {
-                return true;
-            }
-            return false;
+            return IsElement(reportElement, typeof(ReportReportElement));
+        }
+        private bool IsElement(ILisReportElement reportElement, Type type)
+        {
+            return reportElement.GetType().Equals(type);
         }
         #endregion
     }

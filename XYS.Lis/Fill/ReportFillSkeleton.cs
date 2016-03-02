@@ -12,16 +12,16 @@ namespace XYS.Lis.Fill
     {
         #region 字段
         private readonly string m_fillerName;
-        private readonly Hashtable m_section2InsideElementMap;
-        private readonly Hashtable m_section2ExtendElementMap;
+        private readonly Hashtable m_section2InsideTypeMap;
+        private readonly Hashtable m_section2ExtendTypeMap;
         #endregion
 
         #region 构造函数
         protected ReportFillSkeleton(string name)
         {
             this.m_fillerName = name;
-            this.m_section2InsideElementMap = new Hashtable(20);
-            this.m_section2ExtendElementMap = new Hashtable(2);
+            this.m_section2InsideTypeMap = new Hashtable(20);
+            this.m_section2ExtendTypeMap = new Hashtable(2);
         }
         #endregion
 
@@ -30,11 +30,32 @@ namespace XYS.Lis.Fill
         {
             get { return this.m_fillerName.ToLower(); }
         }
-        public virtual void Fill(ReportReportElement reportElement, ReportKey RK)
+        public virtual void Fill(ILisReportElement reportElement, ReportKey RK)
         {
-            if (reportElement != null)
+            if (IsFill(reportElement))
             {
-                FillReport(reportElement, RK);
+                //报告
+                if (IsReport(reportElement))
+                {
+                    ReportReportElement rre = reportElement as ReportReportElement;
+                    if (rre != null)
+                    {
+                        FillReport(rre, RK);
+                    }
+                }
+                //报告项
+                else
+                {
+                    FillElement(reportElement, RK);
+                }
+            }
+        }
+        public virtual void Fill(List<ILisReportElement> reportElementList, ReportKey RK, Type type)
+        {
+            if (IsFill(type))
+            {
+                //
+                FillElements(reportElementList, RK, type);
             }
         }
         #endregion
@@ -42,14 +63,14 @@ namespace XYS.Lis.Fill
         #region 内部处理逻辑
         protected virtual void FillReport(ReportReportElement rre, ReportKey RK)
         {
-            //设置默认元素
+            //默认的报告项
             FillElement(rre.ReportExam, RK);
             FillElement(rre.ReportPatient, RK);
-
+            //可选的报告项
             List<Type> availableElementList = this.GetAvailableInsideElements(RK);
             if (availableElementList != null && availableElementList.Count > 0)
             {
-                List<IReportElement> tempList = null;
+                List<ILisReportElement> tempList = null;
                 foreach (Type type in availableElementList)
                 {
                     if (IsFill(type))
@@ -63,8 +84,8 @@ namespace XYS.Lis.Fill
         #endregion
 
         #region 抽象方法
-        protected abstract void FillElement(IReportElement reportElement, ReportKey RK);
-        protected abstract void FillElements(List<IReportElement> reportElementList, ReportKey RK, Type type);
+        protected abstract void FillElement(ILisReportElement reportElement, ReportKey RK);
+        protected abstract void FillElements(List<ILisReportElement> reportElementList, ReportKey RK, Type type);
         #endregion
 
         #region 辅助方法
@@ -73,7 +94,7 @@ namespace XYS.Lis.Fill
             int sectionNo = 0;
             foreach (KeyColumn c in RK.KeySet)
             {
-                if (c.Name.ToLower().Equals("sectionno") || c.Name.ToLower().Equals("r.sectionno"))
+                if (c.Name.ToLower().Equals("sectionno"))
                 {
                     try
                     {
@@ -90,11 +111,11 @@ namespace XYS.Lis.Fill
         }
         protected virtual List<Type> GetAvailableInsideElements(int sectionNo)
         {
-            if (this.m_section2InsideElementMap.Count == 0)
+            if (this.m_section2InsideTypeMap.Count == 0)
             {
                 InitInsideElementTable();
             }
-            return this.m_section2InsideElementMap[sectionNo] as List<Type>;
+            return this.m_section2InsideTypeMap[sectionNo] as List<Type>;
         }
         protected virtual List<Type> GetAvailableInsideElements(ReportKey key)
         {
@@ -109,12 +130,12 @@ namespace XYS.Lis.Fill
         }
         private void InitInsideElementTable()
         {
-            lock (this.m_section2InsideElementMap)
+            lock (this.m_section2InsideTypeMap)
             {
-                LisMap.InitSection2InnerElementTable(this.m_section2InsideElementMap);
+                LisMap.InitSection2InnerElementTable(this.m_section2InsideTypeMap);
             }
         }
-        private bool IsFill(IReportElement element)
+        private bool IsFill(ILisReportElement element)
         {
             return element is AbstractReportElement;
         }
@@ -126,57 +147,17 @@ namespace XYS.Lis.Fill
             }
             return false;
         }
+        private bool IsReport(ILisReportElement reportElement)
+        {
+            return IsReport(reportElement.GetType());
+        }
+        private bool IsReport(Type type)
+        {
+            return typeof(ReportReportElement).Equals(type);
+        }
         #endregion
 
         #region 未调用的方法
-        //protected virtual ElementTypeMap GetAvailableExtendElements(int sectionNo)
-        //{
-        //    if (this.m_section2InsideElementMap.Count == 0)
-        //    {
-        //        InitExtendElementTable();
-        //    }
-        //    ElementTypeMap result = this.m_section2InsideElementMap[sectionNo] as ElementTypeMap;
-        //    return result;
-        //}
-        //private bool IsTable(Type elementType)
-        //{
-        //    object[] attrs = elementType.GetCustomAttributes(typeof(TableAttribute), true);
-        //    if (attrs != null && attrs.Length > 0)
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
-        //protected virtual ElementTypeMap GetAvailableInsideElements(int sectionNo)
-        //{
-        //    if (this.m_section2InsideElementMap.Count == 0)
-        //    {
-        //        InitInsideElementTable();
-        //    }
-        //    ElementTypeMap result = this.m_section2InsideElementMap[sectionNo] as ElementTypeMap;
-        //    return result;
-        //}
-        //protected virtual ElementTypeMap GetAvailableInsideElements(ReportKey key)
-        //{
-        //    int sectionNo = GetSectionNo(key);
-        //    return GetAvailableInsideElements(sectionNo);
-        //}
-        //protected Type GetElementType(string typeName)
-        //{
-        //    Type result;
-        //    try
-        //    {
-        //        result = SystemInfo.GetTypeFromString(typeName, true, true);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        result = null;
-        //    }
-        //    return result;
-        //}
         #endregion
     }
 }

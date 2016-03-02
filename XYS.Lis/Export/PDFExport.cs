@@ -14,27 +14,31 @@ namespace XYS.Lis.Export
     {
         private readonly static string m_defaultExportName = "PDFExport";
         
-        private readonly Hashtable m_propertyTable;
+        private readonly Hashtable m_graph2ImageTable;
         private readonly Hashtable m_section2Order;
         private readonly Hashtable m_parItem2Order;
+
         private readonly Hashtable m_parItem2PrintModel;
         private readonly Hashtable m_section2PrintModel;
 
         public PDFExport()
+            : this(m_defaultExportName)
+        { }
+        public PDFExport(string name)
             : base(m_defaultExportName)
         {
-            this.m_propertyTable = new Hashtable();
+            this.m_graph2ImageTable = new Hashtable();
             this.m_section2Order = new Hashtable(20);
             this.m_section2PrintModel = new Hashtable(20);
             this.m_parItem2Order = new Hashtable(30);
             this.m_parItem2PrintModel = new Hashtable(30);
         }
         #region
-        protected override void ConvertGraph2Image(List<IReportElement> graphList, ReportReport export)
+        protected override void ConvertGraph2Image(List<ILisReportElement> graphList, List<IExportElement> imageList)
         {
-            FRImage image=new FRImage();
+            FRImage image = new FRImage();
             ReportGraphElement rge = null;
-            foreach (IReportElement re in graphList)
+            foreach (ILisReportElement re in graphList)
             {
                 rge = re as ReportGraphElement;
                 if (rge != null)
@@ -42,11 +46,12 @@ namespace XYS.Lis.Export
                     SetExportImage(rge, image);
                 }
             }
-              export.ReportImage=image;
+            imageList.Add(image);
         }
         protected override void AfterExport(ReportReport export)
         {
-            throw new NotImplementedException();
+            SetReportOrder(export);
+            SetReportModel(export);
         }
         #endregion
 
@@ -65,11 +70,11 @@ namespace XYS.Lis.Export
         }
         private string GetPropertyName(string name)
         {
-            if (this.m_propertyTable.Count == 0)
+            if (this.m_graph2ImageTable.Count == 0)
             {
                 //
             }
-            return this.m_propertyTable[name] as string;
+            return this.m_graph2ImageTable[name] as string;
         }
         #endregion
 

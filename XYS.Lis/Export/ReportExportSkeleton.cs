@@ -7,6 +7,7 @@ using XYS.Common;
 using XYS.Lis.Core;
 using XYS.Lis.Model;
 using XYS.Lis.Export.Model;
+using XYS.Lis.Util;
 namespace XYS.Lis.Export
 {
     public abstract class ReportExportSkeleton : IReportExport
@@ -49,7 +50,7 @@ namespace XYS.Lis.Export
         #endregion
 
         #region
-        protected abstract void ConvertGraph2Image(List<IReportElement> graphList, ReportReport exportReport);
+        protected abstract void ConvertGraph2Image(List<ILisReportElement> graphList, List<IExportElement> imageList);
         protected abstract void AfterExport(ReportReport export);
         #endregion
 
@@ -57,59 +58,92 @@ namespace XYS.Lis.Export
         protected virtual void ExportReport(ReportReportElement reportReport, ReportReport exportReport)
         {
             ExportElement(reportReport, exportReport);
+
             ExportElement(reportReport.ReportExam, exportReport.ReportExam);
             ExportElement(reportReport.ReportPatient, exportReport.ReportPatient);
             ConvertPatItemList(reportReport.ParItemList, exportReport.ParItemList);
 
             //
             string rName = null;
-            Type exportType = null;
-            List<IReportElement> tempList = null;
-            List<IExportElement> exportList=null;
+           //Type exportType = null;
+            List<ILisReportElement> tempList = null;
+            //List<IExportElement> exportList = null;
             foreach (DictionaryEntry de in reportReport.ReportItemTable)
             {
                 rName = de.Key as string;
-                tempList = de.Value as List<IReportElement>;
-                if (rName != null&&IsExist(tempList))
+                tempList = de.Value as List<ILisReportElement>;
+                if (rName != null && IsExist(tempList))
                 {
-                    //图片项处理
-                    if (rName.Equals(typeof(ReportGraphElement).Name))
-                    {
-                        ConvertGraph2Image(tempList, exportReport);
-                    }
-                   // 其他项处理
-                    else
-                    {
-                        exportType=GetExportType(rName);
-                        if(exportType!=null)
-                        {
-                            exportList=exportReport.GetReportItem(exportType.Name);
-                            InnerExport(tempList, exportList, exportType);
-                        }
-                    }
+                    // //图片项处理
+                    // if (rName.Equals(typeof(ReportGraphElement).Name))
+                    // {
+                    //     ConvertGraph2Image(tempList, exportReport);
+                    // }
+                    //// 其他项处理
+                    //else
+                    //{
+                    //exportType = GetExportType(rName);
+                    //if (exportType != null)
+                    //{
+                    //    exportList = exportReport.GetReportItem(exportType.Name);
+                    //    InnerExport(tempList, exportList, exportType);
+                    //}
+                    //}
+                    InnerExport(tempList,exportReport,rName);
                 }
             }
         }
-        protected virtual void InnerExport(List<IReportElement> reportElementList, List<IExportElement> exportElementList, Type exportType)
+        protected virtual void InnerExport(List<ILisReportElement> reportElementList, ReportReport exportReport, string reportElementName)
         {
+            Type exportType = null;
             IExportElement exportElement = null;
-            foreach (IReportElement re in reportElementList)
+            List<IExportElement> exportList = null;
+            exportType = GetExportType(reportElementName);
+            if (exportType != null)
             {
-                try
+                exportList = exportReport.GetReportItem(exportType.Name);
+                if (reportElementName.Equals(typeof(ReportGraphElement).Name))
                 {
-                    exportElement = (IExportElement)exportType.Assembly.CreateInstance(exportType.FullName);
-                    ExportElement(re, exportElement);
+                    ConvertGraph2Image(reportElementList, exportList);
                 }
-                catch (Exception ex)
+                else if (reportElementName.Equals(typeof(ReportKVElement).Name))
                 {
-                    continue;
+                    foreach (ILisReportElement re in reportElementList)
+                    {
+                        try
+                        {
+                            exportElement = (IExportElement)exportType.Assembly.CreateInstance(exportType.FullName);
+                            ConvertKV2Custom(re, exportElement);
+                            exportList.Add(exportElement);
+                        }
+                        catch (Exception ex)
+                        {
+                            continue;
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (ILisReportElement re in reportElementList)
+                    {
+                        try
+                        {
+                            exportElement = (IExportElement)exportType.Assembly.CreateInstance(exportType.FullName);
+                            ExportElement(re, exportElement);
+                            exportList.Add(exportElement);
+                        }
+                        catch (Exception ex)
+                        {
+                            continue;
+                        }
+                    }
                 }
             }
         }
         #endregion
 
         #region
-        protected virtual void ExportElement(IReportElement reportElement, IExportElement exportElement)
+        protected virtual void ExportElement(ILisReportElement reportElement, IExportElement exportElement)
         {
             Type reportType = reportElement.GetType();
             Type exportType = exportElement.GetType();
@@ -132,20 +166,25 @@ namespace XYS.Lis.Export
                 }
             }
         }
-        protected void ConvertKV2Custom(ReportKVElement rkv, ReportCustom rc)
+        protected void ConvertKV2Custom(ILisReportElement reportElement, IExportElement exportElement)
         {
-            rc.Name = rkv.Name;
-            PropertyInfo exportProperty = null;
-            string propertyName = null;
-            foreach (DictionaryEntry de in rkv.KVTable)
+            ReportCustom rc = exportElement as ReportCustom;
+            ReportKVElement rkv = reportElement as ReportKVElement;
+            if (rc != null && rkv != null)
             {
-                propertyName = de.Key as string;
-                if (!string.IsNullOrEmpty(propertyName))
+                rc.Name = rkv.Name;
+                PropertyInfo exportProperty = null;
+                string propertyName = null;
+                foreach (DictionaryEntry de in rkv.KVTable)
                 {
-                    exportProperty = rc.GetType().GetProperty(propertyName);
-                    if (exportProperty != null)
+                    propertyName = de.Key as string;
+                    if (!string.IsNullOrEmpty(propertyName))
                     {
-                        SetProp(exportProperty, rc, de.Value);
+                        exportProperty = rc.GetType().GetProperty(propertyName);
+                        if (exportProperty != null)
+                        {
+                            SetProp(exportProperty, rc, de.Value);
+                        }
                     }
                 }
             }
@@ -176,7 +215,7 @@ namespace XYS.Lis.Export
         #endregion
 
         #region
-        protected void SetProp(PropertyInfo rp, IReportElement element, PropertyInfo ep, IExportElement exportElement)
+        protected void SetProp(PropertyInfo rp, ILisReportElement element, PropertyInfo ep, IExportElement exportElement)
         {
             ep.SetValue(exportElement, rp.GetValue(element, null), null);
         }
@@ -192,7 +231,7 @@ namespace XYS.Lis.Export
             object[] conAttrs = null;
             if (prop != null)
             {
-                conAttrs = prop.GetCustomAttributes(typeof(ConvertAttribute), true);
+                conAttrs = prop.GetCustomAttributes(typeof(FRConvertAttribute), true);
                 if (conAttrs != null && conAttrs.Length > 0)
                 {
                     return true;
@@ -200,7 +239,7 @@ namespace XYS.Lis.Export
             }
             return false;
         }
-        private bool IsExist(List<IReportElement> itemList)
+        private bool IsExist(List<ILisReportElement> itemList)
         {
             if (itemList != null && itemList.Count > 0)
             {
@@ -215,6 +254,7 @@ namespace XYS.Lis.Export
                 if (this.m_elementTypeMap.Count == 0)
                 {
                     //初始化
+                    InitElementTypeMap();
                 }
                 ElementType elementType = this.m_elementTypeMap[rName] as ElementType;
                 if (elementType != null && elementType.ExportType != null)
@@ -227,6 +267,13 @@ namespace XYS.Lis.Export
         private bool IsReport(Type type)
         {
             return typeof(ReportReport).Equals(type);
+        }
+        private void InitElementTypeMap()
+        {
+            lock (this.m_elementTypeMap)
+            {
+                LisMap.ConfigureReportElementMap(this.m_elementTypeMap);
+            }
         }
         #endregion
     }

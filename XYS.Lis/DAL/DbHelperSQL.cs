@@ -9,7 +9,7 @@ namespace XYS.Lis.DAL
 {
     public abstract class DbHelperSQL
     {
-        private static string connectionStr=
+        public static string connectionStr = ConfigurationManager.ConnectionStrings["LisMSSQLConnectionString"].ToString();
 
         //static DbHelperSQL()
         //{

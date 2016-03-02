@@ -1,7 +1,7 @@
 ﻿using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
-    public class AbstractInnerElement : IReportElement
+    public class AbstractInnerElement : ILisReportElement
     {
         #region 字段
         private readonly ReportElementTag m_elementTag;

@@ -12,6 +12,8 @@ namespace XYS.Lis.Config
 
         private static readonly string REPORT_ELEMENTS_TAG = "reportElements";
         private static readonly string REPORT_ELEMENT_TAG = "reportElement";
+        private static readonly string INNER_ELEMENTS_TAG = "innerElements";
+        private static readonly string EXTEND_ELEMENTS_TAG = "extendElements";
         private static readonly string REPORT_SECTIONS_TAG = "reportSections";
         private static readonly string REPORT_SECTION_TAG = "reportSection";
         private static readonly string FILL_ELEMENTS_TAG = "fillElements";
@@ -29,7 +31,7 @@ namespace XYS.Lis.Config
         private static readonly string ORDER_NO_ATTR = "orderNo";
         private static readonly string IMAGE_FLAG_ATTR = "imageFlag";
         private static readonly string IMAGE_PATH_ATTR = "imagePath";
-        private static readonly string MODEL_PATH_ATTR = "modelPath";
+        private static readonly string MODEL_NAME_ATTR = "modelName";
         private static readonly string INNER_ELEMENTS_ATTR = "innerElements";
         private static readonly string EXTEND_ELEMENTS_ATTR = "extendElements";
 
@@ -134,37 +136,51 @@ namespace XYS.Lis.Config
             }
         }
 
-        public static void ConfigReportElementMap(ElementTypeMap elementTypeMap)
+        public static void ConfigElementTypes(ElementTypeMap elementTypeMap)
         {
-            XmlElement reportElementElement = GetTargetElement(REPORT_ELEMENTS_TAG);
-            if (reportElementElement != null)
+            XmlElement reportElements = GetTargetElement(REPORT_ELEMENTS_TAG);
+
+            if (reportElements != null)
             {
-                foreach (XmlNode node in reportElementElement.ChildNodes)
+                foreach (XmlNode node in reportElements.ChildNodes)
                 {
                     if (node.NodeType == XmlNodeType.Element)
                     {
                         XmlElement currentElement = (XmlElement)node;
-                        ConfigReportElement(currentElement, elementTypeMap);
+                        if (currentElement.LocalName == INNER_ELEMENTS_TAG || currentElement.LocalName == EXTEND_ELEMENTS_TAG)
+                        {
+                            foreach (XmlNode n in currentElement.ChildNodes)
+                            {
+                                if (n.NodeType == XmlNodeType.Element)
+                                {
+                                    XmlElement cElement = (XmlElement)n;
+                                    ConfigCommonElement(cElement, elementTypeMap);
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                        }
                     }
                 }
             }
         }
-        public void ConfigReportElementMap(XmlElement element, ElementTypeMap elementTypeMap)
+        private void ConfigInnerElement(XmlElement element, ElementTypeMap elementTypeMap)
         {
-            XmlElement reportElementElement = GetTargetElement(element, REPORT_ELEMENTS_TAG);
-            if (reportElementElement != null)
+            if (element.LocalName == REPORT_ELEMENT_TAG)
             {
-                foreach (XmlNode node in reportElementElement.ChildNodes)
+                string name = element.GetAttribute(NAME_ATTR);
+                string typeName = element.GetAttribute(TYPE_ATTR);
+                string exportName = element.GetAttribute(EXPORT_TYPE_ATTR);
+                if (!string.IsNullOrEmpty(typeName))
                 {
-                    if (node.NodeType == XmlNodeType.Element)
-                    {
-                        XmlElement currentElement = (XmlElement)node;
-                        ConfigReportElement(currentElement, elementTypeMap);
-                    }
+                    ElementType elementType = new ElementType(name, typeName, exportName);
+                    elementTypeMap.Add(elementType);
                 }
             }
         }
-        private static void ConfigReportElement(XmlElement element, ElementTypeMap elementTypeMap)
+        private static void ConfigCommonElement(XmlElement element, ElementTypeMap elementTypeMap)
         {
             if (element.LocalName == REPORT_ELEMENT_TAG)
             {
@@ -270,10 +286,10 @@ namespace XYS.Lis.Config
             if (element.LocalName == REPORT_MODEL_TAG)
             {
                 int value = GetIntValue(element.GetAttribute(VALUE_ATTR));
-                string path = element.GetAttribute(MODEL_PATH_ATTR);
+                string modelName = element.GetAttribute(MODEL_NAME_ATTR);
                 if (value > 0)
                 {
-                    PrintModel model = new PrintModel(value, path);
+                    PrintModel model = new PrintModel(value, modelName);
                     model.Name = element.GetAttribute(NAME_ATTR);
                     modelMap.Add(model);
                 }

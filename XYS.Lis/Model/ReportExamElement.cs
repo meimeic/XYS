@@ -60,7 +60,7 @@ namespace XYS.Lis.Model
             set { m_sectionNo = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string SerialNo
         {
@@ -68,7 +68,7 @@ namespace XYS.Lis.Model
             set { m_serialNo = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string SampleNo
         {
@@ -82,7 +82,7 @@ namespace XYS.Lis.Model
             get { return m_sampleTypeNo; }
             set { m_sampleTypeNo = value; }
         }
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string SampleTypeName
         {
@@ -127,7 +127,7 @@ namespace XYS.Lis.Model
             set { m_secondCheckDateTime = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string ParItemName
         {
@@ -135,21 +135,21 @@ namespace XYS.Lis.Model
             set { m_parItemName = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string FormMemo
         {
             get { return m_formMemo; }
             set { m_formMemo = value; }
         }
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string FormComment
         {
             get { return m_formComment; }
             set { m_formComment = value; }
         }
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string FormComment2
         {
@@ -157,14 +157,14 @@ namespace XYS.Lis.Model
             set { m_formComment2 = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string Technician
         {
             get { return m_technician; }
             set { m_technician = value; }
         }
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string Checker
         {

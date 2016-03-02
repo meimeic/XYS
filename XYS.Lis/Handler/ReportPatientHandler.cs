@@ -21,7 +21,7 @@ namespace XYS.Lis.Handler
        #endregion
 
        #region 实现父类抽象方法
-       protected override bool OperateElement(IReportElement element)
+       protected override bool OperateElement(ILisReportElement element)
        {
            //二级操作
            ReportPatientElement rpe = element as ReportPatientElement;

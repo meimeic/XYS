@@ -41,6 +41,7 @@ namespace ZhTest
             PDF_EXPORT.Clear();
             req.EqualFields.Add("serialno", serialNo);
             MyPDFReport.InitReport(PDF_EXPORT, req);
+            FillReport(PDF_EXPORT, PDF_DS);
             GenderPDF();
             return null;
         }
@@ -62,16 +63,11 @@ namespace ZhTest
         #endregion
 
         #region
-
         private static void FillReport(ReportReport report, DataSet ds)
         {
             FillElement(report, ds);
             FillElement(report.ReportExam, ds);
             FillElement(report.ReportPatient, ds);
-            if (IsImage(report.ReportImage))
-            {
-                FillElement(report.ReportImage, ds);
-            }
             if (report.ReportItemTable.Count > 0)
             {
                 string tableName = null;

@@ -1,4 +1,6 @@
-﻿namespace XYS.Lis.Core
+﻿using XYS.Model;
+
+namespace XYS.Lis.Core
 {
     public enum ReportElementTag : int
     {
@@ -10,7 +12,7 @@
         Custom,
         Temp
     }
-    public interface IReportElement
+    public interface ILisReportElement : IReportElement
     {
         ReportElementTag ElementTag { get; }
     }

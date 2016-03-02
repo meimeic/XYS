@@ -17,16 +17,12 @@ namespace XYS.Lis.Util
         #region
         private LisMap()
         { }
-        #endregion
-
-        #region
         static LisMap()
         {
         }
         #endregion
 
         #region
-
         public static void InitModelNo2ModelPathTable(Hashtable table)
         {
             table.Clear();
@@ -103,22 +99,36 @@ namespace XYS.Lis.Util
             ConfigureReportElementMap(elementMap);
             ReportSectionMap sectionMap = new ReportSectionMap();
             ConfigureReportSectionMap(sectionMap);
+
             ElementType eType = null;
-            ElementTypeMap eMap = null;
+            List<Type> tempList = null;
             foreach (ReportSection rs in sectionMap.AllReporterSection)
             {
                 if (rs.InnerElementList.Count > 0)
                 {
-                    eMap = new ElementTypeMap();
+                    tempList = new List<Type>(2);
                     foreach (string name in rs.InnerElementList)
                     {
                         eType = elementMap[name];
                         if (eType != null)
                         {
-                            eMap.Add(eType);
+                            tempList.Add(eType.EType);
                         }
                     }
-                    table[rs.SectionNo] = eMap;
+                    table[rs.SectionNo] = tempList;
+                }
+            }
+        }
+        public static void InitAllElementTypes(List<Type> typeList)
+        {
+            typeList.Clear();
+            ElementTypeMap typeMap = new ElementTypeMap(7);
+            ConfigureReportElementMap(typeMap);
+            foreach (ElementType eType in typeMap.AllElementTypes)
+            {
+                if (!typeList.Contains(eType.ExportType))
+                {
+                    typeList.Add(eType.ExportType);
                 }
             }
         }
@@ -129,17 +139,19 @@ namespace XYS.Lis.Util
         {
             ReportLog.Debug(declaringType, "LisMap:configuring ReportModelMap");
             XmlParamConfigurator.ConfigReportModelMap(modelMap);
+            ReportLog.Debug(declaringType, "LisMap:configured ReportModelMap");
         }
         
         private static void ConfigureReportElementMap()
         {
             ReportLog.Debug(declaringType, "LisMap:configuring ReportElementTypeMap");
-            XmlParamConfigurator.ConfigReportElementMap(ELEMENT_MAP);
+            XmlParamConfigurator.ConfigElementTypes(ELEMENT_MAP);
         }
-        private static void ConfigureReportElementMap(ElementTypeMap elementTypeMap)
+        public static void ConfigureReportElementMap(ElementTypeMap elementTypeMap)
         {
             ReportLog.Debug(declaringType, "LisMap:configuring ReportElementTypeMap");
-            XmlParamConfigurator.ConfigReportElementMap(elementTypeMap);
+            XmlParamConfigurator.ConfigElementTypes(elementTypeMap);
+            ReportLog.Debug(declaringType, "LisMap:configured ReportElementTypeMap");
         }
         
         private static void ConfigureReportSectionMap()
@@ -151,12 +163,14 @@ namespace XYS.Lis.Util
         {
             ReportLog.Debug(declaringType, "LisMap:configuring ReportSectionMap");
             XmlParamConfigurator.ConfigSectionMap(sectionMap);
+            ReportLog.Debug(declaringType, "LisMap:configured ReportSectionMap");
         }
 
         public static void ConfigureParItemMap(ParItemMap parItemMap)
         {
             ReportLog.Debug(declaringType, "LisMap:configuring ParItemMap");
             XmlParamConfigurator.ConfigParItemMap(parItemMap);
+            ReportLog.Debug(declaringType, "LisMap:configured ParItemMap");
         }
         #endregion
     }

@@ -40,7 +40,7 @@ namespace XYS.Lis.Model
         #endregion
 
         #region 公共属性
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public int ItemNo
         {
@@ -55,7 +55,7 @@ namespace XYS.Lis.Model
             set { this.m_parItemNo = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string ItemCName
         {
@@ -63,7 +63,7 @@ namespace XYS.Lis.Model
             set { this.m_itemCName = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string ItemEName
         {
@@ -83,14 +83,14 @@ namespace XYS.Lis.Model
             get { return this.m_itemDesc; }
             set { this.m_itemDesc = value; }
         }
-        [Convert()]
+        [FRConvert()]
         public string ItemResult
         {
             get { return this.m_itemResult; }
             protected set { this.m_itemResult = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string ItemStandard
         {
@@ -98,7 +98,7 @@ namespace XYS.Lis.Model
             set { this.m_itemStandard = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string ResultStatus
         {
@@ -106,7 +106,7 @@ namespace XYS.Lis.Model
             set { this.m_resultStatus = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string ItemUnit
         {
@@ -114,7 +114,7 @@ namespace XYS.Lis.Model
             set { this.m_itemUnit = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public string RefRange
         {
@@ -122,7 +122,7 @@ namespace XYS.Lis.Model
             set { this.m_refRange = value; }
         }
 
-        [Convert()]
+        [FRConvert()]
         [Column(true)]
         public int DispOrder
         {

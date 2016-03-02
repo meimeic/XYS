@@ -6,7 +6,7 @@ namespace XYS.Lis.DAL
 {
     public interface IReportDAL
     {
-        void Fill(IReportElement element, string sql);
-        void FillList(List<IReportElement> elementList, Type elementType, string sql);
+        void Fill(ILisReportElement element, string sql);
+        void FillList(List<ILisReportElement> elementList, Type elementType, string sql);
     }
 }

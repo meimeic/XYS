@@ -31,14 +31,13 @@ namespace XYS.Lis.Export.Model
 
         private readonly ReportExam m_reportExam;
         private readonly ReportPatient m_reportPatient;
-        private IExportElement m_reportImage;
+        //private IExportElement m_reportImage;
         private readonly List<int> m_parItemList;
 
         public ReportReport()
         {
             this.m_reportExam = new ReportExam();
             this.m_reportPatient = new ReportPatient();
-            this.m_reportImage = null;
             this.m_reportItemTable = new Hashtable(2);
             this.m_parItemList = new List<int>(3);
         }
@@ -136,11 +135,11 @@ namespace XYS.Lis.Export.Model
         {
             get { return this.m_reportPatient; }
         }
-        public IExportElement ReportImage
-        {
-            get { return this.m_reportImage; }
-            set { this.m_reportImage = value; }
-        }
+        //public IExportElement ReportImage
+        //{
+        //    get { return this.m_reportImage; }
+        //    set { this.m_reportImage = value; }
+        //}
         public Hashtable ReportItemTable
         {
             get { return this.m_reportItemTable; }
