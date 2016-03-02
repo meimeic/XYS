@@ -1,8 +1,10 @@
-﻿using XYS.Common;
+﻿using XYS.Model;
+using XYS.Common;
+
 using XYS.Lis.Core;
 namespace XYS.Lis.Model
 {
-    public class ReportPatientElement : AbstractReportElement, IPatient
+    public class ReportPatientElement : AbstractReportElement, IPatientElement
     {
         #region 私有常量字段
         private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.Patient;

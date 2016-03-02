@@ -1,26 +1,24 @@
 ﻿using System;
-using System.Configuration;
-using System.Reflection;
-using System.Text;
 using System.IO;
-using System.Runtime.InteropServices;
+using System.Text;
+using System.Reflection;
 using System.Collections;
+using System.Globalization;
+using System.Configuration;
 
 namespace XYS.Util
 {
     public sealed class SystemInfo
     {
-        #region Private Constants
-
-        private const string DEFAULT_NULL_TEXT = "(null)";
-        private const string DEFAULT_NOT_AVAILABLE_TEXT = "NOT AVAILABLE";
+        #region 私有常量
+        private readonly static string DEFAULT_NULL_TEXT = "(null)";
+        private readonly static string DEFAULT_NOT_AVAILABLE_TEXT = "NOT AVAILABLE";
         #endregion
 
         #region 私有实例构造函数
         private SystemInfo()
         {
         }
-
         #endregion Private Instance Constructors
 
         #region 静态构造函数
@@ -28,20 +26,19 @@ namespace XYS.Util
         {
             string nullText = DEFAULT_NULL_TEXT;
             string notAvailableText = DEFAULT_NOT_AVAILABLE_TEXT;
-
 #if !NETCF
-            // Look for log4net.NullText in AppSettings
-            string nullTextAppSettingsKey = SystemInfo.GetAppSetting("lis-report.NullText");
+            // Look for XYS.NullText in AppSettings
+            string nullTextAppSettingsKey = SystemInfo.GetAppSetting("XYS.NullText");
             if (nullTextAppSettingsKey != null && nullTextAppSettingsKey.Length > 0)
             {
-                //ReportLog.Debug(declaringType, "Initializing NullText value to [" + nullTextAppSettingsKey + "].");
+                ConsoleInfo.Debug(declaringType, "Initializing NullText value to [" + nullTextAppSettingsKey + "].");
                 nullText = nullTextAppSettingsKey;
             }
-            // Look for log4net.NotAvailableText in AppSettings
-            string notAvailableTextAppSettingsKey = SystemInfo.GetAppSetting("lis-report.NotAvailableText");
+            // Look for XYS.NotAvailableText in AppSettings
+            string notAvailableTextAppSettingsKey = SystemInfo.GetAppSetting("XYS.NotAvailableText");
             if (notAvailableTextAppSettingsKey != null && notAvailableTextAppSettingsKey.Length > 0)
             {
-                //ReportLog.Debug(declaringType, "Initializing NotAvailableText value to [" + notAvailableTextAppSettingsKey + "].");
+                ConsoleInfo.Debug(declaringType, "Initializing NotAvailableText value to [" + notAvailableTextAppSettingsKey + "].");
                 notAvailableText = notAvailableTextAppSettingsKey;
             }
 #endif
@@ -51,6 +48,7 @@ namespace XYS.Util
         #endregion
 
         #region 公共静态属性
+        //获取回车换行符
         public static string NewLine
         {
             get
@@ -62,7 +60,7 @@ namespace XYS.Util
 #endif
             }
         }
-
+        //获取应用基本路径
         public static string ApplicationBaseDirectory
         {
             get
@@ -74,6 +72,7 @@ namespace XYS.Util
 #endif
             }
         }
+        //获取程序默认配置文件
         public static string ConfigurationFileLocation
         {
             get
@@ -85,6 +84,7 @@ namespace XYS.Util
 #endif
             }
         }
+        //获取程序集位置
         public static string EntryAssemblyLocation
         {
             get
@@ -111,6 +111,7 @@ namespace XYS.Util
 #endif
             }
         }
+       //获取主机名
         public static string HostName
         {
             get
@@ -125,20 +126,20 @@ namespace XYS.Util
                     }
                     catch (System.Net.Sockets.SocketException)
                     {
-                        ReportLog.Debug(declaringType, "Socket exception occurred while getting the dns hostname. Error Ignored.");
+                        ConsoleInfo.Debug(declaringType, "Socket exception occurred while getting the dns hostname. Error Ignored.");
                     }
                     catch (System.Security.SecurityException)
                     {
                         // We may get a security exception looking up the hostname
                         // You must have Unrestricted DnsPermission to access resource
-                        ReportLog.Debug(declaringType, "Security exception occurred while getting the dns hostname. Error Ignored.");
+                        ConsoleInfo.Debug(declaringType, "Security exception occurred while getting the dns hostname. Error Ignored.");
                     }
                     catch (Exception ex)
                     {
-                        ReportLog.Debug(declaringType, "Some other exception occurred while getting the dns hostname. Error Ignored.", ex);
+                        ConsoleInfo.Debug(declaringType, "Some other exception occurred while getting the dns hostname. Error Ignored.", ex);
                     }
-
                     // Get the NETBIOS machine name of the current machine
+                    //获取当前主机的 netbios名称
                     if (s_hostName == null || s_hostName.Length == 0)
                     {
                         try
@@ -161,13 +162,13 @@ namespace XYS.Util
                     if (s_hostName == null || s_hostName.Length == 0)
                     {
                         s_hostName = s_notAvailableText;
-                        ReportLog.Debug(declaringType, "Could not determine the hostname. Error Ignored. Empty host name will be used");
+                        ConsoleInfo.Debug(declaringType, "Could not determine the hostname. Error Ignored. Empty host name will be used");
                     }
                 }
                 return s_hostName;
             }
         }
-
+        //获取应用程序域的友好名称
         public static string ApplicationFriendlyName
         {
             get
@@ -184,22 +185,22 @@ namespace XYS.Util
                     {
                         // This security exception will occur if the caller does not have 
                         // some undefined set of SecurityPermission flags.
-                        ReportLog.Debug(declaringType, "Security exception while trying to get current domain friendly name. Error Ignored.");
+                        ConsoleInfo.Debug(declaringType, "Security exception while trying to get current domain friendly name. Error Ignored.");
                     }
-                    if (s_appFriendlyName == null || s_appFriendlyName.Length == 0)
+                    if (string.IsNullOrEmpty(s_appFriendlyName))
                     {
                         try
                         {
                             string assemblyLocation = SystemInfo.EntryAssemblyLocation;
-                            s_appFriendlyName = System.IO.Path.GetFileName(assemblyLocation);
+                            s_appFriendlyName = Path.GetFileName(assemblyLocation);
                         }
                         catch (System.Security.SecurityException)
                         {
                             // Caller needs path discovery permission
                         }
                     }
-
-                    if (s_appFriendlyName == null || s_appFriendlyName.Length == 0)
+                    //找不到友好名称
+                    if (string.IsNullOrEmpty(s_appFriendlyName))
                     {
                         s_appFriendlyName = s_notAvailableText;
                     }
@@ -207,86 +208,27 @@ namespace XYS.Util
                 return s_appFriendlyName;
             }
         }
-        /// <summary>
-        /// Get the start time for the current process.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// This is the time at which the log4net library was loaded into the
-        /// AppDomain. Due to reports of a hang in the call to <c>System.Diagnostics.Process.StartTime</c>
-        /// this is not the start time for the current process.
-        /// </para>
-        /// <para>
-        /// The log4net library should be loaded by an application early during its
-        /// startup, therefore this start time should be a good approximation for
-        /// the actual start time.
-        /// </para>
-        /// <para>
-        /// Note that AppDomains may be loaded and unloaded within the
-        /// same process without the process terminating, however this start time
-        /// will be set per AppDomain.
-        /// </para>
-        /// </remarks>
+        //获取当前时间
         public static DateTime ProcessStartTime
         {
             get { return s_processStartTime; }
         }
 
-        /// <summary>
-        /// Text to output when a <c>null</c> is encountered.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// Use this value to indicate a <c>null</c> has been encountered while
-        /// outputting a string representation of an item.
-        /// </para>
-        /// <para>
-        /// The default value is <c>(null)</c>. This value can be overridden by specifying
-        /// a value for the <c>log4net.NullText</c> appSetting in the application's
-        /// .config file.
-        /// </para>
-        /// </remarks>
         public static string NullText
         {
             get { return s_nullText; }
             set { s_nullText = value; }
         }
-
-        /// <summary>
-        /// Text to output when an unsupported feature is requested.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// Use this value when an unsupported feature is requested.
-        /// </para>
-        /// <para>
-        /// The default value is <c>NOT AVAILABLE</c>. This value can be overridden by specifying
-        /// a value for the <c>log4net.NotAvailableText</c> appSetting in the application's
-        /// .config file.
-        /// </para>
-        /// </remarks>
         public static string NotAvailableText
         {
             get { return s_notAvailableText; }
             set { s_notAvailableText = value; }
         }
+        #endregion
 
-        #endregion Public Static Properties
+        #region 公共静态方法
 
-        #region Public Static Methods
-
-        /// <summary>
-        /// Gets the assembly location path for the specified assembly.
-        /// </summary>
-        /// <param name="myAssembly">The assembly to get the location for.</param>
-        /// <returns>The location of the assembly.</returns>
-        /// <remarks>
-        /// <para>
-        /// This method does not guarantee to return the correct path
-        /// to the assembly. If only tries to give an indication as to
-        /// where the assembly was loaded from.
-        /// </para>
-        /// </remarks>
+        //获取特定程序集的位置信息
         public static string AssemblyLocationInfo(Assembly myAssembly)
         {
 #if NETCF
@@ -344,32 +286,12 @@ namespace XYS.Util
             }
 #endif
         }
+        //获取指定类型的包含程序集的全名
         public static string AssemblyQualifiedName(Type type)
         {
             return type.FullName + ", " + type.Assembly.FullName;
         }
-        /// <summary>
-        /// Gets the short name of the <see cref="Assembly" />.
-        /// </summary>
-        /// <param name="myAssembly">The <see cref="Assembly" /> to get the name for.</param>
-        /// <returns>The short name of the <see cref="Assembly" />.</returns>
-        /// <remarks>
-        /// <para>
-        /// The short name of the assembly is the <see cref="Assembly.FullName" /> 
-        /// without the version, culture, or public key. i.e. it is just the 
-        /// assembly's file name without the extension.
-        /// </para>
-        /// <para>
-        /// Use this rather than <c>Assembly.GetName().Name</c> because that
-        /// is not available on the Compact Framework.
-        /// </para>
-        /// <para>
-        /// Because of a FileIOPermission security demand we cannot do
-        /// the obvious Assembly.GetName().Name. We are allowed to get
-        /// the <see cref="Assembly.FullName" /> of the assembly so we 
-        /// start from there and strip out just the assembly name.
-        /// </para>
-        /// </remarks>
+        //程序集的简称
         public static string AssemblyShortName(Assembly myAssembly)
         {
             string name = myAssembly.FullName;
@@ -383,17 +305,7 @@ namespace XYS.Util
             // Doc says '\' is an escape char but has this already been 
             // done by the string loader?
         }
-
-        /// <summary>
-        /// Gets the file name portion of the <see cref="Assembly" />, including the extension.
-        /// </summary>
-        /// <param name="myAssembly">The <see cref="Assembly" /> to get the file name for.</param>
-        /// <returns>The file name of the assembly.</returns>
-        /// <remarks>
-        /// <para>
-        /// Gets the file name portion of the <see cref="Assembly" />, including the extension.
-        /// </para>
-        /// </remarks>
+        //程序集文件名称
         public static string AssemblyFileName(Assembly myAssembly)
         {
 #if NETCF
@@ -419,116 +331,55 @@ namespace XYS.Util
 #endif
         }
 
-        /// <summary>
-        /// Loads the type specified in the type string.
-        /// </summary>
-        /// <param name="relativeType">A sibling type to use to load the type.</param>
-        /// <param name="typeName">The name of the type to load.</param>
-        /// <param name="throwOnError">Flag set to <c>true</c> to throw an exception if the type cannot be loaded.</param>
-        /// <param name="ignoreCase"><c>true</c> to ignore the case of the type name; otherwise, <c>false</c></param>
-        /// <returns>The type loaded or <c>null</c> if it could not be loaded.</returns>
-        /// <remarks>
-        /// <para>
-        /// If the type name is fully qualified, i.e. if contains an assembly name in 
-        /// the type name, the type will be loaded from the system using 
-        /// <see cref="M:Type.GetType(string,bool)"/>.
-        /// </para>
-        /// <para>
-        /// If the type name is not fully qualified, it will be loaded from the assembly
-        /// containing the specified relative type. If the type is not found in the assembly 
-        /// then all the loaded assemblies will be searched for the type.
-        /// </para>
-        /// </remarks>
         public static Type GetTypeFromString(Type relativeType, string typeName, bool throwOnError, bool ignoreCase)
         {
             return GetTypeFromString(relativeType.Assembly, typeName, throwOnError, ignoreCase);
         }
-        /// <summary>
-        /// Loads the type specified in the type string.
-        /// </summary>
-        /// <param name="typeName">The name of the type to load.</param>
-        /// <param name="throwOnError">Flag set to <c>true</c> to throw an exception if the type cannot be loaded.</param>
-        /// <param name="ignoreCase"><c>true</c> to ignore the case of the type name; otherwise, <c>false</c></param>
-        /// <returns>The type loaded or <c>null</c> if it could not be loaded.</returns>		
-        /// <remarks>
-        /// <para>
-        /// If the type name is fully qualified, i.e. if contains an assembly name in 
-        /// the type name, the type will be loaded from the system using 
-        /// <see cref="M:Type.GetType(string,bool)"/>.
-        /// </para>
-        /// <para>
-        /// If the type name is not fully qualified it will be loaded from the
-        /// assembly that is directly calling this method. If the type is not found 
-        /// in the assembly then all the loaded assemblies will be searched for the type.
-        /// </para>
-        /// </remarks>
         public static Type GetTypeFromString(string typeName, bool throwOnError, bool ignoreCase)
         {
             return GetTypeFromString(Assembly.GetCallingAssembly(), typeName, throwOnError, ignoreCase);
         }
-
-        /// <summary>
-        /// Loads the type specified in the type string.
-        /// </summary>
-        /// <param name="relativeAssembly">An assembly to load the type from.</param>
-        /// <param name="typeName">The name of the type to load.</param>
-        /// <param name="throwOnError">Flag set to <c>true</c> to throw an exception if the type cannot be loaded.</param>
-        /// <param name="ignoreCase"><c>true</c> to ignore the case of the type name; otherwise, <c>false</c></param>
-        /// <returns>The type loaded or <c>null</c> if it could not be loaded.</returns>
-        /// <remarks>
-        /// <para>
-        /// If the type name is fully qualified, i.e. if contains an assembly name in 
-        /// the type name, the type will be loaded from the system using 
-        /// <see cref="M:Type.GetType(string,bool)"/>.
-        /// </para>
-        /// <para>
-        /// If the type name is not fully qualified it will be loaded from the specified
-        /// assembly. If the type is not found in the assembly then all the loaded assemblies 
-        /// will be searched for the type.
-        /// </para>
-        /// </remarks>
         public static Type GetTypeFromString(Assembly relativeAssembly, string typeName, bool throwOnError, bool ignoreCase)
         {
             // typeName 不包含程序集名称
             if (typeName.IndexOf(',') == -1)
             {
-                ReportLog.Debug(declaringType, "SystemInfo: Loading type [" + typeName + "] from assembly [" + relativeAssembly.FullName + "]");
+                ConsoleInfo.Debug(declaringType, "Loading type [" + typeName + "] from assembly [" + relativeAssembly.FullName + "]");
 #if NETCF
 				return relativeAssembly.GetType(typeName, throwOnError);
 #else
-                // Attempt to lookup the type from the relativeAssembly
+                // 尝试从调用者所在程序集加载类型
                 Type type = relativeAssembly.GetType(typeName, false, ignoreCase);
                 if (type != null)
                 {
                     // Found type in relative assembly
-                    ReportLog.Debug(declaringType, "SystemInfo: Loaded type [" + typeName + "] from assembly [" + relativeAssembly.FullName + "]");
+                    ConsoleInfo.Debug(declaringType, "Loaded type [" + typeName + "] from assembly [" + relativeAssembly.FullName + "]");
                     return type;
                 }
                 Assembly[] loadedAssemblies = null;
                 try
                 {
+                    //获取加载的程序集
                     loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
                 }
                 catch (System.Security.SecurityException)
                 {
                     // Insufficient permissions to get the list of loaded assemblies
                 }
-
                 if (loadedAssemblies != null)
                 {
-                    // Search the loaded assemblies for the type
+                    //从加载的程序集中加载类型
                     foreach (Assembly assembly in loadedAssemblies)
                     {
                         type = assembly.GetType(typeName, false, ignoreCase);
                         if (type != null)
                         {
                             // Found type in loaded assembly
-                            ReportLog.Debug(declaringType, "SystemInfo:Loaded type [" + typeName + "] from assembly [" + assembly.FullName + "] by searching loaded assemblies.");
+                            ConsoleInfo.Debug(declaringType, "Loaded type [" + typeName + "] from assembly [" + assembly.FullName + "] by searching loaded assemblies.");
                             return type;
                         }
                     }
                 }
-
                 // Didn't find the type
                 if (throwOnError)
                 {
@@ -540,7 +391,7 @@ namespace XYS.Util
             else
             {
                 //包含程序集名称
-                ReportLog.Debug(declaringType, "SystemInfo: Loading type [" + typeName + "] from global Type");
+                ConsoleInfo.Debug(declaringType, "Loading type [" + typeName + "] from global Type");
 
 #if NETCF
 				// In NETCF 2 and 3 arg versions seem to behave differently
@@ -551,7 +402,6 @@ namespace XYS.Util
 #endif
             }
         }
-
         public static Guid NewGuid()
         {
 #if NETCF_1_0
@@ -560,26 +410,6 @@ namespace XYS.Util
             return Guid.NewGuid();
 #endif
         }
-
-        /// <summary>
-        /// Create an <see cref="ArgumentOutOfRangeException"/>
-        /// </summary>
-        /// <param name="parameterName">The name of the parameter that caused the exception</param>
-        /// <param name="actualValue">The value of the argument that causes this exception</param>
-        /// <param name="message">The message that describes the error</param>
-        /// <returns>the ArgumentOutOfRangeException object</returns>
-        /// <remarks>
-        /// <para>
-        /// Create a new instance of the <see cref="ArgumentOutOfRangeException"/> class 
-        /// with a specified error message, the parameter name, and the value 
-        /// of the argument.
-        /// </para>
-        /// <para>
-        /// The Compact Framework does not support the 3 parameter constructor for the
-        /// <see cref="ArgumentOutOfRangeException"/> type. This method provides an
-        /// implementation that works for all platforms.
-        /// </para>
-        /// </remarks>
         public static ArgumentOutOfRangeException CreateArgumentOutOfRangeException(string parameterName, object actualValue, string message)
         {
 #if NETCF_1_0
@@ -591,18 +421,6 @@ namespace XYS.Util
 #endif
         }
 
-        /// <summary>
-        /// Parse a string into an <see cref="Int32"/> value
-        /// </summary>
-        /// <param name="s">the string to parse</param>
-        /// <param name="val">out param where the parsed value is placed</param>
-        /// <returns><c>true</c> if the string was able to be parsed into an integer</returns>
-        /// <remarks>
-        /// <para>
-        /// Attempts to parse the string into an integer. If the string cannot
-        /// be parsed then this method returns <c>false</c>. The method does not throw an exception.
-        /// </para>
-        /// </remarks>
         public static bool TryParse(string s, out int val)
         {
 #if NETCF
@@ -615,7 +433,6 @@ namespace XYS.Util
 			catch
 			{
 			}
-
 			return false;
 #else
             // 初始化 out 参数
@@ -636,19 +453,6 @@ namespace XYS.Util
             return false;
 #endif
         }
-
-        /// <summary>
-        /// Parse a string into an <see cref="Int64"/> value
-        /// </summary>
-        /// <param name="s">the string to parse</param>
-        /// <param name="val">out param where the parsed value is placed</param>
-        /// <returns><c>true</c> if the string was able to be parsed into an integer</returns>
-        /// <remarks>
-        /// <para>
-        /// Attempts to parse the string into an integer. If the string cannot
-        /// be parsed then this method returns <c>false</c>. The method does not throw an exception.
-        /// </para>
-        /// </remarks>
         public static bool TryParse(string s, out long val)
         {
 #if NETCF
@@ -661,7 +465,6 @@ namespace XYS.Util
 			catch
 			{
 			}
-
 			return false;
 #else
             // 初始化 out 参数
@@ -682,19 +485,6 @@ namespace XYS.Util
             return false;
 #endif
         }
-
-        /// <summary>
-        /// Parse a string into an <see cref="Int16"/> value
-        /// </summary>
-        /// <param name="s">the string to parse</param>
-        /// <param name="val">out param where the parsed value is placed</param>
-        /// <returns><c>true</c> if the string was able to be parsed into an integer</returns>
-        /// <remarks>
-        /// <para>
-        /// Attempts to parse the string into an integer. If the string cannot
-        /// be parsed then this method returns <c>false</c>. The method does not throw an exception.
-        /// </para>
-        /// </remarks>
         public static bool TryParse(string s, out short val)
         {
 #if NETCF
@@ -728,17 +518,21 @@ namespace XYS.Util
             return false;
 #endif
         }
-
-        /// <summary>
-        /// Lookup an application setting
-        /// </summary>
-        /// <param name="key">the application settings key to lookup</param>
-        /// <returns>the value for the key, or <c>null</c></returns>
-        /// <remarks>
-        /// <para>
-        /// Configuration APIs are not supported under the Compact Framework
-        /// </para>
-        /// </remarks>
+        public static bool ToBoolean(string argValue, bool defaultValue)
+        {
+            if (argValue != null && argValue.Length > 0)
+            {
+                try
+                {
+                    return bool.Parse(argValue);
+                }
+                catch (Exception e)
+                {
+                    ConsoleInfo.Error(declaringType, "[" + argValue + "] is not in proper bool", e);
+                }
+            }
+            return defaultValue;
+        }
         public static string GetAppSetting(string key)
         {
             try
@@ -749,33 +543,15 @@ namespace XYS.Util
 				return ConfigurationManager.AppSettings[key];
 #else
                 return ConfigurationManager.AppSettings[key];
-                //return ConfigurationSettings.AppSettings[key];
 #endif
             }
             catch (Exception ex)
             {
                 // If an exception is thrown here then it looks like the config file does not parse correctly.
-                ReportLog.Error(declaringType, "SystemInfo:Exception while reading ConfigurationSettings. Check your .config file is well formed XML.", ex);
+                ConsoleInfo.Error(declaringType, "Exception while reading ConfigurationSettings. Check your .config file is well formed XML.", ex);
             }
             return null;
         }
-
-        /// <summary>
-        /// Convert a path into a fully qualified local file path.
-        /// </summary>
-        /// <param name="path">The path to convert.</param>
-        /// <returns>The fully qualified path.</returns>
-        /// <remarks>
-        /// <para>
-        /// Converts the path specified to a fully
-        /// qualified path. If the path is relative it is
-        /// taken as relative from the application base 
-        /// directory.
-        /// </para>
-        /// <para>
-        /// The path specified must be a local file path, a URI is not supported.
-        /// </para>
-        /// </remarks>
         public static string ConvertToFullPath(string path)
         {
             if (path == null)
@@ -800,7 +576,6 @@ namespace XYS.Util
             {
                 // Ignore URI exceptions & SecurityExceptions from SystemInfo.ApplicationBaseDirectory
             }
-
             if (baseDirectory != null && baseDirectory.Length > 0)
             {
                 // Note that Path.Combine will return the second path if it is rooted
@@ -808,56 +583,56 @@ namespace XYS.Util
             }
             return Path.GetFullPath(path);
         }
-        public static string GetNormalImageFilePath()
-        {
-            try
-            {
-                string applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
-                string filePath = Path.Combine(applicationBaseDirectory, "normal");
-                if (!Directory.Exists(filePath))
-                {
-                    Directory.CreateDirectory(filePath);
-                }
-                return filePath;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public static string GetPrintModelFilePath()
-        {
-            try
-            {
-                string applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
-                string filePath = Path.Combine(applicationBaseDirectory, "model");
-                if (!Directory.Exists(filePath))
-                {
-                    Directory.CreateDirectory(filePath);
-                }
-                return filePath;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-        public static byte[] ReadImageFile(string filePath)
-        {
-            try
-            {
-                FileStream fs = File.OpenRead(filePath); //OpenRead
-                int filelength = 0;
-                filelength = (int)fs.Length; //获得文件长度 
-                Byte[] image = new Byte[filelength]; //建立一个字节数组 
-                fs.Read(image, 0, filelength); //按字节流读取 
-                return image;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+        //public static string GetNormalImageFilePath()
+        //{
+        //    try
+        //    {
+        //        string applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
+        //        string filePath = Path.Combine(applicationBaseDirectory, "normal");
+        //        if (!Directory.Exists(filePath))
+        //        {
+        //            Directory.CreateDirectory(filePath);
+        //        }
+        //        return filePath;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+        //public static string GetPrintModelFilePath()
+        //{
+        //    try
+        //    {
+        //        string applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
+        //        string filePath = Path.Combine(applicationBaseDirectory, "model");
+        //        if (!Directory.Exists(filePath))
+        //        {
+        //            Directory.CreateDirectory(filePath);
+        //        }
+        //        return filePath;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
+        //public static byte[] ReadImageFile(string filePath)
+        //{
+        //    try
+        //    {
+        //        FileStream fs = File.OpenRead(filePath); //OpenRead
+        //        int filelength = 0;
+        //        filelength = (int)fs.Length; //获得文件长度 
+        //        Byte[] image = new Byte[filelength]; //建立一个字节数组 
+        //        fs.Read(image, 0, filelength); //按字节流读取 
+        //        return image;
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        throw ex;
+        //    }
+        //}
         public static bool IsFileExist(string filePath)
         {
             return File.Exists(filePath);
@@ -868,16 +643,19 @@ namespace XYS.Util
         }
         public static bool DeleteFile(string filePath)
         {
-            try
+            if (IsFileExist(filePath))
             {
-                File.Delete(filePath);
-                return true;
+                try
+                {
+                    File.Delete(filePath);
+                    return true;
+                }
+                catch (Exception ex)
+                {
+                    ConsoleInfo.Warn(declaringType, "deleting the " + filePath + " file ocurre exception:" + ex.Message);
+                }
             }
-            catch (Exception ex)
-            {
-                ReportLog.Warn(declaringType, "SystemInfo:deleting the " + filePath + " file ocurre exception:" + ex.Message);
-                return false;
-            }
+            return false;
         }
         public static string GetFileFullName(string filePath, string fileName)
         {
@@ -889,38 +667,35 @@ namespace XYS.Util
         }
         public static string FormatDateTime(DateTime dt, string formatter, string emptyLabel)
         {
+            string result = null;
             if (dt == DateTime.MinValue)
             {
-                return emptyLabel;
+                result = emptyLabel;
             }
             else
             {
-                return dt.ToString(formatter);
+                try
+                {
+                    result = dt.ToString(formatter);
+                }
+                catch (FormatException fe)
+                {
+                    ConsoleInfo.Warn(declaringType, "formatting datetime occuring exception", fe);
+                }
             }
+            return result;
         }
-        /// <summary>
-        /// Creates a new case-insensitive instance of the <see cref="Hashtable"/> class with the default initial capacity. 
-        /// </summary>
-        /// <returns>A new case-insensitive instance of the <see cref="Hashtable"/> class with the default initial capacity</returns>
-        /// <remarks>
-        /// <para>
-        /// The new Hashtable instance uses the default load factor, the CaseInsensitiveHashCodeProvider, and the CaseInsensitiveComparer.
-        /// </para>
-        /// </remarks>
-        public static Hashtable CreateCaseInsensitiveHashtable()
+        public static Hashtable CreateCaseInsensitiveHashtable(int capacity)
         {
-#if NETCF_1_0
-			return new Hashtable(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default);
-#elif NETCF_2_0 || NET_2_0 || MONO_2_0
-			return new Hashtable(StringComparer.OrdinalIgnoreCase);
-#else
-            return System.Collections.Specialized.CollectionsUtil.CreateCaseInsensitiveHashtable();
-#endif
+            if (capacity > 0)
+            {
+                return new Hashtable(capacity, new MyCaseInsensitiveComparer());
+            }
+            return new Hashtable(new MyCaseInsensitiveComparer());
         }
-        #endregion Public Static Methods
+        #endregion
 
-        #region Private Static Methods
-
+        #region 私有静态方法
 #if NETCF
 		private static string NativeEntryAssemblyLocation 
 		{
@@ -957,60 +732,49 @@ namespace XYS.Util
 			Int32 cch);
 
 #endif
+        #endregion
 
-        #endregion Private Static Methods
-
-        #region Public Static Fields
-
-        /// <summary>
-        /// Gets an empty array of types.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// The <c>Type.EmptyTypes</c> field is not available on
-        /// the .NET Compact Framework 1.0.
-        /// </para>
-        /// </remarks>
+        #region 公共静态字段
         public static readonly Type[] EmptyTypes = new Type[0];
+        #endregion 
 
-        #endregion Public Static Fields
-
-        #region Private Static Fields
-
-        /// <summary>
-        /// The fully qualified type of the SystemInfo class.
-        /// </summary>
-        /// <remarks>
-        /// Used by the internal logger to record the Type of the
-        /// log message.
-        /// </remarks>
+        #region 私有静态字段
         private readonly static Type declaringType = typeof(SystemInfo);
-
-        /// <summary>
-        /// Cache the host name for the current machine
-        /// </summary>
         private static string s_hostName;
-
-        /// <summary>
-        /// Cache the application friendly name
-        /// </summary>
         private static string s_appFriendlyName;
-
-        /// <summary>
-        /// Text to output when a <c>null</c> is encountered.
-        /// </summary>
         private static string s_nullText;
-
-        /// <summary>
-        /// Text to output when an unsupported feature is requested.
-        /// </summary>
         private static string s_notAvailableText;
-
-        /// <summary>
-        /// Start time for the current process.
-        /// </summary>
         private static DateTime s_processStartTime = DateTime.Now;
+        #endregion
 
+        #region Hashtable 帮助类
+        public class MyCaseInsensitiveComparer : IEqualityComparer
+        {
+            private CaseInsensitiveComparer caseInsensitiveComparer;
+            public MyCaseInsensitiveComparer()
+            {
+                this.caseInsensitiveComparer = CaseInsensitiveComparer.DefaultInvariant;
+            }
+            public MyCaseInsensitiveComparer(CultureInfo culture)
+            {
+                this.caseInsensitiveComparer = new CaseInsensitiveComparer(culture);
+            }
+            public bool Equals(object x, object y)
+            {
+                if (this.caseInsensitiveComparer.Compare(x, y) == 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            public int GetHashCode(object obj)
+            {
+                return obj.ToString().ToLower().GetHashCode();
+            }
+        }
         #endregion
 
         #region Compact Framework Helper Classes

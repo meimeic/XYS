@@ -34,7 +34,7 @@ namespace XYS.Lis.Handler
             bool result = false;
             if (IsReport(reportElement))
             {
-                result = OperateReport(reportElement);
+                result = OperateReport((ReportReportElement)reportElement);
             }
             else
             {
@@ -85,7 +85,7 @@ namespace XYS.Lis.Handler
 
         #region 抽象方法(处理元素)
         protected abstract bool OperateElement(ILisReportElement element);
-        protected abstract bool OperateReport(ILisReportElement report);
+        protected abstract bool OperateReport(ReportReportElement report);
         #endregion
 
         #region 受保护的虚方法
@@ -134,6 +134,10 @@ namespace XYS.Lis.Handler
                 return true;
             }
             return false;
+        }
+        private bool IsReport(Type type)
+        {
+            return typeof(ReportReportElement).Equals(type);
         }
         private bool IsReport(ILisReportElement reportElement)
         {

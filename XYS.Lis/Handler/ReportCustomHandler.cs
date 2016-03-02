@@ -2,8 +2,8 @@
 using System.Reflection;
 using System.Collections.Generic;
 
-using XYS.Lis.Model;
 using XYS.Lis.Core;
+using XYS.Lis.Model;
 namespace XYS.Lis.Handler
 {
     public class ReportCustomHandler : ReportHandlerSkeleton
@@ -29,12 +29,14 @@ namespace XYS.Lis.Handler
             ReportCustomElement rce = element as ReportCustomElement;
             if (rce != null)
             {
+                //ReportCustomElement 处理
                 return true;
             }
             return false;
         }
         protected override bool OperateReport(ReportReportElement report)
         {
+            //
             return OperateCustom(report);
         }
         #endregion

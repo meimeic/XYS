@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using XYS.Lis.Core;
 using XYS.Common;
 namespace XYS.Lis.Fill
