@@ -15,7 +15,7 @@ namespace XYS.Report.Fill
     public interface IReportFiller
     {
         string FillerName { get; }
-        void Fill(ILisReportElement reportElement, ReportKey RK);
-        void Fill(List<ILisReportElement> reportElementList, ReportKey RK, Type type);
+        void Fill(ILisReportElement reportElement, ReporterKey RK);
+        void Fill(List<ILisReportElement> reportElementList, ReporterKey RK, Type type);
     }
 }

@@ -10,7 +10,7 @@ namespace XYS.Report.Core
     {
         IReporterRepository Repository { get; }
         #region
-        void FillReport(IReportElement report, ReportKey RK);
+        void FillReport(IReportElement report, ReportPK RK);
         #endregion
         
         //报告元素处理

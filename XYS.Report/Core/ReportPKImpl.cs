@@ -1,10 +1,11 @@
 ﻿using System;
-using XYS.Util;
+
+using XYS.Common;
 namespace XYS.Report.Core
 {
-    public class ReportFKImpl : ReportKey
+    public class ReportPKImpl : ReportPK
     {
-        public ReportFKImpl()
+        public ReportPKImpl()
             : base()
         {
         }

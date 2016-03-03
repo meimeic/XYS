@@ -13,7 +13,7 @@ namespace XYS.Report.Fill
     public class ReportFillByDB : ReportFillSkeleton
     {
         #region 变量
-        private ReportCommonDAL m_reportDAL;
+        private LisReportCommonDAL m_reportDAL;
         private static readonly string m_FillerName = "DBFiller";
         #endregion
 
@@ -25,18 +25,18 @@ namespace XYS.Report.Fill
         public ReportFillByDB(string name)
             : base(name)
         {
-            this.m_reportDAL = new ReportCommonDAL();
+            this.m_reportDAL = new LisReportCommonDAL();
         }
         #endregion
 
         #region 实例属性
-        public virtual ReportCommonDAL ReportDAL
+        public virtual LisReportCommonDAL ReportDAL
         {
             get
             {
                 if (this.m_reportDAL == null)
                 {
-                    this.m_reportDAL = new ReportCommonDAL();
+                    this.m_reportDAL = new LisReportCommonDAL();
                 }
                 return this.m_reportDAL;
             }
@@ -45,7 +45,7 @@ namespace XYS.Report.Fill
         #endregion
 
         #region 实现父类抽象方法
-        protected override void FillElement(ILisReportElement reportElement, ReportKey RK)
+        protected override void FillElement(ILisReportElement reportElement, ReporterKey RK)
         {
             string sql = GenderSql(reportElement, RK);
             if (sql != null)
@@ -53,7 +53,7 @@ namespace XYS.Report.Fill
                 this.D_FillElement(reportElement, sql);
             }
         }
-        protected override void FillElements(List<ILisReportElement> reportElementList, ReportKey RK, Type type)
+        protected override void FillElements(List<ILisReportElement> reportElementList, ReporterKey RK, Type type)
         {
             string sql = GenderSql(type, RK);
             this.D_FillElements(reportElementList, type, sql);
@@ -72,7 +72,7 @@ namespace XYS.Report.Fill
         #endregion
 
         #region 生成sql语句
-        protected string GenderSql(ILisReportElement element, ReportKey RK)
+        protected string GenderSql(ILisReportElement element, ReporterKey RK)
         {
             string where = GenderWhere(RK);
             AbstractReportElement e = element as AbstractReportElement;
@@ -87,7 +87,7 @@ namespace XYS.Report.Fill
             }
             return null;
         }
-        protected string GenderSql(Type type, ReportKey RK)
+        protected string GenderSql(Type type, ReporterKey RK)
         {
             return GenderPreSQL(type) + GenderWhere(RK);
         }
@@ -144,7 +144,7 @@ namespace XYS.Report.Fill
             sb.Remove(sb.Length - 5, 5);
             return sb.ToString();
         }
-        protected string GenderWhere(ReportKey RK)
+        protected string GenderWhere(ReporterKey RK)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(" where ");

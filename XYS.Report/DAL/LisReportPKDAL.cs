@@ -5,16 +5,16 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Report;
-using XYS.Util;
-
+using XYS.Common;
+using XYS.Report.Core;
 namespace XYS.Report.DAL
 {
-    public class LisReporterKeyDAL
+    public class LisReportPKDAL:IReportPKDAL
     {
-        public List<ReportKey> GetReportKey(LisRequire require)
+        public List<ReportPK> GetReportKey(Require require)
         {
-            ReportKey temp;
-            List<ReportKey> result = new List<ReportKey>();
+            ReportPK temp;
+            List<ReportPK> result = new List<ReportPK>();
             string sql = GetSQLString(require);
             DataTable dt = GetDataTable(sql);
             if (dt.Rows.Count > 0)
@@ -27,7 +27,7 @@ namespace XYS.Report.DAL
             }
             return result;
         }
-        protected string GetSQLString(LisRequire require)
+        protected string GetSQLString(Require require)
         {
             StringBuilder sb = new StringBuilder();
             string temp;
@@ -122,10 +122,10 @@ namespace XYS.Report.DAL
                 return "";
             }
         }
-        protected ReportKey SetReportKey(DataRow dr)
+        protected ReportPK SetReportKey(DataRow dr)
         {
             KeyColumn temp;
-            LisDBKeyImpl key = new LisDBKeyImpl();
+            ReportPKImpl key = new ReportPKImpl();
             foreach (DataColumn dc in dr.Table.Columns)
             {
                 temp = new KeyColumn(dc.ColumnName, dr[dc]);

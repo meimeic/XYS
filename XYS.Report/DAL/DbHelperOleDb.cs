@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Specialized;
 using System.Data;
+using System.Collections;
 using System.Data.OleDb;
 using System.Configuration;
-
+using System.Collections.Specialized;
 namespace XYS.Report.DAL
 {
     /// <summary>
@@ -15,11 +14,14 @@ namespace XYS.Report.DAL
     {
         //数据库连接字符串(web.config来配置)，可以动态更改connectionString支持多数据库.		
         public static string connectionString = ConfigurationManager.ConnectionStrings["LisMSSQLConnectionString"].ConnectionString.ToString();
+        
+        #region
         public DbHelperOleDb()
         {
         }
-        #region 公用方法
+        #endregion
 
+        #region 公用方法
         public static int GetMaxID(string FieldName, string TableName)
         {
             string strsql = "select max(" + FieldName + ")+1 from " + TableName;
@@ -75,12 +77,9 @@ namespace XYS.Report.DAL
                 return true;
             }
         }
-
         #endregion
 
-
         #region  执行简单SQL语句
-
         /// <summary>
         /// 执行SQL语句，返回影响的记录数
         /// </summary>
@@ -282,9 +281,7 @@ namespace XYS.Report.DAL
 
         #endregion
 
-
         #region 执行带参数的SQL语句
-
         /// <summary>
         /// 执行SQL语句，返回影响的记录数
         /// </summary>

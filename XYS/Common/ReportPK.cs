@@ -1,18 +1,18 @@
 ﻿using System.Collections.Generic;
 namespace XYS.Common
 {
-    public class ReportKey
+    public class ReportPK
     {
         #region 私有只读字段
         private readonly HashSet<KeyColumn> m_KeySet;
         #endregion
 
         #region 公共构造函数
-        protected ReportKey()
+        protected ReportPK()
         {
             this.m_KeySet = new HashSet<KeyColumn>();
         }
-        protected ReportKey(HashSet<KeyColumn> ketSet)
+        protected ReportPK(HashSet<KeyColumn> ketSet)
         {
             this.m_KeySet = ketSet;
         }
@@ -30,7 +30,7 @@ namespace XYS.Common
         #endregion
 
         #region 方法
-        public ReportKey AddColumn(KeyColumn key)
+        public ReportPK AddColumn(KeyColumn key)
         {
             this.m_KeySet.Add(key);
             return this;

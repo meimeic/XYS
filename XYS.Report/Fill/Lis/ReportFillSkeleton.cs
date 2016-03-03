@@ -30,7 +30,7 @@ namespace XYS.Report.Fill
         {
             get { return this.m_fillerName; }
         }
-        public virtual void Fill(ILisReportElement reportElement, ReportKey RK)
+        public virtual void Fill(ILisReportElement reportElement, ReporterKey RK)
         {
             if (IsFill(reportElement))
             {
@@ -50,7 +50,7 @@ namespace XYS.Report.Fill
                 }
             }
         }
-        public virtual void Fill(List<ILisReportElement> reportElementList, ReportKey RK, Type type)
+        public virtual void Fill(List<ILisReportElement> reportElementList, ReporterKey RK, Type type)
         {
             if (IsFill(type))
             {
@@ -61,7 +61,7 @@ namespace XYS.Report.Fill
         #endregion
 
         #region 内部报告处理逻辑
-        protected virtual void FillReport(ReportReportElement rre, ReportKey RK)
+        protected virtual void FillReport(ReportReportElement rre, ReporterKey RK)
         {
             //默认的报告项
             FillElement(rre.ReportExam, RK);
@@ -84,12 +84,12 @@ namespace XYS.Report.Fill
         #endregion
 
         #region 抽象方法
-        protected abstract void FillElement(ILisReportElement reportElement, ReportKey RK);
-        protected abstract void FillElements(List<ILisReportElement> reportElementList, ReportKey RK, Type type);
+        protected abstract void FillElement(ILisReportElement reportElement, ReporterKey RK);
+        protected abstract void FillElements(List<ILisReportElement> reportElementList, ReporterKey RK, Type type);
         #endregion
 
         #region 辅助方法
-        protected virtual int GetSectionNo(ReportKey RK)
+        protected virtual int GetSectionNo(ReporterKey RK)
         {
             int sectionNo = 0;
             foreach (KeyColumn c in RK.KeySet)
@@ -117,7 +117,7 @@ namespace XYS.Report.Fill
             }
             return this.m_section2InsideTypeMap[sectionNo] as List<Type>;
         }
-        protected virtual List<Type> GetAvailableInsideElements(ReportKey key)
+        protected virtual List<Type> GetAvailableInsideElements(ReporterKey key)
         {
             int sectionNo = GetSectionNo(key);
             return GetAvailableInsideElements(sectionNo);

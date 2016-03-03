@@ -50,7 +50,7 @@
     <Compile Include="Common\IOptionHandler.cs" />
     <Compile Include="Common\IReportRepository.cs" />
     <Compile Include="Common\KeyColumn.cs" />
-    <Compile Include="Common\ReportKey.cs" />
+    <Compile Include="Common\ReportPK.cs" />
     <Compile Include="Common\SearchRequire.cs" />
     <Compile Include="Common\TableAttribute.cs" />
     <Compile Include="Common\ColumnAttribute.cs" />

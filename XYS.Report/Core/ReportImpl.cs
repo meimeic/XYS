@@ -11,19 +11,19 @@ namespace XYS.Report.Core
     public class ReportImpl : ReporterWrapperImpl, IReport
     {
         #region
-        private LisReporterKeyDAL m_reportKeyDAL;
+        private LisReportPKDAL m_reportKeyDAL;
         #endregion
 
         #region 构造函数
         public ReportImpl(IReporter reporter)
             : base(reporter)
         {
-            this.m_reportKeyDAL = new LisReporterKeyDAL();
+            this.m_reportKeyDAL = new LisReportPKDAL();
         }
         #endregion
 
         #region 属性
-        public LisReporterKeyDAL ReportKeyDAL
+        public LisReportPKDAL ReportKeyDAL
         {
             get { return this.m_reportKeyDAL; }
             set { this.m_reportKeyDAL = value; }
@@ -31,22 +31,22 @@ namespace XYS.Report.Core
         #endregion
 
         #region 实现IReport接口
-        public bool InitReport(ReportReportElement report, ReportKey key)
+        public bool InitReport(ReportReportElement report, ReporterKey key)
         {
             this.Reporter.FillReport(report, key);
             return this.Reporter.OptionReport(report);
         }
         public bool InitReport(ReportReportElement report, LisRequire require)
         {
-            ReportKey RK = GetReportKey(require);
+            ReporterKey RK = GetReportKey(require);
             return InitReport(report, RK);
         }
-        public bool InitReports(List<ILisReportElement> reportList, List<ReportKey> keyList)
+        public bool InitReports(List<ILisReportElement> reportList, List<ReporterKey> keyList)
         {
             if (reportList != null)
             {
                 ReportReportElement rre = null;
-                foreach (ReportKey rk in keyList)
+                foreach (ReporterKey rk in keyList)
                 {
                     rre = new ReportReportElement();
                     this.Reporter.FillReport(rre, rk);
@@ -59,19 +59,19 @@ namespace XYS.Report.Core
 
         public bool InitReports(List<ILisReportElement> exportList, LisRequire require)
         {
-            List<ReportKey> keyList = GetReportKeyList(require);
+            List<ReporterKey> keyList = GetReportKeyList(require);
             return InitReports(exportList, keyList);
         }
         #endregion
 
         #region 获取报告键
-        protected virtual List<ReportKey> GetReportKeyList(LisRequire require)
+        protected virtual List<ReporterKey> GetReportKeyList(LisRequire require)
         {
             return this.ReportKeyDAL.GetReportKey(require);
         }
-        protected virtual ReportKey GetReportKey(LisRequire require)
+        protected virtual ReporterKey GetReportKey(LisRequire require)
         {
-            List<ReportKey> result = this.ReportKeyDAL.GetReportKey(require);
+            List<ReporterKey> result = this.ReportKeyDAL.GetReportKey(require);
             if (result.Count > 0)
             {
                 return result[0];

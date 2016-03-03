@@ -5,13 +5,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Report.Core;
 using XYS.Report.Model;
+using XYS.Report.Model.Lis;
 namespace XYS.Report.DAL
 {
-    public class ReportCommonDAL : IReportDAL
+    public class LisReportCommonDAL : IReportDAL
     {
-        public ReportCommonDAL()
+        public LisReportCommonDAL()
         { }
         public void Fill(ILisReportElement element, string sql)
         {
