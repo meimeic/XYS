@@ -17,7 +17,7 @@ namespace XYS.Lis.Core
         }
         public ReporterKey(string callerName, string strategyName)
         {
-            if (!string.IsNullOrEmpty(callerName)&&!string.IsNullOrEmpty(strategyName))
+            if (!string.IsNullOrEmpty(callerName) && !string.IsNullOrEmpty(strategyName))
             {
                 this.m_callerName = string.Intern(callerName);
                 this.m_strategyName = string.Intern(strategyName);
@@ -58,11 +58,10 @@ namespace XYS.Lis.Core
             ReporterKey rk = obj as ReporterKey;
             if (rk != null)
             {
-                return (((object)m_callerName) == ((object)rk.m_callerName)&&((object)m_strategyName)==((object)rk.m_strategyName));
+                return (((object)m_callerName) == ((object)rk.m_callerName) && ((object)m_strategyName) == ((object)rk.m_strategyName));
             }
             return false;
         }
         #endregion
-
     }
 }

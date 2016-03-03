@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using XYS.Lis.Core;
 using XYS.Common;
-using XYS.Lis.Export.Model;
+using XYS.Lis.Model;
+
 namespace XYS.Lis
 {
     public interface IReport
@@ -11,16 +13,14 @@ namespace XYS.Lis
         //void InitReport(LisSearchRequire require, ReportReportElement report);
         //void InitReports(LisSearchRequire require, List<IReportElement> reportList);
         //void InitReports(List<ReportKey> keyList, List<IReportElement> reportList);
-
         //bool OperateReport(ReportReportElement report);
         //bool OperateReport(List<IReportElement> reportList);
-
         //void HandleReport(LisSearchRequire require, ReportReportElement report);
         //void HandleReports(LisSearchRequire require, List<IReportElement> reportList);
         //void HandleReports(List<ReportKey> keyList, List<IReportElement> reportList);
-        void InitReport(ReportReport export, ReportKey key);
-        void InitReport(ReportReport export, LisRequire require);
-        void InitReports(List<ReportReport> exportList, List<ReportKey> keyList);
-        void InitReports(List<ReportReport> exportList, LisRequire require);
+        bool InitReport(ReportReportElement report, ReportKey key);
+        bool InitReport(ReportReportElement report, LisRequire require);
+        bool InitReports(List<ILisReportElement> exportList, List<ReportKey> keyList);
+        bool InitReports(List<ILisReportElement> exportList, LisRequire require);
     }
 }

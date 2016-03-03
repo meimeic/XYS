@@ -2,9 +2,9 @@
 using System.Text;
 using System.Reflection;
 
+using XYS.Util;
 using XYS.Common;
 using XYS.Lis.Model;
-using XYS.Lis.Util;
 namespace XYS.Lis.Core
 {
     public class ElementType
@@ -27,7 +27,7 @@ namespace XYS.Lis.Core
 
         #region 构造函数
         public ElementType(string typeName)
-            : this(null, typeName,null)
+            : this(null, typeName, null)
         {
         }
         public ElementType(string name, string typeName, string exportTypeName)
@@ -40,10 +40,10 @@ namespace XYS.Lis.Core
             }
         }
         public ElementType(Type type)
-            : this(null, type,null)
+            : this(null, type, null)
         {
         }
-        public ElementType(string name, Type type,Type exportType)
+        public ElementType(string name, Type type, Type exportType)
         {
             this.m_type = type;
             this.m_name = name;
@@ -77,56 +77,56 @@ namespace XYS.Lis.Core
         }
         #endregion
 
-        #region
-        public string GenderSQL(Type type)
-        {
-            if (IsTable(type))
-            {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("select ");
-                PropertyInfo[] props = type.GetProperties();
-                foreach (PropertyInfo prop in props)
-                {
-                    if (IsColumn(prop))
-                    {
-                        sb.Append(prop.Name);
-                        sb.Append(',');
-                    }
-                }
-                sb.Remove(sb.Length - 1, 1);
-                sb.Append(" from ");
-                sb.Append(type.Name);
-                return sb.ToString();
-            }
-            else
-            {
-                return null;
-            }
-        }
-        private bool IsTable(Type type)
-        {
-             object[] attrs = type.GetCustomAttributes(typeof(TableAttribute), true);
-             if (attrs != null && attrs.Length > 0)
-             {
-                 return true;
-             }
-             else
-             {
-                 return false;
-             }
-        }
-        private bool IsColumn(PropertyInfo prop)
-        {
-            object[] attrs = prop.GetCustomAttributes(typeof(ColumnAttribute), true);
-            if (attrs != null && attrs.Length > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        #endregion
+        //#region
+        //public string GenderSQL(Type type)
+        //{
+        //    if (IsTable(type))
+        //    {
+        //        StringBuilder sb = new StringBuilder();
+        //        sb.Append("select ");
+        //        PropertyInfo[] props = type.GetProperties();
+        //        foreach (PropertyInfo prop in props)
+        //        {
+        //            if (IsColumn(prop))
+        //            {
+        //                sb.Append(prop.Name);
+        //                sb.Append(',');
+        //            }
+        //        }
+        //        sb.Remove(sb.Length - 1, 1);
+        //        sb.Append(" from ");
+        //        sb.Append(type.Name);
+        //        return sb.ToString();
+        //    }
+        //    else
+        //    {
+        //        return null;
+        //    }
+        //}
+        //private bool IsTable(Type type)
+        //{
+        //    object[] attrs = type.GetCustomAttributes(typeof(TableAttribute), true);
+        //    if (attrs != null && attrs.Length > 0)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
+        //private bool IsColumn(PropertyInfo prop)
+        //{
+        //    object[] attrs = prop.GetCustomAttributes(typeof(ColumnAttribute), true);
+        //    if (attrs != null && attrs.Length > 0)
+        //    {
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        return false;
+        //    }
+        //}
+        //#endregion
     }
 }

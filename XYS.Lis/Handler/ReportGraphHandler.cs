@@ -5,10 +5,9 @@ using System.Collections.Generic;
 using XYS.Lis.Model;
 using XYS.Lis.Core;
 using XYS.Lis.Util;
-
 namespace XYS.Lis.Handler
 {
-    public class ReportGraphHandler:ReportHandlerSkeleton
+    public class ReportGraphHandler : ReportHandlerSkeleton
     {
         #region 字段
         private static readonly string m_defaultHandlerName = "ReportGraphHandler";

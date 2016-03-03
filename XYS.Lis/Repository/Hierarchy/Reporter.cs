@@ -7,9 +7,7 @@ using XYS.Lis.Fill;
 using XYS.Lis.Util;
 using XYS.Lis.Core;
 using XYS.Lis.Model;
-using XYS.Lis.Export;
 using XYS.Lis.Handler;
-using XYS.Lis.Export.Model;
 namespace XYS.Lis.Repository.Hierarchy
 {
     public abstract class Reporter : IReporter
@@ -21,11 +19,9 @@ namespace XYS.Lis.Repository.Hierarchy
 
         private IReportFiller m_defaultFill;
         private IReportFiller m_filler;
+
         private IReportHandler m_headHandler;
         private IReportHandler m_tailHandler;
-        private IReportExport m_exporter;
-        private IReportExport m_defaultExport;
-
         #endregion
 
         #region 构造函数
@@ -63,32 +59,6 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             set { this.m_filler = value; }
         }
-        public virtual IReportExport DefaultExport
-        {
-            get 
-            {
-                if (this.m_defaultExport == null)
-                {
-                    this.InitDefault();
-                }
-                return this.m_defaultExport;
-            }
-        }
-        public virtual IReportExport Exporter
-        {
-            get
-            {
-                if (this.m_exporter == null)
-                {
-                    return this.DefaultExport;
-                }
-                else
-                {
-                    return this.m_exporter;
-                }
-            }
-            set { this.m_exporter = value; }
-        }
         public virtual Hierarchy Hierarchy
         {
             get { return this.m_hierarchy; }
@@ -105,37 +75,30 @@ namespace XYS.Lis.Repository.Hierarchy
         {
             get { return this.m_hierarchy; }
         }
-        public void InitExport(ReportReport export, ReportKey RK)
+        public void FillReport(ReportReportElement report, ReportKey RK)
         {
-            ReportReportElement rre = new ReportReportElement();
-            this.Filler.Fill(rre, RK);
-            bool result = HandlerEvent(rre);
-            if (result)
-            {
-                this.Exporter.export(rre, export);
-            }
+            this.Filler.Fill(report, RK);
         }
-
-        public void InitExport(List<ReportReport> exportList, List<ReportKey> RKList)
+        public bool OptionReport(ReportReportElement report)
         {
-            ReportReportElement rre = null;
-            List<ReportReportElement> reportList = new List<ReportReportElement>(RKList.Count);
-            foreach (ReportKey rk in RKList)
-            {
-                rre = new ReportReportElement();
-                this.Filler.Fill(rre, rk);
-                reportList.Add(rre);
-            }
-            bool result = HandlerEvent(reportList);
-            if (result)
-            {
-                this.Exporter.export(reportList, exportList);
-            }
+            return this.HandlerReportEvent(report);
+        }
+        public bool OptionReport(List<ILisReportElement> reportList)
+        {
+            return this.HandlerReportEvent(reportList);
         }
         #endregion
 
         #region 受保护的虚方法
-        protected virtual bool HandlerEvent(ReportReportElement element)
+        protected virtual bool HandlerReportEvent(ReportReportElement report)
+        {
+            return HandlerEvent(report);
+        }
+        protected virtual bool HandlerReportEvent(List<ILisReportElement> reportList)
+        {
+            return HandlerEvent(reportList, typeof(ReportReportElement));
+        }
+        protected virtual bool HandlerEvent(ILisReportElement element)
         {
             IReportHandler handler = this.HandlerHead;
             while (handler != null)
@@ -159,12 +122,12 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             return true;
         }
-        protected virtual bool HandlerEvent(List<ReportReportElement> reportElementList)
+        protected virtual bool HandlerEvent(List<ILisReportElement> reportElementList, Type type)
         {
             IReportHandler handler = this.HandlerHead;
             while (handler != null)
             {
-                switch (handler.ReportOptions(reportElementList))
+                switch (handler.ReportOptions(reportElementList, type))
                 {
                     case HandlerResult.Fail:
                         return false;
@@ -222,14 +185,6 @@ namespace XYS.Lis.Repository.Hierarchy
                 this.Filler = filler;
             }
         }
-        protected virtual void SetExporter(Hashtable exportTable, string exportName)
-        {
-            IReportExport export = exportTable[exportName] as IReportExport;
-            if (export != null)
-            {
-                this.Exporter = export;
-            }
-        }
         #endregion
 
         #region 私有方法
@@ -243,13 +198,8 @@ namespace XYS.Lis.Repository.Hierarchy
             {
                 this.m_defaultFill = this.Hierarchy.DefaultFiller;
             }
-            if (this.m_defaultExport == null)
-            {
-                this.m_defaultExport = this.Hierarchy.DefaultExporter;
-            }
         }
         #endregion
-
 
         #region
         public virtual void InnerConfig()
@@ -265,7 +215,6 @@ namespace XYS.Lis.Repository.Hierarchy
             }
             SetFiller(this.Hierarchy.FillerMap, stratrgy.FillerName);
             AddHandler(this.Hierarchy.HandlerMap, stratrgy.HandlerList);
-            SetExporter(this.Hierarchy.ExporterMap, stratrgy.ExporterName);
         }
         public virtual void Reset()
         {

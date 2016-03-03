@@ -1,92 +1,69 @@
 ﻿//using System;
-//using System.Collections;
+//using System.Collections.Generic;
 
-//namespace XYS.Lis.Core
+//namespace XYS.Common
 //{
-//    public class ElementTypeCollection : ICollection, IList, IEnumerable, ICloneable
+//    public interface IElementTypeCollectionEnumerator<T>
 //    {
-
-//        #region 定义了一个枚举接口
-//        public interface IElementTypeCollectionEnumerator
-//        {
-//            ElementType Current { get; }
-//            bool MoveNext();
-//            void Reset();
-//        }
-//        #endregion
-
+//        T Current { get; }
+//        bool MoveNext();
+//        void Reset();
+//    }
+//    public class CustomCollection<T> : ICollection<T>, IList<T>, IEnumerable<T>,ICloneable
+//    {
 //        private static readonly int DEFAULT_CAPACITY = 6;
 
-//        #region 私有变量 用于实现elementtype 集合
-
-//        private ElementType[] m_array;//元素容器
+//        private T[] m_array;//元素容器
 //        private int m_count = 0; //元素个数
 //        private int m_version = 0;
 
-//        #endregion
-
-//        #region 静态包装
-//        public static ElementTypeCollection ReadOnly(ElementTypeCollection list)
-//        {
-//            if (list == null)
-//            {
-//                throw new ArgumentNullException("list");
-//            }
-//            return new ReadOnlyElementTypeCollection(list);
-//        }
-//        #endregion
-
 //        #region 构造函数
-//        //默认初始化容器大小
-//        public ElementTypeCollection()
+//           public CustomCollection()
 //        {
-//            m_array = new ElementType[DEFAULT_CAPACITY];
+//            m_array = new T[DEFAULT_CAPACITY];
 //        }
 
-//        public ElementTypeCollection(int capacity)
+//        public CustomCollection(int capacity)
 //        {
-//            m_array = new ElementType[capacity];
+//            m_array = new T[capacity];
 //        }
 
-//        public ElementTypeCollection(ElementTypeCollection c)
+//        public CustomCollection(CustomCollection<T> c)
 //        {
-//            m_array = new ElementType[c.Count];
+//            m_array = new T[c.Count];
 //            AddRange(c);
 //        }
-//        public ElementTypeCollection(ElementType[] a)
+//        public CustomCollection(T[] a)
 //        {
-//            m_array = new ElementType[a.Length];
+//            m_array = new T[a.Length];
 //            AddRange(a);
 //        }
-//        public ElementTypeCollection(ICollection col)
+//        public CustomCollection(ICollection<T> col)
 //        {
-//            m_array = new ElementType[col.Count];
+//            m_array = new T[col.Count];
 //            AddRange(col);
 //        }
-//        /// </summary>
+
 //        protected internal enum Tag
 //        {
 //            Default
 //        }
-//        protected internal ElementTypeCollection(Tag tag)
+//        protected internal CustomCollection(Tag tag)
 //        {
 //            m_array = null;
 //        }
 //        #endregion
 
-//        #region Operations (type-safe ICollection)
-
+//        #region ICollection实现
 //        public virtual int Count
 //        {
 //            get { return m_count; }
 //        }
-
-//        public virtual void CopyTo(ElementType[] array)
+//        public virtual void CopyTo(T[] array)
 //        {
 //            this.CopyTo(array, 0);
 //        }
-
-//        public virtual void CopyTo(ElementType[] array, int start)
+//        public virtual void CopyTo(T[] array, int start)
 //        {
 //            if (m_count > array.GetUpperBound(0) + 1 - start)
 //            {
@@ -94,22 +71,18 @@
 //            }
 //            Array.Copy(m_array, 0, array, start, m_count);
 //        }
-
 //        public virtual bool IsSynchronized
 //        {
 //            get { return m_array.IsSynchronized; }
 //        }
-
 //        public virtual object SyncRoot
 //        {
 //            get { return m_array.SyncRoot; }
 //        }
-
 //        #endregion
 
-//        #region Operations (type-safe IList)
-
-//        public virtual ElementType this[int index]
+//        #region IList 实现
+//        public virtual T this[int index]
 //        {
 //            get
 //            {
@@ -123,36 +96,31 @@
 //                m_array[index] = value;
 //            }
 //        }
-
-//        public virtual int Add(ElementType item)
+//        public virtual int Add(T item)
 //        {
 //            if (m_count == m_array.Length)
 //            {
 //                EnsureCapacity(m_count + 1);
 //            }
-
 //            m_array[m_count] = item;
 //            m_version++;
 //            return m_count++;
 //        }
-
 //        public virtual void Clear()
 //        {
 //            ++m_version;
-//            m_array = new ElementType[DEFAULT_CAPACITY];
+//            m_array = new T[DEFAULT_CAPACITY];
 //            m_count = 0;
 //        }
-
 //        public virtual object Clone()
 //        {
-//            ElementTypeCollection newCol = new ElementTypeCollection(m_count);
+//            CustomCollection<T> newCol = new CustomCollection<T>(m_count);
 //            Array.Copy(m_array, 0, newCol.m_array, 0, m_count);
 //            newCol.m_count = m_count;
 //            newCol.m_version = m_version;
 //            return newCol;
 //        }
-
-//        public virtual bool Contains(ElementType item)
+//        public virtual bool Contains(T item)
 //        {
 //            for (int i = 0; i != m_count; ++i)
 //            {
@@ -163,8 +131,7 @@
 //            }
 //            return false;
 //        }
-
-//        public virtual int IndexOf(ElementType item)
+//        public virtual int IndexOf(T item)
 //        {
 //            for (int i = 0; i != m_count; ++i)
 //            {
@@ -175,8 +142,7 @@
 //            }
 //            return -1;
 //        }
-
-//        public virtual void Insert(int index, ElementType item)
+//        public virtual void Insert(int index, T item)
 //        {
 //            ValidateIndex(index, true); // throws
 //            if (m_count == m_array.Length)
@@ -191,8 +157,7 @@
 //            m_count++;
 //            m_version++;
 //        }
-
-//        public virtual void Remove(ElementType item)
+//        public virtual void Remove(T item)
 //        {
 //            int i = IndexOf(item);
 //            if (i < 0)
@@ -202,7 +167,6 @@
 //            ++m_version;
 //            RemoveAt(i);
 //        }
-
 //        public virtual void RemoveAt(int index)
 //        {
 //            ValidateIndex(index); // throws
@@ -211,7 +175,7 @@
 //            {
 //                Array.Copy(m_array, index + 1, m_array, index, m_count - index);
 //            }
-//            ElementType[] temp = new ElementType[1];
+//            T[] temp = new T[1];
 //            Array.Copy(temp, 0, m_array, m_count, 1);
 //            m_version++;
 //        }
@@ -225,17 +189,14 @@
 //        }
 //        #endregion
 
-//        #region Operations (type-safe IEnumerable)
-
-//        public virtual IElementTypeCollectionEnumerator GetEnumerator()
+//        #region
+//        public virtual IElementTypeCollectionEnumerator<T> GetEnumerator()
 //        {
-//            return new Enumerator(this);
+//            return new Enumerator<T>(this);
 //        }
-
 //        #endregion
 
-//        #region Public helpers (just to mimic some nice features of ArrayList)
-
+//        #region
 //        public virtual int Capacity
 //        {
 //            get
@@ -252,19 +213,18 @@
 //                {
 //                    if (value > 0)
 //                    {
-//                        ElementType[] temp = new ElementType[value];
+//                        T[] temp = new T[value];
 //                        Array.Copy(m_array, 0, temp, 0, m_count);
 //                        m_array = temp;
 //                    }
 //                    else
 //                    {
-//                        m_array = new ElementType[DEFAULT_CAPACITY];
+//                        m_array = new T[DEFAULT_CAPACITY];
 //                    }
 //                }
 //            }
 //        }
-
-//        public virtual int AddRange(ElementTypeCollection x)
+//        public virtual int AddRange(CustomCollection<T> x)
 //        {
 //            if (m_count + x.Count >= m_array.Length)
 //            {
@@ -275,48 +235,40 @@
 //            m_version++;
 //            return m_count;
 //        }
-
-//        public virtual int AddRange(ElementType[] x)
+//        public virtual int AddRange(T[] x)
 //        {
 //            if (m_count + x.Length >= m_array.Length)
 //            {
 //                EnsureCapacity(m_count + x.Length);
 //            }
-
 //            Array.Copy(x, 0, m_array, m_count, x.Length);
 //            m_count += x.Length;
 //            m_version++;
-
 //            return m_count;
 //        }
-
-//        public virtual int AddRange(ICollection col)
+//        public virtual int AddRange(ICollection<T> col)
 //        {
 //            if (m_count + col.Count >= m_array.Length)
 //            {
 //                EnsureCapacity(m_count + col.Count);
 //            }
-//            foreach (object item in col)
+//            foreach (T item in col)
 //            {
-//                Add((ElementType)item);
+//                Add(item);
 //            }
 //            return m_count;
 //        }
-
 //        public virtual void TrimToSize()
 //        {
 //            this.Capacity = m_count;
 //        }
-
 //        #endregion
 
-//        #region Implementation (helpers)
-
+//        #region
 //        private void ValidateIndex(int i)
 //        {
 //            ValidateIndex(i, false);
 //        }
-
 //        private void ValidateIndex(int i, bool allowEqualEnd)
 //        {
 //            int max = (allowEqualEnd) ? (m_count) : (m_count - 1);
@@ -325,7 +277,6 @@
 //                throw new ArgumentOutOfRangeException("i", (object)i, "Index was out of range. Must be non-negative and less than the size of the collection. [" + (object)i + "] Specified argument was out of the range of valid values.");
 //            }
 //        }
-
 //        private void EnsureCapacity(int min)
 //        {
 //            int newCapacity = ((m_array.Length == 0) ? DEFAULT_CAPACITY : m_array.Length * 2);
@@ -333,154 +284,114 @@
 //            {
 //                newCapacity = min;
 //            }
-
 //            this.Capacity = newCapacity;
 //        }
-
 //        #endregion
 
-//        #region Implementation (ICollection)
-
-//        void ICollection.CopyTo(Array array, int start)
+//        #region
+//        void ICollection<T>.CopyTo(Array array, int start)
 //        {
 //            Array.Copy(m_array, 0, array, start, m_count);
 //        }
-
 //        #endregion
 
-//        #region Implementation (IList)
-
-//        object IList.this[int i]
+//        #region
+//        object IList<T>.this[int i]
 //        {
 //            get { return (object)this[i]; }
-//            set { this[i] = (ElementType)value; }
+//            set { this[i] = (T)value; }
 //        }
-
-//        int IList.Add(object x)
+//        int IList<T>.Add(object x)
 //        {
-//            return this.Add((ElementType)x);
+//            return this.Add((T)x);
 //        }
-
-//        bool IList.Contains(object x)
+//        bool IList<T>.Contains(object x)
 //        {
-//            return this.Contains((ElementType)x);
+//            return this.Contains((T)x);
 //        }
-
-//        int IList.IndexOf(object x)
+//        int IList<T>.IndexOf(object x)
 //        {
-//            return this.IndexOf((ElementType)x);
+//            return this.IndexOf((T)x);
 //        }
-
-//        void IList.Insert(int pos, object x)
+//        void IList<T>.Insert(int pos, object x)
 //        {
-//            this.Insert(pos, (ElementType)x);
+//            this.Insert(pos, (T)x);
 //        }
-
-//        void IList.Remove(object x)
+//        void IList<T>.Remove(object x)
 //        {
-//            this.Remove((ElementType)x);
+//            this.Remove((T)x);
 //        }
-
-//        void IList.RemoveAt(int pos)
+//        void IList<T>.RemoveAt(int pos)
 //        {
 //            this.RemoveAt(pos);
 //        }
 //        #endregion
 
-//        #region Implementation (IEnumerable)
-
-//        IEnumerator IEnumerable.GetEnumerator()
+//        #region
+//        IEnumerator<T> IEnumerable<T>.GetEnumerator()
 //        {
-//            return (IEnumerator)(this.GetEnumerator());
+//            return (IEnumerator<T>)(this.GetEnumerator());
 //        }
-
 //        #endregion
 
-//        #region Nested enumerator class
-
-//        private sealed class Enumerator : IEnumerator, IElementTypeCollectionEnumerator
+//        #region
+//        private sealed class Enumerator<T> : IEnumerator<T>, IElementTypeCollectionEnumerator<T>
 //        {
-//            #region Implementation (data)
-
-//            private readonly ElementTypeCollection m_collection;
+//            private readonly CustomCollection<T> m_collection;
 //            private int m_index;
 //            private int m_version;
 
-//            #endregion
-
-//            #region Construction
-
-//            internal Enumerator(ElementTypeCollection tc)
+//            internal Enumerator(CustomCollection<T> tc)
 //            {
-//                m_collection = tc;
 //                m_index = -1;
+//                m_collection = tc;
 //                m_version = tc.m_version;
 //            }
-
-//            #endregion
-
-//            #region Operations (type-safe IEnumerator)
-
-//            public ElementType Current
+//            public T Current
 //            {
 //                get { return m_collection[m_index]; }
 //            }
-
 //            public bool MoveNext()
 //            {
 //                if (m_version != m_collection.m_version)
 //                {
 //                    throw new System.InvalidOperationException("Collection was modified; enumeration operation may not execute.");
 //                }
-
 //                ++m_index;
 //                return (m_index < m_collection.Count);
 //            }
-
 //            public void Reset()
 //            {
 //                m_index = -1;
 //            }
-
-//            #endregion
-
-//            #region Implementation (IEnumerator)
-
-//            object IEnumerator.Current
+//            T IEnumerator<T>.Current
 //            {
 //                get { return this.Current; }
 //            }
-//            #endregion
 //        }
 //        #endregion
 
-//        #region Nested Read Only Wrapper class
-//        private sealed class ReadOnlyElementTypeCollection : ElementTypeCollection
+//        private sealed class ReadOnlyCustomCollection<T> : CustomCollection<T>
 //        {
-//            #region Implementation (data)
-
-//            private readonly ElementTypeCollection m_collection;
-
+//            #region 
+//            private readonly CustomCollection<T> m_collection;
 //            #endregion
 
-//            #region Construction
-
-//            internal ReadOnlyElementTypeCollection(ElementTypeCollection list)
-//                : base(Tag.Default)
+//            #region 构造函数
+//            internal ReadOnlyCustomCollection(CustomCollection<T> list)
+//                :base(Tag.Default)
 //            {
 //                m_collection = list;
 //            }
-
 //            #endregion
 
 //            #region Type-safe ICollection
 
-//            public override void CopyTo(ElementType[] array)
+//            public override void CopyTo(T[] array)
 //            {
 //                m_collection.CopyTo(array);
 //            }
-
-//            public override void CopyTo(ElementType[] array, int start)
+//            public override void CopyTo(T[] array, int start)
 //            {
 //                m_collection.CopyTo(array, start);
 //            }
@@ -488,75 +399,62 @@
 //            {
 //                get { return m_collection.Count; }
 //            }
-
 //            public override bool IsSynchronized
 //            {
 //                get { return m_collection.IsSynchronized; }
 //            }
-
 //            public override object SyncRoot
 //            {
 //                get { return this.m_collection.SyncRoot; }
 //            }
-
 //            #endregion
 
-//            #region Type-safe IList
+//            #region IList 实现接口
 
-//            public override ElementType this[int i]
+//            public override T this[int i]
 //            {
 //                get { return m_collection[i]; }
 //                set { throw new NotSupportedException("This is a Read Only Collection and can not be modified"); }
 //            }
-
-//            public override int Add(ElementType x)
+//            public override int Add(T x)
 //            {
 //                throw new NotSupportedException("This is a Read Only Collection and can not be modified");
 //            }
-
 //            public override void Clear()
 //            {
 //                throw new NotSupportedException("This is a Read Only Collection and can not be modified");
 //            }
-
-//            public override bool Contains(ElementType x)
+//            public override bool Contains(T x)
 //            {
 //                return m_collection.Contains(x);
 //            }
-
-//            public override int IndexOf(ElementType x)
+//            public override int IndexOf(T x)
 //            {
 //                return m_collection.IndexOf(x);
 //            }
-
-//            public override void Insert(int pos, ElementType x)
+//            public override void Insert(int pos, T x)
 //            {
 //                throw new NotSupportedException("This is a Read Only Collection and can not be modified");
 //            }
-
-//            public override void Remove(ElementType x)
+//            public override void Remove(T x)
 //            {
 //                throw new NotSupportedException("This is a Read Only Collection and can not be modified");
 //            }
-
 //            public override void RemoveAt(int pos)
 //            {
 //                throw new NotSupportedException("This is a Read Only Collection and can not be modified");
 //            }
-
 //            public override bool IsFixedSize
 //            {
 //                get { return true; }
 //            }
-
 //            public override bool IsReadOnly
 //            {
 //                get { return true; }
 //            }
-
 //            #endregion
 
-//            #region Type-safe IEnumerable
+//            #region IEnumerable 实现
 
 //            public override IElementTypeCollectionEnumerator GetEnumerator()
 //            {
@@ -586,6 +484,5 @@
 
 //            #endregion
 //        }
-//        #endregion
 //    }
 //}

@@ -15,14 +15,14 @@ namespace XYS.Lis.Core
         private bool m_imageFlag;
         private string m_imagePath;
         #endregion
-        
+
         #region
         public ParItem(int itemNo)
         {
             this.m_parItemNo = itemNo;
             this.m_ModelNo = -1;
             this.m_orderNo = 0;
-            this.m_imageFlag = false ;
+            this.m_imageFlag = false;
         }
         public ParItem(int itemNo, string parItemName)
             : this(itemNo)

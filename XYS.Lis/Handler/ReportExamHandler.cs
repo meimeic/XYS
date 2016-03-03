@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using XYS.Util;
 using XYS.Lis.Core;
 using XYS.Lis.Model;
 using XYS.Lis.Util;
@@ -26,11 +27,10 @@ namespace XYS.Lis.Handler
         #region 实现父类抽象方法
         protected override bool OperateElement(ILisReportElement element)
         {
+            //exam 元素级别处理
             ReportExamElement ree = element as ReportExamElement;
             if (ree != null)
             {
-                //此处可以添加判断是否删除代码
-
                 //处理代码
                 if (ree.SectionNo == 10)
                 {
@@ -45,6 +45,7 @@ namespace XYS.Lis.Handler
         }
         protected override bool OperateReport(ReportReportElement report)
         {
+            //顶级处理
             return OperateExam(report);
         }
         #endregion
@@ -52,6 +53,7 @@ namespace XYS.Lis.Handler
         #region 内部处理逻辑
         protected virtual bool OperateExam(ReportReportElement rre)
         {
+            //根据exam元素进行处理
             rre.SectionNo = rre.ReportExam.SectionNo;
             rre.ParItemName = rre.ReportExam.ParItemName;
 
@@ -71,7 +73,6 @@ namespace XYS.Lis.Handler
             {
                 rre.TechnicianImage = LisPUser.GetSignImage(rre.ReportExam.Technician);
             }
-
             return OperateElement(rre.ReportExam);
         }
         #endregion

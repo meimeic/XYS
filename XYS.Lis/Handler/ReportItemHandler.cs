@@ -2,9 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Lis.Model;
+using XYS.Util;
 using XYS.Lis.Core;
-using XYS.Lis.Util;
+using XYS.Lis.Model;
 namespace XYS.Lis.Handler
 {
     public class ReportItemHandler : ReportHandlerSkeleton
@@ -29,10 +29,12 @@ namespace XYS.Lis.Handler
         #region 实现父类抽象方法
         protected override bool OperateReport(ReportReportElement report)
         {
+            //报告级操作
             return OperateItem(report);
         }
         protected override bool OperateElement(ILisReportElement element)
         {
+            //元素级操作
             ReportItemElement rie = element as ReportItemElement;
             if (rie != null)
             {
@@ -159,7 +161,7 @@ namespace XYS.Lis.Handler
         }
         #endregion
 
-        #region 通过项设置检验大项集合以及备注标记
+        #region 通过项设置 检验大项集合 备注标记
         private void SetRemarkFlagByItem(ReportReportElement rre,ReportItemElement rie)
         {
             //

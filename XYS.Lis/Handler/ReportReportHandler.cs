@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 
-using XYS.Common;
+using XYS.Model;
 using XYS.Lis.Model;
 using XYS.Lis.Core;
-using XYS.Lis.Util;
-
 namespace XYS.Lis.Handler
 {
     public class ReportReportHandler : ReportHandlerSkeleton

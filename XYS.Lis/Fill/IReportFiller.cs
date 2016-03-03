@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using XYS.Lis.Core;
 using XYS.Common;
 namespace XYS.Lis.Fill
@@ -15,6 +16,6 @@ namespace XYS.Lis.Fill
     {
         string FillerName { get; }
         void Fill(ILisReportElement reportElement, ReportKey RK);
-        void Fill(List<ILisReportElement> reportElementList, ReportKey RK,Type type);
+        void Fill(List<ILisReportElement> reportElementList, ReportKey RK, Type type);
     }
 }

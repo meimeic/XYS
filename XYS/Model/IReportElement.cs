@@ -7,6 +7,5 @@ namespace XYS.Model
 {
     public interface IReportElement
     {
-
     }
 }

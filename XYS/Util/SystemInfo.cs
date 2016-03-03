@@ -111,7 +111,7 @@ namespace XYS.Util
 #endif
             }
         }
-       //获取主机名
+        //获取主机名
         public static string HostName
         {
             get
@@ -637,7 +637,7 @@ namespace XYS.Util
         {
             return File.Exists(filePath);
         }
-        public static bool IsType(Type type1,Type type2)
+        public static bool IsType(Type type1, Type type2)
         {
             return type1.Equals(type2);
         }
@@ -736,7 +736,7 @@ namespace XYS.Util
 
         #region 公共静态字段
         public static readonly Type[] EmptyTypes = new Type[0];
-        #endregion 
+        #endregion
 
         #region 私有静态字段
         private readonly static Type declaringType = typeof(SystemInfo);

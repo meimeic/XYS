@@ -27,7 +27,7 @@ namespace XYS.Lis.Handler
         }
         public virtual string HandlerName
         {
-            get { return this.m_handlerName.ToLower(); }
+            get { return this.m_handlerName; }
         }
         public virtual HandlerResult ReportOptions(ILisReportElement reportElement)
         {
@@ -70,16 +70,35 @@ namespace XYS.Lis.Handler
         //}
         public virtual HandlerResult ReportOptions(List<ILisReportElement> reportElementList, Type type)
         {
-            OperateElementList(reportElementList, type);
-
-            if (reportElementList.Count > 0)
+            if (IsExist(reportElementList))
             {
-                return HandlerResult.Continue;
+                if (IsReport(type))
+                {
+                    bool flag = false;
+                    bool result = false;
+                    for (int i = reportElementList.Count - 1; i >= 0; i--)
+                    {
+                        flag = IsReport(reportElementList[i]);
+                        if (flag)
+                        {
+                            result = OperateReport((ReportReportElement)reportElementList[i]);
+                        }
+                        if (!flag || !result)
+                        {
+                            reportElementList.RemoveAt(i);
+                        }
+                    }
+                }
+                else
+                {
+                    OperateElementList(reportElementList, type);
+                }
+                if (reportElementList.Count > 0)
+                {
+                    return HandlerResult.Continue;
+                }
             }
-            else
-            {
-                return HandlerResult.Fail;
-            }
+            return HandlerResult.Fail;
         }
         #endregion
 
@@ -126,8 +145,8 @@ namespace XYS.Lis.Handler
         }
         #endregion
 
-        #region 私有方法
-        private bool IsExist(List<ILisReportElement> elementList)
+        #region 辅助方法
+        protected bool IsExist(List<ILisReportElement> elementList)
         {
             if (elementList != null && elementList.Count > 0)
             {

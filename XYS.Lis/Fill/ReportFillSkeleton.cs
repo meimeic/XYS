@@ -20,15 +20,15 @@ namespace XYS.Lis.Fill
         protected ReportFillSkeleton(string name)
         {
             this.m_fillerName = name;
-            this.m_section2InsideTypeMap = new Hashtable(20);
             this.m_section2ExtendTypeMap = new Hashtable(2);
+            this.m_section2InsideTypeMap = new Hashtable(20);
         }
         #endregion
 
         #region 实现IReportFiller接口
         public string FillerName
         {
-            get { return this.m_fillerName.ToLower(); }
+            get { return this.m_fillerName; }
         }
         public virtual void Fill(ILisReportElement reportElement, ReportKey RK)
         {
@@ -60,7 +60,7 @@ namespace XYS.Lis.Fill
         }
         #endregion
 
-        #region 内部处理逻辑
+        #region 内部报告处理逻辑
         protected virtual void FillReport(ReportReportElement rre, ReportKey RK)
         {
             //默认的报告项

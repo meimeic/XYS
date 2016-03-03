@@ -2,7 +2,7 @@
 using XYS.Common;
 namespace XYS.Lis.Core
 {
-    public class ReportFKImpl:ReportKey
+    public class ReportFKImpl : ReportKey
     {
         public ReportFKImpl()
             : base()

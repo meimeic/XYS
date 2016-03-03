@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections;
 
-using XYS.Lis.Core;
+using XYS.Util;
 namespace XYS.Lis.Core
 {
     public class ElementTypeMap
     {
         #region 字段
-        private Hashtable m_mapName2ElementType;
+        private readonly int m_capacity = 4;
+        private readonly Hashtable m_mapName2ElementType;
         #endregion
 
         #region 构造函数
         public ElementTypeMap()
         {
-            this.m_mapName2ElementType = new Hashtable(3);
+            this.m_mapName2ElementType = SystemInfo.CreateCaseInsensitiveHashtable(m_capacity);
         }
-        public ElementTypeMap(int d)
+        public ElementTypeMap(int c)
         {
-            this.m_mapName2ElementType = new Hashtable(d);
+            this.m_mapName2ElementType = SystemInfo.CreateCaseInsensitiveHashtable(c);
         }
         #endregion
 
@@ -36,15 +37,9 @@ namespace XYS.Lis.Core
                 }
             }
         }
-        public ElementTypeCollection AllElementTypes
+        public Hashtable ElementTypeTable
         {
-            get
-            {
-                lock (this)
-                {
-                    return new ElementTypeCollection(this.m_mapName2ElementType.Values);
-                }
-            }
+            get { return this.m_mapName2ElementType; }
         }
         #endregion
         

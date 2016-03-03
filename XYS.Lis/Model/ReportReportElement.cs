@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
+using XYS.Util;
 using XYS.Common;
 using XYS.Lis.Core;
 using XYS.Lis.Util;
@@ -44,10 +45,10 @@ namespace XYS.Lis.Model
         {
             this.m_remarkFlag = 0;
             this.m_parItemList = new List<int>(5);
-            this.m_reportItemTable = new Hashtable(3);
             this.m_elementTag = ReportElementTag.Report;
             this.m_reportExam = new ReportExamElement();
             this.m_reportPatient = new ReportPatientElement();
+            this.m_reportItemTable = SystemInfo.CreateCaseInsensitiveHashtable(3);
         }
         #endregion
 

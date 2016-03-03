@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Xml;
 
+using XYS.Util;
 using XYS.Lis.Fill;
-using XYS.Lis.Util;
 using XYS.Lis.Core;
+using XYS.Lis.Util;
 namespace XYS.Lis.Config
 {
     public class XmlParamConfigurator
@@ -334,6 +335,8 @@ namespace XYS.Lis.Config
             }
             return null;
         }
+
+        #region
         /// <summary>
         /// 尝试将字符串转换成数字
         /// </summary>
@@ -381,5 +384,6 @@ namespace XYS.Lis.Config
                 return (FillTypeTag)tag;
             }
         }
+        #endregion
     }
 }

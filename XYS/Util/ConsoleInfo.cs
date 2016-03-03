@@ -4,7 +4,6 @@ using System.Collections;
 namespace XYS.Util
 {
     public delegate void InfoReceivedEventHandler(object sender, InfoReceivedEventArgs e);
-
     public class InfoReceivedEventArgs : EventArgs
     {
         private ConsoleInfo m_info;
@@ -17,9 +16,9 @@ namespace XYS.Util
             get { return this.m_info; }
         }
     }
-   public class ConsoleInfo
+    public class ConsoleInfo
     {
-         #region 静态字段
+        #region 静态字段
         private static bool s_debugEnabled = false;
         private static bool s_quietMode = false;
         private static bool s_emitInternalMessages = true;
@@ -69,7 +68,7 @@ namespace XYS.Util
             }
         }
         #endregion
-        
+
         #region 实例属性
         public Type Source
         {
@@ -107,13 +106,13 @@ namespace XYS.Util
         {
             get { return s_debugEnabled; }
             set { s_debugEnabled = value; }
-        }  
+        }
         public static bool EmitInternalMessages
         {
             get { return s_emitInternalMessages; }
             set { s_emitInternalMessages = value; }
         }
-       //调试模式 启用调试并且不是安静模式 
+        //调试模式 启用调试并且不是安静模式 
         public static bool IsDebugEnabled
         {
             get { return s_debugEnabled && !s_quietMode; }
@@ -137,7 +136,7 @@ namespace XYS.Util
             {
                 if (EmitInternalMessages)
                 {
-                    EmitOutLine(INFO_PREFIX+source.Name+":"+message);
+                    EmitOutLine(INFO_PREFIX + source.Name + ":" + message);
                 }
                 OnInfoReceived(source, INFO_PREFIX, message, null);
             }
@@ -163,7 +162,7 @@ namespace XYS.Util
             {
                 if (EmitInternalMessages)
                 {
-                    EmitErrorLine(WARN_PREFIX +source.Name+":"+message);
+                    EmitErrorLine(WARN_PREFIX + source.Name + ":" + message);
                 }
                 OnInfoReceived(source, WARN_PREFIX, message, null);
             }
@@ -208,8 +207,8 @@ namespace XYS.Util
                 }
                 OnInfoReceived(source, ERR_PREFIX, message, exception);
             }
-        }   
-       //通知事件
+        }
+        //通知事件
         public static void OnInfoReceived(Type source, string prefix, string message, Exception exception)
         {
             if (InfoReceived != null)
@@ -236,7 +235,7 @@ namespace XYS.Util
             {
                 // Ignore exception, what else can we do? Not really a good idea to propagate back to the caller
             }
-        }  
+        }
         private static void EmitErrorLine(string message)
         {
             try
@@ -256,7 +255,7 @@ namespace XYS.Util
         }
         #endregion
 
-        #region 
+        #region
         public class InfoReceivedAdapter : IDisposable
         {
             private readonly IList items;

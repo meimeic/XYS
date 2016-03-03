@@ -1,5 +1,4 @@
 ﻿using XYS.Model;
-
 namespace XYS.Lis.Core
 {
     public enum ReportElementTag : int
