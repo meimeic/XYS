@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using FastReport;
 using FastReport.Export.Pdf;
 
-using XYS.Common;
+using XYS.Util;
 using XYS.Lis;
 using XYS.Lis.Core;
 using XYS.Lis.Util;

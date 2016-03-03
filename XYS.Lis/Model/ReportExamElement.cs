@@ -1,6 +1,6 @@
 ﻿using System;
 
-using XYS.Common;
+using XYS.Util;
 using XYS.Lis.Core;
 using XYS.Lis.Util;
 namespace XYS.Lis.Model

@@ -10,11 +10,10 @@ using System.Configuration;
 using XYS.Util;
 using XYS.Core;
 using XYS.Repository;
-namespace XYS.Lis.Config
+namespace XYS.Config
 {
     public sealed class XmlConfigurator
     {
-
         #region 私有常量
         private static readonly Type declaringType = typeof(XmlConfigurator);
         private static readonly Hashtable m_repositoryName2ConfigAndWatchHandler = new Hashtable(2);

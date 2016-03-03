@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using XYS.Model;
-using XYS.Common;
+using XYS.Util;
 using XYS.FRReport.Model;
 namespace XYS.FRReport.Convert
 {

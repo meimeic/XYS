@@ -5,7 +5,7 @@ using System.Data;
 using System.Reflection;
 using System.Collections.Generic;
 
-using XYS.Common;
+using XYS.Util;
 namespace XYS.Lis.Util
 {
     public class FRDataStruct

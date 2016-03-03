@@ -1,6 +1,6 @@
 ﻿using System;
 
-using XYS.Common;
+using XYS.Util;
 using XYS.Lis.Core;
 namespace XYS.Lis.Export.Model
 {

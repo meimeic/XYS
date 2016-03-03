@@ -42,7 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\CommonPKElement.cs" />
-    <Compile Include="Common\CustomCollection.cs" />
+    <Compile Include="Common\XYSException.cs" />
+    <Compile Include="Config\RepositoryAttribute.cs" />
+    <Compile Include="Core\ReporterException.cs" />
+    <Compile Include="Util\CustomCollection.cs" />
     <Compile Include="Common\FRConvertAttribute.cs" />
     <Compile Include="Common\FRExportAttribute.cs" />
     <Compile Include="Common\IConvert.cs" />

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Runtime.Serialization;
 using System.Xml;
 
-namespace XYS.Lis.Util
+namespace XYS.Util
 {
     [Serializable]
     public class PropertiesDictionary : ReadOnlyPropertiesDictionary, ISerializable, IDictionary

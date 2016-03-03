@@ -1,4 +1,4 @@
-﻿using XYS.Common;
+﻿using XYS.Util;
 
 namespace XYS.Lis
 {

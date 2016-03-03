@@ -3,7 +3,7 @@ using System.Text;
 using System.Reflection;
 
 using XYS.Util;
-using XYS.Common;
+using XYS.Util;
 using XYS.Lis.Model;
 namespace XYS.Lis.Core
 {

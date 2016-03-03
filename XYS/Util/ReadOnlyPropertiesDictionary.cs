@@ -2,7 +2,7 @@
 using System.Xml;
 using System.Collections;
 using System.Runtime.Serialization;
-namespace XYS.Lis.Util
+namespace XYS.Util
 {
     [Serializable]
     public class ReadOnlyPropertiesDictionary : ISerializable, IDictionary
@@ -56,7 +56,7 @@ namespace XYS.Lis.Util
         }
         #endregion
 
-        #region ISerializable实现
+        #region ISerializable接口实现
         [System.Security.Permissions.SecurityPermissionAttribute(System.Security.Permissions.SecurityAction.Demand, SerializationFormatter = true)]
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -73,15 +73,15 @@ namespace XYS.Lis.Util
         #endregion Implementation of ISerializable
 
         #region IDictionary接口实现
-        IDictionaryEnumerator IDictionary.GetEnumerator()
+       public IDictionaryEnumerator IDictionary.GetEnumerator()
         {
             return InnerHashtable.GetEnumerator();
         }
-        void IDictionary.Remove(object key)
+        public void IDictionary.Remove(object key)
         {
             throw new NotSupportedException("This is a Read Only Dictionary and can not be modified");
         }
-        bool IDictionary.Contains(object key)
+        public bool IDictionary.Contains(object key)
         {
             return InnerHashtable.Contains(key);
         }
@@ -89,10 +89,11 @@ namespace XYS.Lis.Util
         {
             throw new NotSupportedException("This is a Read Only Dictionary and can not be modified");
         }
-        void IDictionary.Add(object key, object value)
+        public void IDictionary.Add(object key, object value)
         {
             throw new NotSupportedException("This is a Read Only Dictionary and can not be modified");
         }
+        
         bool IDictionary.IsReadOnly
         {
             get { return true; }
@@ -124,11 +125,11 @@ namespace XYS.Lis.Util
         #endregion
 
         #region ICollection接口实现
-
         void ICollection.CopyTo(Array array, int index)
         {
             InnerHashtable.CopyTo(array, index);
         }
+        
         bool ICollection.IsSynchronized
         {
             get { return InnerHashtable.IsSynchronized; }
@@ -141,11 +142,10 @@ namespace XYS.Lis.Util
         {
             get { return InnerHashtable.SyncRoot; }
         }
-
         #endregion
 
         #region IEnumerable接口实现
-        IEnumerator IEnumerable.GetEnumerator()
+        public IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)InnerHashtable).GetEnumerator();
         }

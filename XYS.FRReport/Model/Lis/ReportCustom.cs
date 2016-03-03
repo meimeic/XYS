@@ -1,6 +1,6 @@
 ﻿using System;
 
-using XYS.Common;
+using XYS.Util;
 using XYS.FRReport.Model;
 namespace XYS.FRReport.Model.Lis
 {

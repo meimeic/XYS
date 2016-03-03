@@ -5,7 +5,7 @@ using System.Collections;
 
 using XYS.Util;
 using XYS.Repository;
-namespace XYS.Lis.Config
+namespace XYS.Config
 {
     [AttributeUsage(AttributeTargets.Assembly)]
     [Serializable]

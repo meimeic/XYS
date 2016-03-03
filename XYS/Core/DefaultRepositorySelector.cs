@@ -5,15 +5,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Lis.Config;
-using XYS.Lis.Repository;
-
-namespace XYS.Lis.Core
+using XYS.Config;
+using XYS.Repository;
+namespace XYS.Core
 {
     public class DefaultRepositorySelector : IRepositorySelector
     {
         #region 静态成员
-        private static readonly string DefaultRepositoryName = "reporter-default-repository";
+        private static readonly string DefaultRepositoryName = "default-repository";
         private static readonly Type declaringType = typeof(DefaultRepositorySelector);
         #endregion
 
@@ -67,7 +66,7 @@ namespace XYS.Lis.Core
                 if (rep == null)
                 {
                     //抛出异常
-                    throw new ReportException("Repository [" + repositoryName + "] is NOT defined.");
+                    throw new ReporterException("Repository [" + repositoryName + "] is NOT defined.");
                 }
                 return rep;
             }
@@ -96,7 +95,7 @@ namespace XYS.Lis.Core
                 if (rep != null)
                 {
                     //存在，抛出异常
-                    throw new ReportException("Repository [" + repositoryName + "] is already defined. Repositories cannot be redefined.");
+                    throw new ReporterException("Repository [" + repositoryName + "] is already defined. Repositories cannot be redefined.");
                 }
                 ConsoleInfo.Debug(declaringType, "Creating repository [" + repositoryName + "] using type [" + repositoryType + "]");
                 //创建repository实例
@@ -105,7 +104,7 @@ namespace XYS.Lis.Core
                 rep.RepositoryName = repositoryName;
                 //将repository实例加入map
                 m_name2repositoryMap[repositoryName] = rep;
-                //通知创建repository事件
+                //广播创建repository事件
                 OnReporterRepositoryCreatedEvent(rep);
                 return rep;
             }
@@ -129,6 +128,7 @@ namespace XYS.Lis.Core
             }
         }
 
+        //事件属性
         public event ReporterRepositoryCreationEventHandler ReporterRepositoryCreationEvent
         {
             add { this.m_reporterRepositoryCreatedEvent += value; }
@@ -216,7 +216,7 @@ namespace XYS.Lis.Core
         }
         #endregion
 
-        #region
+        #region 通过特性设置Repository
         private void GetInfoForAssembly(Assembly assembly, ref string repositoryName, ref Type repositoryType)
         {
             if (assembly == null)
@@ -414,7 +414,7 @@ namespace XYS.Lis.Core
         }
         #endregion
 
-        #region
+        #region 事件触发器
         protected virtual void OnReporterRepositoryCreatedEvent(IReporterRepository repository)
         {
             ReporterRepositoryCreationEventHandler handler = this.m_reporterRepositoryCreatedEvent;

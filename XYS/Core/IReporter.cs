@@ -7,5 +7,6 @@ namespace XYS.Core
 {
     public interface IReporter
     {
+
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using XYS.Lis.Core;
-using XYS.Common;
+using XYS.Util;
 using XYS.Lis.Model;
 
 namespace XYS.Lis

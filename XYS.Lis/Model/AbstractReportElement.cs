@@ -1,5 +1,5 @@
 ﻿using XYS.Lis.Core;
-using XYS.Common;
+using XYS.Util;
 namespace XYS.Lis.Model
 {
     public abstract class AbstractReportElement : ILisReportElement

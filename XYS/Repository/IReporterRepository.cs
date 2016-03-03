@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 
+using XYS.Util;
 namespace XYS.Repository
 {
     //public delegate void ReporterRepositoryConfigurationChangedEventHandler(object sender, EventArgs e);
@@ -13,9 +14,9 @@ namespace XYS.Repository
         //Hashtable StrategyMap { get; }
 
         //bool Configured { get; set; }
-        //string RepositoryName { get; set; }
+        string RepositoryName { get; set; }
         ICollection ConfigurationMessages { get; set; }
-        //PropertiesDictionary Properties { get; }
+        PropertiesDictionary Properties { get; }
         //#endregion
 
         //#region reporter相关方法
