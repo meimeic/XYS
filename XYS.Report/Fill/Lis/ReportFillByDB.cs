@@ -5,10 +5,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Lis.Model;
-using XYS.Lis.Core;
-using XYS.Lis.DAL;
-namespace XYS.Lis.Fill
+using XYS.Report.Model;
+using XYS.Report.Core;
+using XYS.Report.DAL;
+namespace XYS.Report.Fill
 {
     public class ReportFillByDB : ReportFillSkeleton
     {

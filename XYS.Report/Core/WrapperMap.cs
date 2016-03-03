@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections;
 
-using XYS.Lis.Repository;
-namespace XYS.Lis.Core
+using XYS.Report.Repository;
+namespace XYS.Report.Core
 {
     public delegate IReporterWrapper WrapperCreationHandler(IReporter reporter);
     public class WrapperMap

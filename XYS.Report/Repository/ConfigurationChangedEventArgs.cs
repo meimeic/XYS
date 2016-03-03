@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace XYS.Lis.Repository
+namespace XYS.Report.Repository
 {
     public class ConfigurationChangedEventArgs : EventArgs
     {

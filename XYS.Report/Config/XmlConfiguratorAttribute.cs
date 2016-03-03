@@ -4,9 +4,8 @@ using System.Reflection;
 using System.Collections;
 
 using XYS.Util;
-using XYS.Lis.Repository;
-using XYS.Lis.Repository.Hierarchy;
-namespace XYS.Lis.Config
+using XYS.Report.Repository;
+namespace XYS.Report.Config
 {
     [AttributeUsage(AttributeTargets.Assembly)]
     [Serializable]
@@ -53,7 +52,7 @@ namespace XYS.Lis.Config
                 {
                     applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                 }
 
@@ -95,7 +94,7 @@ namespace XYS.Lis.Config
                         throw ex;
                     }
                 }
-                 //使用特定扩展名的配置文件（文件名称按照通用规则生成）
+                //使用特定扩展名的配置文件（文件名称按照通用规则生成）
                 else
                 {
                     // Force the extension to start with a '.'
@@ -118,7 +117,7 @@ namespace XYS.Lis.Config
                     }
                 }
             }
-           //使用指定的配置文件
+            //使用指定的配置文件
             else
             {
                 string applicationBaseDirectory = null;

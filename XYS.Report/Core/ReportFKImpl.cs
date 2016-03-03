@@ -1,6 +1,6 @@
 ﻿using System;
 using XYS.Util;
-namespace XYS.Lis.Core
+namespace XYS.Report.Core
 {
     public class ReportFKImpl : ReportKey
     {

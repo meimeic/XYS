@@ -5,9 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Lis.Core;
-using XYS.Lis.Model;
-namespace XYS.Lis.DAL
+using XYS.Report.Core;
+using XYS.Report.Model;
+namespace XYS.Report.DAL
 {
     public class ReportCommonDAL : IReportDAL
     {

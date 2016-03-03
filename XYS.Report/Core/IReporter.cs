@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XYS.Util;
-using XYS.Lis.Model;
-using XYS.Lis.Repository;
-namespace XYS.Lis.Core
+using XYS.Model;
+using XYS.Common;
+using XYS.Report.Repository;
+namespace XYS.Report.Core
 {
     public interface IReporter
     {
         IReporterRepository Repository { get; }
         #region
-        void FillReport(ReportReportElement report, ReportKey RK);
+        void FillReport(IReportElement report, ReportKey RK);
         #endregion
         
         //报告元素处理
         #region
-        bool OptionReport(ReportReportElement report);
-        bool OptionReport(List<ILisReportElement> reportList);
+        bool OptionReport(IReportElement report);
+        bool OptionReport(List<IReportElement> reportList);
         #endregion
     }
 }

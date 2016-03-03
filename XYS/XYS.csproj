@@ -43,8 +43,6 @@
   <ItemGroup>
     <Compile Include="Common\CommonPKElement.cs" />
     <Compile Include="Common\XYSException.cs" />
-    <Compile Include="Config\RepositoryAttribute.cs" />
-    <Compile Include="Core\ReporterException.cs" />
     <Compile Include="Util\CustomCollection.cs" />
     <Compile Include="Common\FRConvertAttribute.cs" />
     <Compile Include="Common\FRExportAttribute.cs" />
@@ -56,29 +54,18 @@
     <Compile Include="Common\SearchRequire.cs" />
     <Compile Include="Common\TableAttribute.cs" />
     <Compile Include="Common\ColumnAttribute.cs" />
-    <Compile Include="Config\ConfiguratorAttribute.cs" />
-    <Compile Include="Config\XmlConfigurator.cs" />
-    <Compile Include="Config\XmlConfiguratorAttribute.cs" />
-    <Compile Include="Core\DefaultRepositorySelector.cs" />
-    <Compile Include="Core\IReporter.cs" />
-    <Compile Include="Core\IRepositorySelector.cs" />
-    <Compile Include="Core\ReporterManager.cs" />
     <Compile Include="Model\IExportElement.cs" />
     <Compile Include="Model\IPatientElement.cs" />
     <Compile Include="Common\IPKElement.cs" />
     <Compile Include="Model\IReportElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository\IReporterRepository.cs" />
-    <Compile Include="Repository\IXmlRepositoryConfigurator.cs" />
     <Compile Include="Util\ConsoleInfo.cs" />
     <Compile Include="Util\PropertiesDictionary.cs" />
     <Compile Include="Util\PropertyEntry.cs" />
     <Compile Include="Util\ReadOnlyPropertiesDictionary.cs" />
     <Compile Include="Util\SystemInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Common\Pool\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

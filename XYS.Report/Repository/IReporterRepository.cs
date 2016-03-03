@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
 
-using XYS.Lis.Core;
-using XYS.Lis.Util;
-namespace XYS.Lis.Repository
+using XYS.Report.Core;
+using XYS.Report.Util;
+namespace XYS.Report.Repository
 {
     public delegate void ReporterRepositoryConfigurationChangedEventHandler(object sender, EventArgs e);
 

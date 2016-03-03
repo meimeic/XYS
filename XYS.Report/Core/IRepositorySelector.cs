@@ -2,8 +2,8 @@
 using System.Reflection;
 using System.Collections.Generic;
 
-using XYS.Lis.Repository;
-namespace XYS.Lis.Core
+using XYS.Report.Repository;
+namespace XYS.Report.Core
 {
     public delegate void ReporterRepositoryCreationEventHandler(object sender, ReporterRepositoryCreationEventArgs e);
     public class ReporterRepositoryCreationEventArgs : EventArgs
@@ -18,7 +18,6 @@ namespace XYS.Lis.Core
             get { return this.m_repository; }
         }
     }
-
     public interface IRepositorySelector
     {
         #region

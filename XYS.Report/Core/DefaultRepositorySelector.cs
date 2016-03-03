@@ -5,10 +5,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Lis.Config;
-using XYS.Lis.Repository;
-
-namespace XYS.Lis.Core
+using XYS.Report.Config;
+using XYS.Report.Repository;
+namespace XYS.Report.Core
 {
     public class DefaultRepositorySelector : IRepositorySelector
     {
@@ -246,7 +245,7 @@ namespace XYS.Lis.Core
                     //存在多个此特性（当然可以通过设置特性来避免这种情况）
                     if (repositoryAttributes.Length > 1)
                     {
-                        ConsoleInfo.Error(declaringType, "Assembly [" + assembly + "] has multiple XYS.Lis.Config.RepositoryAttribute assembly attributes. Only using first occurrence.");
+                        ConsoleInfo.Error(declaringType, "Assembly [" + assembly + "] has multiple XYS.Report.Config.RepositoryAttribute assembly attributes. Only using first occurrence.");
                     }
                     //获取程序集指定的特性
                     RepositoryAttribute domAttr = repositoryAttributes[0] as RepositoryAttribute;

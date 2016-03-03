@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XYS.Lis.Core;
-using XYS.Lis.Model;
-namespace XYS.Lis.Handler
+using XYS.Report.Core;
+using XYS.Report.Model;
+namespace XYS.Report.Handler
 {
     public class ReportPatientHandler : ReportHandlerSkeleton
     {

@@ -8,9 +8,9 @@ using System.Collections;
 using System.Configuration;
 
 using XYS.Util;
-using XYS.Lis.Core;
-using XYS.Lis.Repository;
-namespace XYS.Lis.Config
+using XYS.Report.Core;
+using XYS.Report.Repository;
+namespace XYS.Report.Config
 {
     public sealed class XmlConfigurator
     {
@@ -277,7 +277,7 @@ namespace XYS.Lis.Config
                 if (configElement == null)
                 {
                     // Failed to load the xml config using configuration settings handler
-                    ConsoleInfo.Error(declaringType, "Failed to find configuration section 'lis-report' in the application's .config file. Check your .config file for the <lis-report> and <configSections> elements. The configuration section should look like: <section name=\"lis-report\" type=\"XYS.Lis.Config.ReportSectionHandler,XYS.Lis\" />");
+                    ConsoleInfo.Error(declaringType, "Failed to find configuration section 'lis-report' in the application's .config file. Check your .config file for the <lis-report> and <configSections> elements. The configuration section should look like: <section name=\"lis-report\" type=\"XYS.Report.Config.ReportSectionHandler,XYS.Report\" />");
                 }
                 else
                 {
@@ -294,7 +294,7 @@ namespace XYS.Lis.Config
                 else
                 {
                     // This exception is typically due to the assembly name not being correctly specified in the section type.
-                    string configSectionStr = "<section name=\"lis-report\" type=\"XYS.Lis.Config.ConfigurationSectionHandler," + Assembly.GetExecutingAssembly().FullName + "\" />";
+                    string configSectionStr = "<section name=\"lis-report\" type=\"XYS.Report.Config.ConfigurationSectionHandler," + Assembly.GetExecutingAssembly().FullName + "\" />";
                     ConsoleInfo.Error(declaringType, "Failed to parse config file. Is the <configSections> specified as: " + configSectionStr, confEx);
                 }
             }

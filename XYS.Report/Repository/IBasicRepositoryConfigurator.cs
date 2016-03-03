@@ -1,4 +1,4 @@
-﻿namespace XYS.Lis.Repository
+﻿namespace XYS.Report.Repository
 {
     public interface IBasicRepositoryConfigurator
     {

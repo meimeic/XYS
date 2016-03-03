@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Lis.Core;
-using XYS.Lis.Model;
-using XYS.Lis.Util;
-namespace XYS.Lis.Handler
+using XYS.Report.Core;
+using XYS.Report.Model;
+using XYS.Report.Util;
+namespace XYS.Report.Handler
 {
     public class ReportExamHandler : ReportHandlerSkeleton
     {

@@ -3,9 +3,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 
-using XYS.Lis.Config;
+using XYS.Report.Config;
 
-namespace XYS.Lis.DAL
+namespace XYS.Report.DAL
 {
     public abstract class DbHelperSQL
     {

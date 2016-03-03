@@ -1,5 +1,5 @@
 ﻿
-namespace XYS.Lis.Handler
+namespace XYS.Report.Handler
 {
     public enum HandlerResult : int
     {

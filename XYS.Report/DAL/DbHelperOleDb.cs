@@ -5,7 +5,7 @@ using System.Data;
 using System.Data.OleDb;
 using System.Configuration;
 
-namespace XYS.Lis.DAL
+namespace XYS.Report.DAL
 {
     /// <summary>
     /// 数据访问基础类(基于OleDb)

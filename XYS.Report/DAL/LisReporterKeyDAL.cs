@@ -4,10 +4,10 @@ using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Lis;
+using XYS.Report;
 using XYS.Util;
 
-namespace XYS.Lis.DAL
+namespace XYS.Report.DAL
 {
     public class LisReporterKeyDAL
     {

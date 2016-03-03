@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Lis;
-using XYS.Lis.DAL;
-using XYS.Lis.Model;
-namespace XYS.Lis.Core
+using XYS.Report;
+using XYS.Report.DAL;
+using XYS.Report.Model;
+namespace XYS.Report.Core
 {
     public class ReportImpl : ReporterWrapperImpl, IReport
     {

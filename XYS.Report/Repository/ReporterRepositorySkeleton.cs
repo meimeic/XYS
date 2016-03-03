@@ -2,11 +2,11 @@
 using System.Collections;
 
 using XYS.Util;
-using XYS.Lis.Fill;
-using XYS.Lis.Core;
-using XYS.Lis.Handler;
-using XYS.Lis.Util;
-namespace XYS.Lis.Repository
+using XYS.Report.Fill;
+using XYS.Report.Core;
+using XYS.Report.Handler;
+using XYS.Report.Util;
+namespace XYS.Report.Repository
 {
     public abstract class ReporterRepositorySkeleton : IReporterRepository
     {

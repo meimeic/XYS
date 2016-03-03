@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace XYS.Core
+namespace XYS.Report.Util
 {
-    public interface IReporter
+    class Class1
     {
-
     }
 }

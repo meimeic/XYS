@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XYS.Lis.Core
+namespace XYS.Report.Core
 {
     public interface IReporterWrapper
     {

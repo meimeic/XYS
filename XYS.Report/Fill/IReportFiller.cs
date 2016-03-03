@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XYS.Lis.Core;
+using XYS.Report.Core;
 using XYS.Util;
-namespace XYS.Lis.Fill
+namespace XYS.Report.Fill
 {
     public enum FillTypeTag
     {

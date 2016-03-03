@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Reflection;
 
-using XYS.Lis.Repository;
-namespace XYS.Lis.Config
+using XYS.Report.Repository;
+namespace XYS.Report.Config
 {
     [AttributeUsage(AttributeTargets.Assembly)]
     public abstract class ConfiguratorAttribute : Attribute, IComparable

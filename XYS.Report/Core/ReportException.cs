@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace XYS.Lis.Core
+namespace XYS.Report.Core
 {
     [Serializable]
     public class ReportException : ApplicationException

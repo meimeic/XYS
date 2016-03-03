@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace XYS.Lis.Core
+namespace XYS.Report.Core
 {
     public abstract class ReporterWrapperImpl : IReporterWrapper
     {

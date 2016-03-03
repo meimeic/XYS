@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Reflection;
-using XYS.Lis.Repository;
 
 using XYS.Util;
-namespace XYS.Lis.Core
+using XYS.Report.Repository;
+namespace XYS.Report.Core
 {
     //不可实例化
     public class ReporterManager
@@ -58,7 +58,7 @@ namespace XYS.Lis.Core
             //使用默认配置
             if (s_repositorySelector == null)
             {
-                s_repositorySelector = new DefaultRepositorySelector(typeof(XYS.Lis.Repository.Hierarchy.Hierarchy));
+                s_repositorySelector = new DefaultRepositorySelector(typeof(XYS.Report.Repository.Hierarchy.Hierarchy));
             }
         }
         #endregion
