@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Xml;
-namespace XYS.Lis.Repository
+namespace XYS.Repository
 {
-   public interface IXmlRepositoryConfigurator
+    public interface IXmlRepositoryConfigurator
     {
-       void Configure(XmlElement element);
+        void Configure(XmlElement element);
     }
 }

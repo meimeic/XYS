@@ -4,8 +4,7 @@ using System.Reflection;
 using System.Collections;
 
 using XYS.Util;
-using XYS.Lis.Repository;
-using XYS.Lis.Repository.Hierarchy;
+using XYS.Repository;
 namespace XYS.Lis.Config
 {
     [AttributeUsage(AttributeTargets.Assembly)]

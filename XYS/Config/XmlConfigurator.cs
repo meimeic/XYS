@@ -8,8 +8,8 @@ using System.Collections;
 using System.Configuration;
 
 using XYS.Util;
-using XYS.Lis.Core;
-using XYS.Lis.Repository;
+using XYS.Core;
+using XYS.Repository;
 namespace XYS.Lis.Config
 {
     public sealed class XmlConfigurator

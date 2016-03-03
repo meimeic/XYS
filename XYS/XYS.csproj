@@ -54,7 +54,6 @@
     <Compile Include="Common\TableAttribute.cs" />
     <Compile Include="Common\ColumnAttribute.cs" />
     <Compile Include="Config\ConfiguratorAttribute.cs" />
-    <Compile Include="Repository\ReporterRepositorySkeleton.cs" />
     <Compile Include="Config\XmlConfigurator.cs" />
     <Compile Include="Config\XmlConfiguratorAttribute.cs" />
     <Compile Include="Core\DefaultRepositorySelector.cs" />
@@ -69,6 +68,9 @@
     <Compile Include="Repository\IReporterRepository.cs" />
     <Compile Include="Repository\IXmlRepositoryConfigurator.cs" />
     <Compile Include="Util\ConsoleInfo.cs" />
+    <Compile Include="Util\PropertiesDictionary.cs" />
+    <Compile Include="Util\PropertyEntry.cs" />
+    <Compile Include="Util\ReadOnlyPropertiesDictionary.cs" />
     <Compile Include="Util\SystemInfo.cs" />
   </ItemGroup>
   <ItemGroup>

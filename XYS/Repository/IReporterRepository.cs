@@ -1,33 +1,31 @@
 ﻿using System;
 using System.Collections;
 
-using XYS.Lis.Core;
-using XYS.Lis.Util;
-namespace XYS.Lis.Repository
+namespace XYS.Repository
 {
-    public delegate void ReporterRepositoryConfigurationChangedEventHandler(object sender, EventArgs e);
+    //public delegate void ReporterRepositoryConfigurationChangedEventHandler(object sender, EventArgs e);
 
     public interface IReporterRepository
     {
-        #region
-        Hashtable FillerMap { get; }
-        Hashtable HandlerMap { get; }
-        Hashtable StrategyMap { get; }
+        //#region
+        //Hashtable FillerMap { get; }
+        //Hashtable HandlerMap { get; }
+        //Hashtable StrategyMap { get; }
 
-        bool Configured { get; set; }
-        string RepositoryName { get; set; }
+        //bool Configured { get; set; }
+        //string RepositoryName { get; set; }
         ICollection ConfigurationMessages { get; set; }
-        PropertiesDictionary Properties { get; }
-        #endregion
+        //PropertiesDictionary Properties { get; }
+        //#endregion
 
-        #region reporter相关方法
-        IReporter Exists(ReporterKey key);
-        IReporter[] GetCurrentReporters();
-        IReporter GetReporter(ReporterKey key);
-        #endregion
+        //#region reporter相关方法
+        //IReporter Exists(ReporterKey key);
+        //IReporter[] GetCurrentReporters();
+        //IReporter GetReporter(ReporterKey key);
+        //#endregion
 
-        #region 事件
-        event ReporterRepositoryConfigurationChangedEventHandler ConfigurationChanged;
-        #endregion
+        //#region 事件
+        //event ReporterRepositoryConfigurationChangedEventHandler ConfigurationChanged;
+        //#endregion
     }
 }
