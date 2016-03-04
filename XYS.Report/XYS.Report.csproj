@@ -48,6 +48,12 @@
     <Compile Include="Core\IReporter.cs" />
     <Compile Include="Core\IReporterWrapper.cs" />
     <Compile Include="Core\IRepositorySelector.cs" />
+    <Compile Include="Core\LisElement.cs" />
+    <Compile Include="Core\LisElementMap.cs" />
+    <Compile Include="Core\LisSection.cs" />
+    <Compile Include="Core\LisSectionMap.cs" />
+    <Compile Include="Core\LisParItem.cs" />
+    <Compile Include="Core\LisParItemMap.cs" />
     <Compile Include="Core\ReporterKey.cs" />
     <Compile Include="Core\ReporterManager.cs" />
     <Compile Include="Core\ReporterWrapperImpl.cs" />
