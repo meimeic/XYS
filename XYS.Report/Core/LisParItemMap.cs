@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections;
-
 namespace XYS.Report.Core
 {
     public class LisParItemMap
     {
-        #region
+        #region 字段
         private readonly Hashtable m_no2ParItemMap;
-        private static readonly int DEFAULT_CAPACITY = 60;
+        private static readonly int DEFAULT_CAPACITY = 40;
         #endregion
 
-        #region
+        #region 构造函数
         public LisParItemMap()
             : this(DEFAULT_CAPACITY)
         { }
@@ -20,7 +19,7 @@ namespace XYS.Report.Core
         }
         #endregion
 
-        #region
+        #region 属性
         public LisParItem this[int itemNo]
         {
             get
@@ -44,7 +43,7 @@ namespace XYS.Report.Core
         }
         #endregion
 
-        #region
+        #region 方法
         public void Clear()
         {
             this.m_no2ParItemMap.Clear();

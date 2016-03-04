@@ -11,6 +11,7 @@ namespace XYS.Report.Core
     {
         private static IRepositorySelector s_repositorySelector;
         private static readonly Type declaringType = typeof(ReporterManager);
+        
         #region 构造函数
         private ReporterManager()
         {

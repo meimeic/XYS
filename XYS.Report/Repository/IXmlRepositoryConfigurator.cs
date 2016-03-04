@@ -2,8 +2,9 @@
 using System.Xml;
 namespace XYS.Report.Repository
 {
-   public interface IXmlRepositoryConfigurator
+    public interface IXmlRepositoryConfigurator
     {
-       void Configure(XmlElement element);
+        string XmlConfigTag { get; }
+        void Configure(XmlElement element);
     }
 }

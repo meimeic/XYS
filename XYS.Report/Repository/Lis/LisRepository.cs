@@ -24,6 +24,7 @@ namespace XYS.Report.Repository.Lis
     public class LisRepository : ReporterRepositorySkeleton, IXmlRepositoryConfigurator
     {
         #region
+        private readonly string m_xmlConfigTag; 
         private LisReporter m_defaultReporter;
         private Hashtable m_key2ReporterMap;
         private IReportFiller m_defaultFiller;
@@ -50,6 +51,7 @@ namespace XYS.Report.Repository.Lis
             {
                 throw new ArgumentNullException("reporterFactory");
             }
+            this.m_xmlConfigTag = "lisConfig";
             this.m_defaultFactory = reporterFactory;
             this.m_key2ReporterMap = new Hashtable(10);
         }
@@ -92,6 +94,10 @@ namespace XYS.Report.Repository.Lis
         #endregion
 
         #region 实现IXmlRepositoryConfigurator接口
+        public string XmlConfigTag
+        {
+            get { return this.m_xmlConfigTag; }
+        }
         public void Configure(XmlElement element)
         {
             XmlRepositoryConfigure(element);

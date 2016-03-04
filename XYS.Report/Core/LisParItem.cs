@@ -3,31 +3,28 @@ namespace XYS.Report.Core
 {
     public class LisParItem
     {
-        #region
+        #region 字段
         private readonly int m_parItemNo;
-        private string m_parItemName;
-        private int m_ModelNo;
-        private int m_orderNo;
+
         private bool m_imageFlag;
-        private string m_imagePath;
+        private string m_imageName;
+        private string m_parItemName;
         #endregion
 
-        #region
+        #region 构造函数
         public LisParItem(int itemNo)
+            : this(itemNo, null)
         {
-            this.m_parItemNo = itemNo;
-            this.m_ModelNo = -1;
-            this.m_orderNo = 0;
-            this.m_imageFlag = false;
         }
         public LisParItem(int itemNo, string parItemName)
-            : this(itemNo)
         {
+            this.m_imageFlag = false;
+            this.m_parItemNo = itemNo;
             this.m_parItemName = parItemName;
         }
         #endregion
 
-        #region
+        #region 属性
         public string ParItemName
         {
             get { return this.m_parItemName; }
@@ -37,25 +34,15 @@ namespace XYS.Report.Core
         {
             get { return this.m_parItemNo; }
         }
-        public int ModelNo
-        {
-            get { return this.m_ModelNo; }
-            set { this.m_ModelNo = value; }
-        }
-        public int OrderNo
-        {
-            get { return this.m_orderNo; }
-            set { this.m_orderNo = value; }
-        }
         public bool ImageFlag
         {
             get { return this.m_imageFlag; }
             set { this.m_imageFlag = value; }
         }
-        public string ImagePath
+        public string ImageName
         {
-            get { return this.m_imagePath; }
-            set { this.m_imagePath = value; }
+            get { return this.m_imageName; }
+            set { this.m_imageName = value; }
         }
         #endregion
     }

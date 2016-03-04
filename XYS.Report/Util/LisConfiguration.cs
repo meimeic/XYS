@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
 using XYS.Report.Core;
-
 namespace XYS.Report.Util
 {
     public class LisConfiguration
@@ -11,7 +11,8 @@ namespace XYS.Report.Util
          #region
         private static readonly Type declaringType = typeof(LisConfiguration);
         private static readonly LisSectionMap SECTION_MAP = new LisSectionMap();
-        private static readonly ElementTypeMap ELEMENT_MAP = new ElementTypeMap();
+        private static readonly LisElementMap ELEMENT_MAP=new LisElementMap();
+        private static readonly LisParItemMap PARITEM_MAP = new LisParItemMap();
         #endregion
 
         #region
@@ -23,58 +24,6 @@ namespace XYS.Report.Util
         #endregion
 
         #region
-        public static void InitModelNo2ModelPathTable(Hashtable table)
-        {
-            table.Clear();
-            string modelFileName;
-            PrintModelMap modelMap = new PrintModelMap();
-            ConfigureReportModelMap(modelMap);
-            foreach (PrintModel rm in modelMap.AllModels)
-            {
-                modelFileName = SystemInfo.GetFileFullName(SystemInfo.GetPrintModelFilePath(), rm.ModelName);
-                table.Add(rm.ModelNo, modelFileName);
-            }
-        }
-        public static void InitParItem2ReportModelTable(Hashtable table)
-        {
-            table.Clear();
-            ParItemMap parItemMap = new ParItemMap();
-            ConfigureParItemMap(parItemMap);
-            foreach (ParItem item in parItemMap.AllParItem)
-            {
-                table.Add(item.ParItemNo, item.ModelNo);
-            }
-        }
-        public static void InitParItem2OrderNoTable(Hashtable table)
-        {
-            table.Clear();
-            ParItemMap parItemMap = new ParItemMap();
-            ConfigureParItemMap(parItemMap);
-            foreach (ParItem item in parItemMap.AllParItem)
-            {
-                table.Add(item.ParItemNo, item.OrderNo);
-            }
-        }
-        public static void InitSection2PrintModelTable(Hashtable table)
-        {
-            table.Clear();
-            ReportSectionMap sectionMap = new ReportSectionMap();
-            ConfigureReportSectionMap(sectionMap);
-            foreach (ReportSection section in sectionMap.AllReporterSection)
-            {
-                table.Add(section.SectionNo, section.ModelNo);
-            }
-        }
-        public static void InitSection2OrderNoTable(Hashtable table)
-        {
-            table.Clear();
-            ReportSectionMap sectionMap = new ReportSectionMap();
-            ConfigureReportSectionMap(sectionMap);
-            foreach (ReportSection section in sectionMap.AllReporterSection)
-            {
-                table.Add(section.SectionNo, section.OrderNo);
-            }
-        }
         public static void InitParItem2NormalImageTable(Hashtable table)
         {
             byte[] imageArray;
@@ -92,7 +41,7 @@ namespace XYS.Report.Util
                 }
             }
         }
-        public static void InitSection2InnerElementTable(Hashtable table)
+        public static void InitSection2FillElementTable(Hashtable table)
         {
             table.Clear();
             ElementTypeMap elementMap = new ElementTypeMap();
@@ -119,39 +68,17 @@ namespace XYS.Report.Util
                 }
             }
         }
-        public static void InitAllElementTypes(List<Type> typeList)
-        {
-            typeList.Clear();
-            ElementTypeMap typeMap = new ElementTypeMap(7);
-            ConfigureReportElementMap(typeMap);
-            foreach (ElementType eType in typeMap.AllElementTypes)
-            {
-                if (!typeList.Contains(eType.ExportType))
-                {
-                    typeList.Add(eType.ExportType);
-                }
-            }
-        }
         #endregion
 
         #region
-        private static void ConfigureReportModelMap(PrintModelMap modelMap)
-        {
-            ReportLog.Debug(declaringType, "LisMap:configuring ReportModelMap");
-            XmlParamConfigurator.ConfigReportModelMap(modelMap);
-            ReportLog.Debug(declaringType, "LisMap:configured ReportModelMap");
-        }
-        
         private static void ConfigureReportElementMap()
         {
-            ReportLog.Debug(declaringType, "LisMap:configuring ReportElementTypeMap");
-            XmlParamConfigurator.ConfigElementTypes(ELEMENT_MAP);
         }
-        public static void ConfigureReportElementMap(ElementTypeMap elementTypeMap)
+        public static void ConfigureReportElementMap(LisElementMap elementMap)
         {
-            ReportLog.Debug(declaringType, "LisMap:configuring ReportElementTypeMap");
-            XmlParamConfigurator.ConfigElementTypes(elementTypeMap);
-            ReportLog.Debug(declaringType, "LisMap:configured ReportElementTypeMap");
+            ConsoleInfo.Debug(declaringType, "configuring ReportElementTypeMap");
+            XmlParamConfigurator.ConfigElementTypes(elementMap);
+            ConsoleInfo.Debug(declaringType, "configured ReportElementTypeMap");
         }
         
         private static void ConfigureReportSectionMap()
@@ -159,18 +86,18 @@ namespace XYS.Report.Util
             ReportLog.Debug(declaringType, "LisMap:configuring ReportSectionMap");
             XmlParamConfigurator.ConfigSectionMap(SECTION_MAP);
         }
-        private static void ConfigureReportSectionMap(ReportSectionMap sectionMap)
+        private static void ConfigureReportSectionMap(LisSectionMap sectionMap)
         {
-            ReportLog.Debug(declaringType, "LisMap:configuring ReportSectionMap");
+            ConsoleInfo.Debug(declaringType, "configuring ReportSectionMap");
             XmlParamConfigurator.ConfigSectionMap(sectionMap);
-            ReportLog.Debug(declaringType, "LisMap:configured ReportSectionMap");
+            ConsoleInfo.Debug(declaringType, "configured ReportSectionMap");
         }
 
-        public static void ConfigureParItemMap(ParItemMap parItemMap)
+        public static void ConfigureParItemMap(LisParItemMap parItemMap)
         {
-            ReportLog.Debug(declaringType, "LisMap:configuring ParItemMap");
+            ConsoleInfo.Debug(declaringType, "configuring ParItemMap");
             XmlParamConfigurator.ConfigParItemMap(parItemMap);
-            ReportLog.Debug(declaringType, "LisMap:configured ParItemMap");
+            ConsoleInfo.Debug(declaringType, "configured ParItemMap");
         }
         #endregion
     }

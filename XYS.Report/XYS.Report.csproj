@@ -44,6 +44,7 @@
     <Compile Include="Config\RepositoryAttribute.cs" />
     <Compile Include="Config\XmlConfigurator.cs" />
     <Compile Include="Config\XmlConfiguratorAttribute.cs" />
+    <Compile Include="Config\XmlLisParamConfigurator.cs" />
     <Compile Include="Core\DefaultRepositorySelector.cs" />
     <Compile Include="Core\IReporter.cs" />
     <Compile Include="Core\IReporterWrapper.cs" />

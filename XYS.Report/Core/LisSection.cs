@@ -4,42 +4,26 @@ namespace XYS.Report.Core
 {
     public class LisSection
     {
-         #region 字段
-        private int m_orderNo;
-        private int m_ModelNo;
+        #region 字段
         private string m_sectionName;
         private readonly int m_sectionNo;
-        private readonly List<string> m_innerElementList;
-        private readonly List<string> m_extendElementList;
+        private readonly List<string> m_fillElementList;
         #endregion
 
         #region 构造函数
         public LisSection(int sectionNo)
+            : this(sectionNo, null)
         {
-            this.m_orderNo = 0;
-            this.m_ModelNo = -1;
-            this.m_sectionNo = sectionNo;
-            this.m_innerElementList = new List<string>(3);
-            this.m_extendElementList = new List<string>(2);
         }
         public LisSection(int sectionNo, string sectionName)
-            : this(sectionNo)
         {
+            this.m_sectionNo = sectionNo;
             this.m_sectionName = sectionName;
+            this.m_fillElementList = new List<string>(3);
         }
         #endregion
 
         #region 属性
-        public int OrderNo
-        {
-            get { return this.m_orderNo; }
-            set { this.m_orderNo = value; }
-        }
-        public int ModelNo
-        {
-            get { return this.m_ModelNo; }
-            set { this.m_ModelNo = value; }
-        }
         public int SectionNo
         {
             get { return this.m_sectionNo; }
@@ -49,41 +33,26 @@ namespace XYS.Report.Core
             get { return this.m_sectionName; }
             set { this.m_sectionName = value; }
         }
-        public List<string> InnerElementList
+        public List<string> FillElementList
         {
-            get { return this.m_innerElementList; }
-        }
-        public List<string> ExtendElementList
-        {
-            get { return this.m_extendElementList; }
+            get { return this.m_fillElementList; }
         }
         #endregion
 
         #region 方法
-        public void AddInnerElement(string elementName)
+        public void AddFillElement(string elementName)
         {
             if (!string.IsNullOrEmpty(elementName))
             {
-                if (!this.m_innerElementList.Contains(elementName))
+                if (!this.m_fillElementList.Contains(elementName))
                 {
-                    this.m_innerElementList.Add(elementName);
-                }
-            }
-        }
-        public void AddExtendElement(string elementName)
-        {
-            if (!string.IsNullOrEmpty(elementName))
-            {
-                if (!this.m_extendElementList.Contains(elementName))
-                {
-                    this.m_extendElementList.Add(elementName);
+                    this.m_fillElementList.Add(elementName);
                 }
             }
         }
         public void ClearElements()
         {
-            this.m_innerElementList.Clear();
-            this.m_extendElementList.Clear();
+            this.m_fillElementList.Clear();
         }
         #endregion
     }

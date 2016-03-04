@@ -41,7 +41,7 @@ namespace XYS.Report.Config
             repository.ConfigurationMessages = configurationMessages;
             return configurationMessages;
         }
-        
+     
         public static ICollection Configure(XmlElement element)
         {
             ArrayList configurationMessages = new ArrayList();
@@ -249,7 +249,8 @@ namespace XYS.Report.Config
         }
         #endregion
 
-        #region
+        #region 私有静态方法
+        //使用系统配置文件
         private static void InternalConfigure(IReporterRepository repository)
         {
             ConsoleInfo.Debug(declaringType, "configuring repository [" + repository.RepositoryName + "] using .config file section");
@@ -270,14 +271,14 @@ namespace XYS.Report.Config
             {
                 XmlElement configElement = null;
 #if NET_2_0
-				configElement = System.Configuration.ConfigurationManager.GetSection("lis-report") as XmlElement;
+				configElement = System.Configuration.ConfigurationManager.GetSection("xys-report") as XmlElement;
 #else
-                configElement = System.Configuration.ConfigurationManager.GetSection("lis-report") as XmlElement;
+                configElement = System.Configuration.ConfigurationManager.GetSection("xys-report") as XmlElement;
 #endif
                 if (configElement == null)
                 {
                     // Failed to load the xml config using configuration settings handler
-                    ConsoleInfo.Error(declaringType, "Failed to find configuration section 'lis-report' in the application's .config file. Check your .config file for the <lis-report> and <configSections> elements. The configuration section should look like: <section name=\"lis-report\" type=\"XYS.Report.Config.ReportSectionHandler,XYS.Report\" />");
+                    ConsoleInfo.Error(declaringType, "Failed to find configuration section 'xys-report' in the application's .config file. Check your .config file for the <xys-report> and <configSections> elements. The configuration section should look like: <section name=\"xys-report\" type=\"XYS.Report.Config.ReportSectionHandler,XYS.Report\" />");
                 }
                 else
                 {
@@ -294,12 +295,13 @@ namespace XYS.Report.Config
                 else
                 {
                     // This exception is typically due to the assembly name not being correctly specified in the section type.
-                    string configSectionStr = "<section name=\"lis-report\" type=\"XYS.Report.Config.ConfigurationSectionHandler," + Assembly.GetExecutingAssembly().FullName + "\" />";
+                    string configSectionStr = "<section name=\"xys-report\" type=\"XYS.Report.Config.ConfigurationSectionHandler," + Assembly.GetExecutingAssembly().FullName + "\" />";
                     ConsoleInfo.Error(declaringType, "Failed to parse config file. Is the <configSections> specified as: " + configSectionStr, confEx);
                 }
             }
 #endif
         }
+        //根据io流对repository进行配置
         private static void InternalConfigure(IReporterRepository repository, Stream configStream)
         {
             ConsoleInfo.Debug(declaringType, "configuring repository [" + repository.RepositoryName + "] using stream");
@@ -332,7 +334,7 @@ namespace XYS.Report.Config
                     // Create a validating reader around a text reader for the file stream
                     XmlReaderSettings xmlSettings = new XmlReaderSettings();
                     xmlSettings.ValidationType = ValidationType.None;
-                    XmlReader xmlReader = XmlReader.Create(new XmlTextReader(configStream),xmlSettings);
+                    XmlReader xmlReader = XmlReader.Create(new XmlTextReader(configStream), xmlSettings);
 #endif
                     //将文件流加载到xml文档
                     doc.Load(xmlReader);
@@ -342,7 +344,6 @@ namespace XYS.Report.Config
                     ConsoleInfo.Error(declaringType, "Error while loading XML configuration", ex);
                     doc = null;
                 }
-
                 if (doc != null)
                 {
                     ConsoleInfo.Debug(declaringType, "loading XML configuration");
