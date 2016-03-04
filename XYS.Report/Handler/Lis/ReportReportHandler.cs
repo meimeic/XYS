@@ -1,9 +1,8 @@
 ﻿using System;
 
 using XYS.Model;
-using XYS.Report.Model;
-using XYS.Report.Core;
-namespace XYS.Report.Handler
+using XYS.Report.Model.Lis;
+namespace XYS.Report.Handler.Lis
 {
     public class ReportReportHandler : ReportHandlerSkeleton
     {
@@ -22,14 +21,11 @@ namespace XYS.Report.Handler
         }
         #endregion
 
-        #region 实现父类虚方法
-        protected override bool OperateElement(ILisReportElement element)
+        #region 实现父类方法
+        protected override bool OperateElement(IReportElement element)
         {
             return true;
         }
-        #endregion
-
-        #region
         protected override bool OperateReport(ReportReportElement rre)
         {
             //设置备注

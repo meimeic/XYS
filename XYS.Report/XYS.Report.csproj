@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -39,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Config\ConfiguratorAttribute.cs" />
     <Compile Include="Config\RepositoryAttribute.cs" />
     <Compile Include="Config\XmlConfigurator.cs" />
@@ -60,7 +60,7 @@
     <Compile Include="DAL\IReportDAL.cs" />
     <Compile Include="DAL\IReportPKDAL.cs" />
     <Compile Include="DAL\LisReportPKDAL.cs" />
-    <Compile Include="DAL\LisReportCommonDAL.cs" />
+    <Compile Include="DAL\ReportCommonDAL.cs" />
     <Compile Include="Fill\IReportFiller.cs" />
     <Compile Include="Fill\Lis\ReportFillByDB.cs" />
     <Compile Include="Fill\Lis\ReportFillSkeleton.cs" />
@@ -75,12 +75,16 @@
     <Compile Include="Handler\Lis\ReportPatientHandler.cs" />
     <Compile Include="Handler\Lis\ReportReportHandler.cs" />
     <Compile Include="IReport.cs" />
+    <Compile Include="Repository\Lis\DefaultReporter.cs" />
+    <Compile Include="Repository\Lis\DefaultReporterFactory.cs" />
+    <Compile Include="Repository\Lis\IReporterFactory.cs" />
     <Compile Include="Repository\Lis\LisRepository.cs" />
     <Compile Include="Repository\Lis\LisReporter.cs" />
+    <Compile Include="Repository\Lis\XmlLisConfigurator.cs" />
+    <Compile Include="Repository\ReporterStrategy.cs" />
     <Compile Include="Require.cs" />
-    <Compile Include="Model\ILisReportElement.cs" />
-    <Compile Include="Model\Lis\AbstractInnerElement.cs" />
-    <Compile Include="Model\Lis\AbstractReportElement.cs" />
+    <Compile Include="Model\LisAbstractInnerElement.cs" />
+    <Compile Include="Model\LisAbstractReportElement.cs" />
     <Compile Include="Model\Lis\ReportCustomElement.cs" />
     <Compile Include="Model\Lis\ReportExamElement.cs" />
     <Compile Include="Model\Lis\ReportGraphElement.cs" />
@@ -96,7 +100,7 @@
     <Compile Include="Repository\IReporterRepository.cs" />
     <Compile Include="Repository\IXmlRepositoryConfigurator.cs" />
     <Compile Include="Repository\ReporterRepositorySkeleton.cs" />
-    <Compile Include="Util\Class1.cs" />
+    <Compile Include="Util\LisConfiguration.cs" />
     <Compile Include="Util\LisPUser.cs" />
   </ItemGroup>
   <ItemGroup>

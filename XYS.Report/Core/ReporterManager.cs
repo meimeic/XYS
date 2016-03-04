@@ -3,6 +3,7 @@ using System.Reflection;
 
 using XYS.Util;
 using XYS.Report.Repository;
+
 namespace XYS.Report.Core
 {
     //不可实例化

@@ -1,14 +1,13 @@
 ﻿using System;
-using System.Reflection;
 using System.Collections.Generic;
 
-using XYS.Report.Core;
-using XYS.Report.Model;
-namespace XYS.Report.Handler
+using XYS.Model;
+using XYS.Report.Model.Lis;
+namespace XYS.Report.Handler.Lis
 {
     public class ReportCustomHandler : ReportHandlerSkeleton
     {
-        #region
+        #region 只读字段
         private static readonly string m_defaultHandlerName = "ReportCustomHandler";
         #endregion
 
@@ -24,7 +23,7 @@ namespace XYS.Report.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateElement(ILisReportElement element)
+        protected override bool OperateElement(IReportElement element)
         {
             ReportCustomElement rce = element as ReportCustomElement;
             if (rce != null)
@@ -40,6 +39,7 @@ namespace XYS.Report.Handler
             return OperateCustom(report);
         }
         #endregion
+        
         //可以添加一些custom项的内部处理逻辑
         #region
         protected virtual bool OperateCustom(ReportReportElement rre)

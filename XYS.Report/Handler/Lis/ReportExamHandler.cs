@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Report.Core;
-using XYS.Report.Model;
+using XYS.Model;
 using XYS.Report.Util;
-namespace XYS.Report.Handler
+using XYS.Report.Model.Lis;
+namespace XYS.Report.Handler.Lis
 {
     public class ReportExamHandler : ReportHandlerSkeleton
     {
@@ -25,7 +25,7 @@ namespace XYS.Report.Handler
         #endregion
         
         #region 实现父类抽象方法
-        protected override bool OperateElement(ILisReportElement element)
+        protected override bool OperateElement(IReportElement element)
         {
             //exam 元素级别处理
             ReportExamElement ree = element as ReportExamElement;

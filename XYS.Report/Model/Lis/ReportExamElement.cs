@@ -1,19 +1,10 @@
 ﻿using System;
-
-using XYS.Util;
-using XYS.Report.Core;
-using XYS.Report.Util;
+using XYS.Common;
 namespace XYS.Report.Model.Lis
 {
-    public class ReportExamElement : AbstractReportElement
+    public class ReportExamElement : LisAbstractReportElement
     {
         #region 私有常量字段
-        //        private static readonly string m_defaultEaxmSQL = @"select serialno,sampleno,s.CName as sampletypename,CAST(CONVERT(varchar(10), collectdate, 121) + ' ' + CONVERT(varchar(8), collecttime, 114) AS datetime) as collectdatetime,CAST(CONVERT(varchar(10), inceptdate, 121) + ' ' + CONVERT(varchar(8), incepttime, 114) AS datetime) as inceptdatetime,
-        //                                                                             CAST(CONVERT(varchar(10), testdate, 121) + ' ' + CONVERT(varchar(8), testtime, 114) AS datetime) as testdatetime,CAST(CONVERT(varchar(10), checkdate, 121) + ' ' + CONVERT(varchar(8), checktime, 114) AS datetime) as checkdatetime,
-        //                                                                             CAST(CONVERT(varchar(10), receivedate, 121) + ' ' + CONVERT(varchar(8), receivetime, 114) AS datetime) as receivedatetime,sendertime2 as secondecheckdatetime,paritemname,sectionno,r.sampletypeno,formmemo,formcomment,formcomment2,technician,checker
-        //                                                                             from ReportForm as r left outer join SampleType as s on r.SampleTypeNo=s.SampleTypeNo";
-
-        private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.Exam;
         #endregion
 
         #region 私有字段
@@ -43,11 +34,11 @@ namespace XYS.Report.Model.Lis
 
         #region 构造函数
         public ReportExamElement()
-            : base(m_defaultElementTag)
+            : this(null)
         {
         }
         public ReportExamElement(string sql)
-            : base(m_defaultElementTag, sql)
+            : base(sql)
         {
         }
         #endregion
@@ -173,24 +164,10 @@ namespace XYS.Report.Model.Lis
         }
         #endregion
 
-        #region 实现父类抽象方法
-        public override void AfterFill()
-        {
-        }
+        #region 方法
         #endregion
 
         #region
-        //protected virtual void SetSignImage()
-        //{
-        //    //if (this.Checker != null && !this.Checker.Equals(""))
-        //    //{
-        //    //    this.CheckerImage = LisPUser.GetSignImage(this.Checker);
-        //    //}
-        //    //if (this.Technician != null && !this.Technician.Equals(""))
-        //    //{
-        //    //    this.TechnicianImage = LisPUser.GetSignImage(this.Technician);
-        //    //}
-        //}
         #endregion
     }
 }

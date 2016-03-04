@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Report.Core;
-using XYS.Report.Model;
-namespace XYS.Report.Handler
+using XYS.Model;
+using XYS.Report.Model.Lis;
+namespace XYS.Report.Handler.Lis
 {
     public class ReportItemHandler : ReportHandlerSkeleton
     {
@@ -32,7 +32,7 @@ namespace XYS.Report.Handler
             //报告级操作
             return OperateItem(report);
         }
-        protected override bool OperateElement(ILisReportElement element)
+        protected override bool OperateElement(IReportElement element)
         {
             //元素级操作
             ReportItemElement rie = element as ReportItemElement;
@@ -62,7 +62,7 @@ namespace XYS.Report.Handler
         {
             //item 处理
             ReportItemElement rie=null;
-            List<ILisReportElement> itemElementList = rre.GetReportItem(typeof(ReportItemElement).Name);
+            List<IReportElement> itemElementList = rre.GetReportItem(typeof(ReportItemElement).Name);
             ReportKVElement kve = GetKVElement(rre.ReportExam.SectionNo);
             for (int i = itemElementList.Count - 1; i >= 0; i--)
             {
@@ -94,7 +94,7 @@ namespace XYS.Report.Handler
             }
             if (kve != null)
             {
-                List<ILisReportElement> kveList = rre.GetReportItem(typeof(ReportKVElement).Name);
+                List<IReportElement> kveList = rre.GetReportItem(typeof(ReportKVElement).Name);
                 kveList.Add(kve);
             }
             return true;

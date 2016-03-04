@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Reflection;
 
-using XYS.Lis.Core;
-using XYS.Lis.Repository;
-namespace XYS.Lis
+using XYS.Report.Core;
+using XYS.Report.Repository;
+
+namespace XYS.Report
 {
     public class ReportManager
     {
 
         private static readonly WrapperMap s_wrapperMap = new WrapperMap(new WrapperCreationHandler(WrapperCreationHandler));
-        
+
         public static IReport Exists(ReporterKey key)
         {
             return Exists(Assembly.GetCallingAssembly(), key);
@@ -44,7 +45,7 @@ namespace XYS.Lis
         {
             return WrapReporter(ReporterManager.GetReporter(repository, type, strategyName));
         }
-        
+
         public static IReport GetReporter(Assembly repositoryAssembly, ReporterKey key)
         {
             return WrapReporter(ReporterManager.GetReporter(repositoryAssembly, key));
@@ -55,7 +56,7 @@ namespace XYS.Lis
         }
         public static IReport GetReporter(Assembly repositoryAssembly, Type type, string strategyName)
         {
-            return WrapReporter(ReporterManager.GetReporter(repositoryAssembly, type,strategyName));
+            return WrapReporter(ReporterManager.GetReporter(repositoryAssembly, type, strategyName));
         }
         #endregion
 

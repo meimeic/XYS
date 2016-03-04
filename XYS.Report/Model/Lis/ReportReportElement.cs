@@ -1,20 +1,14 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 
 using XYS.Util;
-using XYS.Util;
-using XYS.Report.Core;
-using XYS.Report.Util;
+using XYS.Model;
+using XYS.Common;
 namespace XYS.Report.Model.Lis
 {
-    public class ReportReportElement : ILisReportElement
+    public class ReportReportElement : IReportElement
     {
-
-        #region 私有只读字段
-        private readonly ReportElementTag m_elementTag;
-        #endregion
 
         #region 私有实例字段
         private int m_sectionNo;
@@ -45,18 +39,13 @@ namespace XYS.Report.Model.Lis
         {
             this.m_remarkFlag = 0;
             this.m_parItemList = new List<int>(5);
-            this.m_elementTag = ReportElementTag.Report;
             this.m_reportExam = new ReportExamElement();
             this.m_reportPatient = new ReportPatientElement();
             this.m_reportItemTable = SystemInfo.CreateCaseInsensitiveHashtable(3);
         }
         #endregion
 
-        #region 实现IReportElement接口属性
-        public ReportElementTag ElementTag
-        {
-            get { return this.m_elementTag; }
-        }
+        #region 实现IReportElement接口
         #endregion
 
         #region 实例属性
@@ -84,7 +73,7 @@ namespace XYS.Report.Model.Lis
             get { return this.m_remark; }
             set { this.m_remark = value; }
         }
-         [FRConvert()]
+        [FRConvert()]
         public string ParItemName
         {
             get { return this.m_parItemName; }
@@ -173,14 +162,14 @@ namespace XYS.Report.Model.Lis
             this.TechnicianImage = null;
             this.CheckerImage = null;
         }
-        public List<ILisReportElement> GetReportItem(string typeName)
+        public List<IReportElement> GetReportItem(string typeName)
         {
             if (!string.IsNullOrEmpty(typeName))
             {
-                List<ILisReportElement> result = this.m_reportItemTable[typeName] as List<ILisReportElement>;
+                List<IReportElement> result = this.m_reportItemTable[typeName] as List<IReportElement>;
                 if (result == null)
                 {
-                    result = new List<ILisReportElement>(10);
+                    result = new List<IReportElement>(10);
                     lock (this.m_reportItemTable)
                     {
                         this.m_reportItemTable[typeName] = result;

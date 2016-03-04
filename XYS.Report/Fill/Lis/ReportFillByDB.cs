@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Text;
 using System.Reflection;
-using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Util;
-using XYS.Report.Model;
-using XYS.Report.Core;
+using XYS.Model;
+using XYS.Common;
 using XYS.Report.DAL;
-namespace XYS.Report.Fill
+using XYS.Report.Model;
+namespace XYS.Report.Fill.Lis
 {
     public class ReportFillByDB : ReportFillSkeleton
     {
         #region 变量
-        private LisReportCommonDAL m_reportDAL;
+        private ReportCommonDAL m_reportDAL;
         private static readonly string m_FillerName = "DBFiller";
         #endregion
 
@@ -25,18 +24,18 @@ namespace XYS.Report.Fill
         public ReportFillByDB(string name)
             : base(name)
         {
-            this.m_reportDAL = new LisReportCommonDAL();
+            this.m_reportDAL = new ReportCommonDAL();
         }
         #endregion
 
         #region 实例属性
-        public virtual LisReportCommonDAL ReportDAL
+        public virtual ReportCommonDAL ReportDAL
         {
             get
             {
                 if (this.m_reportDAL == null)
                 {
-                    this.m_reportDAL = new LisReportCommonDAL();
+                    this.m_reportDAL = new ReportCommonDAL();
                 }
                 return this.m_reportDAL;
             }
@@ -45,7 +44,7 @@ namespace XYS.Report.Fill
         #endregion
 
         #region 实现父类抽象方法
-        protected override void FillElement(ILisReportElement reportElement, ReporterKey RK)
+        protected override void FillElement(IReportElement reportElement, ReportPK RK)
         {
             string sql = GenderSql(reportElement, RK);
             if (sql != null)
@@ -53,7 +52,7 @@ namespace XYS.Report.Fill
                 this.D_FillElement(reportElement, sql);
             }
         }
-        protected override void FillElements(List<ILisReportElement> reportElementList, ReporterKey RK, Type type)
+        protected override void FillElements(List<IReportElement> reportElementList, ReportPK RK, Type type)
         {
             string sql = GenderSql(type, RK);
             this.D_FillElements(reportElementList, type, sql);
@@ -61,24 +60,23 @@ namespace XYS.Report.Fill
         #endregion
 
         #region DAL层代码访问
-        protected virtual void D_FillElement(ILisReportElement reportElement, string sql)
+        protected virtual void D_FillElement(IReportElement reportElement, string sql)
         {
             this.ReportDAL.Fill(reportElement, sql);
         }
-        protected virtual void D_FillElements(List<ILisReportElement> reportElementList, Type type, string sql)
+        protected virtual void D_FillElements(List<IReportElement> reportElementList, Type type, string sql)
         {
             this.ReportDAL.FillList(reportElementList, type, sql);
         }
         #endregion
 
         #region 生成sql语句
-        protected string GenderSql(ILisReportElement element, ReporterKey RK)
+        protected string GenderSql(IReportElement element, ReportPK RK)
         {
             string where = GenderWhere(RK);
-            AbstractReportElement e = element as AbstractReportElement;
+            LisAbstractReportElement e = element as LisAbstractReportElement;
             if (e != null)
             {
-                //
                 if (string.IsNullOrEmpty(e.SearchSQL))
                 {
                     return GenderPreSQL(element.GetType()) + GenderWhere(RK);
@@ -87,7 +85,7 @@ namespace XYS.Report.Fill
             }
             return null;
         }
-        protected string GenderSql(Type type, ReporterKey RK)
+        protected string GenderSql(Type type, ReportPK RK)
         {
             return GenderPreSQL(type) + GenderWhere(RK);
         }
@@ -109,42 +107,7 @@ namespace XYS.Report.Fill
             sb.Append(type.Name);
             return sb.ToString();
         }
-        protected string GenderWhere(Hashtable equalTable)
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.Append(" where ");
-            foreach (DictionaryEntry de in equalTable)
-            {
-                //int
-                if (de.Value.GetType().FullName == "System.Int32")
-                {
-                    sb.Append(de.Key);
-                    sb.Append("=");
-                    sb.Append(de.Value);
-                }
-                //datetime
-                else if (de.Value.GetType().FullName == "System.DateTime")
-                {
-                    DateTime dt = (DateTime)de.Value;
-                    sb.Append(de.Key);
-                    sb.Append("='");
-                    sb.Append(dt.Date.ToString("yyyy-MM-dd"));
-                    sb.Append("'");
-                }
-                //其他类型
-                else
-                {
-                    sb.Append(de.Key);
-                    sb.Append("='");
-                    sb.Append(de.Value.ToString());
-                    sb.Append("'");
-                }
-                sb.Append(" and ");
-            }
-            sb.Remove(sb.Length - 5, 5);
-            return sb.ToString();
-        }
-        protected string GenderWhere(ReporterKey RK)
+        protected string GenderWhere(ReportPK RK)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(" where ");

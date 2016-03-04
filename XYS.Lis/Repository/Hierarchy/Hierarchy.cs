@@ -31,7 +31,6 @@ namespace XYS.Lis.Repository.Hierarchy
         private Reporter m_defaultReporter;
         private Hashtable m_key2ReporterMap;
         private IReportFiller m_defaultFiller;
-        private IReportExport m_defaultExport;
         private IReporterFactory m_defaultFactory;
         private event ReporterCreationEventHandler m_reporterCreatedEvent;
         #endregion

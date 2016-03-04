@@ -1,13 +1,10 @@
 ﻿using XYS.Model;
-using XYS.Util;
-
-using XYS.Report.Core;
+using XYS.Common;
 namespace XYS.Report.Model.Lis
 {
-    public class ReportPatientElement : AbstractReportElement, IPatientElement
+    public class ReportPatientElement : LisAbstractReportElement, IPatientElement
     {
         #region 私有常量字段
-        private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.Patient;
         #endregion
 
         #region 私有字段
@@ -36,11 +33,11 @@ namespace XYS.Report.Model.Lis
 
         #region 构造函数
         public ReportPatientElement()
-            : base(m_defaultElementTag)
+            : this(null)
         {
         }
         public ReportPatientElement(string sql)
-            : base(m_defaultElementTag, sql)
+            : base(sql)
         {
         }
         #endregion
@@ -88,14 +85,7 @@ namespace XYS.Report.Model.Lis
         }
         #endregion
 
-        #region 实现父类抽象方法
-        public override void AfterFill()
-        {
-            this.ConvertGender();
-            this.ConvertClinic();
-            this.ConvertAge();
-            this.ConvertCID();
-        }
+        #region 方法
         #endregion
 
         #region 公共属性

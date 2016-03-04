@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XYS.Report.Core;
-using XYS.Util;
+using XYS.Model;
+using XYS.Common;
 namespace XYS.Report.Fill
 {
     public enum FillTypeTag
@@ -15,7 +15,7 @@ namespace XYS.Report.Fill
     public interface IReportFiller
     {
         string FillerName { get; }
-        void Fill(ILisReportElement reportElement, ReporterKey RK);
-        void Fill(List<ILisReportElement> reportElementList, ReporterKey RK, Type type);
+        void Fill(IReportElement reportElement, ReportPK RK);
+        void Fill(List<IReportElement> reportElementList, ReportPK RK, Type type);
     }
 }

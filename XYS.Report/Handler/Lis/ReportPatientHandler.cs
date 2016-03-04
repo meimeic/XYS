@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XYS.Report.Core;
-using XYS.Report.Model;
-namespace XYS.Report.Handler
+using XYS.Model;
+using XYS.Report.Model.Lis;
+namespace XYS.Report.Handler.Lis
 {
     public class ReportPatientHandler : ReportHandlerSkeleton
     {
@@ -21,7 +21,7 @@ namespace XYS.Report.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateElement(ILisReportElement element)
+        protected override bool OperateElement(IReportElement element)
         {
             //元素级操作
             ReportPatientElement rpe = element as ReportPatientElement;

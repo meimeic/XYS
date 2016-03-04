@@ -2,20 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Util;
-using XYS.Lis.Fill;
-using XYS.Lis.Util;
-using XYS.Lis.Core;
-using XYS.Lis.Model;
-using XYS.Lis.Handler;
-namespace XYS.Lis.Repository.Hierarchy
+using XYS.Report.Core;
+using XYS.Report.Fill;
+using XYS.Report.Handler;
+namespace XYS.Report.Repository.Lis
 {
-    public abstract class Reporter : IReporter
+    public abstract class LisReporter : IReporter
     {
         #region 变量
         private readonly string m_callerName;
         private readonly string m_strategyName;
-        private Hierarchy m_hierarchy;
+        private LisRepository m_hierarchy;
 
         private IReportFiller m_defaultFill;
         private IReportFiller m_filler;
@@ -25,7 +22,7 @@ namespace XYS.Lis.Repository.Hierarchy
         #endregion
 
         #region 构造函数
-        protected Reporter(string callerName, string strategyName)
+        protected LisReporter(string callerName, string strategyName)
         {
             this.m_callerName = callerName;
             this.m_strategyName = strategyName;

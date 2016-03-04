@@ -3,8 +3,6 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
 
-using XYS.Report.Config;
-
 namespace XYS.Report.DAL
 {
     public abstract class DbHelperSQL

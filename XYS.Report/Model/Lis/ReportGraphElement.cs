@@ -1,12 +1,9 @@
-﻿using XYS.Util;
-using XYS.Report.Core;
+﻿using XYS.Common;
 namespace XYS.Report.Model.Lis
 {
-    public class ReportGraphElement : AbstractReportElement
+    public class ReportGraphElement : LisAbstractReportElement
     {
         #region 私有静态字段
-        //private static readonly string m_defaultGraphSQL = "select graphname,Graphjpg as graphimage from RFGraphData";
-        private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.Graph;
         #endregion
 
         #region 私有字段
@@ -16,10 +13,10 @@ namespace XYS.Report.Model.Lis
 
         #region 公共构造函数
         public ReportGraphElement()
-            : base(m_defaultElementTag)
+            : this(null)
         { }
         public ReportGraphElement(string sql)
-            : base(m_defaultElementTag, sql)
+            : base(sql)
         { }
         #endregion
 

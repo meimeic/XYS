@@ -9,6 +9,7 @@ namespace XYS.Report.Core
     public interface IReporter
     {
         IReporterRepository Repository { get; }
+
         #region
         void FillReport(IReportElement report, ReportPK RK);
         #endregion

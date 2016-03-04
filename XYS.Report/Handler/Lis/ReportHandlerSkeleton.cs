@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using XYS.Report.Model;
-using XYS.Report.Core;
-namespace XYS.Report.Handler
+using XYS.Model;
+using XYS.Report.Model.Lis;
+namespace XYS.Report.Handler.Lis
 {
     public abstract class ReportHandlerSkeleton : IReportHandler
     {
@@ -29,7 +28,8 @@ namespace XYS.Report.Handler
         {
             get { return this.m_handlerName; }
         }
-        public virtual HandlerResult ReportOptions(ILisReportElement reportElement)
+
+        public virtual HandlerResult ReportOptions(IReportElement reportElement)
         {
             bool result = false;
             if (IsReport(reportElement))
@@ -47,75 +47,73 @@ namespace XYS.Report.Handler
             }
             return HandlerResult.Fail;
         }
-        //public virtual HandlerResult ReportOptions(List<ILisReportElement> reportElementList)
-        //{
-
-        //    if (IsExist(reportElementList))
-        //    {
-        //        bool result = false;
-        //        for (int i = reportElementList.Count - 1; i >= 0; i--)
-        //        {
-        //            result = OperateReport(reportElementList[i]);
-        //            if (!result)
-        //            {
-        //                reportElementList.RemoveAt(i);
-        //            }
-        //        }
-        //    }
-        //    if (IsExist(reportElementList))
-        //    {
-        //        return HandlerResult.Continue;
-        //    }
-        //    return HandlerResult.Fail;
-        //}
-        public virtual HandlerResult ReportOptions(List<ILisReportElement> reportElementList, Type type)
+        public virtual HandlerResult ReportOptions(List<IReportElement> reportElementList)
         {
             if (IsExist(reportElementList))
             {
-                if (IsReport(type))
-                {
-                    bool flag = false;
-                    bool result = false;
-                    for (int i = reportElementList.Count - 1; i >= 0; i--)
-                    {
-                        flag = IsReport(reportElementList[i]);
-                        if (flag)
-                        {
-                            result = OperateReport((ReportReportElement)reportElementList[i]);
-                        }
-                        if (!flag || !result)
-                        {
-                            reportElementList.RemoveAt(i);
-                        }
-                    }
-                }
-                else
-                {
-                    OperateElementList(reportElementList, type);
-                }
-                if (reportElementList.Count > 0)
+                OperateElementList(reportElementList);
+                if (IsExist(reportElementList))
                 {
                     return HandlerResult.Continue;
                 }
             }
             return HandlerResult.Fail;
         }
+        //public virtual HandlerResult ReportOptions(List<IReportElement> reportElementList, Type type)
+        //{
+        //    if (IsExist(reportElementList))
+        //    {
+        //        if (IsReport(type))
+        //        {
+        //            bool flag = false;
+        //            bool result = false;
+        //            for (int i = reportElementList.Count - 1; i >= 0; i--)
+        //            {
+        //                flag = IsReport(reportElementList[i]);
+        //                if (flag)
+        //                {
+        //                    result = OperateReport((ReportReportElement)reportElementList[i]);
+        //                }
+        //                if (!flag || !result)
+        //                {
+        //                    reportElementList.RemoveAt(i);
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            OperateElementList(reportElementList, type);
+        //        }
+        //        if (reportElementList.Count > 0)
+        //        {
+        //            return HandlerResult.Continue;
+        //        }
+        //    }
+        //    return HandlerResult.Fail;
+        //}
         #endregion
 
         #region 抽象方法(处理元素)
-        protected abstract bool OperateElement(ILisReportElement element);
+        protected abstract bool OperateElement(IReportElement element);
         protected abstract bool OperateReport(ReportReportElement report);
         #endregion
 
         #region 受保护的虚方法
-        protected virtual void OperateElementList(List<ILisReportElement> reportElementList)
+        protected virtual void OperateElementList(List<IReportElement> reportElementList)
         {
             bool result = false;
             if (IsExist(reportElementList))
             {
                 for (int i = reportElementList.Count - 1; i >= 0; i--)
                 {
-                    result = OperateElement(reportElementList[i]);
+                    if (IsReport(reportElementList[i].GetType()))
+                    {
+                        result = OperateReport((ReportReportElement)reportElementList[i]);
+                    }
+                    else
+                    {
+                        result = OperateElement(reportElementList[i]);
+                    }
                     if (!result)
                     {
                         reportElementList.RemoveAt(i);
@@ -123,7 +121,7 @@ namespace XYS.Report.Handler
                 }
             }
         }
-        protected virtual void OperateElementList(List<ILisReportElement> reportElementList, Type type)
+        protected virtual void OperateElementList(List<IReportElement> reportElementList, Type type)
         {
             bool flag = false;
             bool result = false;
@@ -146,7 +144,7 @@ namespace XYS.Report.Handler
         #endregion
 
         #region 辅助方法
-        protected bool IsExist(List<ILisReportElement> elementList)
+        protected bool IsExist(List<IReportElement> elementList)
         {
             if (elementList != null && elementList.Count > 0)
             {
@@ -154,15 +152,15 @@ namespace XYS.Report.Handler
             }
             return false;
         }
-        private bool IsReport(Type type)
+        protected bool IsReport(Type type)
         {
             return typeof(ReportReportElement).Equals(type);
         }
-        private bool IsReport(ILisReportElement reportElement)
+        protected bool IsReport(IReportElement reportElement)
         {
             return IsElement(reportElement, typeof(ReportReportElement));
         }
-        private bool IsElement(ILisReportElement reportElement, Type type)
+        protected bool IsElement(IReportElement reportElement, Type type)
         {
             return reportElement.GetType().Equals(type);
         }

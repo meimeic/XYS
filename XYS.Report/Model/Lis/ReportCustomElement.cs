@@ -1,12 +1,9 @@
-﻿using XYS.Util;
-using XYS.Report.Core;
-
+﻿using XYS.Common;
 namespace XYS.Report.Model.Lis
 {
-    public class ReportCustomElement : AbstractReportElement
+    public class ReportCustomElement : LisAbstractReportElement
     {
         #region 私有常量字段
-        private static readonly ReportElementTag m_defaultElementTag = ReportElementTag.Custom;
         #endregion
 
         #region 私有字段
@@ -35,16 +32,11 @@ namespace XYS.Report.Model.Lis
 
         #region 公共构造函数
         public ReportCustomElement()
-            : this(m_defaultElementTag)
+            : this(null)
         {
-        }
-        public ReportCustomElement(ReportElementTag elementTag)
-            : base(elementTag)
-        {
-
         }
         public ReportCustomElement(string sql)
-            : base(m_defaultElementTag, sql)
+            : base(sql)
         {
         }
         #endregion
@@ -178,11 +170,7 @@ namespace XYS.Report.Model.Lis
         }
         #endregion
 
-        #region 实现父类抽象方法
-        public override void AfterFill()
-        {
-            throw new System.NotImplementedException();
-        }
+        #region 方法
         #endregion
     }
 }

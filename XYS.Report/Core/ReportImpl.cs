@@ -2,10 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Util;
+using XYS.Model;
 using XYS.Report;
+using XYS.Common;
 using XYS.Report.DAL;
-using XYS.Report.Model;
 namespace XYS.Report.Core
 {
     public class ReportImpl : ReporterWrapperImpl, IReport
@@ -31,47 +31,54 @@ namespace XYS.Report.Core
         #endregion
 
         #region 实现IReport接口
-        public bool InitReport(ReportReportElement report, ReporterKey key)
+        public bool InitReport(IReportElement report, ReportPK key)
         {
             this.Reporter.FillReport(report, key);
             return this.Reporter.OptionReport(report);
         }
-        public bool InitReport(ReportReportElement report, LisRequire require)
+        public bool InitReport(IReportElement report, Require require)
         {
-            ReporterKey RK = GetReportKey(require);
+            ReportPK RK = GetReportKey(require);
             return InitReport(report, RK);
         }
-        public bool InitReports(List<ILisReportElement> reportList, List<ReporterKey> keyList)
+        public bool InitReports(List<IReportElement> reportList,Type reportType,List<ReportPK> keyList)
         {
             if (reportList != null)
             {
-                ReportReportElement rre = null;
-                foreach (ReporterKey rk in keyList)
+                IReportElement report = null;
+                foreach (ReportPK rk in keyList)
                 {
-                    rre = new ReportReportElement();
-                    this.Reporter.FillReport(rre, rk);
-                    reportList.Add(rre);
+                    try
+                    {
+                        report = (IReportElement)reportType.Assembly.CreateInstance(reportType.FullName);
+                        this.Reporter.FillReport(report, rk);
+                        reportList.Add(report);
+                    }
+                    catch (Exception ex)
+                    {
+                        continue;
+                    }
                 }
                 return this.Reporter.OptionReport(reportList);
             }
             return false;
         }
 
-        public bool InitReports(List<ILisReportElement> exportList, LisRequire require)
+        public bool InitReports(List<IReportElement> exportList, Type reportType, Require require)
         {
-            List<ReporterKey> keyList = GetReportKeyList(require);
-            return InitReports(exportList, keyList);
+            List<ReportPK> keyList = GetReportKeyList(require);
+            return InitReports(exportList, reportType,keyList);
         }
         #endregion
 
         #region 获取报告键
-        protected virtual List<ReporterKey> GetReportKeyList(LisRequire require)
+        protected virtual List<ReportPK> GetReportKeyList(Require require)
         {
             return this.ReportKeyDAL.GetReportKey(require);
         }
-        protected virtual ReporterKey GetReportKey(LisRequire require)
+        protected virtual ReportPK GetReportKey(Require require)
         {
-            List<ReporterKey> result = this.ReportKeyDAL.GetReportKey(require);
+            List<ReportPK> result = this.ReportKeyDAL.GetReportKey(require);
             if (result.Count > 0)
             {
                 return result[0];

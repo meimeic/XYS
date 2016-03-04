@@ -2,11 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Util;
-using XYS.Report.Core;
+using XYS.Model;
+using XYS.Common;
 using XYS.Report.Model;
-using XYS.Report.Util;
-namespace XYS.Report.Fill
+using XYS.Report.Model.Lis;
+namespace XYS.Report.Fill.Lis
 {
     public abstract class ReportFillSkeleton : IReportFiller
     {
@@ -30,7 +30,7 @@ namespace XYS.Report.Fill
         {
             get { return this.m_fillerName; }
         }
-        public virtual void Fill(ILisReportElement reportElement, ReporterKey RK)
+        public virtual void Fill(IReportElement reportElement, ReportPK RK)
         {
             if (IsFill(reportElement))
             {
@@ -50,18 +50,17 @@ namespace XYS.Report.Fill
                 }
             }
         }
-        public virtual void Fill(List<ILisReportElement> reportElementList, ReporterKey RK, Type type)
+        public void Fill(List<IReportElement> reportElementList, ReportPK RK, Type type)
         {
             if (IsFill(type))
             {
-                //
-                FillElements(reportElementList, RK, type);
+                FillElements(reportElementList,RK,type);
             }
         }
         #endregion
 
         #region 内部报告处理逻辑
-        protected virtual void FillReport(ReportReportElement rre, ReporterKey RK)
+        protected virtual void FillReport(ReportReportElement rre, ReportPK RK)
         {
             //默认的报告项
             FillElement(rre.ReportExam, RK);
@@ -70,7 +69,7 @@ namespace XYS.Report.Fill
             List<Type> availableElementList = this.GetAvailableInsideElements(RK);
             if (availableElementList != null && availableElementList.Count > 0)
             {
-                List<ILisReportElement> tempList = null;
+                List<IReportElement> tempList = null;
                 foreach (Type type in availableElementList)
                 {
                     if (IsFill(type))
@@ -84,12 +83,12 @@ namespace XYS.Report.Fill
         #endregion
 
         #region 抽象方法
-        protected abstract void FillElement(ILisReportElement reportElement, ReporterKey RK);
-        protected abstract void FillElements(List<ILisReportElement> reportElementList, ReporterKey RK, Type type);
+        protected abstract void FillElement(IReportElement reportElement, ReportPK RK);
+        protected abstract void FillElements(List<IReportElement> reportElementList, ReportPK RK, Type type);
         #endregion
 
         #region 辅助方法
-        protected virtual int GetSectionNo(ReporterKey RK)
+        protected virtual int GetSectionNo(ReportPK RK)
         {
             int sectionNo = 0;
             foreach (KeyColumn c in RK.KeySet)
@@ -117,7 +116,7 @@ namespace XYS.Report.Fill
             }
             return this.m_section2InsideTypeMap[sectionNo] as List<Type>;
         }
-        protected virtual List<Type> GetAvailableInsideElements(ReporterKey key)
+        protected virtual List<Type> GetAvailableInsideElements(ReportPK key)
         {
             int sectionNo = GetSectionNo(key);
             return GetAvailableInsideElements(sectionNo);
@@ -135,29 +134,26 @@ namespace XYS.Report.Fill
                 LisMap.InitSection2InnerElementTable(this.m_section2InsideTypeMap);
             }
         }
-        private bool IsFill(ILisReportElement element)
+        protected bool IsFill(IReportElement element)
         {
-            return element is AbstractReportElement;
+            return element is LisAbstractReportElement;
         }
-        private bool IsFill(Type type)
+        protected bool IsFill(Type type)
         {
             if (type != null)
             {
-                return typeof(AbstractReportElement).IsAssignableFrom(type);
+                return typeof(LisAbstractReportElement).IsAssignableFrom(type);
             }
             return false;
         }
-        private bool IsReport(ILisReportElement reportElement)
+        protected bool IsReport(IReportElement reportElement)
         {
             return IsReport(reportElement.GetType());
         }
-        private bool IsReport(Type type)
+        protected bool IsReport(Type type)
         {
             return typeof(ReportReportElement).Equals(type);
         }
-        #endregion
-
-        #region 未调用的方法
         #endregion
     }
 }

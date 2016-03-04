@@ -33,13 +33,11 @@ namespace XYS.Report.Core
                     // Must register with hierarchy
                     wrappersMap = new Hashtable();
                     m_repositories[reporter.Repository] = wrappersMap;
-
                     // Register for config reset & shutdown on repository
                     // logger.Repository.ShutdownEvent += m_shutdownHandler;
                 }
                 // Look for the wrapper object in the map
                 IReporterWrapper wrapperObject = wrappersMap[reporter] as IReporterWrapper;
-
                 if (wrapperObject == null)
                 {
                     // No wrapper object exists for the specified logger

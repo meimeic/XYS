@@ -2,11 +2,9 @@
 using System.Collections;
 
 using XYS.Util;
-using XYS.Report.Core;
-
-namespaceXYS.Report.Model.Lis
+namespace XYS.Report.Model.Lis
 {
-    public class ReportKVElement : AbstractInnerElement
+    public class ReportKVElement : LisAbstractInnerElement
     {
         #region 字段
         private string m_name;
@@ -47,7 +45,7 @@ namespaceXYS.Report.Model.Lis
                 {
                     if (this.m_kvTable.Count > DEFAULT_CAPACITY)
                     {
-                        throw new Exception();
+                        throw SystemInfo.CreateArgumentOutOfRangeException("ItemCount", this.m_kvTable.Count, "KV项已达到上限，无法再添加！");
                     }
                     this.m_kvTable[key] = value;
                 }

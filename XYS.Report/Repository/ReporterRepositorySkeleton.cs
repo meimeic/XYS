@@ -13,11 +13,13 @@ namespace XYS.Report.Repository
         #region 私有字段
         private bool m_configured;
         private string m_repositoryName;
+
         private Hashtable m_name2FillerMap;
         private Hashtable m_name2HandlerMap;
         private Hashtable m_name2StrategyMap;
-        private ICollection m_configurationMessages;
+
         private PropertiesDictionary m_properties;
+        private ICollection m_configurationMessages;
         private event ReporterRepositoryConfigurationChangedEventHandler m_configurationChangedEvent;
         #endregion
 
@@ -31,18 +33,12 @@ namespace XYS.Report.Repository
             this.m_configured = false;
             this.m_properties = properties;
             this.m_name2FillerMap = SystemInfo.CreateCaseInsensitiveHashtable(2);
-            this.m_name2HandlerMap = SystemInfo.CreateCaseInsensitiveHashtable(5);
-            this.m_name2StrategyMap = SystemInfo.CreateCaseInsensitiveHashtable(5);
+            this.m_name2HandlerMap = SystemInfo.CreateCaseInsensitiveHashtable(4);
+            this.m_name2StrategyMap = SystemInfo.CreateCaseInsensitiveHashtable(2);
         }
         #endregion
 
         #region 实现IReporterRepository接口属性
-        public virtual string RepositoryName
-        {
-            get { return this.m_repositoryName; }
-            set { this.m_repositoryName = value; }
-        }
-        
         public virtual Hashtable FillerMap
         {
             get { return this.m_name2FillerMap; }
@@ -55,20 +51,25 @@ namespace XYS.Report.Repository
         {
             get { return this.m_name2StrategyMap; }
         }
-        
+
         public virtual bool Configured
         {
             get { return m_configured; }
             set { m_configured = value; }
         }
-        public virtual ICollection ConfigurationMessages
+        public virtual string RepositoryName
         {
-            get { return m_configurationMessages; }
-            set { m_configurationMessages = value; }
+            get { return this.m_repositoryName; }
+            set { this.m_repositoryName = value; }
         }
         public PropertiesDictionary Properties
         {
             get { return m_properties; }
+        }
+        public virtual ICollection ConfigurationMessages
+        {
+            get { return m_configurationMessages; }
+            set { m_configurationMessages = value; }
         }
         #endregion
 
@@ -127,7 +128,6 @@ namespace XYS.Report.Repository
                 this.m_name2StrategyMap[strategy.StrategyName] = strategy;
             }
         }
-        
         public virtual void ClearFiller()
         {
             lock (this.m_name2FillerMap)
@@ -149,7 +149,6 @@ namespace XYS.Report.Repository
                 this.m_name2StrategyMap.Clear();
             }
         }
-
         #endregion
     }
 }

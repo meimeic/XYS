@@ -2,10 +2,9 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Report.Model;
-using XYS.Report.Core;
-using XYS.Report.Util;
-namespace XYS.Report.Handler
+using XYS.Model;
+using XYS.Report.Model.Lis;
+namespace XYS.Report.Handler.Lis
 {
     public class ReportGraphHandler : ReportHandlerSkeleton
     {
@@ -31,7 +30,7 @@ namespace XYS.Report.Handler
         {
             return OperateGraph(report);
         }
-        protected override bool OperateElement(ILisReportElement element)
+        protected override bool OperateElement(IReportElement element)
         {
             ReportGraphElement rge = element as ReportGraphElement;
             if (rge != null)
@@ -47,7 +46,7 @@ namespace XYS.Report.Handler
         {
             if (rre.ReportExam.SectionNo == 11)
             {
-                List<ILisReportElement> graphList = rre.GetReportItem(typeof(ReportGraphElement).Name);
+                List<IReportElement> graphList = rre.GetReportItem(typeof(ReportGraphElement).Name);
                 AddImageByParItem(rre.ParItemList, graphList);
             }
             OperateElementList(rre.GetReportItem(typeof(ReportGraphElement).Name));
@@ -56,7 +55,7 @@ namespace XYS.Report.Handler
         #endregion
 
         #region 图片项添加处理
-        private void AddImageByParItem(List<int> parItemList, List<ILisReportElement> graphElementList)
+        private void AddImageByParItem(List<int> parItemList, List<IReportElement> graphElementList)
         {
             byte[] imageValue;
             ReportGraphElement rge;
