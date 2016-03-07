@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Model;
+using XYS.Report.Util;
 using XYS.Report.Model.Lis;
 namespace XYS.Report.Handler.Lis
 {
@@ -79,7 +80,7 @@ namespace XYS.Report.Handler.Lis
         {
             lock (this.m_parItemNo2NormalImage)
             {
-                LisMap.InitParItem2NormalImageTable(this.m_parItemNo2NormalImage);
+                LisConfiguration.InitParItem2NormalImageTable(this.m_parItemNo2NormalImage);
             }
         }
         #endregion

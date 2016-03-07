@@ -320,7 +320,7 @@ namespace XYS.Report.Core
             if (repository.RepositoryName == DefaultRepositoryName)
             {
                 //获取相关的配置文件名
-                string repositoryConfigFile = SystemInfo.GetAppSetting("lis-report.Config");
+                string repositoryConfigFile = SystemInfo.GetAppSetting("xys-report.Config");
                 if (repositoryConfigFile != null && repositoryConfigFile.Length > 0)
                 {
                     //使用AppSettings指定的配置文件进行配置
@@ -343,7 +343,7 @@ namespace XYS.Report.Core
                     //是否观测文件变化（根据AppSettings获取监控文件标识）
                     bool watchRepositoryConfigFile = false;
                     {
-                        string watch = SystemInfo.GetAppSetting("lis-report.Config.Watch");
+                        string watch = SystemInfo.GetAppSetting("xys-report.Config.Watch");
                         if (watch != null && watch.Length > 0)
                         {
                             try

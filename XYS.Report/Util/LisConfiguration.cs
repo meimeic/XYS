@@ -4,21 +4,23 @@ using System.Collections.Generic;
 
 using XYS.Util;
 using XYS.Report.Core;
+using XYS.Report.Config;
+
 namespace XYS.Report.Util
 {
     public class LisConfiguration
     {
-         #region
+        #region
         private static readonly Type declaringType = typeof(LisConfiguration);
         private static readonly LisSectionMap SECTION_MAP = new LisSectionMap();
-        private static readonly LisElementMap ELEMENT_MAP=new LisElementMap();
+        private static readonly LisElementMap ELEMENT_MAP = new LisElementMap();
         private static readonly LisParItemMap PARITEM_MAP = new LisParItemMap();
         #endregion
 
         #region
-        private LisMap()
+        private LisConfiguration()
         { }
-        static LisMap()
+        static LisConfiguration()
         {
         }
         #endregion
@@ -26,77 +28,96 @@ namespace XYS.Report.Util
         #region
         public static void InitParItem2NormalImageTable(Hashtable table)
         {
-            byte[] imageArray;
-            string imageFileName;
             table.Clear();
-            ParItemMap parItemMap = new ParItemMap();
-            ConfigureParItemMap(parItemMap);
-            foreach (ParItem item in parItemMap.AllParItem)
+            byte[] imageArray=null;
+            string imageFullName=null;
+            LisParItem parItem = null;
+            if (PARITEM_MAP.Count == 0)
             {
-                if (item.ImageFlag)
+                ConfigureParItemMap();
+            }
+            foreach (object item in PARITEM_MAP.AllParItem)
+            {
+                parItem = item as LisParItem;
+                if (parItem != null)
                 {
-                    imageFileName = SystemInfo.GetFileFullName(SystemInfo.GetNormalImageFilePath(), item.ImagePath);
-                    imageArray = SystemInfo.ReadImageFile(imageFileName);
-                    table[item.ParItemNo] = imageArray;
+                    if (parItem.ImageFlag)
+                    {
+                        imageFullName = SystemInfo.GetFileFullName(LisImage.GetImageFilePath(), parItem.ImageName);
+                        imageArray = LisImage.ReadImageFile(imageFullName);
+                        table[parItem.ParItemNo] = imageArray;
+                    }
                 }
             }
         }
         public static void InitSection2FillElementTable(Hashtable table)
         {
             table.Clear();
-            ElementTypeMap elementMap = new ElementTypeMap();
-            ConfigureReportElementMap(elementMap);
-            ReportSectionMap sectionMap = new ReportSectionMap();
-            ConfigureReportSectionMap(sectionMap);
-
-            ElementType eType = null;
-            List<Type> tempList = null;
-            foreach (ReportSection rs in sectionMap.AllReporterSection)
+            if (SECTION_MAP.Count == 0)
             {
-                if (rs.InnerElementList.Count > 0)
+                ConfigureSectionMap();
+            }
+            if (ELEMENT_MAP.Count == 0)
+            {
+                ConfigureElementMap();
+            }
+            LisSection section = null;
+            LisElement element = null;
+            List<Type> tempList = null;
+            foreach (object rs in SECTION_MAP.AllReporterSection)
+            {
+                section = rs as LisSection;
+                if (section != null)
                 {
-                    tempList = new List<Type>(2);
-                    foreach (string name in rs.InnerElementList)
+                    if (section.FillElementList.Count > 0)
                     {
-                        eType = elementMap[name];
-                        if (eType != null)
+                        tempList = new List<Type>(2);
+                        foreach (string name in section.FillElementList)
                         {
-                            tempList.Add(eType.EType);
+                            element = ELEMENT_MAP[name];
+                            if (element != null)
+                            {
+                                tempList.Add(element.EType);
+                            }
                         }
+                        table[section.SectionNo] = tempList;
                     }
-                    table[rs.SectionNo] = tempList;
                 }
             }
         }
         #endregion
 
         #region
-        private static void ConfigureReportElementMap()
+        private static void ConfigureElementMap()
         {
+            ConfigureElementMap(ELEMENT_MAP);
         }
-        public static void ConfigureReportElementMap(LisElementMap elementMap)
+        public static void ConfigureElementMap(LisElementMap elementMap)
         {
-            ConsoleInfo.Debug(declaringType, "configuring ReportElementTypeMap");
-            XmlParamConfigurator.ConfigElementTypes(elementMap);
-            ConsoleInfo.Debug(declaringType, "configured ReportElementTypeMap");
+            ConsoleInfo.Debug(declaringType, "configuring LisElementMap");
+            XmlLisParamConfigurator.ConfigElementMap(elementMap);
+            ConsoleInfo.Debug(declaringType, "configured LisElementMap");
         }
-        
-        private static void ConfigureReportSectionMap()
+
+        private static void ConfigureSectionMap()
         {
-            ReportLog.Debug(declaringType, "LisMap:configuring ReportSectionMap");
-            XmlParamConfigurator.ConfigSectionMap(SECTION_MAP);
+            ConfigureSectionMap(SECTION_MAP);
         }
-        private static void ConfigureReportSectionMap(LisSectionMap sectionMap)
+        private static void ConfigureSectionMap(LisSectionMap sectionMap)
         {
             ConsoleInfo.Debug(declaringType, "configuring ReportSectionMap");
-            XmlParamConfigurator.ConfigSectionMap(sectionMap);
+            XmlLisParamConfigurator.ConfigSectionMap(sectionMap);
             ConsoleInfo.Debug(declaringType, "configured ReportSectionMap");
         }
 
+        public static void ConfigureParItemMap()
+        {
+            ConfigureParItemMap(PARITEM_MAP);
+        }
         public static void ConfigureParItemMap(LisParItemMap parItemMap)
         {
             ConsoleInfo.Debug(declaringType, "configuring ParItemMap");
-            XmlParamConfigurator.ConfigParItemMap(parItemMap);
+            XmlLisParamConfigurator.ConfigParItemMap(parItemMap);
             ConsoleInfo.Debug(declaringType, "configured ParItemMap");
         }
         #endregion

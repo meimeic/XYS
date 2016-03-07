@@ -3,7 +3,8 @@ using System.Xml;
 using System.Collections;
 
 using XYS.Util;
-
+using XYS.Report.Fill;
+using XYS.Report.Handler;
 namespace XYS.Report.Repository.Lis
 {
     public class XmlLisConfigurator

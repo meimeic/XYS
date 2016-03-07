@@ -19,7 +19,7 @@ namespace XYS.Report.Core
         static ReporterManager()
         {
             //设置RepositorySelector
-            string appRepositorySelectorTypeName = SystemInfo.GetAppSetting("lis-report.RepositorySelector");
+            string appRepositorySelectorTypeName = SystemInfo.GetAppSetting("xys-report.RepositorySelector");
             //根据配置设置
             if (appRepositorySelectorTypeName != null && appRepositorySelectorTypeName.Length > 0)
             {
@@ -60,7 +60,7 @@ namespace XYS.Report.Core
             //使用默认配置
             if (s_repositorySelector == null)
             {
-                s_repositorySelector = new DefaultRepositorySelector(typeof(XYS.Report.Repository.Hierarchy.Hierarchy));
+                s_repositorySelector = new DefaultRepositorySelector(typeof(XYS.Report.Repository.Lis.LisRepository));
             }
         }
         #endregion

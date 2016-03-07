@@ -273,7 +273,7 @@ namespace XYS.Report.Config
 #if NET_2_0
 				configElement = System.Configuration.ConfigurationManager.GetSection("xys-report") as XmlElement;
 #else
-                configElement = System.Configuration.ConfigurationManager.GetSection("xys-report") as XmlElement;
+                configElement = System.Configuration.ConfigurationManager.GetSection("xysConfig") as XmlElement;
 #endif
                 if (configElement == null)
                 {
@@ -348,15 +348,15 @@ namespace XYS.Report.Config
                 {
                     ConsoleInfo.Debug(declaringType, "loading XML configuration");
                     //获取节点集合
-                    XmlNodeList configNodeList = doc.GetElementsByTagName("lis-report");
+                    XmlNodeList configNodeList = doc.GetElementsByTagName("xysConfig");
                     //节点必须有且只有一个
                     if (configNodeList.Count == 0)
                     {
-                        ConsoleInfo.Debug(declaringType, "XML configuration does not contain a <lis-report> element. Configuration Aborted.");
+                        ConsoleInfo.Debug(declaringType, "XML configuration does not contain a <xysConfig> element. Configuration Aborted.");
                     }
                     else if (configNodeList.Count > 1)
                     {
-                        ConsoleInfo.Error(declaringType, "XML configuration contains [" + configNodeList.Count + "] <lis-report> elements. Only one is allowed. Configuration Aborted.");
+                        ConsoleInfo.Error(declaringType, "XML configuration contains [" + configNodeList.Count + "] <xysConfig> elements. Only one is allowed. Configuration Aborted.");
                     }
                     else
                     {
@@ -388,10 +388,18 @@ namespace XYS.Report.Config
                 }
                 else
                 {
-                    XmlDocument newDoc = new XmlDocument();
-                    XmlElement newElement = (XmlElement)newDoc.AppendChild(newDoc.ImportNode(element, true));
-                    //配置
-                    configurableRepository.Configure(newElement);
+                    if (string.IsNullOrEmpty(configurableRepository.XmlConfigTag))
+                    {
+                        throw new ArgumentNullException("elementTag");
+                    }
+                    XmlElement targetElement = element[configurableRepository.XmlConfigTag];
+                    if (targetElement != null)
+                    {
+                        //XmlDocument newDoc = new XmlDocument();
+                        //XmlElement newElement = (XmlElement)newDoc.AppendChild(newDoc.ImportNode(targetElement, true));
+                        //配置
+                        configurableRepository.Configure(targetElement);
+                    }
                 }
             }
         }

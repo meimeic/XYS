@@ -73,15 +73,15 @@ namespace XYS.Util
         #endregion Implementation of ISerializable
 
         #region IDictionary接口实现
-       public IDictionaryEnumerator IDictionary.GetEnumerator()
+        IDictionaryEnumerator IDictionary.GetEnumerator()
         {
             return InnerHashtable.GetEnumerator();
         }
-        public void IDictionary.Remove(object key)
+        void IDictionary.Remove(object key)
         {
             throw new NotSupportedException("This is a Read Only Dictionary and can not be modified");
         }
-        public bool IDictionary.Contains(object key)
+        bool IDictionary.Contains(object key)
         {
             return InnerHashtable.Contains(key);
         }
@@ -89,11 +89,11 @@ namespace XYS.Util
         {
             throw new NotSupportedException("This is a Read Only Dictionary and can not be modified");
         }
-        public void IDictionary.Add(object key, object value)
+        void IDictionary.Add(object key, object value)
         {
             throw new NotSupportedException("This is a Read Only Dictionary and can not be modified");
         }
-        
+
         bool IDictionary.IsReadOnly
         {
             get { return true; }
@@ -129,7 +129,7 @@ namespace XYS.Util
         {
             InnerHashtable.CopyTo(array, index);
         }
-        
+
         bool ICollection.IsSynchronized
         {
             get { return InnerHashtable.IsSynchronized; }
@@ -145,7 +145,7 @@ namespace XYS.Util
         #endregion
 
         #region IEnumerable接口实现
-        public IEnumerator IEnumerable.GetEnumerator()
+         IEnumerator IEnumerable.GetEnumerator()
         {
             return ((IEnumerable)InnerHashtable).GetEnumerator();
         }

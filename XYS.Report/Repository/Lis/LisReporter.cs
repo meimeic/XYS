@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 
+using XYS.Model;
+using XYS.Common;
 using XYS.Report.Core;
 using XYS.Report.Fill;
 using XYS.Report.Handler;
@@ -56,7 +58,7 @@ namespace XYS.Report.Repository.Lis
             }
             set { this.m_filler = value; }
         }
-        public virtual Hierarchy Hierarchy
+        public virtual LisRepository Hierarchy
         {
             get { return this.m_hierarchy; }
             set { this.m_hierarchy = value; }
@@ -72,30 +74,22 @@ namespace XYS.Report.Repository.Lis
         {
             get { return this.m_hierarchy; }
         }
-        public void FillReport(ReportReportElement report, ReportKey RK)
+        public void FillReport(IReportElement report, ReportPK RK)
         {
             this.Filler.Fill(report, RK);
         }
-        public bool OptionReport(ReportReportElement report)
+        public bool OptionReport(IReportElement report)
         {
-            return this.HandlerReportEvent(report);
+            return this.HandlerEvent(report);
         }
-        public bool OptionReport(List<ILisReportElement> reportList)
+        public bool OptionReport(List<IReportElement> reportList)
         {
-            return this.HandlerReportEvent(reportList);
+            return this.HandlerEvent(reportList);
         }
         #endregion
 
         #region 受保护的虚方法
-        protected virtual bool HandlerReportEvent(ReportReportElement report)
-        {
-            return HandlerEvent(report);
-        }
-        protected virtual bool HandlerReportEvent(List<ILisReportElement> reportList)
-        {
-            return HandlerEvent(reportList, typeof(ReportReportElement));
-        }
-        protected virtual bool HandlerEvent(ILisReportElement element)
+        protected virtual bool HandlerEvent(IReportElement element)
         {
             IReportHandler handler = this.HandlerHead;
             while (handler != null)
@@ -119,12 +113,12 @@ namespace XYS.Report.Repository.Lis
             }
             return true;
         }
-        protected virtual bool HandlerEvent(List<ILisReportElement> reportElementList, Type type)
+        protected virtual bool HandlerEvent(List<IReportElement> reportElementList)
         {
             IReportHandler handler = this.HandlerHead;
             while (handler != null)
             {
-                switch (handler.ReportOptions(reportElementList, type))
+                switch (handler.ReportOptions(reportElementList))
                 {
                     case HandlerResult.Fail:
                         return false;

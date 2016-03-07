@@ -1,0 +1,222 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/01/2016 08:50:16" ReportInfo.Modified="03/01/2016 11:43:36" ReportInfo.CreatorVersion="2013.2.5.0">
+  <Dictionary>
+    <TableDataSource Name="ReportExam" ReferenceName="Data.ReportExam" DataType="System.Int32" Enabled="true">
+      <Column Name="SerialNo" DataType="System.String" PropName="Column"/>
+      <Column Name="SampleNo" DataType="System.String" PropName="Column"/>
+      <Column Name="SampleTypeName" DataType="System.String" PropName="Column"/>
+      <Column Name="ParItemName" DataType="System.String" PropName="Column"/>
+      <Column Name="FormMemo" DataType="System.String" PropName="Column"/>
+      <Column Name="FormComment" DataType="System.String" PropName="Column"/>
+      <Column Name="FormComment2" DataType="System.String" PropName="Column"/>
+      <Column Name="Technician" DataType="System.String" PropName="Column"/>
+      <Column Name="Checker" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="ReportReport" ReferenceName="Data.ReportReport" DataType="System.Int32" Enabled="true">
+      <Column Name="ReceiveDateTime" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="CollectDateTime" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="InceptDateTime" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="TestDateTime" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="CheckDateTime" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="SecondeCheckDateTime" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="Remark" DataType="System.String" PropName="Column"/>
+      <Column Name="ReportTitle" DataType="System.String" PropName="Column"/>
+      <Column Name="ParItemName" DataType="System.String" PropName="Column"/>
+      <Column Name="TechnicianImage" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="CheckerImage" DataType="System.Byte[]" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="ReportCustom" ReferenceName="Data.ReportCustom" DataType="System.Int32" Enabled="true">
+      <Column Name="Name" DataType="System.String" PropName="Column"/>
+      <Column Name="Column0" DataType="System.String" PropName="Column"/>
+      <Column Name="Column1" DataType="System.String" PropName="Column"/>
+      <Column Name="Column2" DataType="System.String" PropName="Column"/>
+      <Column Name="Column3" DataType="System.String" PropName="Column"/>
+      <Column Name="Column4" DataType="System.String" PropName="Column"/>
+      <Column Name="Column5" DataType="System.String" PropName="Column"/>
+      <Column Name="Column6" DataType="System.String" PropName="Column"/>
+      <Column Name="Column7" DataType="System.String" PropName="Column"/>
+      <Column Name="Column8" DataType="System.String" PropName="Column"/>
+      <Column Name="Column9" DataType="System.String" PropName="Column"/>
+      <Column Name="Column10" DataType="System.String" PropName="Column"/>
+      <Column Name="Column11" DataType="System.String" PropName="Column"/>
+      <Column Name="Column12" DataType="System.String" PropName="Column"/>
+      <Column Name="Column13" DataType="System.String" PropName="Column"/>
+      <Column Name="Column14" DataType="System.String" PropName="Column"/>
+      <Column Name="Column15" DataType="System.String" PropName="Column"/>
+      <Column Name="Column16" DataType="System.String" PropName="Column"/>
+      <Column Name="Column17" DataType="System.String" PropName="Column"/>
+      <Column Name="Column18" DataType="System.String" PropName="Column"/>
+      <Column Name="Column19" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="ReportItem" ReferenceName="Data.ReportItem" DataType="System.Int32" Enabled="true">
+      <Column Name="ItemNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="ItemCName" DataType="System.String" PropName="Column"/>
+      <Column Name="ItemEName" DataType="System.String" PropName="Column"/>
+      <Column Name="ItemResult" DataType="System.String" PropName="Column"/>
+      <Column Name="ItemStandard" DataType="System.String" PropName="Column"/>
+      <Column Name="ResultStatus" DataType="System.String" PropName="Column"/>
+      <Column Name="ItemUnit" DataType="System.String" PropName="Column"/>
+      <Column Name="RefRange" DataType="System.String" PropName="Column"/>
+      <Column Name="DispOrder" DataType="System.Int32" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="ReportPatient" ReferenceName="Data.ReportPatient" DataType="System.Int32" Enabled="true">
+      <Column Name="PatientName" DataType="System.String" PropName="Column"/>
+      <Column Name="GenderName" DataType="System.String" PropName="Column"/>
+      <Column Name="AgeStr" DataType="System.String" PropName="Column"/>
+      <Column Name="CID" DataType="System.String" PropName="Column"/>
+      <Column Name="PID" DataType="System.String" PropName="Column"/>
+      <Column Name="ClinicName" DataType="System.String" PropName="Column"/>
+      <Column Name="VisitTimes" DataType="System.Int32" PropName="Column"/>
+      <Column Name="DeptName" DataType="System.String" PropName="Column"/>
+      <Column Name="Doctor" DataType="System.String" PropName="Column"/>
+      <Column Name="BedNo" DataType="System.String" PropName="Column"/>
+      <Column Name="ClinicalDiagnosis" DataType="System.String" PropName="Column"/>
+      <Column Name="Explanation" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="FRImage" ReferenceName="Data.FRImage" DataType="System.Int32" Enabled="true">
+      <Column Name="Image1" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="Image2" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="Image3" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="Image4" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="Image5" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="Image6" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="Image7" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="Image8" DataType="System.Byte[]" PropName="Column"/>
+    </TableDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="195" PaperHeight="271" LeftMargin="20" BottomMargin="5">
+    <DataBand Name="Data1" Top="22.9" Width="623.7" Height="18.9" DataSource="ReportReport">
+      <TextObject Name="Text3" Width="623.7" Height="18.9" Text="中国医学科学院血液病医院临床检验室报告单" HorzAlign="Center" Font="宋体, 12pt, style=Bold"/>
+      <DataHeaderBand Name="DataHeader1" Width="623.7" Height="18.9" KeepWithData="true" RepeatOnEveryPage="true">
+        <TextObject Name="Text1" Width="472.5" Height="17.01" Text="[ReportReport.ParItemName]" Font="宋体, 8pt"/>
+        <TextObject Name="Text2" Left="538.65" Width="94.5" Height="17.01" CanBreak="false" Text="[Format(&quot;{0:yyyy-MM-dd}&quot;,[ReportReport.TestDateTime])]" WordWrap="false" Font="宋体, 8pt"/>
+      </DataHeaderBand>
+      <DataBand Name="Data2" Top="45.8" Width="623.7" Height="51.03">
+        <TextObject Name="Text4" Width="68.04" Height="17.01" Text="申请序号：" Padding="0, 0, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text5" Left="52.92" Width="105.84" Height="17.01" Text="[ReportExam.SerialNo]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text6" Left="170.1" Width="41.58" Height="17.01" Text="科室：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text7" Left="202.34" Width="168.21" Height="17.01" Text="[ReportPatient.DeptName]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt, style=Bold"/>
+        <TextObject Name="Text8" Left="366.66" Width="41.58" Height="17.01" Text="床号：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text9" Left="396.9" Width="49.14" Height="17.01" Text="[ReportPatient.BedNo]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text10" Left="453.6" Width="64.26" Height="17.01" Text="样本编号：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text11" Left="510.3" Width="79.38" Height="17.01" Text="[ReportExam.SampleNo]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text12" Top="17.01" Width="41.58" Height="17.01" Text="姓名：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text13" Left="30.35" Top="17.01" Width="83.16" Height="17.01" Text="[ReportPatient.PatientName]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text14" Left="132.3" Top="17.01" Width="41.58" Height="17.01" Text="性别：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text15" Left="162.65" Top="17.01" Width="41.58" Height="17.01" Text="[ReportPatient.GenderName]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text16" Left="217.35" Top="17.01" Width="41.58" Height="17.01" Text="年龄：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text17" Left="255.15" Top="17.01" Width="51.03" Height="17.01" Text="[ReportPatient.AgeStr]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text18" Left="321.3" Top="17.01" Width="56.7" Height="17.01" Text="病案号：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text19" Left="368.55" Top="17.01" Width="75.6" Height="17.01" Text="[ReportPatient.PID]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text20" Left="453.6" Top="17.01" Width="64.26" Height="17.01" Text="样本类型：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text21" Left="512.3" Top="17.01" Width="79.38" Height="17.01" Text="[ReportExam.SampleTypeName]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text22" Top="34.02" Width="41.58" Height="17.01" Text="类型：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text23" Left="30.35" Top="34.02" Width="58.59" Height="17.01" Text="[ReportPatient.ClinicName]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text24" Left="103.95" Top="34.02" Width="41.58" Height="17.01" Text="医生：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text25" Left="136.08" Top="34.02" Width="69.93" Height="17.01" Text="[ReportPatient.Doctor]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text26" Left="217.35" Top="34.02" Width="66.15" Height="17.01" Text="临床诊断：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text28" Left="453.6" Top="34.02" Width="41.58" Height="17.01" Text="说明：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text29" Left="491.4" Top="34.02" Width="100.17" Height="17.01" Text="[ReportPatient.Explanation]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text27" Left="274.05" Top="34.02" Width="181.44" Height="17.01" Text="[ReportPatient.ClinicalDiagnosis]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      </DataBand>
+      <DataBand Name="Data3" Top="123.73" Width="623.7" Height="708.75">
+        <SubreportObject Name="Subreport1" Width="623.7" Height="708.75" ReportPage="Page2" PrintOnParent="true"/>
+        <DataHeaderBand Name="DataHeader2" Top="100.83" Width="623.7" Height="18.9">
+          <TextObject Name="Text30" Width="54.81" Height="18.9" Text="序号" VertAlign="Center" Font="宋体, 9pt"/>
+          <TextObject Name="Text31" Left="56.7" Width="213.57" Height="18.9" Text="项   目" VertAlign="Center" Font="宋体, 9pt"/>
+          <TextObject Name="Text32" Left="283.5" Width="77.49" Height="18.9" Text="结果" VertAlign="Center" Font="宋体, 9pt"/>
+          <TextObject Name="Text33" Left="359.1" Width="56.7" Height="18.9" Text="状态" VertAlign="Center" Font="宋体, 9pt"/>
+          <TextObject Name="Text34" Left="425.25" Width="64.26" Height="18.9" Text=" 单位" VertAlign="Center" Font="宋体, 9pt"/>
+          <TextObject Name="Text35" Left="510.3" Width="94.5" Height="18.9" Text="生物参考区间" VertAlign="Center" Font="宋体, 9pt"/>
+        </DataHeaderBand>
+      </DataBand>
+      <DataBand Name="Data4" Top="836.48" Width="623.7" Height="75.6" DataSource="ReportCustom">
+        <TableObject Name="Table2" Left="75.6" Width="472.5" Height="75.6" Border.Lines="All">
+          <TableColumn Name="Column6" Width="18.9"/>
+          <TableColumn Name="Column7" Width="113.4"/>
+          <TableColumn Name="Column8" Width="113.4"/>
+          <TableColumn Name="Column9" Width="113.4"/>
+          <TableColumn Name="Column10" Width="113.4"/>
+          <TableRow Name="Row5">
+            <TableCell Name="Cell22" Border.Lines="Right" Text="人&#13;&#10;工&#13;&#10;分&#13;&#10;类" VertAlign="Center" Font="宋体, 9pt" RowSpan="4"/>
+            <TableCell Name="Cell23" Border.Lines="Right, Bottom" Text="原始粒          %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
+              <TextObject Name="Text63" Left="63.15" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column0]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+            </TableCell>
+            <TableCell Name="Cell24" Border.Lines="Right, Bottom" Text="早幼粒          %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
+              <TextObject Name="Text64" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column1]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+            </TableCell>
+            <TableCell Name="Cell25" Border.Lines="Right, Bottom" Text="中幼粒          %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
+              <TextObject Name="Text65" Left="66.15" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column2]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+            </TableCell>
+            <TableCell Name="Cell26" Border.Lines="Bottom" Text="晚幼粒          %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
+              <TextObject Name="Text66" Left="66.15" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column3]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+            </TableCell>
+          </TableRow>
+          <TableRow Name="Row6">
+            <TableCell Name="Cell27" Font="宋体, 9pt"/>
+            <TableCell Name="Cell28" Border.Lines="Right, Bottom" Text="中性杆状        %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
+              <TextObject Name="Text67" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column4]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+            </TableCell>
+            <TableCell Name="Cell29" Border.Lines="Right, Bottom" Text="中性分叶        %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
+              <TextObject Name="Text68" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column5]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+            </TableCell>
+            <TableCell Name="Cell30" Border.Lines="Right, Bottom" Text="嗜酸粒          %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
+              <TextObject Name="Text69" Left="66.15" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column6]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+            </TableCell>
+            <TableCell Name="Cell31" Border.Lines="Bottom" Text="嗜碱粒          %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
+              <TextObject Name="Text70" Left="66.15" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column10]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+            </TableCell>
+          </TableRow>
+          <TableRow Name="Row7">
+            <TableCell Name="Cell32" Font="宋体, 9pt"/>
+            <TableCell Name="Cell33" Border.Lines="Right, Bottom" Text="淋巴            %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
+              <TextObject Name="Text71" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column7]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+            </TableCell>
+            <TableCell Name="Cell34" Border.Lines="Right, Bottom" Text="单核            %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
+              <TextObject Name="Text72" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column8]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+            </TableCell>
+            <TableCell Name="Cell35" Border.Lines="Right, Bottom" Text="有核红     /100WBC" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
+              <TextObject Name="Text73" Left="37.8" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column9]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+            </TableCell>
+            <TableCell Name="Cell36" Border.Lines="Bottom" Text="幼稚细胞        %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
+              <TextObject Name="Text74" Left="66.15" Top="3" Width="30.24" Height="15.12" Text="[ReportCustom.Column11]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+            </TableCell>
+          </TableRow>
+          <TableRow Name="Row8">
+            <TableCell Name="Cell37" Font="宋体, 9pt"/>
+            <TableCell Name="Cell38" Text="备注" Font="宋体, 9pt" ColSpan="3"/>
+            <TableCell Name="Cell39" Font="宋体, 9pt"/>
+            <TableCell Name="Cell40" Font="宋体, 9pt"/>
+            <TableCell Name="Cell41" Border.Lines="Left" Text="其他未见异常" VertAlign="Center" Font="宋体, 9pt"/>
+          </TableRow>
+        </TableObject>
+      </DataBand>
+      <DataFooterBand Name="DataFooter1" Top="916.08" Width="623.7" Height="75.6">
+        <TextObject Name="Text42" Width="64.26" Height="18.9" Text="采集时间：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text45" Left="66.15" Width="132.3" Height="18.9" Text="[Format(&quot;{0:yyyy-MM-dd HH:mm}&quot;,[ReportReport.CollectDateTime])]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text52" Left="340.2" Top="9.45" Width="56.7" Height="18.9" Text="检验者：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text53" Left="472.5" Top="9.45" Width="56.7" Height="18.9" Text="审核者：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <PictureObject Name="Picture1" Left="396.9" Top="1.89" Width="75.6" Height="37.8" DataColumn="ReportReport.TechnicianImage"/>
+        <PictureObject Name="Picture2" Left="529.2" Top="1.89" Width="75.6" Height="37.8" DataColumn="ReportReport.CheckerImage"/>
+        <TextObject Name="Text43" Top="18.9" Width="64.26" Height="18.9" Text="签收时间：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text46" Left="66.15" Top="18.9" Width="132.3" Height="18.9" Text="[Format(&quot;{0:yyyy-MM-dd HH:mm}&quot;,[ReportReport.InceptDateTime])]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text44" Top="37.8" Width="64.26" Height="18.9" Text="报告时间：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text47" Left="66.15" Top="37.8" Width="132.3" Height="18.9" Text="[Format(&quot;{0:yyyy-MM-dd HH:mm}&quot;,[ReportReport.CheckDateTime])]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text51" Top="56.7" Width="444.15" Height="18.9" Text="注:此报告仅对该份被检标本有效，若有质疑请在接到报告2天内提出！" VertAlign="Center" Font="宋体, 9pt"/>
+      </DataFooterBand>
+    </DataBand>
+  </ReportPage>
+  <ReportPage Name="Page2">
+    <DataBand Name="Data5" Width="718.2" Height="18.9" DataSource="ReportItem">
+      <TextObject Name="Text36" Width="45.36" Height="18.9" Text="[Row#]" Padding="2, 4, 2, 0" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text37" Left="37.8" Width="232.47" Height="18.9" Text="[ReportItem.ItemCName]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text38" Left="283.5" Width="49.14" Height="18.9" Text="[ReportItem.ItemResult]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text39" Left="368.55" Width="56.7" Height="18.9" Text="[ReportItem.ResultStatus]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text40" Left="425.25" Width="83.16" Height="18.9" Text="[ReportItem.ItemUnit]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text41" Left="519.75" Width="122.85" Height="18.9" Text="[ReportItem.RefRange]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <Sort>
+        <Sort Expression="[ReportItem.DispOrder]"/>
+      </Sort>
+    </DataBand>
+  </ReportPage>
+</Report>

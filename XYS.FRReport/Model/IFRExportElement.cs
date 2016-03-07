@@ -5,5 +5,6 @@ namespace XYS.FRReport.Model
 {
     public interface IFRExportElement:IExportElement
     {
+
     }
 }

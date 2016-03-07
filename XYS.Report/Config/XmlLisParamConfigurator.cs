@@ -3,7 +3,7 @@ using System.Xml;
 
 using XYS.Util;
 using XYS.Report.Core;
-namespace XYS.Lis.Config
+namespace XYS.Report.Config
 {
     public class XmlLisParamConfigurator
     {
@@ -18,13 +18,11 @@ namespace XYS.Lis.Config
         private static readonly string PAR_ITEMS_TAG = "parItems";
         private static readonly string PAR_ITEM_TAG = "parItem";
 
-        private static readonly string NAME_ATTR = "name";
         private static readonly string TYPE_ATTR = "type";
         private static readonly string VALUE_ATTR = "value";
-        private static readonly string FILL_TAG_ATTR = "fillTag";
-
+        private static readonly string NAME_ATTR = "name";
         private static readonly string IMAGE_FLAG_ATTR = "imageFlag";
-        private static readonly string IMAGE_PATH_ATTR = "imagePath";
+        private static readonly string IMAGE_NAME_ATTR = "imageName";
 
         private static readonly string FILL_ELEMENTS_ATTR = "fillElements";
         private static readonly string FILL_TAG_ATTR = "fillTag";
@@ -156,7 +154,7 @@ namespace XYS.Lis.Config
                 {
                     LisParItem parItem = new LisParItem(value, name);
                     parItem.ImageFlag = GetBoolean(element.GetAttribute(IMAGE_FLAG_ATTR));
-                    parItem.ImagePath = element.GetAttribute(IMAGE_PATH_ATTR);
+                    parItem.ImageName = element.GetAttribute(IMAGE_NAME_ATTR);
                     parItemMap.Add(parItem);
                 }
             }

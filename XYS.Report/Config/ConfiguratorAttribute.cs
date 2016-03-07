@@ -9,16 +9,16 @@ namespace XYS.Report.Config
     {
         //权值
         private int m_priority = 0;
-        
+
         #region 构造函数
         protected ConfiguratorAttribute(int priority)
         {
             m_priority = priority;
         }
         #endregion
-        
+
         public abstract void Configure(Assembly sourceAssembly, IReporterRepository targetRepository);
-       
+
         #region 实现IComparable方法
         public int CompareTo(object obj)
         {

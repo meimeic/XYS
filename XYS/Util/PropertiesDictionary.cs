@@ -35,15 +35,15 @@ namespace XYS.Util
         #endregion
 
         #region IDictionary接口实现
-        public IDictionaryEnumerator IDictionary.GetEnumerator()
+        IDictionaryEnumerator IDictionary.GetEnumerator()
         {
             return InnerHashtable.GetEnumerator();
         }
-        public void IDictionary.Remove(object key)
+        void IDictionary.Remove(object key)
         {
             InnerHashtable.Remove(key);
         }
-        public bool IDictionary.Contains(object key)
+        bool IDictionary.Contains(object key)
         {
             return InnerHashtable.Contains(key);
         }
@@ -51,7 +51,7 @@ namespace XYS.Util
         {
             InnerHashtable.Clear();
         }
-        public void IDictionary.Add(object key, object value)
+        void IDictionary.Add(object key, object value)
         {
             if (!(key is string))
             {
@@ -59,11 +59,11 @@ namespace XYS.Util
             }
             InnerHashtable.Add(key, value);
         }
-        public bool IDictionary.IsReadOnly
+        bool IDictionary.IsReadOnly
         {
             get { return false; }
         }
-        public object IDictionary.this[object key]
+        object IDictionary.this[object key]
         {
             get
             {

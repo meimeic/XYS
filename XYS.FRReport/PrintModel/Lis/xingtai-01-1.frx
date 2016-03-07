@@ -1,0 +1,752 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="08/13/2015 15:10:27" ReportInfo.Modified="09/16/2015 13:27:14" ReportInfo.CreatorVersion="2013.2.5.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+    private void Table2_ManualBuild(object sender, EventArgs e)
+    {
+      
+    }
+  }
+}
+</ScriptText>
+  <Dictionary>
+    <TableDataSource Name="ReportForm" ReferenceName="Data.ReportForm" DataType="System.Int32" Enabled="true">
+      <Column Name="ReceiveDate" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="SectionNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="TestTypeNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="SampleNo" DataType="System.String" PropName="Column"/>
+      <Column Name="SerialNo" DataType="System.String" PropName="Column"/>
+      <Column Name="DeptName" DataType="System.String" PropName="Column"/>
+      <Column Name="BedNo" DataType="System.String" PropName="Column"/>
+      <Column Name="CName" DataType="System.String" PropName="Column"/>
+      <Column Name="Sex" DataType="System.String" PropName="Column"/>
+      <Column Name="Age" DataType="System.String" PropName="Column"/>
+      <Column Name="PID" DataType="System.String" PropName="Column"/>
+      <Column Name="SampleTypeName" DataType="System.String" PropName="Column"/>
+      <Column Name="ClinicTypeName" DataType="System.String" PropName="Column"/>
+      <Column Name="DoctorName" DataType="System.String" PropName="Column"/>
+      <Column Name="ClinicalDiagnosis" DataType="System.String" PropName="Column"/>
+      <Column Name="Explanation" DataType="System.String" PropName="Column"/>
+      <Column Name="ParItemName" DataType="System.String" PropName="Column"/>
+      <Column Name="TestDateTime" DataType="System.String" PropName="Column"/>
+      <Column Name="CollectDateTime" DataType="System.String" PropName="Column"/>
+      <Column Name="InceptDateTime" DataType="System.String" PropName="Column"/>
+      <Column Name="ReportDateTime" DataType="System.String" PropName="Column"/>
+      <Column Name="ReportTitle" DataType="System.String" PropName="Column"/>
+      <Column Name="Remark" DataType="System.String" PropName="Column"/>
+      <Column Name="TechnicianImage" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="CheckerImage" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="FormMemo" DataType="System.String" PropName="Column"/>
+      <Column Name="FormComment" DataType="System.String" PropName="Column"/>
+      <Column Name="FormComment2" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="ReportItem" ReferenceName="Data.ReportItem" DataType="System.Int32" Enabled="true">
+      <Column Name="ReceiveDate" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="SectionNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="TestTypeNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="SampleNo" DataType="System.String" PropName="Column"/>
+      <Column Name="ItemNo" DataType="System.String" PropName="Column"/>
+      <Column Name="DispNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="ItemName" DataType="System.String" PropName="Column"/>
+      <Column Name="ItemEName" DataType="System.String" PropName="Column"/>
+      <Column Name="ItemResult" DataType="System.String" PropName="Column"/>
+      <Column Name="ResultStatus" DataType="System.String" PropName="Column"/>
+      <Column Name="ItemUnit" DataType="System.String" PropName="Column"/>
+      <Column Name="RefRange" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="ManReportItem" ReferenceName="Data.ManReportItem" DataType="System.Int32" Enabled="true">
+      <Column Name="ReceiveDate" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="SectionNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="TestTypeNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="SampleNo" DataType="System.String" PropName="Column"/>
+      <Column Name="Item9288" DataType="System.String" PropName="Column"/>
+      <Column Name="Item9289" DataType="System.String" PropName="Column"/>
+      <Column Name="Item9290" DataType="System.String" PropName="Column"/>
+      <Column Name="Item9291" DataType="System.String" PropName="Column"/>
+      <Column Name="Item9292" DataType="System.String" PropName="Column"/>
+      <Column Name="Item9293" DataType="System.String" PropName="Column"/>
+      <Column Name="Item9294" DataType="System.String" PropName="Column"/>
+      <Column Name="Item9300" DataType="System.String" PropName="Column"/>
+      <Column Name="Item9295" DataType="System.String" PropName="Column"/>
+      <Column Name="Item9296" DataType="System.String" PropName="Column"/>
+      <Column Name="Item9297" DataType="System.String" PropName="Column"/>
+      <Column Name="Item9301" DataType="System.String" PropName="Column"/>
+      <Column Name="Remark" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="RanReportItem" ReferenceName="Data.RanReportItem" DataType="System.Int32" Enabled="true">
+      <Column Name="ReceiveDate" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="SectionNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="TestTypeNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="SampleNo" DataType="System.String" PropName="Column"/>
+      <Column Name="SampleQuality" DataType="System.String" PropName="Column"/>
+      <Column Name="CulturalMethod" DataType="System.String" PropName="Column"/>
+      <Column Name="BandMethod" DataType="System.String" PropName="Column"/>
+      <Column Name="CaryogramDesc" DataType="System.String" PropName="Column"/>
+      <Column Name="Remark" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="HLAReportItem" ReferenceName="Data.HLAReportItem" DataType="System.Int32" Enabled="true">
+      <Column Name="ReceiveDate" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="SectionNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="TestTypeNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="SampleNo" DataType="System.String" PropName="Column"/>
+      <Column Name="OtherName" DataType="System.String" PropName="Column"/>
+      <Column Name="OtherAge" DataType="System.String" PropName="Column"/>
+      <Column Name="OtherRelation" DataType="System.String" PropName="Column"/>
+      <Column Name="HLAItemName" DataType="System.String" PropName="Column"/>
+      <Column Name="HLAValue1" DataType="System.String" PropName="Column"/>
+      <Column Name="HLAValue2" DataType="System.String" PropName="Column"/>
+      <Column Name="Remark" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="RFGraphData" ReferenceName="Data.RFGraphData" DataType="System.Int32" Enabled="true">
+      <Column Name="ReceiveDate" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="SectionNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="TestTypeNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="SampleNo" DataType="System.String" PropName="Column"/>
+      <Column Name="S_FLHxS" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="S_FLLxS" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="S_SSCxS" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="B_FLHxB1" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="S_FSCWxS" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="S_FLLWxS" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="YiChuan_Result" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="FISH_Normal" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="DianYong" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="TuPu" DataType="System.Byte[]" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="GSReportItem" ReferenceName="Data.GSReportItem" DataType="System.Int32" Enabled="true">
+      <Column Name="ReceiveDate" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="SectionNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="TestTypeNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="SampleNo" DataType="System.String" PropName="Column"/>
+      <Column Name="i1_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i1_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i2_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i2_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i3_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i3_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i4_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i4_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i5_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i5_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i6_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i6_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i7_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i7_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i8_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i8_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i9_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i9_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i10_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i10_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i11_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i11_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i12_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i12_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i13_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i13_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i14_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i14_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i15_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i15_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i16_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i16_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i17_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i17_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i18_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i18_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i19_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i19_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i11_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i11_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i12_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i12_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i13_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i13_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i14_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i14_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i15_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i15_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i16_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i16_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i17_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i17_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i18_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i18_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i19_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i19_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i20_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i20_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i21_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i21_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i22_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i22_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i23_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i23_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i24_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i24_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i25_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i25_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i26_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i26_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i27_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i27_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i28_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i28_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i29_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i29_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i30_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i30_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i31_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i31_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i32_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i32_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i33_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i33_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i34_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i34_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i35_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i35_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i36_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i36_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i37_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i37_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i38_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i38_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i39_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i39_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i40_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i40_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i41_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i41_gs" DataType="System.String" PropName="Column"/>
+      <Column Name="i42_xue" DataType="System.String" PropName="Column"/>
+      <Column Name="i42_gs" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="GSReportResult" ReferenceName="Data.GSReportResult" DataType="System.Int32" Enabled="true">
+      <Column Name="ReceiveDate" DataType="System.DateTime" PropName="Column"/>
+      <Column Name="SectionNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="TestTypeNo" DataType="System.Int32" PropName="Column"/>
+      <Column Name="SampleNo" DataType="System.String" PropName="Column"/>
+      <Column Name="MorphologicalDesc" DataType="System.String" PropName="Column"/>
+      <Column Name="DiagnosticOpinion" DataType="System.String" PropName="Column"/>
+      <Column Name="Image1" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="Image2" DataType="System.Byte[]" PropName="Column"/>
+    </TableDataSource>
+    <Relation Name="ReportForm_ReportItem" ParentDataSource="ReportForm" ChildDataSource="ReportItem" ParentColumns="ReceiveDate&#13;&#10;SectionNo&#13;&#10;TestTypeNo&#13;&#10;SampleNo" ChildColumns="ReceiveDate&#13;&#10;SectionNo&#13;&#10;TestTypeNo&#13;&#10;SampleNo" Enabled="true"/>
+    <Relation Name="ReportForm_ManReportItem" ParentDataSource="ReportForm" ChildDataSource="ManReportItem" ParentColumns="ReceiveDate&#13;&#10;SectionNo&#13;&#10;TestTypeNo&#13;&#10;SampleNo" ChildColumns="ReceiveDate&#13;&#10;SectionNo&#13;&#10;TestTypeNo&#13;&#10;SampleNo" Enabled="true"/>
+    <Relation Name="ReportForm_RanReportItem" ParentDataSource="ReportForm" ChildDataSource="RanReportItem" ParentColumns="ReceiveDate&#13;&#10;SectionNo&#13;&#10;TestTypeNo&#13;&#10;SampleNo" ChildColumns="ReceiveDate&#13;&#10;SectionNo&#13;&#10;TestTypeNo&#13;&#10;SampleNo" Enabled="true"/>
+    <Relation Name="ReportForm_RFGraphData" ParentDataSource="ReportForm" ChildDataSource="RFGraphData" ParentColumns="ReceiveDate&#13;&#10;SectionNo&#13;&#10;TestTypeNo&#13;&#10;SampleNo" ChildColumns="ReceiveDate&#13;&#10;SectionNo&#13;&#10;TestTypeNo&#13;&#10;SampleNo" Enabled="true"/>
+    <Relation Name="ReportForm_GSReportItem" ParentDataSource="ReportForm" ChildDataSource="GSReportItem" ParentColumns="ReceiveDate&#13;&#10;SectionNo&#13;&#10;TestTypeNo&#13;&#10;SampleNo" ChildColumns="ReceiveDate&#13;&#10;SectionNo&#13;&#10;TestTypeNo&#13;&#10;SampleNo" Enabled="true"/>
+    <Relation Name="ReportForm_GSReportResult" ParentDataSource="ReportForm" ChildDataSource="GSReportResult" ParentColumns="ReceiveDate&#13;&#10;SectionNo&#13;&#10;TestTypeNo&#13;&#10;SampleNo" ChildColumns="ReceiveDate&#13;&#10;SectionNo&#13;&#10;TestTypeNo&#13;&#10;SampleNo" Enabled="true"/>
+  </Dictionary>
+  <ReportPage Name="Page1" RawPaperSize="9" LeftMargin="20">
+    <PageHeaderBand Name="PageHeader1" Width="680.4" Height="47.25">
+      <TextObject Name="Text2" Left="56.7" Width="441.88" Height="16.63" Text="骨髓细胞形态学检查" Padding="0, 0, 0, 0" Font="宋体, 8pt"/>
+      <TextObject Name="Text3" Left="576.45" Width="135.32" Height="16.63" Text="[ReportForm.ReceiveDate]" Format="Date" Format.Format="D" WordWrap="false" Font="宋体, 8pt"/>
+      <TextObject Name="Text1" Top="18.9" Width="718.2" Height="18.9" Text="中国医学科学院血液病医院临床检验室报告单" HorzAlign="Center" Font="宋体, 14pt, style=Bold"/>
+      <TextObject Name="Text31" Width="66.15" Height="18.9" Text="开单项目：" WordWrap="false" Font="宋体, 8pt"/>
+      <TextObject Name="Text32" Left="500.85" Width="85.05" Height="18.9" Text="标本接收时间：" WordWrap="false" Font="宋体, 8pt"/>
+    </PageHeaderBand>
+    <DataBand Name="Data1" Top="51.25" Width="680.4" Height="66.15" DataSource="ReportForm">
+      <TextObject Name="Text4" Left="9.45" Top="18.9" Width="68.04" Height="17.01" Text="申请序号：" Padding="0, 0, 0, 0" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text5" Left="75.6" Top="18.9" Width="105.84" Height="17.01" Text="[ReportForm.SerialNo]" Font="宋体, 10pt"/>
+      <TextObject Name="Text6" Left="274.05" Width="41.58" Height="17.01" Text="科室：" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text7" Left="313.74" Width="139.86" Height="17.01" Text="[ReportForm.DeptName]" Font="宋体, 10pt"/>
+      <TextObject Name="Text8" Left="451.71" Width="41.58" Height="17.01" Text="床号：" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text9" Left="491.4" Width="49.14" Height="17.01" Text="[ReportForm.BedNo]" Font="宋体, 10pt"/>
+      <TextObject Name="Text10" Left="179.55" Top="18.9" Width="64.26" Height="17.01" Text="样本编号：" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text11" Left="245.7" Top="18.9" Width="79.38" Height="17.01" Text="[ReportForm.SampleNo]" Font="宋体, 10pt"/>
+      <TextObject Name="Text12" Left="9.45" Width="41.58" Height="17.01" Text="姓名：" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text13" Left="47.25" Width="73.71" Height="17.01" Text="[ReportForm.CName]" Font="宋体, 10pt"/>
+      <TextObject Name="Text14" Left="198.45" Width="41.58" Height="17.01" Text="性别：" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text15" Left="236.25" Width="41.58" Height="17.01" Text="[ReportForm.Sex]" Font="宋体, 10pt"/>
+      <TextObject Name="Text16" Left="122.85" Width="41.58" Height="17.01" Text="年龄：" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text17" Left="160.65" Width="41.58" Height="17.01" Text="[ReportForm.Age]" Font="宋体, 10pt"/>
+      <TextObject Name="Text18" Left="321.3" Top="18.9" Width="56.7" Height="17.01" Text="病案号：" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text19" Left="378" Top="18.9" Width="56.7" Height="17.01" Text="[ReportForm.PID]" Font="宋体, 10pt"/>
+      <TextObject Name="Text20" Left="434.7" Top="18.9" Width="64.26" Height="17.01" Text="样本类型：" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text21" Left="500.85" Top="18.9" Width="79.38" Height="17.01" Text="[ReportForm.SampleTypeName]" Font="宋体, 10pt"/>
+      <TextObject Name="Text24" Left="576.45" Top="18.9" Width="41.58" Height="17.01" Text="医生：" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text25" Left="623.7" Top="18.9" Width="69.93" Height="17.01" Text="[ReportForm.DoctorName]" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text26" Left="330.75" Top="37.8" Width="66.15" Height="18.9" Text="临床诊断：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text27" Left="396.9" Top="37.8" Width="143.64" Height="18.9" Text="[ReportForm.ClinicalDiagnosis]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text28" Left="538.65" Top="37.8" Width="41.58" Height="18.9" Text="备注：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text29" Left="576.45" Top="37.8" Width="109.62" Height="18.9" Text="[ReportForm.FormMemo]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text42" Left="538.65" Width="64.26" Height="18.9" Text="采集时间：" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text45" Left="604.8" Width="132.3" Height="18.9" Text="[ReportForm.CollectDateTime]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text43" Left="9.45" Top="37.8" Width="64.26" Height="18.9" Text="签收时间：" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text46" Left="75.6" Top="37.8" Width="94.5" Height="18.9" Text="[ReportForm.InceptDateTime]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text44" Left="170.1" Top="37.8" Width="64.26" Height="18.9" Text="报告时间：" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text47" Left="236.25" Top="37.8" Width="103.95" Height="18.9" Text="[ReportForm.ReportDateTime]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <DataBand Name="Data2" Top="121.4" Width="680.4" Height="869.4">
+        <SubreportObject Name="Subreport1" Width="340.2" Height="869.4" ReportPage="Page2" PrintOnParent="true"/>
+        <SubreportObject Name="Subreport2" Left="340.2" Width="340.2" Height="869.4" ReportPage="Page3"/>
+      </DataBand>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="994.8" Width="680.4" Height="47.25">
+      <PictureObject Name="Picture1" Left="56.7" Top="1.89" Width="75.6" Height="37.8" DataColumn="ReportForm.TechnicianImage"/>
+      <PictureObject Name="Picture2" Left="217.35" Top="1.89" Width="75.6" Height="37.8" DataColumn="ReportForm.CheckerImage"/>
+      <TextObject Name="Text52" Top="9.45" Width="56.7" Height="18.9" Text="检验者：" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text53" Left="160.65" Top="9.45" Width="56.7" Height="18.9" Text="审核者：" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text51" Left="311.85" Top="18.9" Width="444.15" Height="18.9" Text="注:此报告仅对该份被检标本有效，若有质疑请在接到报告2天内提出！" VertAlign="Center" Font="宋体, 9pt"/>
+    </PageFooterBand>
+  </ReportPage>
+  <ReportPage Name="Page2">
+    <DataBand Name="Data3" Width="718.2" Height="869.4" DataSource="GSReportItem">
+      <TableObject Name="Table1" Width="340.2" Height="869.4" Border.Lines="All">
+        <TableColumn Name="Column1" Width="18.9"/>
+        <TableColumn Name="Column2" Width="56.7"/>
+        <TableColumn Name="Column3" Width="75.6"/>
+        <TableColumn Name="Column4" Width="47.25"/>
+        <TableColumn Name="Column5" Width="47.25"/>
+        <TableColumn Name="Column6" Width="47.25"/>
+        <TableColumn Name="Column7" Width="47.25"/>
+        <TableRow Name="Row1">
+          <TableCell Name="Cell1" Border.Lines="Right, Bottom" Text="细 胞 名 称" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt" ColSpan="3" RowSpan="2"/>
+          <TableCell Name="Cell2" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell3" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell4" Border.Lines="Right, Bottom" Text="血片%" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt" RowSpan="2"/>
+          <TableCell Name="Cell5" Border.Lines="Bottom" Text="骨  髓  片" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt" ColSpan="3"/>
+          <TableCell Name="Cell126" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell127" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row2">
+          <TableCell Name="Cell6" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell7" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell8" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell9" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell10" Border.Lines="Right, Bottom" Text="平均值" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell128" Border.Lines="Right, Bottom" Text="+/-SD" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt"/>
+          <TableCell Name="Cell129" Border.Lines="Bottom" Text="%" HorzAlign="Center" VertAlign="Center" Font="宋体, 9pt"/>
+        </TableRow>
+        <TableRow Name="Row3">
+          <TableCell Name="Cell11" Border.Lines="Right, Bottom" Text="原  始  血  细  胞" HorzAlign="Center" Font="宋体, 10pt" ColSpan="3"/>
+          <TableCell Name="Cell12" Border.Lines="Right, Bottom" Font="宋体, 10pt"/>
+          <TableCell Name="Cell13" Border.Lines="Right, Bottom" Font="宋体, 10pt"/>
+          <TableCell Name="Cell14" Border.Lines="Right, Bottom" Text="[GSReportItem.i1_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell15" Border.Lines="Right, Bottom" Text="0.08&#13;&#10;" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell130" Border.Lines="Right, Bottom" Text="0.01" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell131" Border.Lines="Bottom" Text="[GSReportItem.i1_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row4">
+          <TableCell Name="Cell16" Border.Lines="Right, Bottom" Text="粒&#13;&#10;&#13;&#10;&#13;&#10;细&#13;&#10;&#13;&#10;&#13;&#10;胞&#13;&#10;&#13;&#10;&#13;&#10;系&#13;&#10;&#13;&#10;&#13;&#10;统" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" RowSpan="14"/>
+          <TableCell Name="Cell17" Border.Lines="Right, Bottom" Text="原 始 粒 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell18" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell19" Border.Lines="Right, Bottom" Text="[GSReportItem.i2_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell20" Border.Lines="Right, Bottom" Text="0.64" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell132" Border.Lines="Right, Bottom" Text="0.33" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell133" Border.Lines="Bottom" Text="[GSReportItem.i2_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row5">
+          <TableCell Name="Cell21" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell22" Border.Lines="Right, Bottom" Text="早 幼 粒 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell23" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell24" Border.Lines="Right, Bottom" Text="[GSReportItem.i3_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell25" Border.Lines="Right, Bottom" Text="1.57" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell134" Border.Lines="Right, Bottom" Text="0.6" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell135" Border.Lines="Bottom" Text="[GSReportItem.i3_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row6">
+          <TableCell Name="Cell26" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell27" Border.Lines="Right, Bottom" Text="中性粒&#13;&#10;细胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" RowSpan="4"/>
+          <TableCell Name="Cell28" Border.Lines="Right, Bottom" Text="中  幼" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell29" Border.Lines="Right, Bottom" Text="[GSReportItem.i4_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell30" Border.Lines="Right, Bottom" Text="6.49" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell136" Border.Lines="Right, Bottom" Text="2.04" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell137" Border.Lines="Bottom" Text="[GSReportItem.i4_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row7">
+          <TableCell Name="Cell31" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell32" Border.Lines="Right, Bottom" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell33" Border.Lines="Right, Bottom" Text="晚  幼" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell34" Border.Lines="Right, Bottom" Text="[GSReportItem.i5_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell35" Border.Lines="Right, Bottom" Text="7.9" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell138" Border.Lines="Right, Bottom" Text="1.97" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell139" Border.Lines="Bottom" Text="[GSReportItem.i5_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row8">
+          <TableCell Name="Cell36" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell37" Border.Lines="Right, Bottom" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell38" Border.Lines="Right, Bottom" Text="杆状核" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell39" Border.Lines="Right, Bottom" Text="[GSReportItem.i6_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell40" Border.Lines="Right, Bottom" Text="23.72" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell140" Border.Lines="Right, Bottom" Text="3.5" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell141" Border.Lines="Bottom" Text="[GSReportItem.i6_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row9">
+          <TableCell Name="Cell41" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell42" Border.Lines="Right, Bottom" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell43" Border.Lines="Right, Bottom" Text="分叶核" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell44" Border.Lines="Right, Bottom" Text="[GSReportItem.i7_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell45" Border.Lines="Right, Bottom" Text="9.44" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell142" Border.Lines="Right, Bottom" Text="2.92" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell143" Border.Lines="Bottom" Text="[GSReportItem.i7_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row10">
+          <TableCell Name="Cell46" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell47" Border.Lines="Right, Bottom" Text="嗜酸粒&#13;&#10;细胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" RowSpan="4"/>
+          <TableCell Name="Cell48" Border.Lines="Right, Bottom" Text="中  幼" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell49" Border.Lines="Right, Bottom" Text="[GSReportItem.i8_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell50" Border.Lines="Right, Bottom" Text="0.38" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell144" Border.Lines="Right, Bottom" Text="0.23" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell145" Border.Lines="Bottom" Text="[GSReportItem.i8_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row11">
+          <TableCell Name="Cell51" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell52" Border.Lines="Right, Bottom" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell53" Border.Lines="Right, Bottom" Text="晚  幼" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell54" Border.Lines="Right, Bottom" Text="[GSReportItem.i9_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell55" Border.Lines="Right, Bottom" Text="0.49" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell146" Border.Lines="Right, Bottom" Text="0.32" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell147" Border.Lines="Bottom" Text="[GSReportItem.i9_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row12">
+          <TableCell Name="Cell56" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell57" Border.Lines="Right, Bottom" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell58" Border.Lines="Right, Bottom" Text="杆状核" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell59" Border.Lines="Right, Bottom" Text="[GSReportItem.i10_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell60" Border.Lines="Right, Bottom" Text="1.25" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell148" Border.Lines="Right, Bottom" Text="0.61" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell149" Border.Lines="Bottom" Text="[GSReportItem.i10_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row13">
+          <TableCell Name="Cell61" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell62" Border.Lines="Right, Bottom" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell63" Border.Lines="Right, Bottom" Text="分叶核" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell64" Border.Lines="Right, Bottom" Text="[GSReportItem.i11_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell65" Border.Lines="Right, Bottom" Text="0.86" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell150" Border.Lines="Right, Bottom" Text="0.61" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell151" Border.Lines="Bottom" Text="[GSReportItem.i11_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row14">
+          <TableCell Name="Cell66" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell67" Border.Lines="Right, Bottom" Text="嗜碱粒&#13;&#10;细胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" RowSpan="4"/>
+          <TableCell Name="Cell68" Border.Lines="Right, Bottom" Text="中  幼" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell69" Border.Lines="Right, Bottom" Text="[GSReportItem.i42_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell70" Border.Lines="Right, Bottom" Text="0.02" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell152" Border.Lines="Right, Bottom" Text="0.05" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell153" Border.Lines="Bottom" Text="[GSReportItem.i42_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row15">
+          <TableCell Name="Cell71" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell72" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell73" Border.Lines="Right, Bottom" Text="晚  幼" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell74" Border.Lines="Right, Bottom" Text="[GSReportItem.i12_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell75" Border.Lines="Right, Bottom" Text="0.06" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell154" Border.Lines="Right, Bottom" Text="0.07" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell155" Border.Lines="Bottom" Text="[GSReportItem.i12_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row16">
+          <TableCell Name="Cell76" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell77" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell78" Border.Lines="Right, Bottom" Text="杆状核" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell79" Border.Lines="Right, Bottom" Text="[GSReportItem.i13_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell80" Border.Lines="Right, Bottom" Text="0.1" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell156" Border.Lines="Right, Bottom" Text="0.09" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell157" Border.Lines="Bottom" Text="[GSReportItem.i13_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row17">
+          <TableCell Name="Cell81" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell82" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell83" Border.Lines="Right, Bottom" Text="分叶核" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell84" Border.Lines="Right, Bottom" Text="[GSReportItem.i14_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell85" Border.Lines="Right, Bottom" Text="0.03" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell158" Border.Lines="Right, Bottom" Text="0.05" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell159" Border.Lines="Bottom" Text="[GSReportItem.i14_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row18">
+          <TableCell Name="Cell86" Border.Lines="Right, Bottom" Text="红&#13;&#10;细&#13;&#10;胞&#13;&#10;系&#13;&#10;统" VertAlign="Center" Font="宋体, 10pt" RowSpan="7"/>
+          <TableCell Name="Cell87" Border.Lines="Right, Bottom" Text="原 始 红 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell88" Border.Lines="Right, Bottom" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell89" Border.Lines="Right, Bottom" Text="[GSReportItem.i15_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell90" Border.Lines="Right, Bottom" Text="0.57" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell160" Border.Lines="Right, Bottom" Text="0.3" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell161" Border.Lines="Bottom" Text="[GSReportItem.i15_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row19">
+          <TableCell Name="Cell91" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell92" Border.Lines="Right, Bottom" Text="早 幼 红 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell93" Border.Lines="Right, Bottom" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell94" Border.Lines="Right, Bottom" Text="[GSReportItem.i16_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell95" Border.Lines="Right, Bottom" Text="0.92" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell162" Border.Lines="Right, Bottom" Text="0.41" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell163" Border.Lines="Bottom" Text="[GSReportItem.i16_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row20">
+          <TableCell Name="Cell96" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell97" Border.Lines="Right, Bottom" Text="中 幼 红 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell98" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell99" Border.Lines="Right, Bottom" Text="[GSReportItem.i17_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell100" Border.Lines="Right, Bottom" Text="7.41" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell164" Border.Lines="Right, Bottom" Text="1.91" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell165" Border.Lines="Bottom" Text="[GSReportItem.i17_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row21">
+          <TableCell Name="Cell101" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell102" Border.Lines="Right, Bottom" Text="晚 幼 红 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell103" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell104" Border.Lines="Right, Bottom" Text="[GSReportItem.i18_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell105" Border.Lines="Right, Bottom" Text="10.75" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell166" Border.Lines="Right, Bottom" Text="2.36" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell167" Border.Lines="Bottom" Text="[GSReportItem.i18_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row22">
+          <TableCell Name="Cell106" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell107" Border.Lines="Right, Bottom" Text="早 巨 红 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell108" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell109" Border.Lines="Right, Bottom" Text="[GSReportItem.i19_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell110" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell168" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell169" Border.Lines="Bottom" Text="[GSReportItem.i19_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row23">
+          <TableCell Name="Cell111" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell112" Border.Lines="Right, Bottom" Text="中 巨 红 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell113" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell114" Border.Lines="Right, Bottom" Text="[GSReportItem.i20_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell115" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell170" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell171" Border.Lines="Bottom" Text="[GSReportItem.i20_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row24">
+          <TableCell Name="Cell116" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell117" Border.Lines="Right, Bottom" Text="晚 巨 红 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell118" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell119" Border.Lines="Right, Bottom" Text="[GSReportItem.i21_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell120" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell172" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell173" Border.Lines="Bottom" Text="[GSReportItem.i21_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row25">
+          <TableCell Name="Cell121" Border.Lines="Right, Bottom" Text="淋&#13;&#10;巴&#13;&#10;系" VertAlign="Center" Font="宋体, 10pt" RowSpan="3"/>
+          <TableCell Name="Cell122" Border.Lines="Right, Bottom" Text="原 始 淋 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell123" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell124" Border.Lines="Right, Bottom" Text="[GSReportItem.i22_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell125" Border.Lines="Right, Bottom" Text="0.05" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell174" Border.Lines="Right, Bottom" Text="0.09" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell175" Border.Lines="Bottom" Text="[GSReportItem.i22_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row26">
+          <TableCell Name="Cell176" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell177" Border.Lines="Right, Bottom" Text="幼 稚 淋 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell178" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell179" Border.Lines="Right, Bottom" Text="[GSReportItem.i23_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell180" Border.Lines="Right, Bottom" Text="0.47" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell181" Border.Lines="Right, Bottom" Text="0.84" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell182" Border.Lines="Bottom" Text="[GSReportItem.i23_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row27">
+          <TableCell Name="Cell183" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell184" Border.Lines="Right, Bottom" Text="成 熟 淋 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell185" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell186" Border.Lines="Right, Bottom" Text="[GSReportItem.i24_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell187" Border.Lines="Right, Bottom" Text="22.78" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell188" Border.Lines="Right, Bottom" Text="7.04" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell189" Border.Lines="Bottom" Text="[GSReportItem.i24_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row28">
+          <TableCell Name="Cell190" Border.Lines="Right, Bottom" Text="单&#13;&#10;核&#13;&#10;系" VertAlign="Center" Font="宋体, 10pt" RowSpan="3"/>
+          <TableCell Name="Cell191" Border.Lines="Right, Bottom" Text="原 始 单 核 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell192" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell193" Border.Lines="Right, Bottom" Text="[GSReportItem.i25_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell194" Border.Lines="Right, Bottom" Text="0.01" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell195" Border.Lines="Right, Bottom" Text="0.04" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell196" Border.Lines="Bottom" Text="[GSReportItem.i25_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row29">
+          <TableCell Name="Cell197" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell198" Border.Lines="Right, Bottom" Text="幼 稚 单 核 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell199" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell200" Border.Lines="Right, Bottom" Text="[GSReportItem.i26_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell201" Border.Lines="Right, Bottom" Text="0.14" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell202" Border.Lines="Right, Bottom" Text="0.19" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell203" Border.Lines="Bottom" Text="[GSReportItem.i26_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row30">
+          <TableCell Name="Cell204" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell205" Border.Lines="Right, Bottom" Text="成 熟 单 核 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell206" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell207" Border.Lines="Right, Bottom" Text="[GSReportItem.i27_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell208" Border.Lines="Right, Bottom" Text="3" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell209" Border.Lines="Right, Bottom" Text="0.88" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell210" Border.Lines="Bottom" Text="[GSReportItem.i27_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row31">
+          <TableCell Name="Cell211" Border.Lines="Right, Bottom" Text="巨&#13;&#10;核&#13;&#10;系&#13;&#10;统" VertAlign="Center" Font="宋体, 10pt" RowSpan="5"/>
+          <TableCell Name="Cell212" Border.Lines="Right, Bottom" Text="原  始  巨  核" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell213" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell214" Border.Lines="Right, Bottom" Text="[GSReportItem.i28_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell215" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell216" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell217" Border.Lines="Bottom" Text="[GSReportItem.i28_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row32">
+          <TableCell Name="Cell218" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell219" Border.Lines="Right, Bottom" Text="幼  稚  巨  核" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell220" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell221" Border.Lines="Right, Bottom" Text="[GSReportItem.i29_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell222" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell223" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell224" Border.Lines="Bottom" Text="[GSReportItem.i29_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row33">
+          <TableCell Name="Cell225" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell226" Border.Lines="Right, Bottom" Text="产  板  巨  核" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell227" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell228" Border.Lines="Right, Bottom" Text="[GSReportItem.i30_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell229" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell230" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell231" Border.Lines="Bottom" Text="[GSReportItem.i30_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row34">
+          <TableCell Name="Cell232" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell233" Border.Lines="Right, Bottom" Text="颗  粒  巨  核" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell234" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell235" Border.Lines="Right, Bottom" Text="[GSReportItem.i31_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell236" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell237" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell238" Border.Lines="Bottom" Text="[GSReportItem.i31_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row35">
+          <TableCell Name="Cell239" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell240" Border.Lines="Right, Bottom" Text="裸  核  巨  核" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell241" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell242" Border.Lines="Right, Bottom" Text="[GSReportItem.i32_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell243" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell244" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell245" Border.Lines="Bottom" Text="[GSReportItem.i32_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row36">
+          <TableCell Name="Cell246" Border.Lines="Right, Bottom" Text="浆&#13;&#10;细&#13;&#10;胞" VertAlign="Center" Font="宋体, 10pt" RowSpan="3"/>
+          <TableCell Name="Cell247" Border.Lines="Right, Bottom" Text="原 始 浆 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell248" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell249" Border.Lines="Right, Bottom" Text="[GSReportItem.i33_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell250" Border.Lines="Right, Bottom" Text="0.004" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell251" Border.Lines="Right, Bottom" Text="0.02" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell252" Border.Lines="Bottom" Text="[GSReportItem.i33_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row37">
+          <TableCell Name="Cell253" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell254" Border.Lines="Right, Bottom" Text="幼 稚 浆 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell255" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell256" Border.Lines="Right, Bottom" Text="[GSReportItem.i34_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell257" Border.Lines="Right, Bottom" Text="0.104" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell258" Border.Lines="Right, Bottom" Text="0.16" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell259" Border.Lines="Bottom" Text="[GSReportItem.i34_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row38">
+          <TableCell Name="Cell260" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell261" Border.Lines="Right, Bottom" Text="成 熟 浆 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell262" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell263" Border.Lines="Right, Bottom" Text="[GSReportItem.i35_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell264" Border.Lines="Right, Bottom" Text="0.71" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell265" Border.Lines="Right, Bottom" Text="0.42" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell266" Border.Lines="Bottom" Text="[GSReportItem.i35_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row39">
+          <TableCell Name="Cell267" Border.Lines="Right, Bottom" Text="其&#13;&#10;&#13;&#10;它" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" RowSpan="6"/>
+          <TableCell Name="Cell268" Border.Lines="Right, Bottom" Text="网  状  细  胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell269" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell270" Border.Lines="Right, Bottom" Text="[GSReportItem.i36_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell271" Border.Lines="Right, Bottom" Text="0.05" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell272" Border.Lines="Right, Bottom" Text="0.09" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell273" Border.Lines="Bottom" Text="[GSReportItem.i36_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row40">
+          <TableCell Name="Cell274" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell275" Border.Lines="Right, Bottom" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell276" Border.Lines="Right, Bottom" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell277" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell278" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell279" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell280" Border.Lines="Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row41">
+          <TableCell Name="Cell281" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell282" Border.Lines="Right, Bottom" Text="吞  噬  细  胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell283" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell284" Border.Lines="Right, Bottom" Text="[GSReportItem.i37_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell285" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell286" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell287" Border.Lines="Bottom" Text="[GSReportItem.i37_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row42">
+          <TableCell Name="Cell288" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell289" Border.Lines="Right, Bottom" Text="组 织 嗜 碱 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell290" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell291" Border.Lines="Right, Bottom" Text="[GSReportItem.i38_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell292" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell293" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell294" Border.Lines="Bottom" Text="[GSReportItem.i38_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row43">
+          <TableCell Name="Cell295" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell296" Border.Lines="Right, Bottom" Text="脂  肪  细  胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell297" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell298" Border.Lines="Right, Bottom" Text="[GSReportItem.i39_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell299" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell300" Border.Lines="Right, Bottom" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell301" Border.Lines="Bottom" Text="[GSReportItem.i39_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row44">
+          <TableCell Name="Cell302" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell303" Border.Lines="Right, Bottom" Text="分 类 不 明 细 胞" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="2"/>
+          <TableCell Name="Cell304" Border.Lines="Right, Bottom" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell305" Border.Lines="Right, Bottom" Text="[GSReportItem.i40_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell306" Border.Lines="Right, Bottom" Text="0.03" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell307" Border.Lines="Right, Bottom" Text="0.09" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell308" Border.Lines="Bottom" Text="[GSReportItem.i40_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row45">
+          <TableCell Name="Cell309" Border.Lines="Right, Bottom" Text="粒细胞系统:有核红" HorzAlign="Center" Font="宋体, 10pt" ColSpan="3"/>
+          <TableCell Name="Cell310" Border.Lines="Right, Bottom" Font="宋体, 10pt"/>
+          <TableCell Name="Cell311" Border.Lines="Right, Bottom" Font="宋体, 10pt"/>
+          <TableCell Name="Cell312" Border.Lines="Right, Bottom" Text="[GSReportItem.i41_xue]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell313" Border.Lines="Right, Bottom" Text="2.76" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell314" Border.Lines="Right, Bottom" Text="0.87" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+          <TableCell Name="Cell315" Border.Lines="Right, Bottom" Text="[GSReportItem.i41_gs]" HorzAlign="Right" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        </TableRow>
+        <TableRow Name="Row46">
+          <TableCell Name="Cell316" Border.Lines="Right" Text="共  计  细  胞  数" HorzAlign="Center" VertAlign="Center" Font="宋体, 10pt" ColSpan="3"/>
+          <TableCell Name="Cell317" Border.Lines="Right" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell318" Border.Lines="Right" VertAlign="Center" Font="宋体, 10pt"/>
+          <TableCell Name="Cell319" Border.Lines="Right" Text="100" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+          <TableCell Name="Cell320" Border.Lines="Right" Text="个" HorzAlign="Center" VertAlign="Center" WordWrap="false" Font="宋体, 9pt" ColSpan="2"/>
+          <TableCell Name="Cell321" Border.Lines="Right" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+          <TableCell Name="Cell322" Border.Lines="Right" Text="200" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        </TableRow>
+      </TableObject>
+    </DataBand>
+  </ReportPage>
+  <ReportPage Name="Page3" RawPaperSize="9" LeftMargin="20" TopMargin="5" BottomMargin="5">
+    <DataBand Name="Data4" Width="680.4">
+      <DataBand Name="Data5" Top="4" Width="680.4" Height="132.3" DataSource="GSReportResult">
+        <PictureObject Name="Picture3" Width="132.3" Height="132.3" DataColumn="GSReportResult.Image1"/>
+        <PictureObject Name="Picture4" Left="141.75" Width="141.75" Height="132.3" DataColumn="GSReportResult.Image2"/>
+      </DataBand>
+      <DataBand Name="Data6" Top="140.3" Width="680.4" Height="481.95" DataSource="GSReportResult">
+        <TextObject Name="Text33" Width="66.15" Height="18.9" Text="形态描述:" VertAlign="Center" Font="宋体, 9pt"/>
+        <TextObject Name="Text34" Left="9.45" Top="18.9" Width="359.1" Height="463.05" Text="[GSReportResult.MorphologicalDesc]" Font="宋体, 10pt"/>
+        <DataFooterBand Name="DataFooter1" Top="626.25" Width="680.4" Height="122.85" PrintOnBottom="true">
+          <TextObject Name="Text35" Width="66.15" Height="18.9" Text="诊断意见:" VertAlign="Center" Font="宋体, 9pt"/>
+          <TextObject Name="Text36" Left="9.45" Top="18.9" Width="359.1" Height="103.95" Text="[GSReportResult.DiagnosticOpinion]" Font="宋体, 9pt"/>
+        </DataFooterBand>
+      </DataBand>
+    </DataBand>
+  </ReportPage>
+</Report>

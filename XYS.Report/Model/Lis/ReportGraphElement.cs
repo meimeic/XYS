@@ -37,10 +37,7 @@ namespace XYS.Report.Model.Lis
         }
         #endregion
 
-        #region 实现父类抽象方法
-        public override void AfterFill()
-        {
-        }
+        #region 方法
         #endregion
     }
 }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 using XYS.Util;
 using XYS.Report.Fill;
+using XYS.Report.Core;
 using XYS.Report.Fill.Lis;
 namespace XYS.Report.Repository.Lis
 {
@@ -117,6 +118,90 @@ namespace XYS.Report.Repository.Lis
             ConfigurationMessages = configurationMessages;
             // Notify listeners
             OnConfigurationChanged(new ConfigurationChangedEventArgs(configurationMessages));
+        }
+        #endregion
+
+        #region 实现父类抽象方法
+        //查看某个名字的reporter是否存在
+        public override IReporter Exists(ReporterKey key)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException("key");
+            }
+            return this.m_key2ReporterMap[key] as LisReporter;
+        }
+        //获取当前库中所有reporter
+        public override IReporter[] GetCurrentReporters()
+        {
+            ArrayList reporters = new ArrayList(this.m_key2ReporterMap.Count);
+            foreach (object node in this.m_key2ReporterMap.Values)
+            {
+                if (node is LisReporter)
+                {
+                    reporters.Add(node);
+                }
+            }
+            return (IReporter[])reporters.ToArray(typeof(LisReporter));
+        }
+        //根据名称获取reporter
+        public override IReporter GetReporter(ReporterKey key)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException("key");
+            }
+            return this.GetReporter(key, this.m_defaultFactory);
+        }
+        #endregion
+        #region  公共方法
+        //从缓存中根据reporterName获取reporter,如果reporter不存在，则创建
+        public LisReporter GetReporter(ReporterKey key, IReporterFactory factory)
+        {
+            if (key == null)
+            {
+                throw new ArgumentNullException("reportkey");
+            }
+            if (factory == null)
+            {
+                throw new ArgumentNullException("factory");
+            }
+            lock (this.m_key2ReporterMap)
+            {
+                LisReporter reporter = null;
+                object node = this.m_key2ReporterMap[key];
+                if (node == null)
+                {
+                    reporter = factory.CreateReporter(this, key);
+                    reporter.Hierarchy = this;
+                    this.m_key2ReporterMap[key] = reporter;
+                    OnReporter(reporter);
+                    return reporter;
+                }
+                LisReporter nodereporter = node as LisReporter;
+                if (nodereporter != null)
+                {
+                    return nodereporter;
+                }
+                return null;
+            }
+        }
+        #endregion
+
+        #region 事件处理
+        protected virtual void OnReporter(LisReporter reporter)
+        {
+            reporter.InnerConfig();
+            OnReporterCreationEvent(reporter);
+        }
+        //通知事件监听器，处理新建reporter事件
+        protected virtual void OnReporterCreationEvent(LisReporter reporter)
+        {
+            ReporterCreationEventHandler handler = this.m_reporterCreatedEvent;
+            if (handler != null)
+            {
+                handler(this, new ReporterCreationEventArgs(reporter));
+            }
         }
         #endregion
     }

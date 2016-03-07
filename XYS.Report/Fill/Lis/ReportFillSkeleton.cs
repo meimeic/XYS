@@ -6,6 +6,7 @@ using XYS.Model;
 using XYS.Common;
 using XYS.Report.Model;
 using XYS.Report.Model.Lis;
+using XYS.Report.Util;
 namespace XYS.Report.Fill.Lis
 {
     public abstract class ReportFillSkeleton : IReportFiller
@@ -131,7 +132,7 @@ namespace XYS.Report.Fill.Lis
         {
             lock (this.m_section2InsideTypeMap)
             {
-                LisMap.InitSection2InnerElementTable(this.m_section2InsideTypeMap);
+                LisConfiguration.InitSection2FillElementTable(this.m_section2InsideTypeMap);
             }
         }
         protected bool IsFill(IReportElement element)

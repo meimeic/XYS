@@ -13,7 +13,7 @@ namespace XYS.Report.Core
         #region
         void FillReport(IReportElement report, ReportPK RK);
         #endregion
-        
+
         //报告元素处理
         #region
         bool OptionReport(IReportElement report);
