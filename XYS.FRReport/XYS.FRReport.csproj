@@ -61,6 +61,7 @@
     <Compile Include="Model\Lis\ReportPatient.cs" />
     <Compile Include="Model\Lis\ReportReport.cs" />
     <Compile Include="Convert\Lis\FRConvertSkeleton.cs" />
+    <Compile Include="PDFService\LisService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\FRDataStruct.cs" />

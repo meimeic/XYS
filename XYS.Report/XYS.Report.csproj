@@ -83,6 +83,7 @@
     <Compile Include="Handler\Lis\ReportPatientHandler.cs" />
     <Compile Include="Handler\Lis\ReportReportHandler.cs" />
     <Compile Include="IReport.cs" />
+    <Compile Include="Model\Lis\ReportImagesElement.cs" />
     <Compile Include="Repository\Lis\DefaultReporter.cs" />
     <Compile Include="Repository\Lis\DefaultReporterFactory.cs" />
     <Compile Include="Repository\Lis\IReporterFactory.cs" />

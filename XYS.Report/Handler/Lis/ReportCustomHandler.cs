@@ -44,28 +44,6 @@ namespace XYS.Report.Handler.Lis
         #region
         protected virtual bool OperateCustom(ReportReportElement rre)
         {
-            //if (rre.SectionNo == 45)
-            //{
-            //    List<IReportElement> customList = rre.GetReportItem(typeof(ReportCustomElement).Name);
-            //    List<ReportCustomElement> tempList = new List<ReportCustomElement>(15);
-            //    if (customList.Count > 0)
-            //    {
-            //        ReportCustomElement rec;
-            //        for (int i = customList.Count - 1; i >= 0; i--)
-            //        {
-            //            rec = customList[i] as ReportCustomElement;
-            //            if (rec != null)
-            //            {
-            //                tempList.Add(rec);
-            //            }
-            //            customList.RemoveAt(i);
-            //        }
-            //        //
-            //        List<ReportCustomElement> searchList = new List<ReportCustomElement>(5);
-            //        MergeCustomList(tempList, customList, searchList);
-            //    }
-            //}
-            OperateElementList(rre.GetReportItem(typeof(ReportCustomElement).Name));
             return true;
         }
         #endregion

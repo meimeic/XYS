@@ -27,6 +27,10 @@ namespace XYS.Report.Handler.Lis
             ReportPatientElement rpe = element as ReportPatientElement;
             if (rpe != null)
             {
+                if (rpe.CID != null)
+                {
+                    rpe.CID.Trim();
+                }
                 return true;
             }
             return false;
@@ -34,7 +38,6 @@ namespace XYS.Report.Handler.Lis
         protected override bool OperateReport(ReportReportElement rre)
         {
             //报告级操作
-
             return OperatePatient(rre);
         }
         #endregion

@@ -44,7 +44,7 @@
     <Compile Include="Common\CommonPKElement.cs" />
     <Compile Include="Common\XYSException.cs" />
     <Compile Include="Util\CustomCollection.cs" />
-    <Compile Include="Common\FRConvertAttribute.cs" />
+    <Compile Include="Common\ExportAttribute.cs" />
     <Compile Include="Common\FRExportAttribute.cs" />
     <Compile Include="Common\IConvert.cs" />
     <Compile Include="Common\IOptionHandler.cs" />

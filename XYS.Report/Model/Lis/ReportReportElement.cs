@@ -7,16 +7,20 @@ using XYS.Model;
 using XYS.Common;
 namespace XYS.Report.Model.Lis
 {
-    public class ReportReportElement : IReportElement
+    [Export()]
+    public class ReportReportElement : LisAbstractReportElement
     {
-
         #region 私有实例字段
         private int m_sectionNo;
-        private string m_reportTitle;
-        private int m_remarkFlag;
-        private string m_remark;
         private string m_parItemName;
 
+        private string m_reportTitle;
+
+        private int m_remarkFlag;
+        private string m_remark;
+
+        private string m_technician;
+        private string m_checker;
         private byte[] m_technicianImage;
         private byte[] m_checkerImage;
 
@@ -48,18 +52,29 @@ namespace XYS.Report.Model.Lis
         #region 实现IReportElement接口
         #endregion
 
+        #region 实现抽象类方法
+        #endregion
+
         #region 实例属性
-        [FRConvert()]
+        [Export()]
+        public string ReportTitle
+        {
+            get { return this.m_reportTitle; }
+            set { this.m_reportTitle = value; }
+        }
+        [Export()]
+        [Column(true)]
         public int SectionNo
         {
             get { return this.m_sectionNo; }
             set { this.m_sectionNo = value; }
         }
-        [FRConvert()]
-        public string ReportTitle
+        [Export()]
+        [Column(true)]
+        public string ParItemName
         {
-            get { return this.m_reportTitle; }
-            set { this.m_reportTitle = value; }
+            get { return this.m_parItemName; }
+            set { this.m_parItemName = value; }
         }
         //备注标识 0表示没有备注 1 表示备注已设置  2 表示备注未设置
         public int RemarkFlag
@@ -67,63 +82,77 @@ namespace XYS.Report.Model.Lis
             get { return this.m_remarkFlag; }
             set { this.m_remarkFlag = value; }
         }
-        [FRConvert()]
+        [Export()]
         public string Remark
         {
             get { return this.m_remark; }
             set { this.m_remark = value; }
         }
-        [FRConvert()]
-        public string ParItemName
-        {
-            get { return this.m_parItemName; }
-            set { this.m_parItemName = value; }
-        }
 
-        [FRConvert()]
+        [Export()]
+        [Column(true)]
         public DateTime ReceiveDateTime
         {
             get { return this.m_receiveDateTime; }
             set { this.m_receiveDateTime = value; }
         }
-        [FRConvert()]
+        [Export()]
+        [Column(true)]
         public DateTime CollectDateTime
         {
             get { return this.m_collectDateTime; }
             set { this.m_collectDateTime = value; }
         }
-        [FRConvert()]
+        [Export()]
+        [Column(true)]
         public DateTime InceptDateTime
         {
             get { return m_inceptDateTime; }
             set { m_inceptDateTime = value; }
         }
-        [FRConvert()]
+        [Export()]
+        [Column(true)]
         public DateTime TestDateTime
         {
             get { return m_testDateTime; }
             set { m_testDateTime = value; }
         }
-        [FRConvert()]
+        [Export()]
+        [Column(true)]
         public DateTime CheckDateTime
         {
             get { return m_checkDateTime; }
             set { m_checkDateTime = value; }
         }
-        [FRConvert()]
+        [Export()]
+        [Column(true)]
         public DateTime SecondeCheckDateTime
         {
             get { return m_secondCheckDateTime; }
             set { m_secondCheckDateTime = value; }
         }
 
-        [FRConvert()]
+        [Export()]
+        [Column(true)]
+        public string Technician
+        {
+            get { return m_technician; }
+            set { m_technician = value; }
+        }
+        [Export()]
+        [Column(true)]
+        public string Checker
+        {
+            get { return m_checker; }
+            set { m_checker = value; }
+        }
+        [Export()]
         public byte[] TechnicianImage
         {
             get { return this.m_technicianImage; }
             set { this.m_technicianImage = value; }
         }
-        [FRConvert()]
+        [Export()]
         public byte[] CheckerImage
         {
             get { return this.m_checkerImage; }
@@ -152,7 +181,7 @@ namespace XYS.Report.Model.Lis
         public void Init()
         {
         }
-        public void ReportClear()
+        public void Clear()
         {
             this.ParItemList.Clear();
             this.ReportItemTable.Clear();
@@ -178,6 +207,19 @@ namespace XYS.Report.Model.Lis
                 return result;
             }
             return null;
+        }
+        public void RemoveReportItem(string typeName)
+        {
+            if (!string.IsNullOrEmpty(typeName))
+            {
+                if (this.m_reportItemTable.ContainsKey(typeName))
+                {
+                    lock (this.m_reportItemTable)
+                    {
+                        this.m_reportItemTable.Remove(typeName);
+                    }
+                }
+            }
         }
         #endregion
     }

@@ -2,19 +2,19 @@
 namespace XYS.Common
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class, Inherited = true)]
-    public class FRConvertAttribute : Attribute
+    public class ExportAttribute : Attribute
     {
         private bool flag;
         private string name;
-        public FRConvertAttribute()
+        public ExportAttribute()
             : this(true, null)
         {
         }
-        public FRConvertAttribute(bool f)
+        public ExportAttribute(bool f)
             : this(f, null)
         {
         }
-        public FRConvertAttribute(bool flag, string name)
+        public ExportAttribute(bool flag, string name)
         {
             this.flag = flag;
             this.name = name;

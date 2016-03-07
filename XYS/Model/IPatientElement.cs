@@ -14,7 +14,10 @@
     }
     public interface IPatientElement
     {
-        string ClinicName { get; }
-        string GenderName { get; }
+        string PatientName { get; set; }
+        string GenderName { get; set; }
+        string AgeStr { get; set; }
+        string PatientID { get; set; }
+        string ClinicName { get; set; }
     }
 }

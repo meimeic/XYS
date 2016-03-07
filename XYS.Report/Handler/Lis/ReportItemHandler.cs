@@ -38,7 +38,7 @@ namespace XYS.Report.Handler.Lis
             ReportItemElement rie = element as ReportItemElement;
             if (rie != null)
             {
-                //删除
+                //删除此项
                 if (ItemIsDelete(rie))
                 {
                     return false;
@@ -63,7 +63,7 @@ namespace XYS.Report.Handler.Lis
             //item 处理
             ReportItemElement rie=null;
             List<IReportElement> itemElementList = rre.GetReportItem(typeof(ReportItemElement).Name);
-            ReportKVElement kve = GetKVElement(rre.ReportExam.SectionNo);
+            ReportKVElement kve = GetKVElement(rre.SectionNo);
             for (int i = itemElementList.Count - 1; i >= 0; i--)
             {
                 rie = itemElementList[i] as ReportItemElement;
@@ -102,6 +102,10 @@ namespace XYS.Report.Handler.Lis
         #endregion
 
         #region item项转换成KV项
+        private void Convert2KVElement(ReportReportElement rre)
+        {
+
+        }
         private bool IsConvert2KVElement(ReportItemElement rie, ReportKVElement rkve)
         {
             if (this.m_convertItemMap.Count == 0)

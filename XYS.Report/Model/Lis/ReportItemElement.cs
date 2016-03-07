@@ -1,6 +1,7 @@
 ﻿using XYS.Common;
 namespace XYS.Report.Model.Lis
 {
+    [Export()]
     public class ReportItemElement : LisAbstractReportElement
     {
         #region 私有常量字段
@@ -35,7 +36,7 @@ namespace XYS.Report.Model.Lis
         #endregion
 
         #region 公共属性
-        [FRConvert()]
+        [Export()]
         [Column(true)]
         public int ItemNo
         {
@@ -50,7 +51,7 @@ namespace XYS.Report.Model.Lis
             set { this.m_parItemNo = value; }
         }
 
-        [FRConvert()]
+        [Export()]
         [Column(true)]
         public string ItemCName
         {
@@ -58,7 +59,7 @@ namespace XYS.Report.Model.Lis
             set { this.m_itemCName = value; }
         }
 
-        [FRConvert()]
+        [Export()]
         [Column(true)]
         public string ItemEName
         {
@@ -78,14 +79,14 @@ namespace XYS.Report.Model.Lis
             get { return this.m_itemDesc; }
             set { this.m_itemDesc = value; }
         }
-        [FRConvert()]
+        [Export()]
         public string ItemResult
         {
             get { return this.m_itemResult; }
             protected set { this.m_itemResult = value; }
         }
 
-        [FRConvert()]
+        [Export()]
         [Column(true)]
         public string ItemStandard
         {
@@ -93,7 +94,7 @@ namespace XYS.Report.Model.Lis
             set { this.m_itemStandard = value; }
         }
 
-        [FRConvert()]
+        [Export()]
         [Column(true)]
         public string ResultStatus
         {
@@ -101,7 +102,7 @@ namespace XYS.Report.Model.Lis
             set { this.m_resultStatus = value; }
         }
 
-        [FRConvert()]
+        [Export()]
         [Column(true)]
         public string ItemUnit
         {
@@ -109,7 +110,7 @@ namespace XYS.Report.Model.Lis
             set { this.m_itemUnit = value; }
         }
 
-        [FRConvert()]
+        [Export()]
         [Column(true)]
         public string RefRange
         {
@@ -117,7 +118,7 @@ namespace XYS.Report.Model.Lis
             set { this.m_refRange = value; }
         }
 
-        [FRConvert()]
+        [Export()]
         [Column(true)]
         public int DispOrder
         {

@@ -126,7 +126,7 @@ namespace XYS.FRReport.Convert.Lis
             object[] conAttrs = null;
             if (prop != null)
             {
-                conAttrs = prop.GetCustomAttributes(typeof(FRConvertAttribute), true);
+                conAttrs = prop.GetCustomAttributes(typeof(ExportAttribute), true);
                 if (conAttrs != null && conAttrs.Length > 0)
                 {
                     return true;
@@ -139,7 +139,7 @@ namespace XYS.FRReport.Convert.Lis
             object[] conAttrs = null;
             if (type != null)
             {
-                conAttrs = type.GetCustomAttributes(typeof(FRConvertAttribute), true);
+                conAttrs = type.GetCustomAttributes(typeof(ExportAttribute), true);
                 if (conAttrs != null && conAttrs.Length > 0)
                 {
                     return true;
@@ -152,10 +152,10 @@ namespace XYS.FRReport.Convert.Lis
             object[] conAttrs = null;
             if (prop != null)
             {
-                conAttrs = prop.GetCustomAttributes(typeof(FRConvertAttribute), true);
+                conAttrs = prop.GetCustomAttributes(typeof(ExportAttribute), true);
                 if (conAttrs != null && conAttrs.Length > 0)
                 {
-                    FRConvertAttribute frcAttr = conAttrs[0] as FRConvertAttribute;
+                    ExportAttribute frcAttr = conAttrs[0] as ExportAttribute;
                     if (frcAttr != null)
                     {
                         return frcAttr.Name;
@@ -169,10 +169,10 @@ namespace XYS.FRReport.Convert.Lis
             object[] conAttrs = null;
             if (type != null)
             {
-                conAttrs = type.GetCustomAttributes(typeof(FRConvertAttribute), true);
+                conAttrs = type.GetCustomAttributes(typeof(ExportAttribute), true);
                 if (conAttrs != null && conAttrs.Length > 0)
                 {
-                    FRConvertAttribute frcAttr = conAttrs[0] as FRConvertAttribute;
+                    ExportAttribute frcAttr = conAttrs[0] as ExportAttribute;
                     if (frcAttr != null)
                     {
                         return frcAttr.Name;

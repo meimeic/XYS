@@ -322,7 +322,7 @@ namespace XYS.FRReport.Util
         {
             if (type != null)
             {
-                object[] xAttrs = type.GetCustomAttributes(typeof(FRExportAttribute), true);
+                object[] xAttrs = type.GetCustomAttributes(typeof(ExportAttribute), true);
                 if (xAttrs != null && xAttrs.Length > 0)
                 {
                     return true;
@@ -334,7 +334,7 @@ namespace XYS.FRReport.Util
         {
             if (prop != null)
             {
-                object[] xAttrs = prop.GetCustomAttributes(typeof(FRExportAttribute), true);
+                object[] xAttrs = prop.GetCustomAttributes(typeof(ExportAttribute), true);
                 if (xAttrs != null && xAttrs.Length > 0)
                 {
                     return true;

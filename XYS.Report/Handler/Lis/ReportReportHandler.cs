@@ -37,10 +37,10 @@ namespace XYS.Report.Handler.Lis
         #region 备注设置
         protected virtual void SetRemark(ReportReportElement rre)
         {
-            if (rre.RemarkFlag == 2 && rre.ReportPatient.ClinicType == ClinicType.clinic)
-            {
-                rre.Remark = "带*为天津市临床检测中心认定的相互认可检验项目";
-            }
+            //if (rre.RemarkFlag == 2 && rre.ReportPatient.ClinicName == ClinicType.clinic)
+            //{
+            //    rre.Remark = "带*为天津市临床检测中心认定的相互认可检验项目";
+            //}
         }
         #endregion
 

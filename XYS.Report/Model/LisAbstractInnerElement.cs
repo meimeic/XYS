@@ -3,7 +3,7 @@ namespace XYS.Report.Model
 {
     public class LisAbstractInnerElement : IReportElement
     {
-        #region
+        #region 私有字段
         #endregion
 
         #region 构造函数
@@ -12,7 +12,7 @@ namespace XYS.Report.Model
         }
         #endregion
 
-        #region 实现接口
+        #region 实现IReportElement接口
         #endregion
     }
 }

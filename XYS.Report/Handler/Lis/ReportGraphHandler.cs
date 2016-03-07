@@ -27,10 +27,6 @@ namespace XYS.Report.Handler.Lis
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateReport(ReportReportElement report)
-        {
-            return OperateGraph(report);
-        }
         protected override bool OperateElement(IReportElement element)
         {
             ReportGraphElement rge = element as ReportGraphElement;
@@ -40,31 +36,49 @@ namespace XYS.Report.Handler.Lis
             }
             return false;
         }
+        protected override bool OperateReport(ReportReportElement report)
+        {
+            return OperateGraph(report);
+        }
         #endregion
 
         #region graph项的内部处理逻辑
         protected virtual bool OperateGraph(ReportReportElement rre)
         {
-            if (rre.ReportExam.SectionNo == 11)
+            switch (rre.SectionNo)
             {
-                List<IReportElement> graphList = rre.GetReportItem(typeof(ReportGraphElement).Name);
-                AddImageByParItem(rre.ParItemList, graphList);
+                case 11:
+                    AddImageByParItem(rre);
+                    break;
+                default:
+                    break;
             }
             OperateElementList(rre.GetReportItem(typeof(ReportGraphElement).Name));
+            Convert2Image(rre);
             return true;
         }
         #endregion
 
+        #region
+        protected void Convert2Image(ReportReportElement rre)
+        {
+            List<IReportElement> graphList = rre.GetReportItem(typeof(ReportGraphElement).Name);
+            if (IsExist(graphList))
+            {
+            }
+        }
+        #endregion
         #region 图片项添加处理
-        private void AddImageByParItem(List<int> parItemList, List<IReportElement> graphElementList)
+        private void AddImageByParItem(ReportReportElement rre)
         {
             byte[] imageValue;
             ReportGraphElement rge;
+            List<IReportElement> graphList = rre.GetReportItem(typeof(ReportGraphElement).Name);
             if (this.m_parItemNo2NormalImage.Count == 0)
             {
                 this.InitParItem2NormalImage();
             }
-            foreach (int parItemNo in parItemList)
+            foreach (int parItemNo in rre.ParItemList)
             {
                 imageValue = this.m_parItemNo2NormalImage[parItemNo] as byte[];
                 if (imageValue != null)
@@ -72,7 +86,7 @@ namespace XYS.Report.Handler.Lis
                     rge = new ReportGraphElement();
                     rge.GraphName = "normal";
                     rge.GraphImage = imageValue;
-                    graphElementList.Add(rge);
+                    graphList.Add(rge);
                 }
             }
         }

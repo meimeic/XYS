@@ -18,7 +18,7 @@ namespace XYS.Report.Model
         }
         #endregion
 
-        #region 属性
+        #region 实例属性
         public string SearchSQL
         {
             get { return this.m_searchSQL; }
@@ -29,7 +29,7 @@ namespace XYS.Report.Model
         #region IReportElement接口属性实现
         #endregion
 
-        #region 方法
+        #region 内部方法
         #endregion
     }
 }
