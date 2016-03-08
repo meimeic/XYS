@@ -92,8 +92,8 @@
     <Compile Include="Repository\Lis\XmlLisConfigurator.cs" />
     <Compile Include="Repository\ReporterStrategy.cs" />
     <Compile Include="Require.cs" />
-    <Compile Include="Model\LisAbstractInnerElement.cs" />
-    <Compile Include="Model\LisAbstractReportElement.cs" />
+    <Compile Include="Model\AbstractInnerElement.cs" />
+    <Compile Include="Model\AbstractFillElement.cs" />
     <Compile Include="Model\Lis\ReportCustomElement.cs" />
     <Compile Include="Model\Lis\ReportExamElement.cs" />
     <Compile Include="Model\Lis\ReportGraphElement.cs" />

@@ -22,6 +22,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,7 +35,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FastReport, Version=2013.2.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\FastReport.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -45,22 +52,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Convert\IFRConvert.cs" />
-    <Compile Include="Convert\Lis\LisPDFConvert.cs" />
+    <Compile Include="Config\LisFRConfigManager.cs" />
+    <Compile Include="Config\LisFRSection.cs" />
+    <Compile Include="Config\LisGroupCollection.cs" />
+    <Compile Include="Config\LisGroupSection.cs" />
+    <Compile Include="Config\LisItemCollection.cs" />
+    <Compile Include="Config\LisItemSection.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="Model\IFRExportElement.cs" />
-    <Compile Include="Model\Lis\ReportCustom.cs" />
-    <Compile Include="Model\Lis\ReportExam.cs" />
-    <Compile Include="Model\Lis\ReportImage.cs" />
-    <Compile Include="Model\Lis\ReportItem.cs" />
-    <Compile Include="Model\Lis\ReportPatient.cs" />
-    <Compile Include="Model\Lis\ReportReport.cs" />
-    <Compile Include="Convert\Lis\FRConvertSkeleton.cs" />
     <Compile Include="PDFService\LisService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,59 +78,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="DataStruct\sample.frd" />
-    <None Include="PrintModel\Lis\fs-01-1.frx" />
-    <None Include="PrintModel\Lis\fs-06-02.frx" />
-    <None Include="PrintModel\Lis\fs-06-175.frx" />
-    <None Include="PrintModel\Lis\fs-40.frx" />
-    <None Include="PrintModel\Lis\lj-02-20.frx" />
-    <None Include="PrintModel\Lis\lj-03-1.frx" />
-    <None Include="PrintModel\Lis\lj-04-1.frx" />
-    <None Include="PrintModel\Lis\lj-niaodazhang.frx" />
-    <None Include="PrintModel\Lis\lj-niaoxiaozhang.frx" />
-    <None Include="PrintModel\Lis\lj-xue.frx" />
-    <None Include="PrintModel\Lis\lj-xuechanggui.frx" />
-    <None Include="PrintModel\Lis\lj-xuechanggui1.frx" />
-    <None Include="PrintModel\Lis\ls-1600.frx" />
-    <None Include="PrintModel\Lis\ls-1610.frx" />
-    <None Include="PrintModel\Lis\ls-1620.frx" />
-    <None Include="PrintModel\Lis\ls-1630.frx" />
-    <None Include="PrintModel\Lis\ls-1640.frx" />
-    <None Include="PrintModel\Lis\ls-1650.frx" />
-    <None Include="PrintModel\Lis\ls-1660.frx" />
-    <None Include="PrintModel\Lis\mianyi-common-xiao.frx" />
-    <None Include="PrintModel\Lis\mianyi-DXI800-da-2.frx" />
-    <None Include="PrintModel\Lis\mianyi-DXI800-da.frx" />
-    <None Include="PrintModel\Lis\mianyi-shougong-xiao-2.frx" />
-    <None Include="PrintModel\Lis\mianyi-shougong-xiao.frx" />
-    <None Include="PrintModel\Lis\mianyi-SPIFE4000-da-bak.frx" />
-    <None Include="PrintModel\Lis\mianyi-SPIFE4000-da.frx" />
-    <None Include="PrintModel\Lis\mianyi-Sunrise-xiao.frx" />
-    <None Include="PrintModel\Lis\mianyi-TECAN150-xiao.frx" />
-    <None Include="PrintModel\Lis\mianyi-xibaopeiyang-xiao.frx" />
-    <None Include="PrintModel\Lis\rongxue-Common-da.frx" />
-    <None Include="PrintModel\Lis\rongxue-Common-xiao.frx" />
-    <None Include="PrintModel\Lis\shenghua-01-1.frx" />
-    <None Include="PrintModel\Lis\shenghua-01-3.frx" />
-    <None Include="PrintModel\Lis\shenghua-adaption.frx" />
-    <None Include="PrintModel\Lis\shenghua-common-da-2.frx" />
-    <None Include="PrintModel\Lis\shenghua-common-da.frx" />
-    <None Include="PrintModel\Lis\shenghua-common-xiao.frx" />
-    <None Include="PrintModel\Lis\xingtai-01-1.frx" />
-    <None Include="PrintModel\Lis\yc-01-1.frx" />
-    <None Include="PrintModel\Lis\yc-02-1.frx" />
-    <None Include="PrintModel\Lis\yichuan-FISH.frx" />
-    <None Include="PrintModel\Lis\yichuan-Ran.frx" />
-    <None Include="PrintModel\Lis\zhixue-01-1.frx" />
-    <None Include="PrintModel\Lis\zhixue-01-2.frx" />
-    <None Include="PrintModel\Lis\zhixue-Adaption-2.frx" />
-    <None Include="PrintModel\Lis\zhixue-adaption.frx" />
-    <None Include="PrintModel\Lis\zuhua-1image-1.frx" />
-    <None Include="PrintModel\Lis\zuhua-1image-2.frx" />
-    <None Include="PrintModel\Lis\zuhua-2image-1.frx" />
-    <None Include="XYS.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -139,9 +89,18 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="lib\FastReport.Bars.dll" />
+    <Content Include="lib\FastReport.dll" />
+    <Content Include="lib\FastReport.Editor.dll" />
+    <EmbeddedResource Include="XYS.Report.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XYS.Report\XYS.Report.csproj">
       <Project>{42304c04-caef-44a0-8a10-623af40fb773}</Project>

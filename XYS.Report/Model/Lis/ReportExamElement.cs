@@ -3,7 +3,7 @@ using XYS.Common;
 namespace XYS.Report.Model.Lis
 {
     [Export()]
-    public class ReportExamElement : LisAbstractReportElement
+    public class ReportExamElement : AbstractFillElement
     {
         #region 私有常量字段
         #endregion

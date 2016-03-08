@@ -3,7 +3,7 @@ using XYS.Common;
 namespace XYS.Report.Model.Lis
 {
     [Export()]
-    public class ReportImagesElement : LisAbstractInnerElement
+    public class ReportImagesElement : AbstractInnerElement
     {
         #region 私有字段
         private byte[] m_image0;

@@ -74,7 +74,7 @@ namespace XYS.Report.Fill.Lis
         protected string GenderSql(IReportElement element, ReportPK RK)
         {
             string where = GenderWhere(RK);
-            LisAbstractReportElement e = element as LisAbstractReportElement;
+            AbstractFillElement e = element as AbstractFillElement;
             if (e != null)
             {
                 if (string.IsNullOrEmpty(e.SearchSQL))

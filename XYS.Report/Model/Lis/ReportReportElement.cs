@@ -8,7 +8,7 @@ using XYS.Common;
 namespace XYS.Report.Model.Lis
 {
     [Export()]
-    public class ReportReportElement : LisAbstractReportElement
+    public class ReportReportElement : AbstractFillElement
     {
         #region 私有实例字段
         private int m_sectionNo;

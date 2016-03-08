@@ -137,13 +137,13 @@ namespace XYS.Report.Fill.Lis
         }
         protected bool IsFill(IReportElement element)
         {
-            return element is LisAbstractReportElement;
+            return element is AbstractFillElement;
         }
         protected bool IsFill(Type type)
         {
             if (type != null)
             {
-                return typeof(LisAbstractReportElement).IsAssignableFrom(type);
+                return typeof(AbstractFillElement).IsAssignableFrom(type);
             }
             return false;
         }

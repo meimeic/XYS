@@ -85,6 +85,23 @@ namespace XYS.Report.Util
                 }
             }
         }
+        public static void InitAllElementList(List<Type> elementTypeList)
+        {
+            elementTypeList.Clear();
+            if (ELEMENT_MAP.Count == 0)
+            {
+                ConfigureElementMap();
+            }
+            LisElement element = null;
+            foreach (object item in ELEMENT_MAP.AllElements)
+            {
+                element = item as LisElement;
+                if (element != null)
+                {
+                    elementTypeList.Add(element.EType);
+                }
+            }
+        }
         #endregion
 
         #region

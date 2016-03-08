@@ -2,7 +2,7 @@
 namespace XYS.Report.Model.Lis
 {
     [Export()]
-    public class ReportCustomElement : LisAbstractReportElement
+    public class ReportCustomElement : AbstractFillElement
     {
         #region 私有常量字段
         #endregion

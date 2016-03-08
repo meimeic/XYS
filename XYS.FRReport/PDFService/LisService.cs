@@ -20,6 +20,7 @@ namespace XYS.FRReport.PDFService
     class LisService
     {
         #region
+        private static readonly string XmlStructFileName = "LisReport.frd";
         private static readonly DataSet PDF_DS = new DataSet();
         private static readonly Hashtable m_no2FullModelNameMap = new Hashtable(20);
         private static readonly ReportReportElement PDF_REPORT = new ReportReportElement();
@@ -29,8 +30,10 @@ namespace XYS.FRReport.PDFService
         #region
         static LisService()
         {
-            FRDataStruct.InitDataStruct(PDF_DS);
-            InitModelNameMap();
+            List<Type> elementList = new List<Type>();
+            LisConfiguration.InitAllElementList(elementList);
+            FRDataStruct.InitXmlDataStruct(elementList, XmlStructFileName);
+            FRDataStruct.InitRawDataStruct(elementList, PDF_DS);
         }
         public LisService()
         {
@@ -50,12 +53,12 @@ namespace XYS.FRReport.PDFService
         }
         private static void GenderPDF()
         {
-            string modelFullName = GetPrintModelName(PDF_EXPORT.PrintModelNo);
+            string modelFullName =SystemInfo.GetFileFullName(SystemInfo.ApplicationBaseDirectory,"PrintModel\\Lis\\lj-xuechanggui.frx");
             if (modelFullName == null)
             {
                 throw new ArgumentNullException("modelName");
             }
-            Report report = new Report();
+            FastReport.Report report = new FastReport.Report();
             report.Load(modelFullName);
             report.RegisterData(PDF_DS);
             report.Prepare();
@@ -163,11 +166,6 @@ namespace XYS.FRReport.PDFService
         }
         private static void InitModelNameMap()
         {
-            m_no2FullModelNameMap.Clear();
-            lock (m_no2FullModelNameMap)
-            {
-                LisMap.InitModelNo2ModelPathTable(m_no2FullModelNameMap);
-            }
         }
         #endregion
     }

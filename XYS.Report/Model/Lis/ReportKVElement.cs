@@ -4,7 +4,7 @@ using System.Collections;
 using XYS.Util;
 namespace XYS.Report.Model.Lis
 {
-    public class ReportKVElement : LisAbstractInnerElement
+    public class ReportKVElement : AbstractInnerElement
     {
         #region 字段
         private string m_name;

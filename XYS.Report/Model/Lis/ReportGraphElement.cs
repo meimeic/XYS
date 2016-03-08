@@ -1,7 +1,7 @@
 ﻿using XYS.Common;
 namespace XYS.Report.Model.Lis
 {
-    public class ReportGraphElement : LisAbstractReportElement
+    public class ReportGraphElement : AbstractFillElement
     {
         #region 私有静态字段
         #endregion
