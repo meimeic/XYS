@@ -63,10 +63,10 @@ namespace XYS.Report.Core
             }
             return false;
         }
-        public bool InitReports(List<IReportElement> exportList, Type reportType, Require require)
+        public bool InitReports(List<IReportElement> reportList, Type reportType, Require require)
         {
             List<ReportPK> keyList = GetReportKeyList(require);
-            return InitReports(exportList, reportType, keyList);
+            return InitReports(reportList, reportType, keyList);
         }
         #endregion
 

@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D3BA9322-4F50-47FF-BE2F-424FF88C0126}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>XYS.Report.Lis</RootNamespace>
+    <AssemblyName>XYS.Report.Lis</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="Core\LisElement.cs" />
+    <Compile Include="Core\LisElementMap.cs" />
+    <Compile Include="Core\LisParItem.cs" />
+    <Compile Include="Core\LisParItemMap.cs" />
+    <Compile Include="Core\LisSection.cs" />
+    <Compile Include="Core\LisSectionMap.cs" />
+    <Compile Include="Filler\ReportFillByDB.cs" />
+    <Compile Include="Filler\ReportFillSkeleton.cs" />
+    <Compile Include="Handler\ReportCustomHandler.cs" />
+    <Compile Include="Handler\ReportExamHandler.cs" />
+    <Compile Include="Handler\ReportGraphHandler.cs" />
+    <Compile Include="Handler\ReportHandlerSkeleton.cs" />
+    <Compile Include="Handler\ReportItemHandler.cs" />
+    <Compile Include="Handler\ReportKVHandler.cs" />
+    <Compile Include="Handler\ReportPatientHandler.cs" />
+    <Compile Include="Handler\ReportReportHandler.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repository\DefaultReporter.cs" />
+    <Compile Include="Repository\DefaultReporterFactory.cs" />
+    <Compile Include="Repository\IReporterFactory.cs" />
+    <Compile Include="Repository\LisReporter.cs" />
+    <Compile Include="Repository\LisRepository.cs" />
+    <Compile Include="Repository\XmlLisConfigurator.cs" />
+    <Compile Include="Util\ConfigManager.cs" />
+    <Compile Include="Util\LisImage.cs" />
+    <Compile Include="Util\LisPUser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Config\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

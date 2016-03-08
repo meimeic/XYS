@@ -71,7 +71,6 @@ namespace XYS.Report.Core
                 return rep;
             }
         }
-
         public IReporterRepository CreateRepository(Assembly assembly, Type repositoryType)
         {
             return CreateRepository(assembly, repositoryType, DefaultRepositoryName, true);

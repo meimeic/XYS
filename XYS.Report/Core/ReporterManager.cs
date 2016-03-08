@@ -9,9 +9,11 @@ namespace XYS.Report.Core
     //不可实例化
     public class ReporterManager
     {
+        #region
         private static IRepositorySelector s_repositorySelector;
         private static readonly Type declaringType = typeof(ReporterManager);
-        
+        #endregion
+
         #region 构造函数
         private ReporterManager()
         {

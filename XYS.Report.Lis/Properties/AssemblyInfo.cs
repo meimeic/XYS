@@ -2,16 +2,14 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-using XYS.Report.Config;
-
 // 有关程序集的常规信息通过以下
 // 特性集控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("XYS.FRReport")]
+[assembly: AssemblyTitle("XYS.Report.Lis")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("XYS.FRReport")]
+[assembly: AssemblyProduct("XYS.Report.Lis")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -22,7 +20,7 @@ using XYS.Report.Config;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于类型库的 ID
-[assembly: Guid("1133a156-a0ff-4861-a041-cc0020a3ed0b")]
+[assembly: Guid("ed9103b0-3d74-44d5-97bf-db22994dd4e7")]
 
 // 程序集的版本信息由下面四个值组成: 
 //
@@ -36,4 +34,3 @@ using XYS.Report.Config;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: XmlConfigurator(ConfigFile = "XYS.Report.xml")]
