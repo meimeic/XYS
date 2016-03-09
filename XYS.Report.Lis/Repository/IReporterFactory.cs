@@ -1,10 +1,11 @@
 ﻿using System;
 
-using XYS.Report.Core;
-namespace XYS.Report.Repository.Lis
+using XYS.Common;
+using XYS.Repository;
+namespace XYS.Report.Lis.Repository
 {
    public interface IReporterFactory
     {
-       LisReporter CreateReporter(IReporterRepository repository,ReporterKey key);
+       Reporter CreateReporter(IReporterRepository repository,ReporterKey key);
     }
 }

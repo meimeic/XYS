@@ -1,5 +1,5 @@
 ﻿using System;
-namespace XYS.Report.Core
+namespace XYS.Report.Lis.Core
 {
     public class LisParItem
     {

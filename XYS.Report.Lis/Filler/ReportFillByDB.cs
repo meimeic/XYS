@@ -3,11 +3,12 @@ using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
 
+using XYS.DAL;
 using XYS.Model;
 using XYS.Common;
-using XYS.Report.DAL;
-using XYS.Report.Model;
-namespace XYS.Report.Fill.Lis
+
+using XYS.Report.Lis.Model;
+namespace XYS.Report.Lis.Filler
 {
     public class ReportFillByDB : ReportFillSkeleton
     {

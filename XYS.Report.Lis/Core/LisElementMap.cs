@@ -2,7 +2,7 @@
 using System.Collections;
 
 using XYS.Util;
-namespace XYS.Report.Core
+namespace XYS.Report.Lis.Core
 {
     public class LisElementMap
     {

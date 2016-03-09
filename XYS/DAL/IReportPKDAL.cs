@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace XYS.Common
+namespace XYS.DAL
 {
-    public interface IReportRepository
+    public interface IReportPKDAL
     {
-
     }
 }

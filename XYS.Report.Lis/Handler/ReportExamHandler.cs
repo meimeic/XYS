@@ -5,7 +5,7 @@ using XYS.Util;
 using XYS.Model;
 using XYS.Report.Util;
 using XYS.Report.Model.Lis;
-namespace XYS.Report.Handler.Lis
+namespace XYS.Report.Lis.Handler
 {
     public class ReportExamHandler : ReportHandlerSkeleton
     {

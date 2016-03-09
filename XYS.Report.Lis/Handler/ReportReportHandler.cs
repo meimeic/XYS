@@ -2,7 +2,7 @@
 
 using XYS.Model;
 using XYS.Report.Model.Lis;
-namespace XYS.Report.Handler.Lis
+namespace XYS.Report.Lis.Handler
 {
     public class ReportReportHandler : ReportHandlerSkeleton
     {

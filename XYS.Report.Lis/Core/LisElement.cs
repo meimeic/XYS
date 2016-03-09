@@ -1,6 +1,6 @@
 ﻿using System;
 using XYS.Util;
-namespace XYS.Report.Core
+namespace XYS.Report.Lis.Core
 {
     public class LisElement
     {

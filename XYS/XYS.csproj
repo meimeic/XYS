@@ -42,13 +42,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\CommonPKElement.cs" />
+    <Compile Include="Common\IReporter.cs" />
+    <Compile Include="Common\ReporterKey.cs" />
+    <Compile Include="Common\ReportException.cs" />
     <Compile Include="Common\XYSException.cs" />
+    <Compile Include="Config\ConfiguratorAttribute.cs" />
+    <Compile Include="Config\RepositoryAttribute.cs" />
+    <Compile Include="DAL\CommonDAL.cs" />
+    <Compile Include="DAL\DbHelperOleDb.cs" />
+    <Compile Include="DAL\DbHelperSQL.cs" />
+    <Compile Include="DAL\IReportDAL.cs" />
+    <Compile Include="DAL\IReportPKDAL.cs" />
+    <Compile Include="DAL\ReportCommonDAL.cs" />
+    <Compile Include="Repository\IReporterRepository.cs" />
+    <Compile Include="Repository\IXmlRepositoryConfigurator.cs" />
     <Compile Include="Util\CustomCollection.cs" />
     <Compile Include="Common\ExportAttribute.cs" />
     <Compile Include="Common\FRExportAttribute.cs" />
     <Compile Include="Common\IConvert.cs" />
     <Compile Include="Common\IOptionHandler.cs" />
-    <Compile Include="Common\IReportRepository.cs" />
     <Compile Include="Common\KeyColumn.cs" />
     <Compile Include="Common\ReportPK.cs" />
     <Compile Include="Common\SearchRequire.cs" />

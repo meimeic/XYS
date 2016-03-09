@@ -1,7 +1,8 @@
 ﻿using System;
 
-using XYS.Report.Core;
-namespace XYS.Report.Repository.Lis
+using XYS.Common;
+using XYS.Repository;
+namespace XYS.Report.Lis.Repository
 {
     public class DefaultReporterFactory : IReporterFactory
     {
@@ -12,7 +13,7 @@ namespace XYS.Report.Repository.Lis
         #endregion
 
         #region 实现IReporterFactory接口
-        public LisReporter CreateReporter(IReporterRepository repository, ReporterKey key)
+        public Reporter CreateReporter(IReporterRepository repository, ReporterKey key)
         {
             if (key == null)
             {
@@ -23,7 +24,7 @@ namespace XYS.Report.Repository.Lis
         #endregion
 
         #region 内部类
-        public sealed class ReporterImpl : LisReporter
+        public sealed class ReporterImpl : Reporter
         {
             public ReporterImpl(string callerName, string strategyName)
                 : base(callerName, strategyName)

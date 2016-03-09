@@ -3,15 +3,17 @@ using System.Xml;
 using System.Collections;
 
 using XYS.Util;
-using XYS.Report.Fill;
-using XYS.Report.Handler;
-namespace XYS.Report.Repository.Lis
+
+using XYS.Report.Lis.Core;
+using XYS.Report.Lis.Filler;
+using XYS.Report.Lis.Handler;
+namespace XYS.Report.Lis.Repository
 {
     public class XmlLisConfigurator
     {
         #region 字段
         private Hashtable m_reporterBag;
-        private LisRepository m_repository;
+        private Hierarchy m_repository;
         private static Type declaringType = typeof(XmlLisConfigurator);
         #endregion
 
@@ -36,7 +38,7 @@ namespace XYS.Report.Repository.Lis
         #endregion
 
         #region 构造函数
-        public XmlLisConfigurator(LisRepository repository)
+        public XmlLisConfigurator(Hierarchy repository)
         {
             this.m_repository = repository;
             this.m_reporterBag = new Hashtable();
@@ -239,40 +241,6 @@ namespace XYS.Report.Repository.Lis
                 return;
             }
         }
-        //protected void ParseExportStack(XmlElement exportsElement)
-        //{
-        //    foreach (XmlNode currentNode in exportsElement.ChildNodes)
-        //    {
-        //        if (currentNode.NodeType == XmlNodeType.Element)
-        //        {
-        //            XmlElement currentElement = (XmlElement)currentNode;
-        //            if (currentElement.LocalName == EXPORT_TAG)
-        //            {
-        //                ParseExport(currentElement);
-        //            }
-        //        }
-        //    }
-        //}
-        //protected void ParseExport(XmlElement exportElement)
-        //{
-        //    string exportName = exportElement.GetAttribute(NAME_ATTR);
-        //    ConsoleInfo.Debug(declaringType, "XmlHierarchyConfigurator:Configuring Export [" + exportName + "]");
-        //    object[] param = new object[] { exportName };
-        //    string typeName = exportElement.GetAttribute(TYPE_ATTR);
-        //    try
-        //    {
-        //        IReportExport reportExport = (IReportExport)Activator.CreateInstance(SystemInfo.GetTypeFromString(typeName, true, true), param);
-        //        if (reportExport != null)
-        //        {
-        //            this.m_hierarchy.AddExporter(reportExport);
-        //            ReportLog.Debug(declaringType, "XmlHierarchyConfigurator:Configured Export [" + exportName + "]");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return;
-        //    }
-        //}
         #endregion
     }
 }

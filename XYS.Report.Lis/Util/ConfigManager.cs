@@ -3,24 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Report.Core;
-using XYS.Report.Config;
+using XYS.Report.Lis.Core;
+using XYS.Report.Lis.Config;
 
-namespace XYS.Report.Util
+namespace XYS.Report.Lis.Util
 {
     public class ConfigManager
     {
         #region
-        private static readonly Type declaringType = typeof(LisConfiguration);
+        private static readonly Type declaringType = typeof(ConfigManager);
         private static readonly LisSectionMap SECTION_MAP = new LisSectionMap();
         private static readonly LisElementMap ELEMENT_MAP = new LisElementMap();
         private static readonly LisParItemMap PARITEM_MAP = new LisParItemMap();
         #endregion
 
         #region
-        private LisConfiguration()
+        private ConfigManager()
         { }
-        static LisConfiguration()
+        static ConfigManager()
         {
         }
         #endregion

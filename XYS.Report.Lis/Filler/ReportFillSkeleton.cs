@@ -4,25 +4,24 @@ using System.Collections.Generic;
 
 using XYS.Model;
 using XYS.Common;
-using XYS.Report.Model;
-using XYS.Report.Model.Lis;
-using XYS.Report.Util;
-namespace XYS.Report.Fill.Lis
+
+using XYS.Report.Lis.Core;
+using XYS.Report.Lis.Model;
+using XYS.Report.Lis.Util;
+namespace XYS.Report.Lis.Filler
 {
     public abstract class ReportFillSkeleton : IReportFiller
     {
         #region 字段
         private readonly string m_fillerName;
-        private readonly Hashtable m_section2InsideTypeMap;
-        private readonly Hashtable m_section2ExtendTypeMap;
+        private readonly Hashtable m_section2FillTypeMap;
         #endregion
 
         #region 构造函数
         protected ReportFillSkeleton(string name)
         {
             this.m_fillerName = name;
-            this.m_section2ExtendTypeMap = new Hashtable(2);
-            this.m_section2InsideTypeMap = new Hashtable(20);
+            this.m_section2FillTypeMap = new Hashtable(20);
         }
         #endregion
 
@@ -55,7 +54,7 @@ namespace XYS.Report.Fill.Lis
         {
             if (IsFill(type))
             {
-                FillElements(reportElementList,RK,type);
+                FillElements(reportElementList, RK, type);
             }
         }
         #endregion
@@ -111,11 +110,11 @@ namespace XYS.Report.Fill.Lis
         }
         protected virtual List<Type> GetAvailableInsideElements(int sectionNo)
         {
-            if (this.m_section2InsideTypeMap.Count == 0)
+            if (this.m_section2FillTypeMap.Count == 0)
             {
                 InitInsideElementTable();
             }
-            return this.m_section2InsideTypeMap[sectionNo] as List<Type>;
+            return this.m_section2FillTypeMap[sectionNo] as List<Type>;
         }
         protected virtual List<Type> GetAvailableInsideElements(ReportPK key)
         {
@@ -130,9 +129,9 @@ namespace XYS.Report.Fill.Lis
         }
         private void InitInsideElementTable()
         {
-            lock (this.m_section2InsideTypeMap)
+            lock (this.m_section2FillTypeMap)
             {
-                LisConfiguration.InitSection2FillElementTable(this.m_section2InsideTypeMap);
+                 ConfigManager.InitSection2FillElementTable(this.m_section2FillTypeMap);
             }
         }
         protected bool IsFill(IReportElement element)
@@ -149,7 +148,7 @@ namespace XYS.Report.Fill.Lis
         }
         protected bool IsReport(IReportElement reportElement)
         {
-            return IsReport(reportElement.GetType());
+            return reportElement is ReportReportElement;
         }
         protected bool IsReport(Type type)
         {

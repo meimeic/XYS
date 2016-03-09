@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections;
-namespace XYS.Report.Core
+namespace XYS.Report.Lis.Core
 {
     public class LisParItemMap
     {

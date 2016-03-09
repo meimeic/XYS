@@ -1,8 +1,7 @@
 ﻿using System;
-
-namespace XYS.Report.Repository.Lis
+namespace XYS.Report.Lis.Repository
 {
-    class DefaultReporter : LisReporter
+    class DefaultReporter : Reporter
     {
         #region
         private static readonly string m_strategyName = "DefaultStrategy";

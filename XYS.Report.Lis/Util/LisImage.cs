@@ -2,7 +2,7 @@
 using System.IO;
 
 using XYS.Util;
-namespace XYS.Report.Util
+namespace XYS.Report.Lis.Util
 {
     public class LisImage
     {

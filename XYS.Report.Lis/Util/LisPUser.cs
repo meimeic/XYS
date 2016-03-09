@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 
-using XYS.Report.DAL;
-namespace XYS.Report.Util
+using XYS.DAL;
+namespace XYS.Report.Lis.Util
 {
     public class LisPUser
     {
