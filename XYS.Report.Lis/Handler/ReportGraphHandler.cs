@@ -3,15 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Model;
-using XYS.Report.Util;
-using XYS.Report.Model.Lis;
+using XYS.Report.Lis.Util;
+using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
     public class ReportGraphHandler : ReportHandlerSkeleton
     {
         #region 字段
         private static readonly string m_defaultHandlerName = "ReportGraphHandler";
-        private readonly Hashtable m_parItemNo2NormalImage;
+        private readonly Dictionary<int,byte[]> m_parItemNo2NormalImage;
+        private readonly Dictionary<string,string> m_graphName2PropertyName;
         #endregion
 
         #region 构造函数
@@ -22,7 +23,8 @@ namespace XYS.Report.Lis.Handler
         public ReportGraphHandler(string handlerName)
             : base(handlerName)
         {
-            this.m_parItemNo2NormalImage = new Hashtable(20);
+            this.m_parItemNo2NormalImage = new Dictionary<int, byte[]>(20);
+            this.m_graphName2PropertyName = new Dictionary<string, string>(10);
         }
         #endregion
 
@@ -45,6 +47,14 @@ namespace XYS.Report.Lis.Handler
         #region graph项的内部处理逻辑
         protected virtual bool OperateGraph(ReportReportElement rre)
         {
+            List<IReportElement> graphList = rre.GetReportItem(typeof(ReportGraphElement).Name);
+            if (IsExist(graphList))
+            {
+                rre.CreateImageCollection();
+                Convert2ImageCollection(graphList, rre.ImageCollection);
+            }
+            rre.RemoveReportItem(typeof(ReportGraphElement).Name);
+
             switch (rre.SectionNo)
             {
                 case 11:
@@ -54,20 +64,39 @@ namespace XYS.Report.Lis.Handler
                     break;
             }
             OperateElementList(rre.GetReportItem(typeof(ReportGraphElement).Name));
-            Convert2Image(rre);
+            Convert2ImageCollection(rre);
             return true;
         }
         #endregion
 
         #region
-        protected void Convert2Image(ReportReportElement rre)
+        protected void Convert2ImageCollection(List<IReportElement> graphList,ReportImagesElement imageCollection)
         {
-            List<IReportElement> graphList = rre.GetReportItem(typeof(ReportGraphElement).Name);
-            if (IsExist(graphList))
+            if (imageCollection == null)
             {
+                throw new ArgumentNullException("ImageCollection");
+            }
+            string propertyName = null;
+            ReportGraphElement rge = null;
+            foreach (IReportElement element in graphList)
+            {
+                rge = element as ReportGraphElement;
+                if (rge != null)
+                {
+ 
+                }
             }
         }
+        private string GetPropertyName(string graphName)
+        {
+            if (this.m_graphName2PropertyName.ContainsKey(graphName))
+            {
+                return this.m_graphName2PropertyName[graphName];
+            }
+            return null;
+        }
         #endregion
+
         #region 图片项添加处理
         private void AddImageByParItem(ReportReportElement rre)
         {
@@ -80,9 +109,9 @@ namespace XYS.Report.Lis.Handler
             }
             foreach (int parItemNo in rre.ParItemList)
             {
-                imageValue = this.m_parItemNo2NormalImage[parItemNo] as byte[];
-                if (imageValue != null)
+                if (this.m_parItemNo2NormalImage.ContainsKey(parItemNo))
                 {
+                    imageValue = this.m_parItemNo2NormalImage[parItemNo];
                     rge = new ReportGraphElement();
                     rge.GraphName = "normal";
                     rge.GraphImage = imageValue;
@@ -94,7 +123,7 @@ namespace XYS.Report.Lis.Handler
         {
             lock (this.m_parItemNo2NormalImage)
             {
-                LisConfiguration.InitParItem2NormalImageTable(this.m_parItemNo2NormalImage);
+                ConfigManager.InitParItem2NormalImageDictionary(this.m_parItemNo2NormalImage);
             }
         }
         #endregion

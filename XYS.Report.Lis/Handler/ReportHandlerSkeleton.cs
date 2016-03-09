@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using XYS.Model;
-using XYS.Report.Model.Lis;
+
+using XYS.Report.Lis.Core;
+using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
     public abstract class ReportHandlerSkeleton : IReportHandler
@@ -106,7 +109,7 @@ namespace XYS.Report.Lis.Handler
             {
                 for (int i = reportElementList.Count - 1; i >= 0; i--)
                 {
-                    if (IsReport(reportElementList[i].GetType()))
+                    if (IsReport(reportElementList[i]))
                     {
                         result = OperateReport((ReportReportElement)reportElementList[i]);
                     }
@@ -125,7 +128,7 @@ namespace XYS.Report.Lis.Handler
         {
             bool flag = false;
             bool result = false;
-            if (reportElementList.Count > 0)
+            if (IsExist(reportElementList))
             {
                 for (int i = reportElementList.Count - 1; i >= 0; i--)
                 {
@@ -158,7 +161,7 @@ namespace XYS.Report.Lis.Handler
         }
         protected bool IsReport(IReportElement reportElement)
         {
-            return IsElement(reportElement, typeof(ReportReportElement));
+            return reportElement is ReportReportElement;
         }
         protected bool IsElement(IReportElement reportElement, Type type)
         {

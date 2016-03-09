@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 using XYS.Util;
 using XYS.Model;
-using XYS.Report.Util;
-using XYS.Report.Model.Lis;
+
+using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
     public class ReportExamHandler : ReportHandlerSkeleton
@@ -53,25 +53,6 @@ namespace XYS.Report.Lis.Handler
         #region 内部处理逻辑
         protected virtual bool OperateExam(ReportReportElement rre)
         {
-            //根据exam元素进行处理
-            //rre.SectionNo = rre.ReportExam.SectionNo;
-            //rre.ParItemName = rre.ReportExam.ParItemName;
-            //rre.ReceiveDateTime = rre.ReportExam.ReceiveDateTime;
-            //rre.CollectDateTime = rre.ReportExam.CollectDateTime;
-            //rre.InceptDateTime = rre.ReportExam.InceptDateTime;
-            //rre.CheckDateTime = rre.ReportExam.CheckDateTime;
-            //rre.SecondeCheckDateTime = rre.ReportExam.SecondeCheckDateTime;
-            //rre.TestDateTime = rre.ReportExam.TestDateTime;
-
-            //设置签名图片
-            if (!string.IsNullOrEmpty(rre.Checker))
-            {
-                rre.CheckerImage = LisPUser.GetSignImage(rre.Checker);
-            }
-            if (string.IsNullOrEmpty(rre.Technician))
-            {
-                rre.TechnicianImage = LisPUser.GetSignImage(rre.Technician);
-            }
             return OperateElement(rre.ReportExam);
         }
         #endregion

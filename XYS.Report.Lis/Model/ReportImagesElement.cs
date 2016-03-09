@@ -6,6 +6,7 @@ namespace XYS.Report.Lis.Model
     public class ReportImagesElement : AbstractInnerElement
     {
         #region 私有字段
+        private string m_name;
         private byte[] m_image0;
         private byte[] m_image1;
         private byte[] m_image2;
@@ -30,10 +31,17 @@ namespace XYS.Report.Lis.Model
             this.m_image6 = null;
             this.m_image7 = null;
             this.m_image8 = null;
+            this.m_name = "ImageCollection";
         }
         #endregion
 
         #region 实例属性
+        [Export()]
+        public string Name
+        {
+            get { return this.m_name; }
+            set { this.m_name = value; }
+        }
         [Export()]
         public byte[] Image0
         {

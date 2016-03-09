@@ -3,9 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
+
 using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Config;
-
 namespace XYS.Report.Lis.Util
 {
     public class ConfigManager
@@ -26,6 +26,30 @@ namespace XYS.Report.Lis.Util
         #endregion
 
         #region
+        public static void InitParItem2NormalImageDictionary(Dictionary<int, byte[]> map)
+        {
+            map.Clear();
+            byte[] imageArray = null;
+            string imageFullName = null;
+            LisParItem parItem = null;
+            if (PARITEM_MAP.Count == 0)
+            {
+                ConfigureParItemMap();
+            }
+            foreach (object item in PARITEM_MAP.AllParItem)
+            {
+                parItem = item as LisParItem;
+                if (parItem != null)
+                {
+                    if (parItem.ImageFlag)
+                    {
+                        imageFullName = SystemInfo.GetFileFullName(LisImage.GetImageFilePath(), parItem.ImageName);
+                        imageArray = LisImage.ReadImageFile(imageFullName);
+                        map[parItem.ParItemNo] = imageArray;
+                    }
+                }
+            }
+        }
         public static void InitParItem2NormalImageTable(Hashtable table)
         {
             table.Clear();

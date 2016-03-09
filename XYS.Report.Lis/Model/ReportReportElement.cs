@@ -36,12 +36,14 @@ namespace XYS.Report.Lis.Model
 
         private readonly ReportExamElement m_reportExam;
         private readonly ReportPatientElement m_reportPatient;
+        private ReportImagesElement m_imageCollection;
         #endregion
 
         #region 公共构造函数
         public ReportReportElement()
         {
             this.m_remarkFlag = 0;
+            this.m_imageCollection = null;
             this.m_parItemList = new List<int>(5);
             this.m_reportExam = new ReportExamElement();
             this.m_reportPatient = new ReportPatientElement();
@@ -175,9 +177,14 @@ namespace XYS.Report.Lis.Model
         {
             get { return this.m_reportPatient; }
         }
+        public ReportImagesElement ImageCollection
+        {
+            get { return this.m_imageCollection; }
+        }
         #endregion
 
         #region 公共方法
+
         public void Init()
         {
         }
@@ -190,6 +197,29 @@ namespace XYS.Report.Lis.Model
             this.Remark = "";
             this.TechnicianImage = null;
             this.CheckerImage = null;
+        }
+        public void CreateImageCollection()
+        {
+            lock (this.m_imageCollection)
+            {
+                if (this.m_imageCollection == null)
+                {
+                    this.m_imageCollection = new ReportImagesElement();
+                }
+            }
+        }
+        public void RemoveReportItem(string typeName)
+        {
+            if (!string.IsNullOrEmpty(typeName))
+            {
+                if (this.m_reportItemTable.ContainsKey(typeName))
+                {
+                    lock (this.m_reportItemTable)
+                    {
+                        this.m_reportItemTable.Remove(typeName);
+                    }
+                }
+            }
         }
         public List<IReportElement> GetReportItem(string typeName)
         {
@@ -207,19 +237,6 @@ namespace XYS.Report.Lis.Model
                 return result;
             }
             return null;
-        }
-        public void RemoveReportItem(string typeName)
-        {
-            if (!string.IsNullOrEmpty(typeName))
-            {
-                if (this.m_reportItemTable.ContainsKey(typeName))
-                {
-                    lock (this.m_reportItemTable)
-                    {
-                        this.m_reportItemTable.Remove(typeName);
-                    }
-                }
-            }
         }
         #endregion
     }
