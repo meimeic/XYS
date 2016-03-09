@@ -27,7 +27,7 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类抽象方法
         protected override bool OperateElement(IReportElement element)
         {
-            //exam 元素级别处理
+            //元素级别处理
             ReportExamElement ree = element as ReportExamElement;
             if (ree != null)
             {
@@ -53,6 +53,7 @@ namespace XYS.Report.Lis.Handler
         #region 内部处理逻辑
         protected virtual bool OperateExam(ReportReportElement rre)
         {
+            //中间级处理
             return OperateElement(rre.ReportExam);
         }
         #endregion

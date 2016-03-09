@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 using XYS.Util;
 using XYS.Model;
-using XYS.Report.Model.Lis;
+
+using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
     public class ReportItemHandler : ReportHandlerSkeleton
@@ -104,7 +105,6 @@ namespace XYS.Report.Lis.Handler
         #region item项转换成KV项
         private void Convert2KVElement(ReportReportElement rre)
         {
-
         }
         private bool IsConvert2KVElement(ReportItemElement rie, ReportKVElement rkve)
         {
@@ -113,13 +113,8 @@ namespace XYS.Report.Lis.Handler
                 InitItem2CustomMap();
             }
             string key = this.m_convertItemMap[rie.ItemNo] as string;
-            if (!string.IsNullOrEmpty(key))
+            if (key != null)
             {
-                //抛出异常
-                if (rkve == null)
-                {
-                    throw new ArgumentNullException("");
-                }
                 rkve.Add(key, rie.ItemResult);
                 return true;
             }

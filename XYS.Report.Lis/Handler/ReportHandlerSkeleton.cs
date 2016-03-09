@@ -62,38 +62,6 @@ namespace XYS.Report.Lis.Handler
             }
             return HandlerResult.Fail;
         }
-        //public virtual HandlerResult ReportOptions(List<IReportElement> reportElementList, Type type)
-        //{
-        //    if (IsExist(reportElementList))
-        //    {
-        //        if (IsReport(type))
-        //        {
-        //            bool flag = false;
-        //            bool result = false;
-        //            for (int i = reportElementList.Count - 1; i >= 0; i--)
-        //            {
-        //                flag = IsReport(reportElementList[i]);
-        //                if (flag)
-        //                {
-        //                    result = OperateReport((ReportReportElement)reportElementList[i]);
-        //                }
-        //                if (!flag || !result)
-        //                {
-        //                    reportElementList.RemoveAt(i);
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            OperateElementList(reportElementList, type);
-        //        }
-        //        if (reportElementList.Count > 0)
-        //        {
-        //            return HandlerResult.Continue;
-        //        }
-        //    }
-        //    return HandlerResult.Fail;
-        //}
         #endregion
 
         #region 抽象方法(处理元素)
@@ -117,27 +85,8 @@ namespace XYS.Report.Lis.Handler
                     {
                         result = OperateElement(reportElementList[i]);
                     }
+                    //是否删除元素
                     if (!result)
-                    {
-                        reportElementList.RemoveAt(i);
-                    }
-                }
-            }
-        }
-        protected virtual void OperateElementList(List<IReportElement> reportElementList, Type type)
-        {
-            bool flag = false;
-            bool result = false;
-            if (IsExist(reportElementList))
-            {
-                for (int i = reportElementList.Count - 1; i >= 0; i--)
-                {
-                    flag = IsElement(reportElementList[i], type);
-                    if (flag)
-                    {
-                        result = OperateElement(reportElementList[i]);
-                    }
-                    if (!flag || !result)
                     {
                         reportElementList.RemoveAt(i);
                     }
