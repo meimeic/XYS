@@ -4,7 +4,6 @@ namespace XYS.Repository
 {
     public interface IXmlRepositoryConfigurator
     {
-        string XmlConfigTag { get; }
         void Configure(XmlElement element);
     }
 }

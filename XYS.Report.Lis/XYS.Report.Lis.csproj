@@ -57,6 +57,7 @@
     <Compile Include="Core\LisSection.cs" />
     <Compile Include="Core\LisSectionMap.cs" />
     <Compile Include="Core\ReporterManager.cs" />
+    <Compile Include="DAL\CommonDAL.cs" />
     <Compile Include="DAL\DbHelperOleDb.cs" />
     <Compile Include="DAL\DbHelperSQL.cs" />
     <Compile Include="DAL\LisReportCommonDAL.cs" />

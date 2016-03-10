@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XYS.Model;
+using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
@@ -23,7 +23,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateElement(IReportElement element)
+        protected override bool OperateElement(ILisReportElement element)
         {
             ReportCustomElement rce = element as ReportCustomElement;
             if (rce != null)

@@ -1,5 +1,4 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<xysConfig>
   <lisConfig>
     <lis-report>
       <reporter-strategy-stack>
@@ -107,6 +106,3 @@
       </parItems>
     </lis-param>
   </lisConfig>
-  <hisConfig>
-  </hisConfig>
-</xysConfig>

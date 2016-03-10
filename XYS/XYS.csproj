@@ -48,10 +48,8 @@
     <Compile Include="Common\XYSException.cs" />
     <Compile Include="Config\ConfiguratorAttribute.cs" />
     <Compile Include="Config\RepositoryAttribute.cs" />
-    <Compile Include="DAL\CommonDAL.cs" />
     <Compile Include="DAL\IReportDAL.cs" />
     <Compile Include="DAL\IReportPKDAL.cs" />
-    <Compile Include="DAL\ReportCommonDAL.cs" />
     <Compile Include="Repository\IReporterRepository.cs" />
     <Compile Include="Repository\IXmlRepositoryConfigurator.cs" />
     <Compile Include="Util\CustomCollection.cs" />

@@ -271,9 +271,9 @@ namespace XYS.Report.Lis.Config
             {
                 XmlElement configElement = null;
 #if NET_2_0
-				configElement = System.Configuration.ConfigurationManager.GetSection("lis-report") as XmlElement;
+				configElement = System.Configuration.ConfigurationManager.GetSection("lisConfig") as XmlElement;
 #else
-                configElement = System.Configuration.ConfigurationManager.GetSection("lis-report") as XmlElement;
+                configElement = System.Configuration.ConfigurationManager.GetSection("lisConfig") as XmlElement;
 #endif
                 if (configElement == null)
                 {
@@ -295,7 +295,7 @@ namespace XYS.Report.Lis.Config
                 else
                 {
                     // This exception is typically due to the assembly name not being correctly specified in the section type.
-                    string configSectionStr = "<section name=\"xys-report\" type=\"XYS.Report.Config.ConfigurationSectionHandler," + Assembly.GetExecutingAssembly().FullName + "\" />";
+                    string configSectionStr = "<section name=\"lisConfig\" type=\"XYS.Report.Lis.Config.ConfigurationSectionHandler," + Assembly.GetExecutingAssembly().FullName + "\" />";
                     ConsoleInfo.Error(declaringType, "Failed to parse config file. Is the <configSections> specified as: " + configSectionStr, confEx);
                 }
             }
@@ -348,15 +348,15 @@ namespace XYS.Report.Lis.Config
                 {
                     ConsoleInfo.Debug(declaringType, "loading XML configuration");
                     //获取节点集合
-                    XmlNodeList configNodeList = doc.GetElementsByTagName("lis-report");
+                    XmlNodeList configNodeList = doc.GetElementsByTagName("lisConfig");
                     //节点必须有且只有一个
                     if (configNodeList.Count == 0)
                     {
-                        ConsoleInfo.Debug(declaringType, "XML configuration does not contain a <lis-report> element. Configuration Aborted.");
+                        ConsoleInfo.Debug(declaringType, "XML configuration does not contain a <lisConfig> element. Configuration Aborted.");
                     }
                     else if (configNodeList.Count > 1)
                     {
-                        ConsoleInfo.Error(declaringType, "XML configuration contains [" + configNodeList.Count + "] <lis-report> elements. Only one is allowed. Configuration Aborted.");
+                        ConsoleInfo.Error(declaringType, "XML configuration contains [" + configNodeList.Count + "] <lisConfig> elements. Only one is allowed. Configuration Aborted.");
                     }
                     else
                     {
