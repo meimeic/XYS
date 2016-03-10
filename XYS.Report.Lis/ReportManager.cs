@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Reflection;
+using System.Collections;
 
-using XYS.Report.Lis.Core;
+using XYS.Model;
+using XYS.Common;
 using XYS.Repository;
 
-namespace XYS.Report
+using XYS.Report.Lis.Core;
+namespace XYS.Report.Lis
 {
     public class ReportManager
     {
 
-        private static readonly WrapperMap s_wrapperMap = new WrapperMap(new WrapperCreationHandler(WrapperCreationHandler));
+        private static readonly Hashtable RepositoryMap = new Hashtable(2);
 
         public static IReport Exists(ReporterKey key)
         {
@@ -45,7 +48,6 @@ namespace XYS.Report
         {
             return WrapReporter(ReporterManager.GetReporter(repository, type, strategyName));
         }
-
         public static IReport GetReporter(Assembly repositoryAssembly, ReporterKey key)
         {
             return WrapReporter(ReporterManager.GetReporter(repositoryAssembly, key));
@@ -60,6 +62,7 @@ namespace XYS.Report
         }
         #endregion
 
+        #region 获取Repository
         public static IReporterRepository GetRepository()
         {
             return GetRepository(Assembly.GetCallingAssembly());
@@ -72,7 +75,6 @@ namespace XYS.Report
         {
             return ReporterManager.GetRepository(repositoryAssembly);
         }
-
         public static IReporterRepository CreateRepository(Type repositoryType)
         {
             return CreateRepository(Assembly.GetCallingAssembly(), repositoryType);
@@ -89,17 +91,23 @@ namespace XYS.Report
         {
             return ReporterManager.CreateRepository(repositoryAssembly, repositoryType);
         }
-        public static IReporterRepository[] GetAllRepositories()
-        {
-            return ReporterManager.GetAllRepositories();
-        }
+        #endregion
+
         private static IReport WrapReporter(IReporter reporter)
         {
-            return (IReport)s_wrapperMap.GetWrapper(reporter);
-        }
-        private static IReporterWrapper WrapperCreationHandler(IReporter reporter)
-        {
-            return new ReportImpl(reporter);
+            Hashtable ReportMap = RepositoryMap[reporter.Repository] as Hashtable;
+            if (ReportMap == null)
+            {
+                ReportMap = new Hashtable(10);
+                RepositoryMap[reporter.Repository] = ReportMap;
+            }
+            IReport reportImpl = ReportMap[reporter] as IReport;
+            if (reportImpl == null)
+            {
+                reportImpl = new ReportImpl(reporter);
+                ReportMap[reporter] = reportImpl;
+            }
+            return reportImpl;
         }
     }
 }

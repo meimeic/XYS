@@ -7,6 +7,7 @@ using XYS.Common;
 using XYS.Repository;
 
 using XYS.Report.Lis.Core;
+using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Repository
 {
     public abstract class Reporter : ILisReporter
@@ -69,27 +70,42 @@ namespace XYS.Report.Lis.Repository
         }
         #endregion
 
-        #region 实现ILisReport接口
+        #region 实现IReport接口
         public IReporterRepository Repository
         {
             get { return this.m_hierarchy; }
         }
         public void FillReport(IReportElement report, ReportPK RK)
         {
-            this.Filler.Fill(report, RK);
+            if (IsLisReport(report))
+            {
+                this.Filler.Fill((ReportReportElement)report, RK);
+            }
         }
         public bool OptionReport(IReportElement report)
         {
-            return this.HandlerEvent(report);
+            if (IsLisReport(report))
+            {
+                return this.HandlerEvent((ReportReportElement)report);
+            }
+            return false;
         }
-        public bool OptionReport(List<IReportElement> reportList)
+        #endregion
+
+        #region 实现ILisReporter接口
+        public bool IsLisReport(IReportElement report)
         {
-            return this.HandlerEvent(reportList);
+            ReportReportElement rre = report as ReportReportElement;
+            if (rre != null)
+            {
+                return true;
+            }
+            return false;
         }
         #endregion
 
         #region 受保护的虚方法
-        protected virtual bool HandlerEvent(IReportElement element)
+        protected virtual bool HandlerEvent(ReportReportElement element)
         {
             IReportHandler handler = this.HandlerHead;
             while (handler != null)
@@ -113,31 +129,6 @@ namespace XYS.Report.Lis.Repository
             }
             return true;
         }
-        protected virtual bool HandlerEvent(List<IReportElement> reportElementList)
-        {
-            IReportHandler handler = this.HandlerHead;
-            while (handler != null)
-            {
-                switch (handler.ReportOptions(reportElementList))
-                {
-                    case HandlerResult.Fail:
-                        return false;
-                    case HandlerResult.HasErrorButContinue:
-                        handler = handler.Next;
-                        break;
-                    case HandlerResult.Continue:
-                        handler = handler.Next;
-                        break;
-                    case HandlerResult.Success:
-                        handler = null;
-                        break;
-                    default:
-                        return true;
-                }
-            }
-            return true;
-        }
-
         protected virtual void AddHandler(Hashtable handlerTable, IList<string> handlerNameList)
         {
             IReportHandler handler;

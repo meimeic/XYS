@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Model;
 using XYS.Common;
+
+using XYS.Report.Lis.Core;
 namespace XYS.Report.Lis.Model
 {
     [Export()]
@@ -64,6 +65,7 @@ namespace XYS.Report.Lis.Model
             get { return this.m_reportTitle; }
             set { this.m_reportTitle = value; }
         }
+
         [Export()]
         [Column(true)]
         public int SectionNo
@@ -78,6 +80,7 @@ namespace XYS.Report.Lis.Model
             get { return this.m_parItemName; }
             set { this.m_parItemName = value; }
         }
+        
         //备注标识 0表示没有备注 1 表示备注已设置  2 表示备注未设置
         public int RemarkFlag
         {
@@ -221,14 +224,14 @@ namespace XYS.Report.Lis.Model
                 }
             }
         }
-        public List<IReportElement> GetReportItem(string typeName)
+        public List<ILisReportElement> GetReportItem(string typeName)
         {
             if (!string.IsNullOrEmpty(typeName))
             {
-                List<IReportElement> result = this.m_reportItemTable[typeName] as List<IReportElement>;
+                List<ILisReportElement> result = this.m_reportItemTable[typeName] as List<ILisReportElement>;
                 if (result == null)
                 {
-                    result = new List<IReportElement>(10);
+                    result = new List<ILisReportElement>(10);
                     lock (this.m_reportItemTable)
                     {
                         this.m_reportItemTable[typeName] = result;

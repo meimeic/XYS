@@ -43,7 +43,9 @@
     <Compile Include="Config\XmlConfigurator.cs" />
     <Compile Include="Config\XmlConfiguratorAttribute.cs" />
     <Compile Include="Config\XmlLisParamConfigurator.cs" />
+    <Compile Include="Core\ILisReportElement.cs" />
     <Compile Include="Core\ILisReporter.cs" />
+    <Compile Include="Core\ReportImpl.cs" />
     <Compile Include="Core\RepositorySelector.cs" />
     <Compile Include="Core\HandlerResult.cs" />
     <Compile Include="Core\IReportFiller.cs" />
@@ -55,6 +57,10 @@
     <Compile Include="Core\LisSection.cs" />
     <Compile Include="Core\LisSectionMap.cs" />
     <Compile Include="Core\ReporterManager.cs" />
+    <Compile Include="DAL\DbHelperOleDb.cs" />
+    <Compile Include="DAL\DbHelperSQL.cs" />
+    <Compile Include="DAL\LisReportCommonDAL.cs" />
+    <Compile Include="DAL\LisReportPKDAL.cs" />
     <Compile Include="Filler\ReportFillByDB.cs" />
     <Compile Include="Filler\ReportFillSkeleton.cs" />
     <Compile Include="Handler\ReportCustomHandler.cs" />

@@ -3,26 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Model;
-using XYS.Report;
 using XYS.Common;
-using XYS.Report.DAL;
-namespace XYS.Report.Core
+
+using XYS.Report.Lis;
+using XYS.Report.Lis.DAL;
+using XYS.Report.Lis.Model;
+namespace XYS.Report.Lis.Core
 {
-    public class ReportImpl : ReporterWrapperImpl, IReport
+    public class ReportImpl : IReport
     {
         #region
         private LisReportPKDAL m_reportKeyDAL;
+        private readonly IReporter m_reporter;
         #endregion
 
         #region 构造函数
         public ReportImpl(IReporter reporter)
-            : base(reporter)
         {
+            this.m_reporter = reporter;
             this.m_reportKeyDAL = new LisReportPKDAL();
         }
         #endregion
 
         #region 属性
+        public IReporter Reporter
+        {
+            get { return this.m_reporter; }
+        }
         public LisReportPKDAL ReportKeyDAL
         {
             get { return this.m_reportKeyDAL; }
@@ -41,32 +48,33 @@ namespace XYS.Report.Core
             ReportPK RK = GetReportKey(require);
             return InitReport(report, RK);
         }
-        public bool InitReports(List<IReportElement> reportList, Type reportType, List<ReportPK> keyList)
+        public bool InitReports(List<IReportElement> reportList, List<ReportPK> keyList)
         {
             if (reportList != null)
             {
-                IReportElement report = null;
+                bool result = false;
+                ReportReportElement report = null;
                 foreach (ReportPK rk in keyList)
                 {
-                    try
+                    report = new ReportReportElement();
+                    this.Reporter.FillReport(report, rk);
+                    result = this.Reporter.OptionReport(report);
+                    if (result)
                     {
-                        report = (IReportElement)reportType.Assembly.CreateInstance(reportType.FullName);
-                        this.Reporter.FillReport(report, rk);
                         reportList.Add(report);
                     }
-                    catch (Exception ex)
-                    {
-                        continue;
-                    }
                 }
-                return this.Reporter.OptionReport(reportList);
+                if (reportList.Count > 0)
+                {
+                    return true;
+                }
             }
             return false;
         }
-        public bool InitReports(List<IReportElement> reportList, Type reportType, Require require)
+        public bool InitReports(List<IReportElement> reportList, Require require)
         {
             List<ReportPK> keyList = GetReportKeyList(require);
-            return InitReports(reportList, reportType, keyList);
+            return InitReports(reportList, keyList);
         }
         #endregion
 

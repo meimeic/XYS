@@ -1,7 +1,8 @@
-﻿using XYS.Model;
+﻿using XYS.Report.Lis.Core;
+
 namespace XYS.Report.Lis.Model
 {
-    public abstract class AbstractFillElement : IReportElement
+    public abstract class AbstractFillElement : ILisReportElement
     {
         #region 私有字段
         private string m_searchSQL;

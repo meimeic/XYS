@@ -4,10 +4,11 @@ using System.Data;
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Report;
+using XYS.DAL;
 using XYS.Common;
-using XYS.Report.Core;
-namespace XYS.Report.DAL
+
+using XYS.Report.Lis;
+namespace XYS.Report.Lis.DAL
 {
     public class LisReportPKDAL:IReportPKDAL
     {
@@ -125,7 +126,7 @@ namespace XYS.Report.DAL
         protected ReportPK SetReportKey(DataRow dr)
         {
             KeyColumn temp;
-            ReportPKImpl key = new ReportPKImpl();
+            ReportPK key = new ReportPK();
             foreach (DataColumn dc in dr.Table.Columns)
             {
                 temp = new KeyColumn(dc.ColumnName, dr[dc]);

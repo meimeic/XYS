@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Model;
 
+using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
@@ -25,7 +25,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
         
         #region 实现父类抽象方法
-        protected override bool OperateElement(IReportElement element)
+        protected override bool OperateElement(ILisReportElement element)
         {
             //元素级别处理
             ReportExamElement ree = element as ReportExamElement;
@@ -46,16 +46,12 @@ namespace XYS.Report.Lis.Handler
         protected override bool OperateReport(ReportReportElement report)
         {
             //顶级处理
-            return OperateExam(report);
+            return OperateElement(report.ReportExam);
         }
         #endregion
 
         #region 内部处理逻辑
-        protected virtual bool OperateExam(ReportReportElement rre)
-        {
-            //中间级处理
-            return OperateElement(rre.ReportExam);
-        }
+     
         #endregion
     }
 }

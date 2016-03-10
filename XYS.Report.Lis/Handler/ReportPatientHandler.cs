@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XYS.Model;
-using XYS.Report.Model.Lis;
+using XYS.Report.Lis.Core;
+using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
     public class ReportPatientHandler : ReportHandlerSkeleton
@@ -21,7 +21,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateElement(IReportElement element)
+        protected override bool OperateElement(ILisReportElement element)
         {
             //元素级操作
             ReportPatientElement rpe = element as ReportPatientElement;
@@ -35,19 +35,14 @@ namespace XYS.Report.Lis.Handler
             }
             return false;
         }
-        protected override bool OperateReport(ReportReportElement rre)
+        protected override bool OperateReport(ReportReportElement report)
         {
             //报告级操作
-            return OperatePatient(rre);
+            return OperateElement(report.ReportPatient);
         }
         #endregion
 
         #region
-        protected virtual bool OperatePatient(ReportReportElement rre)
-        {
-            //中间级操作
-            return OperateElement(rre.ReportPatient);
-        }
         #endregion
     }
 }

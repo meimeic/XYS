@@ -2,12 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Model;
 using XYS.Common;
 
+using XYS.Report.Lis.Util;
 using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
-using XYS.Report.Lis.Util;
 namespace XYS.Report.Lis.Filler
 {
     public abstract class ReportFillSkeleton : IReportFiller
@@ -30,31 +29,11 @@ namespace XYS.Report.Lis.Filler
         {
             get { return this.m_fillerName; }
         }
-        public virtual void Fill(IReportElement reportElement, ReportPK RK)
+        public virtual void Fill(ReportReportElement report, ReportPK RK)
         {
-            if (IsFill(reportElement))
+            if (report != null)
             {
-                //报告
-                if (IsReport(reportElement))
-                {
-                    ReportReportElement rre = reportElement as ReportReportElement;
-                    if (rre != null)
-                    {
-                        FillReport(rre, RK);
-                    }
-                }
-                //报告项
-                else
-                {
-                    FillElement(reportElement, RK);
-                }
-            }
-        }
-        public void Fill(List<IReportElement> reportElementList, ReportPK RK, Type type)
-        {
-            if (IsFill(type))
-            {
-                FillElements(reportElementList, RK, type);
+                FillReport(report, RK);
             }
         }
         #endregion
@@ -69,7 +48,7 @@ namespace XYS.Report.Lis.Filler
             List<Type> availableElementList = this.GetAvailableInsideElements(RK);
             if (availableElementList != null && availableElementList.Count > 0)
             {
-                List<IReportElement> tempList = null;
+                List<ILisReportElement> tempList = null;
                 foreach (Type type in availableElementList)
                 {
                     if (IsFill(type))
@@ -83,8 +62,8 @@ namespace XYS.Report.Lis.Filler
         #endregion
 
         #region 抽象方法
-        protected abstract void FillElement(IReportElement reportElement, ReportPK RK);
-        protected abstract void FillElements(List<IReportElement> reportElementList, ReportPK RK, Type type);
+        protected abstract void FillElement(ILisReportElement reportElement, ReportPK RK);
+        protected abstract void FillElements(List<ILisReportElement> reportElementList, ReportPK RK, Type type);
         #endregion
 
         #region 辅助方法
@@ -112,7 +91,7 @@ namespace XYS.Report.Lis.Filler
         {
             if (this.m_section2FillTypeMap.Count == 0)
             {
-                InitInsideElementTable();
+                InitFillElementTable();
             }
             return this.m_section2FillTypeMap[sectionNo] as List<Type>;
         }
@@ -124,17 +103,14 @@ namespace XYS.Report.Lis.Filler
         #endregion
 
         #region 私有方法
-        private void InitExtendElementTable()
-        {
-        }
-        private void InitInsideElementTable()
+        private void InitFillElementTable()
         {
             lock (this.m_section2FillTypeMap)
             {
                  ConfigManager.InitSection2FillElementTable(this.m_section2FillTypeMap);
             }
         }
-        protected bool IsFill(IReportElement element)
+        protected bool IsFill(ILisReportElement element)
         {
             return element is AbstractFillElement;
         }
@@ -146,7 +122,7 @@ namespace XYS.Report.Lis.Filler
             }
             return false;
         }
-        protected bool IsReport(IReportElement reportElement)
+        protected bool IsReport(ILisReportElement reportElement)
         {
             return reportElement is ReportReportElement;
         }

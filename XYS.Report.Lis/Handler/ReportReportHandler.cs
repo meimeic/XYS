@@ -1,9 +1,8 @@
 ﻿using System;
 
-using XYS.Model;
-
-using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Util;
+using XYS.Report.Lis.Core;
+using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
     public class ReportReportHandler : ReportHandlerSkeleton
@@ -24,7 +23,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类方法
-        protected override bool OperateElement(IReportElement element)
+        protected override bool OperateElement(ILisReportElement element)
         {
             return true;
         }

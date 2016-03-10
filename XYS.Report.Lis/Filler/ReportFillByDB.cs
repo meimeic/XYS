@@ -3,17 +3,17 @@ using System.Text;
 using System.Reflection;
 using System.Collections.Generic;
 
-using XYS.DAL;
-using XYS.Model;
 using XYS.Common;
 
+using XYS.Report.Lis.DAL;
+using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Filler
 {
     public class ReportFillByDB : ReportFillSkeleton
     {
         #region 变量
-        private ReportCommonDAL m_reportDAL;
+        private LisReportCommonDAL m_reportDAL;
         private static readonly string m_FillerName = "DBFiller";
         #endregion
 
@@ -25,18 +25,18 @@ namespace XYS.Report.Lis.Filler
         public ReportFillByDB(string name)
             : base(name)
         {
-            this.m_reportDAL = new ReportCommonDAL();
+            this.m_reportDAL = new LisReportCommonDAL();
         }
         #endregion
 
         #region 实例属性
-        public virtual ReportCommonDAL ReportDAL
+        public virtual LisReportCommonDAL ReportDAL
         {
             get
             {
                 if (this.m_reportDAL == null)
                 {
-                    this.m_reportDAL = new ReportCommonDAL();
+                    this.m_reportDAL = new LisReportCommonDAL();
                 }
                 return this.m_reportDAL;
             }
@@ -45,7 +45,7 @@ namespace XYS.Report.Lis.Filler
         #endregion
 
         #region 实现父类抽象方法
-        protected override void FillElement(IReportElement reportElement, ReportPK RK)
+        protected override void FillElement(ILisReportElement reportElement, ReportPK RK)
         {
             string sql = GenderSql(reportElement, RK);
             if (sql != null)
@@ -53,7 +53,7 @@ namespace XYS.Report.Lis.Filler
                 this.D_FillElement(reportElement, sql);
             }
         }
-        protected override void FillElements(List<IReportElement> reportElementList, ReportPK RK, Type type)
+        protected override void FillElements(List<ILisReportElement> reportElementList, ReportPK RK, Type type)
         {
             string sql = GenderSql(type, RK);
             this.D_FillElements(reportElementList, type, sql);
@@ -61,18 +61,18 @@ namespace XYS.Report.Lis.Filler
         #endregion
 
         #region DAL层代码访问
-        protected virtual void D_FillElement(IReportElement reportElement, string sql)
+        protected virtual void D_FillElement(ILisReportElement reportElement, string sql)
         {
             this.ReportDAL.Fill(reportElement, sql);
         }
-        protected virtual void D_FillElements(List<IReportElement> reportElementList, Type type, string sql)
+        protected virtual void D_FillElements(List<ILisReportElement> reportElementList, Type type, string sql)
         {
             this.ReportDAL.FillList(reportElementList, type, sql);
         }
         #endregion
 
         #region 生成sql语句
-        protected string GenderSql(IReportElement element, ReportPK RK)
+        protected string GenderSql(ILisReportElement element, ReportPK RK)
         {
             string where = GenderWhere(RK);
             AbstractFillElement e = element as AbstractFillElement;

@@ -1,7 +1,8 @@
-﻿using XYS.Model;
+﻿using XYS.Report.Lis.Core;
+
 namespace XYS.Report.Lis.Model
 {
-    public class AbstractInnerElement : IReportElement
+    public class AbstractInnerElement : ILisReportElement
     {
         #region 私有字段
         #endregion

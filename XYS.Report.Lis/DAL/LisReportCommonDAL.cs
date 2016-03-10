@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Data;
 using System.Reflection;
-using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Model;
+using XYS.DAL;
 using XYS.Common;
-namespace XYS.Report.DAL
+using XYS.Report.Lis.Core;
+namespace XYS.Report.Lis.DAL
 {
-    public class ReportCommonDAL : IReportDAL
+    public class LisReportCommonDAL:IReportDAL
     {
-        public ReportCommonDAL()
+        public LisReportCommonDAL()
         { }
-        public void Fill(IReportElement element, string sql)
+        public void Fill(ILisReportElement element, string sql)
         {
             DataTable dt = GetDataTable(sql);
             if (dt != null && dt.Rows.Count > 0)
@@ -21,17 +21,17 @@ namespace XYS.Report.DAL
                 //AfterFill(element);
             }
         }
-        public void FillList(List<IReportElement> elementList, Type elementType, string sql)
+        public void FillList(List<ILisReportElement> elementList, Type elementType, string sql)
         {
             DataTable dt = GetDataTable(sql);
             if (dt != null && dt.Rows.Count > 0)
             {
-                IReportElement element;
+                ILisReportElement element;
                 foreach (DataRow dr in dt.Rows)
                 {
                     try
                     {
-                        element = (IReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
+                        element = (ILisReportElement)elementType.Assembly.CreateInstance(elementType.FullName);
                         FillData(element, dr, dt.Columns);
                         //AfterFill(element);
                         elementList.Add(element);
@@ -45,7 +45,7 @@ namespace XYS.Report.DAL
         }
 
         //填充对象属性
-        protected void FillData(IReportElement element, DataRow dr, DataColumnCollection columns)
+        protected void FillData(ILisReportElement element, DataRow dr, DataColumnCollection columns)
         {
             PropertyInfo prop = null;
             PropertyInfo[] props = element.GetType().GetProperties();
@@ -58,7 +58,7 @@ namespace XYS.Report.DAL
                 }
             }
         }
-        protected void FillData(IReportElement element, Type type, DataRow dr, DataColumnCollection columns)
+        protected void FillData(ILisReportElement element, Type type, DataRow dr, DataColumnCollection columns)
         {
             PropertyInfo prop = null;
             foreach (DataColumn dc in columns)
@@ -71,7 +71,7 @@ namespace XYS.Report.DAL
             }
         }
 
-        protected bool FillProperty(IReportElement element, PropertyInfo p, DataRow dr)
+        protected bool FillProperty(ILisReportElement element, PropertyInfo p, DataRow dr)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace XYS.Report.DAL
                 return false;
             }
         }
-        protected bool FillProperty(IReportElement element, PropertyInfo p, object v)
+        protected bool FillProperty(ILisReportElement element, PropertyInfo p, object v)
         {
             try
             {
@@ -129,15 +129,6 @@ namespace XYS.Report.DAL
             }
             return dt;
         }
-        //获取对象属性
-        //protected void AfterFill(ILisReportElement element)
-        //{
-        //    LisAbstractReportElement e = element as LisAbstractReportElement;
-        //    if (e != null)
-        //    {
-        //        e.AfterFill();
-        //    }
-        //}
         private PropertyInfo GetProperty(PropertyInfo[] props, string propName)
         {
             PropertyInfo p = null;

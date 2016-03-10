@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XYS.Model;
-
 using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
@@ -31,46 +29,40 @@ namespace XYS.Report.Lis.Handler
         {
             get { return this.m_handlerName; }
         }
-
-        public virtual HandlerResult ReportOptions(IReportElement reportElement)
+        public virtual HandlerResult ReportOptions(ReportReportElement report)
         {
-            bool result = false;
-            if (IsReport(reportElement))
+            if (report != null)
             {
-                result = OperateReport((ReportReportElement)reportElement);
-            }
-            else
-            {
-                result = OperateElement(reportElement);
-            }
-            //
-            if (result)
-            {
-                return HandlerResult.Continue;
-            }
-            return HandlerResult.Fail;
-        }
-        public virtual HandlerResult ReportOptions(List<IReportElement> reportElementList)
-        {
-            if (IsExist(reportElementList))
-            {
-                OperateElementList(reportElementList);
-                if (IsExist(reportElementList))
+                bool result = OperateReport(report);
+                if (result)
                 {
                     return HandlerResult.Continue;
                 }
             }
             return HandlerResult.Fail;
         }
+
+        //public virtual HandlerResult ReportOptions(List<IReportElement> reportElementList)
+        //{
+        //    if (IsExist(reportElementList))
+        //    {
+        //        OperateElementList(reportElementList);
+        //        if (IsExist(reportElementList))
+        //        {
+        //            return HandlerResult.Continue;
+        //        }
+        //    }
+        //    return HandlerResult.Fail;
+        //}
         #endregion
 
         #region 抽象方法(处理元素)
-        protected abstract bool OperateElement(IReportElement element);
+        protected abstract bool OperateElement(ILisReportElement element);
         protected abstract bool OperateReport(ReportReportElement report);
         #endregion
 
         #region 受保护的虚方法
-        protected virtual void OperateElementList(List<IReportElement> reportElementList)
+        protected virtual void OperateElementList(List<ILisReportElement> reportElementList)
         {
             bool result = false;
             if (IsExist(reportElementList))
@@ -96,7 +88,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 辅助方法
-        protected bool IsExist(List<IReportElement> elementList)
+        protected bool IsExist(List<ILisReportElement> elementList)
         {
             if (elementList != null && elementList.Count > 0)
             {
@@ -108,11 +100,11 @@ namespace XYS.Report.Lis.Handler
         {
             return typeof(ReportReportElement).Equals(type);
         }
-        protected bool IsReport(IReportElement reportElement)
+        protected bool IsReport(ILisReportElement reportElement)
         {
             return reportElement is ReportReportElement;
         }
-        protected bool IsElement(IReportElement reportElement, Type type)
+        protected bool IsElement(ILisReportElement reportElement, Type type)
         {
             return reportElement.GetType().Equals(type);
         }

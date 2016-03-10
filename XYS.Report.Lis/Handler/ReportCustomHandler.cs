@@ -42,7 +42,7 @@ namespace XYS.Report.Lis.Handler
         
         //可以添加一些custom项的内部处理逻辑
         #region 内部处理逻辑
-        protected virtual bool OperateCustom(ReportReportElement rre)
+        private bool OperateCustom(ReportReportElement rre)
         {
             return true;
         }

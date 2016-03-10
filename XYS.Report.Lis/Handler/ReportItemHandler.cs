@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Model;
 
+using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
     public class ReportItemHandler : ReportHandlerSkeleton
     {
-        #region
+        #region 字段
         private static readonly string m_defaultHandlerName = "ReportItemHandler";
         private readonly Hashtable m_convertItemMap;
         #endregion
@@ -28,12 +28,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateReport(ReportReportElement report)
-        {
-            //报告级操作
-            return OperateItem(report);
-        }
-        protected override bool OperateElement(IReportElement element)
+        protected override bool OperateElement(ILisReportElement element)
         {
             //元素级操作
             ReportItemElement rie = element as ReportItemElement;
@@ -44,7 +39,7 @@ namespace XYS.Report.Lis.Handler
                 {
                     return false;
                 }
-                //不删除，执行处理代码
+                //不删除，检验项处理操作
                 if (rie.ItemNo == 50004360 || rie.ItemNo == 50004370)
                 {
                     if (rie.RefRange != null)
@@ -56,66 +51,58 @@ namespace XYS.Report.Lis.Handler
             }
             return false;
         }
-        #endregion
-
-        #region item内部处理逻辑
-        protected virtual bool OperateItem(ReportReportElement rre)
+        protected override bool OperateReport(ReportReportElement report)
         {
-            //item 处理
-            ReportItemElement rie=null;
-            List<IReportElement> itemElementList = rre.GetReportItem(typeof(ReportItemElement).Name);
-            ReportKVElement kve = GetKVElement(rre.SectionNo);
-            for (int i = itemElementList.Count - 1; i >= 0; i--)
+            //报告级操作
+            ReportItemElement rie = null;
+            List<ILisReportElement> itemList = report.GetReportItem(typeof(ReportItemElement).Name);
+            ReportKVElement kv = new ReportKVElement();
+            if (IsExist(itemList))
             {
-                rie = itemElementList[i] as ReportItemElement;
-                if (rie == null)
+                for (int i = itemList.Count - 1; i >= 0; i--)
                 {
-                    itemElementList.RemoveAt(i);
-                    continue;
-                }
+                    rie = itemList[i] as ReportItemElement;
+                    if (rie == null)
+                    {
+                        itemList.RemoveAt(i);
+                        continue;
+                    }
+                    //设置ParItemList 检验大项集合
+                    SetParItemListByItem(report.ParItemList, rie);
 
-                //设置ParItemList 检验大项集合
-                SetParItemListByItem(rre.ParItemList, rie);
-
-                //通过item设置备注
-                SetRemarkFlagByItem(rre, rie);
-                
-                //item是否转换为kv
-                if (IsConvert2KVElement(rie, kve))
-                {
-                    itemElementList.RemoveAt(i);
-                    continue;
+                    //元素转换
+                    if (Convert2KVElement(rie, kv))
+                    {
+                        itemList.RemoveAt(i);
+                        continue;
+                    }
+                    //元素处理
+                    if (!OperateElement(rie))
+                    {
+                        itemList.RemoveAt(i);
+                        continue;
+                    }
                 }
-                //是否删除
-                if (!OperateElement(rie))
+                if (kv.Count > 0)
                 {
-                    itemElementList.RemoveAt(i);
-                    continue;
+                    List<ILisReportElement> kvList = report.GetReportItem(typeof(ReportKVElement).Name);
+                    kvList.Add(kv);
                 }
-            }
-            if (kve != null)
-            {
-                List<IReportElement> kveList = rre.GetReportItem(typeof(ReportKVElement).Name);
-                kveList.Add(kve);
             }
             return true;
         }
         #endregion
 
+        #region item内部处理逻辑
+        #endregion
+
         #region item项转换成KV项
-        private void Convert2KVElement(ReportReportElement rre)
+        private bool Convert2KVElement(ReportItemElement rie, ReportKVElement kv)
         {
-        }
-        private bool IsConvert2KVElement(ReportItemElement rie, ReportKVElement rkve)
-        {
-            if (this.m_convertItemMap.Count == 0)
-            {
-                InitItem2CustomMap();
-            }
             string key = this.m_convertItemMap[rie.ItemNo] as string;
             if (key != null)
             {
-                rkve.Add(key, rie.ItemResult);
+                kv.Add(key, rie.ItemResult);
                 return true;
             }
             return false;
@@ -123,7 +110,7 @@ namespace XYS.Report.Lis.Handler
         //获取kv 若所在小组不需要kve 则返回null
         private ReportKVElement GetKVElement(int sectionNo)
         {
-            ReportKVElement kve = null; 
+            ReportKVElement kve = null;
             switch (sectionNo)
             {
                 case 2:
@@ -160,15 +147,7 @@ namespace XYS.Report.Lis.Handler
         }
         #endregion
 
-        #region 通过项设置 检验大项集合 备注标记
-        private void SetRemarkFlagByItem(ReportReportElement rre,ReportItemElement rie)
-        {
-            //
-            if (rie.ItemNo == 123)
-            {
-                rre.RemarkFlag = 2;
-            }
-        }
+        #region 设置检验大项集合
         private void SetParItemListByItem(List<int> parItemList, ReportItemElement rie)
         {
             if (!parItemList.Contains(rie.ParItemNo))

@@ -8,11 +8,11 @@ namespace XYS.Common
         #endregion
 
         #region 公共构造函数
-        protected ReportPK()
+        public ReportPK()
         {
             this.m_KeySet = new HashSet<KeyColumn>();
         }
-        protected ReportPK(HashSet<KeyColumn> ketSet)
+        public ReportPK(HashSet<KeyColumn> ketSet)
         {
             this.m_KeySet = ketSet;
         }

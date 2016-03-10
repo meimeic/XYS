@@ -49,8 +49,6 @@
     <Compile Include="Config\ConfiguratorAttribute.cs" />
     <Compile Include="Config\RepositoryAttribute.cs" />
     <Compile Include="DAL\CommonDAL.cs" />
-    <Compile Include="DAL\DbHelperOleDb.cs" />
-    <Compile Include="DAL\DbHelperSQL.cs" />
     <Compile Include="DAL\IReportDAL.cs" />
     <Compile Include="DAL\IReportPKDAL.cs" />
     <Compile Include="DAL\ReportCommonDAL.cs" />

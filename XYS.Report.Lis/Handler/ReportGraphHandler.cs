@@ -3,8 +3,8 @@ using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Model;
 using XYS.Report.Lis.Util;
+using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
@@ -30,7 +30,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateElement(IReportElement element)
+        protected override bool OperateElement(ILisReportElement element)
         {
             ReportGraphElement rge = element as ReportGraphElement;
             if (rge != null)
@@ -41,38 +41,33 @@ namespace XYS.Report.Lis.Handler
         }
         protected override bool OperateReport(ReportReportElement report)
         {
-            return OperateGraph(report);
-        }
-        #endregion
-
-        #region graph项的内部处理逻辑
-        protected virtual bool OperateGraph(ReportReportElement rre)
-        {
-            List<IReportElement> graphList = rre.GetReportItem(typeof(ReportGraphElement).Name);
+            List<ILisReportElement> graphList = report.GetReportItem(typeof(ReportGraphElement).Name);
             if (IsExist(graphList))
             {
-                rre.CreateImageCollection();
-                Convert2ImageCollection(graphList, rre.ImageCollection);
+                report.CreateImageCollection();
+                Convert2ImageCollection(graphList, report.ImageCollection);
             }
-            rre.RemoveReportItem(typeof(ReportGraphElement).Name);
-            if (rre.SectionNo == 11)
+            report.RemoveReportItem(typeof(ReportGraphElement).Name);
+            if (report.SectionNo == 11)
             {
-                AddImageByParItem(rre.ParItemList, rre.ImageCollection);
+                AddNormalGraph(report.ParItemList, report.ImageCollection);
             }
             return true;
         }
         #endregion
 
-        #region
-        protected void Convert2ImageCollection(List<IReportElement> graphList, ReportImagesElement imageCollection)
+        #region graph项的内部处理逻辑
+        protected void Convert2ImageCollection(List<ILisReportElement> graphList, ReportImagesElement imageCollection)
         {
             if (imageCollection == null)
             {
                 throw new ArgumentNullException("ImageCollection");
             }
             string propertyName = null;
+            PropertyInfo imageProperty = null;
+            Type type = imageCollection.GetType();
             ReportGraphElement rge = null;
-            foreach (IReportElement element in graphList)
+            foreach (ILisReportElement element in graphList)
             {
                 rge = element as ReportGraphElement;
                 if (rge != null)
@@ -80,7 +75,11 @@ namespace XYS.Report.Lis.Handler
                     propertyName = GetPropertyName(rge.GraphName);
                     if (propertyName != null)
                     {
-                        SetImageProperty(propertyName, rge.GraphImage, imageCollection);
+                        imageProperty = type.GetProperty(propertyName);
+                        if (imageProperty != null)
+                        {
+                            SetImageProperty(imageProperty, rge.GraphImage, imageCollection);
+                        }
                     }
                 }
             }
@@ -97,15 +96,11 @@ namespace XYS.Report.Lis.Handler
             }
             return null;
         }
-        private void SetImageProperty(string propertyName, object value,ReportImagesElement imageCollection)
+        private void SetImageProperty(PropertyInfo pro, object value, ReportImagesElement imageCollection)
         {
             try
             {
-                PropertyInfo pro = imageCollection.GetType().GetProperty(propertyName);
-                if (pro != null)
-                {
-                    pro.SetValue(imageCollection, value, null);
-                }
+                pro.SetValue(imageCollection, value, null);
             }
             catch (Exception ex)
             {
@@ -115,27 +110,28 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 图片项添加处理
-        private void AddImageByParItem(List<int> parItemList,ReportImagesElement imageCollection)
+        private void AddNormalGraph(List<int> parItemList, ReportImagesElement imageCollection)
         {
             if (imageCollection == null)
             {
                 throw new ArgumentNullException("ImageCollection");
             }
+            Type type = imageCollection.GetType();
             string propertyName = GetPropertyName("normal");
-            if (parItemList.Count > 0&&propertyName!=null)
+            if (parItemList.Count > 0 && propertyName != null)
             {
-                object imageValue=null;
-                if (this.m_parItemNo2NormalImage.Count == 0)
+                PropertyInfo imageProperty = type.GetProperty(propertyName);
+                if (imageProperty != null)
                 {
-                    this.InitParItem2NormalImage();
-                }
-                foreach (int parItemNo in parItemList)
-                {
-                    imageValue = this.m_parItemNo2NormalImage[parItemNo];
-                    if (imageValue != null)
+                    object imageValue = null;
+                    foreach (int parItemNo in parItemList)
                     {
-                        SetImageProperty(propertyName, imageValue, imageCollection);
-                        break;
+                        imageValue = this.m_parItemNo2NormalImage[parItemNo];
+                        if (imageValue != null)
+                        {
+                            SetImageProperty(imageProperty, imageValue, imageCollection);
+                            break;
+                        }
                     }
                 }
             }
@@ -151,7 +147,7 @@ namespace XYS.Report.Lis.Handler
         {
             lock (this.m_graphName2PropertyName)
             {
-                //
+
             }
         }
         #endregion
