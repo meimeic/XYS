@@ -54,7 +54,6 @@ namespace XYS.FRReport.Util
             }
             return ds;
         }
-
         #endregion
 
         #region 私有静态方法
@@ -110,7 +109,6 @@ namespace XYS.FRReport.Util
             ConsoleInfo.Debug(declaringType, "maked xml table struct by " + elementType.Name);
             parentNode.AppendChild(tableElement);
         }
-
         private static Dictionary<string, string> GenderTableAttrDic(Type elementType)
         {
             return GenderTableAttrDic(elementType.Name);
@@ -124,7 +122,6 @@ namespace XYS.FRReport.Util
             result.Add(ENABLE_ATTR, DEFAULT_ENABLE_ATTR);
             return result;
         }
-
         private static Dictionary<string, string> GenderColumnAttrDic(PropertyInfo p)
         {
             return GenderColumnAttrDic(p.Name, p.PropertyType.FullName);
@@ -137,7 +134,6 @@ namespace XYS.FRReport.Util
             result.Add(PROP_NAME_ATTR, PROP_NAME_ATTR_VALUE);
             return result;
         }
-
         public static XmlElement CreateElement(XmlDocument xmlDoc, string name, Dictionary<string, string> attrDic)
         {
             XmlElement element = xmlDoc.CreateElement(name);
@@ -166,7 +162,6 @@ namespace XYS.FRReport.Util
                 }
             }
         }
-
         public static string GetDataStructFilePath()
         {
             try
@@ -187,49 +182,6 @@ namespace XYS.FRReport.Util
         #endregion
 
         #region 创建导出的dataset以及xml模板结构
-        //public static void InitDataStruct(DataSet ds)
-        //{
-        //    List<Type> typeList = new List<Type>(10);
-        //    LisMap.InitAllElementTypes(typeList);
-        //    InitDataStruct(ds, typeList);
-        //}
-        //public static void InitDataStruct(DataSet ds, List<Type> typeList)
-        //{
-        //    string fileFullName = SystemInfo.GetFileFullName(GetDataStructFilePath(), "ReportTables.frd");
-        //    ConsoleInfo.Debug(declaringType, "FRDataStruct:Start--make the data struct xml file " + fileFullName + " by reportelemnts");
-
-        //    XmlDocument doc = new XmlDocument();
-        //    XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "utf-8", null);
-        //    doc.AppendChild(dec);
-        //    XmlNode root = doc.CreateNode(XmlNodeType.Element, ROOT_TAG, null);
-
-        //    foreach (Type type in typeList)
-        //    {
-        //        if (IsExport(type))
-        //        {
-        //            ConvertObj2Table(ds, type);
-        //            ConvertObj2Xml(doc, root, type);
-        //        }
-        //    }
-        //    doc.AppendChild(root);
-        //    if (SystemInfo.IsFileExist(fileFullName))
-        //    {
-        //        if (!SystemInfo.DeleteFile(fileFullName))
-        //        {
-        //            throw new Exception("can not delete the file " + fileFullName);
-        //        }
-        //    }
-        //    try
-        //    {
-        //        doc.Save(fileFullName);
-        //        ConsoleInfo.Debug(declaringType, "FRDataStruct:End--make the data struct xml file " + fileFullName + " by reportelements");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ConsoleInfo.Error(declaringType, "FRDataStruct:" + ex.Message);
-        //        throw ex;
-        //    }
-        //}
         public static void InitXmlDataStruct(List<Type> typeList, string fileName)
         {
             string fileFullName = SystemInfo.GetFileFullName(GetDataStructFilePath(), fileName);
@@ -280,26 +232,6 @@ namespace XYS.FRReport.Util
         #endregion
 
         #region dataset相关操作
-        private static void ConvertObj2Table(DataSet ds, Type elementType)
-        {
-            ConsoleInfo.Debug(declaringType, "making RAM table by " + elementType.Name);
-            DataTable dt = new DataTable();
-            dt.TableName = elementType.Name;
-            PropertyInfo[] props = elementType.GetProperties();
-            if (props == null || props.Length == 0)
-            {
-                return;
-            }
-            foreach (PropertyInfo pro in props)
-            {
-                if (IsExport(pro))
-                {
-                    dt.Columns.Add(pro.Name, pro.PropertyType);
-                }
-            }
-            ConsoleInfo.Debug(declaringType, "maked RAM table by " + elementType.Name);
-            ds.Tables.Add(dt);
-        }
         private static void ConvertObj2Table(DataTable dt, Type elementType)
         {
             ConsoleInfo.Debug(declaringType, "making RAM table by " + elementType.Name);
@@ -318,6 +250,9 @@ namespace XYS.FRReport.Util
             }
             ConsoleInfo.Debug(declaringType, "maked RAM table by " + elementType.Name);
         }
+        #endregion
+
+        #region 辅助方法
         public static bool IsExport(Type type)
         {
             if (type != null)

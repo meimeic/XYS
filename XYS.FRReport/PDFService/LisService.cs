@@ -8,11 +8,11 @@ using FastReport;
 using FastReport.Export.Pdf;
 
 using XYS.Util;
-using XYS.Model;
 
-using XYS.Report;
-using XYS.Report.Util;
-using XYS.Report.Model.Lis;
+using XYS.Report.Lis;
+using XYS.Report.Lis.Util;
+using XYS.Report.Lis.Core;
+using XYS.Report.Lis.Model;
 
 using XYS.FRReport.Util;
 namespace XYS.FRReport.PDFService
@@ -21,8 +21,16 @@ namespace XYS.FRReport.PDFService
     {
         #region
         private static readonly string XmlStructFileName = "LisReport.frd";
+
         private static readonly DataSet PDF_DS = new DataSet();
-        private static readonly Hashtable m_no2FullModelNameMap = new Hashtable(20);
+        private static readonly Hashtable m_printModelMap = new Hashtable(20);
+
+        private static readonly Hashtable m_section2ModelNoMap = new Hashtable(20);
+        private static readonly Hashtable m_item2ModelNoMap = new Hashtable(10);
+
+        private static readonly Hashtable m_section2OrderMap = new Hashtable(20);
+        private static readonly Hashtable m_item2OrderMap = new Hashtable(10);
+
         private static readonly ReportReportElement PDF_REPORT = new ReportReportElement();
         static IReport PDFReporter = ReportManager.GetReporter(typeof(LisService));
         #endregion
@@ -31,7 +39,7 @@ namespace XYS.FRReport.PDFService
         static LisService()
         {
             List<Type> elementList = new List<Type>();
-            LisConfiguration.InitAllElementList(elementList);
+            ConfigManager.InitAllElementList(elementList);
             FRDataStruct.InitXmlDataStruct(elementList, XmlStructFileName);
             FRDataStruct.InitRawDataStruct(elementList, PDF_DS);
         }
@@ -40,7 +48,7 @@ namespace XYS.FRReport.PDFService
         }
         #endregion
 
-        #region
+        #region 公共函数
         public static string GetPDF(string serialNo)
         {
             Require req = new Require();
@@ -143,11 +151,11 @@ namespace XYS.FRReport.PDFService
         #region
         private static string GetPrintModelName(int modelNo)
         {
-            if (m_no2FullModelNameMap.Count == 0)
+            if (m_section2ModelNoMap.Count == 0)
             {
                 InitModelNameMap();
             }
-            return m_no2FullModelNameMap[modelNo] as string;
+            return m_section2ModelNoMap[modelNo] as string;
         }
         #endregion
 
@@ -167,6 +175,10 @@ namespace XYS.FRReport.PDFService
         private static void InitModelNameMap()
         {
         }
+        #endregion
+
+        #region 获取模板号
+
         #endregion
     }
 }

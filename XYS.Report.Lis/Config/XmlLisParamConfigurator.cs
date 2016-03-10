@@ -46,21 +46,6 @@ namespace XYS.Report.Lis.Config
                 }
             }
         }
-        public void ConfigSectionMap(XmlElement element, LisSectionMap sectionMap)
-        {
-            XmlElement sectionsElement = GetTargetElement(element, REPORT_SECTIONS_TAG);
-            if (sectionsElement != null)
-            {
-                foreach (XmlNode node in sectionsElement.ChildNodes)
-                {
-                    if (node.NodeType == XmlNodeType.Element)
-                    {
-                        XmlElement currentElement = (XmlElement)node;
-                        ConfigSection(currentElement, sectionMap);
-                    }
-                }
-            }
-        }
         private static void ConfigSection(XmlElement element, LisSectionMap sectionMap)
         {
             if (element.LocalName == REPORT_SECTION_TAG)
@@ -117,21 +102,6 @@ namespace XYS.Report.Lis.Config
         public static void ConfigParItemMap(LisParItemMap parItemMap)
         {
             XmlElement parItemElement = GetTargetElement(PAR_ITEMS_TAG);
-            if (parItemElement != null)
-            {
-                foreach (XmlNode node in parItemElement.ChildNodes)
-                {
-                    if (node.NodeType == XmlNodeType.Element)
-                    {
-                        XmlElement currentElement = (XmlElement)node;
-                        ConfigParItem(currentElement, parItemMap);
-                    }
-                }
-            }
-        }
-        public void ConfigParItemMap(XmlElement element, LisParItemMap parItemMap)
-        {
-            XmlElement parItemElement = GetTargetElement(element, PAR_ITEMS_TAG);
             if (parItemElement != null)
             {
                 foreach (XmlNode node in parItemElement.ChildNodes)
