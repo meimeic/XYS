@@ -5,9 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Config;
 using XYS.Common;
-using XYS.Repository;
 using XYS.Report.Lis.Config;
 using XYS.Report.Lis.Repository;
 namespace XYS.Report.Lis.Core
@@ -15,7 +13,7 @@ namespace XYS.Report.Lis.Core
     public class RepositorySelector
     {
         #region 静态成员
-        private static readonly Type defaultRepositoryType = null;
+        private static readonly Type defaultRepositoryType = typeof(Hierarchy);
         private static readonly string defaultRepositoryName = "default-repository";
         private static readonly Type declaringType = typeof(RepositorySelector);
         #endregion
@@ -23,8 +21,8 @@ namespace XYS.Report.Lis.Core
         #region 指读实例成员
         //默认的Repository类型
         private readonly Type m_repositoryType;
-        private readonly Hashtable m_assembly2repositoryMap = new Hashtable(3);
-        private readonly Hashtable m_name2repositoryMap = SystemInfo.CreateCaseInsensitiveHashtable(2);
+        private readonly Hashtable m_assembly2repositoryMap;
+        private readonly Hashtable m_name2repositoryMap;
         #endregion
 
         #region 构造函数
@@ -45,6 +43,8 @@ namespace XYS.Report.Lis.Core
             }
             this.m_repositoryType = repositoryType;
             ConsoleInfo.Debug(declaringType, "defaultRepositoryType [" + this.m_repositoryType + "]");
+            this.m_assembly2repositoryMap = new Hashtable(3);
+            this.m_name2repositoryMap = SystemInfo.CreateCaseInsensitiveHashtable(2);
         }
         #endregion
 

@@ -2,11 +2,8 @@
 using System.Reflection;
 using System.Collections;
 
-using XYS.Model;
-using XYS.Common;
-using XYS.Repository;
-
 using XYS.Report.Lis.Core;
+using XYS.Report.Lis.Repository;
 namespace XYS.Report.Lis
 {
     public class ReportManager
@@ -93,7 +90,7 @@ namespace XYS.Report.Lis
         }
         #endregion
 
-        private static IReport WrapReporter(IReporter reporter)
+        private static IReport WrapReporter(ILisReporter reporter)
         {
             Hashtable ReportMap = RepositoryMap[reporter.Repository] as Hashtable;
             if (ReportMap == null)

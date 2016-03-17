@@ -3,7 +3,7 @@ using XYS.Common;
 namespace XYS.Report.Lis.Model
 {
     [Export()]
-    public class ReportImagesElement : AbstractInnerElement
+    public class ReportImageByteElement : AbstractInnerElement
     {
         #region 私有字段
         private string m_name;
@@ -19,7 +19,7 @@ namespace XYS.Report.Lis.Model
         #endregion
 
         #region 构造函数
-        public ReportImagesElement()
+        public ReportImageByteElement()
             : base()
         {
             this.m_image0 = null;
@@ -31,7 +31,7 @@ namespace XYS.Report.Lis.Model
             this.m_image6 = null;
             this.m_image7 = null;
             this.m_image8 = null;
-            this.m_name = "ImageCollection";
+            this.m_name = "ImageByteCollection";
         }
         #endregion
 

@@ -42,18 +42,6 @@ namespace XYS.Report.Lis.Handler
             return HandlerResult.Fail;
         }
 
-        //public virtual HandlerResult ReportOptions(List<IReportElement> reportElementList)
-        //{
-        //    if (IsExist(reportElementList))
-        //    {
-        //        OperateElementList(reportElementList);
-        //        if (IsExist(reportElementList))
-        //        {
-        //            return HandlerResult.Continue;
-        //        }
-        //    }
-        //    return HandlerResult.Fail;
-        //}
         #endregion
 
         #region 抽象方法(处理元素)
@@ -69,14 +57,7 @@ namespace XYS.Report.Lis.Handler
             {
                 for (int i = reportElementList.Count - 1; i >= 0; i--)
                 {
-                    if (IsReport(reportElementList[i]))
-                    {
-                        result = OperateReport((ReportReportElement)reportElementList[i]);
-                    }
-                    else
-                    {
-                        result = OperateElement(reportElementList[i]);
-                    }
+                    result = OperateElement(reportElementList[i]);
                     //是否删除元素
                     if (!result)
                     {

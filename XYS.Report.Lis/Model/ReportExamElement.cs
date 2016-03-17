@@ -10,6 +10,7 @@ namespace XYS.Report.Lis.Model
 
         #region 私有字段
         private int m_sectionNo;
+        private int m_testTypeNo;
         private string m_serialNo;
         private string m_sampleNo;
 
@@ -41,7 +42,12 @@ namespace XYS.Report.Lis.Model
             get { return m_sectionNo; }
             set { m_sectionNo = value; }
         }
-
+        [Column(true)]
+        public int TestTypeNo
+        {
+            get { return this.m_testTypeNo; }
+            set { this.m_testTypeNo = value; }
+        }
         [Export()]
         [Column(true)]
         public string SerialNo

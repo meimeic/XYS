@@ -3,7 +3,7 @@
 using XYS.Model;
 namespace XYS.Report.Lis.Core
 {
-    public interface ILisReportElement : IReportElement
+    public interface ILisReportElement
     {
     }
 }

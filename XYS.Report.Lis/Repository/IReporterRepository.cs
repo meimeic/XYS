@@ -2,8 +2,8 @@
 using System.Collections;
 
 using XYS.Util;
-using XYS.Common;
-namespace XYS.Repository
+using XYS.Report.Lis.Core;
+namespace XYS.Report.Lis.Repository
 {
     public delegate void ReporterRepositoryConfigurationChangedEventHandler(object sender, EventArgs e);
 
@@ -21,8 +21,8 @@ namespace XYS.Repository
         #endregion
 
         #region reporter相关方法
-        IReporter Exists(ReporterKey key);
-        IReporter GetReporter(ReporterKey key);
+        ILisReporter Exists(ReporterKey key);
+        ILisReporter GetReporter(ReporterKey key);
         #endregion
     }
 }

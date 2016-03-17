@@ -219,6 +219,7 @@ namespace XYS.FRReport.Util
         public static void InitRawDataStruct(List<Type> typeList, DataSet ds)
         {
             DataTable dt = null;
+            ConsoleInfo.Debug(declaringType, "Start--make the RAM dataset "  + " by exportelemnts");
             foreach (Type type in typeList)
             {
                 if (IsExport(type))
@@ -228,6 +229,7 @@ namespace XYS.FRReport.Util
                     ds.Tables.Add(dt);
                 }
             }
+            ConsoleInfo.Debug(declaringType, "end--make the RAM dataset " + " by exportelemnts");
         }
         #endregion
 

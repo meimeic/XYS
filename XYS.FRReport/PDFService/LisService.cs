@@ -82,22 +82,26 @@ namespace XYS.FRReport.PDFService
             FillElement(report, ds);
             FillElement(report.ReportExam, ds);
             FillElement(report.ReportPatient, ds);
+            if (report.ReportImage != null)
+            {
+                FillElement(report.ReportImage, ds);
+            }
             if (report.ReportItemTable.Count > 0)
             {
-                string tableName = null;
-                List<IReportElement> elementList = null;
+                Type type = null;
+                List<ILisReportElement> elementList = null;
                 foreach (DictionaryEntry de in report.ReportItemTable)
                 {
-                    tableName = de.Key as string;
-                    elementList = de.Value as List<IReportElement>;
-                    if (elementList != null && elementList.Count > 0)
+                    type = de.Key as Type;
+                    elementList = de.Value as List<ILisReportElement>;
+                    if (IsExport(type)&&IsExist(elementList))
                     {
-                        FillElements(elementList, ds, tableName);
+                        FillElements(elementList, ds, type);
                     }
                 }
             }
         }
-        private static void FillElement(IReportElement element, DataSet ds)
+        private static void FillElement(ILisReportElement element, DataSet ds)
         {
             Type elementType = element.GetType();
             PropertyInfo[] props = elementType.GetProperties();
@@ -116,7 +120,7 @@ namespace XYS.FRReport.PDFService
             }
             dt.Rows.Add(dr);
         }
-        private static void FillElement(IReportElement element, DataRow dr)
+        private static void FillElement(ILisReportElement element, DataRow dr)
         {
             PropertyInfo[] props = element.GetType().GetProperties();
             if (props == null || props.Length == 0)
@@ -131,18 +135,33 @@ namespace XYS.FRReport.PDFService
                 }
             }
         }
-        private static void FillElements(List<IReportElement> exportElementList, DataSet ds, string tableName)
+        private static void FillElement(ILisReportElement element, Type type, DataRow dr)
+        {
+            PropertyInfo[] props = type.GetProperties();
+            if (props == null || props.Length == 0)
+            {
+                return;
+            }
+            foreach (PropertyInfo prop in props)
+            {
+                if (IsExport(prop))
+                {
+                    FillDataColumn(prop, dr, element);
+                }
+            }
+        }
+        private static void FillElements(List<ILisReportElement> exportElementList, DataSet ds, Type type)
         {
             DataRow dr = null;
-            DataTable dt = ds.Tables[tableName];
-            foreach (IReportElement element in exportElementList)
+            DataTable dt = ds.Tables[type.Name];
+            foreach (ILisReportElement element in exportElementList)
             {
                 dr = dt.NewRow();
                 FillElement(element, dr);
                 dt.Rows.Add(dr);
             }
         }
-        private static void FillDataColumn(PropertyInfo p, DataRow dr, IReportElement element)
+        private static void FillDataColumn(PropertyInfo p, DataRow dr, ILisReportElement element)
         {
             dr[p.Name] = p.GetValue(element, null);
         }
@@ -160,6 +179,14 @@ namespace XYS.FRReport.PDFService
         #endregion
 
         #region
+        private static bool IsExist(List<ILisReportElement> elementList)
+        {
+            if (elementList != null && elementList.Count > 0)
+            {
+                return true;
+            }
+            return false;
+        }
         private static bool IsReport(Type type)
         {
             return typeof(ReportReportElement).Equals(type);

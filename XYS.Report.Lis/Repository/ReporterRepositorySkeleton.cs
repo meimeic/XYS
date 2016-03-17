@@ -2,8 +2,6 @@
 using System.Collections;
 
 using XYS.Util;
-using XYS.Common;
-using XYS.Repository;
 
 using XYS.Report.Lis.Core;
 namespace XYS.Report.Lis.Repository
@@ -73,8 +71,8 @@ namespace XYS.Report.Lis.Repository
         #endregion
 
         #region 实现IReporterRepository接口方法
-        public abstract IReporter Exists(ReporterKey key);
-        public abstract IReporter GetReporter(ReporterKey key);
+        public abstract ILisReporter Exists(ReporterKey key);
+        public abstract ILisReporter GetReporter(ReporterKey key);
         #endregion
 
         #region 公共方法

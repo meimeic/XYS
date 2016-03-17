@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Xml;
-namespace XYS.Repository
+namespace XYS.Report.Lis.Repository
 {
     public interface IXmlRepositoryConfigurator
     {

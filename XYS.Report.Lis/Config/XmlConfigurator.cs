@@ -8,7 +8,7 @@ using System.Collections;
 using System.Configuration;
 
 using XYS.Util;
-using XYS.Repository;
+using XYS.Report.Lis.Repository;
 
 namespace XYS.Report.Lis.Config
 {

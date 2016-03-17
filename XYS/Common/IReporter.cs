@@ -1,17 +1,7 @@
-﻿using XYS.Model;
-using XYS.Repository;
-namespace XYS.Common
-{
-    public interface IReporter
-    {
-        IReporterRepository Repository { get; }
+﻿//namespace XYS.Common
+//{
+//    public interface IReporter
+//    {
 
-        #region
-        void FillReport(IReportElement report, ReportPK RK);
-        #endregion
-
-        #region
-        bool OptionReport(IReportElement report);
-        #endregion
-    }
-}
+//    }
+//}

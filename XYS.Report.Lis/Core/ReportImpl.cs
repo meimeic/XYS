@@ -2,9 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Model;
-using XYS.Common;
-
 using XYS.Report.Lis;
 using XYS.Report.Lis.DAL;
 using XYS.Report.Lis.Model;
@@ -14,11 +11,11 @@ namespace XYS.Report.Lis.Core
     {
         #region
         private LisReportPKDAL m_reportKeyDAL;
-        private readonly IReporter m_reporter;
+        private readonly ILisReporter m_reporter;
         #endregion
 
         #region 构造函数
-        public ReportImpl(IReporter reporter)
+        public ReportImpl(ILisReporter reporter)
         {
             this.m_reporter = reporter;
             this.m_reportKeyDAL = new LisReportPKDAL();
@@ -26,7 +23,7 @@ namespace XYS.Report.Lis.Core
         #endregion
 
         #region 属性
-        public IReporter Reporter
+        public ILisReporter Reporter
         {
             get { return this.m_reporter; }
         }
@@ -38,23 +35,23 @@ namespace XYS.Report.Lis.Core
         #endregion
 
         #region 实现IReport接口
-        public bool InitReport(IReportElement report, ReportPK key)
+        public bool InitReport(ILisReportElement report, LisReportPK key)
         {
             this.Reporter.FillReport(report, key);
             return this.Reporter.OptionReport(report);
         }
-        public bool InitReport(IReportElement report, Require require)
+        public bool InitReport(ILisReportElement report, Require require)
         {
-            ReportPK RK = GetReportKey(require);
+            LisReportPK RK = GetReportKey(require);
             return InitReport(report, RK);
         }
-        public bool InitReports(List<IReportElement> reportList, List<ReportPK> keyList)
+        public bool InitReports(List<ILisReportElement> reportList, List<LisReportPK> keyList)
         {
             if (reportList != null)
             {
                 bool result = false;
                 ReportReportElement report = null;
-                foreach (ReportPK rk in keyList)
+                foreach (LisReportPK rk in keyList)
                 {
                     report = new ReportReportElement();
                     this.Reporter.FillReport(report, rk);
@@ -71,7 +68,7 @@ namespace XYS.Report.Lis.Core
             }
             return false;
         }
-        public bool InitReports(List<IReportElement> reportList, Require require)
+        public bool InitReports(List<ILisReportElement> reportList, Require require)
         {
             List<ReportPK> keyList = GetReportKeyList(require);
             return InitReports(reportList, keyList);
@@ -79,13 +76,13 @@ namespace XYS.Report.Lis.Core
         #endregion
 
         #region 获取报告键
-        protected virtual List<ReportPK> GetReportKeyList(Require require)
+        protected virtual List<LisReportPK> GetReportKeyList(Require require)
         {
             return this.ReportKeyDAL.GetReportKey(require);
         }
-        protected virtual ReportPK GetReportKey(Require require)
+        protected virtual LisReportPK GetReportKey(Require require)
         {
-            List<ReportPK> result = this.ReportKeyDAL.GetReportKey(require);
+            List<LisReportPK> result = this.ReportKeyDAL.GetReportKey(require);
             if (result.Count > 0)
             {
                 return result[0];

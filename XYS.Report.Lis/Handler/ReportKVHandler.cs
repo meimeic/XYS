@@ -33,10 +33,10 @@ namespace XYS.Report.Lis.Handler
         {
             ReportKVElement kv = null;
             ReportCustomElement custom = null;
-            List<ILisReportElement> kvList = report.GetReportItem(typeof(ReportKVElement).Name);
+            List<ILisReportElement> kvList = report.GetReportItem(typeof(ReportKVElement));
             if (IsExist(kvList))
             {
-                List<ILisReportElement> customList = report.GetReportItem(typeof(ReportCustomElement).Name);
+                List<ILisReportElement> customList = report.GetReportItem(typeof(ReportCustomElement));
                 foreach (ILisReportElement element in kvList)
                 {
                     kv = element as ReportKVElement;
@@ -48,7 +48,7 @@ namespace XYS.Report.Lis.Handler
                     }
                 }
             }
-            report.RemoveReportItem(typeof(ReportKVElement).Name);
+            report.RemoveReportItem(typeof(ReportKVElement));
             return true;
         }
         #endregion

@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 using XYS.Util;
 using XYS.Common;
-
 using XYS.Report.Lis.Core;
 namespace XYS.Report.Lis.Model
 {
@@ -13,6 +12,7 @@ namespace XYS.Report.Lis.Model
     {
         #region 私有实例字段
         private int m_sectionNo;
+        private string m_serialNo;
         private string m_parItemName;
 
         private string m_reportTitle;
@@ -22,8 +22,6 @@ namespace XYS.Report.Lis.Model
 
         private string m_technician;
         private string m_checker;
-        private byte[] m_technicianImage;
-        private byte[] m_checkerImage;
 
         private DateTime m_receiveDateTime;
         private DateTime m_collectDateTime;
@@ -32,33 +30,44 @@ namespace XYS.Report.Lis.Model
         private DateTime m_checkDateTime;
         private DateTime m_secondCheckDateTime;
 
-        private readonly List<int> m_parItemList;
         private readonly Hashtable m_reportItemTable;
 
         private readonly ReportExamElement m_reportExam;
         private readonly ReportPatientElement m_reportPatient;
-        private ReportImagesElement m_imageCollection;
+        private ReportImageElement m_reportImage;
         #endregion
 
         #region 公共构造函数
         public ReportReportElement()
         {
             this.m_remarkFlag = 0;
-            this.m_imageCollection = null;
-            this.m_parItemList = new List<int>(5);
+            this.m_reportImage = null;
             this.m_reportExam = new ReportExamElement();
             this.m_reportPatient = new ReportPatientElement();
             this.m_reportItemTable = SystemInfo.CreateCaseInsensitiveHashtable(3);
         }
         #endregion
 
-        #region 实现IReportElement接口
+        #region 实现ILisReportElement接口
         #endregion
 
         #region 实现抽象类方法
         #endregion
 
         #region 实例属性
+        [Column(true)]
+        public int SectionNo
+        {
+            get { return m_sectionNo; }
+            set { m_sectionNo = value; }
+        }
+        [Export()]
+        [Column(true)]
+        public string SerialNo
+        {
+            get { return m_serialNo; }
+            set { m_serialNo = value; }
+        }
         [Export()]
         public string ReportTitle
         {
@@ -164,10 +173,6 @@ namespace XYS.Report.Lis.Model
             set { this.m_checkerImage = value; }
         }
 
-        public List<int> ParItemList
-        {
-            get { return this.m_parItemList; }
-        }
         public Hashtable ReportItemTable
         {
             get { return this.m_reportItemTable; }
@@ -180,9 +185,9 @@ namespace XYS.Report.Lis.Model
         {
             get { return this.m_reportPatient; }
         }
-        public ReportImagesElement ImageCollection
+        public ReportImageElement ReportImage
         {
-            get { return this.m_imageCollection; }
+            get { return this.m_reportImage; }
         }
         #endregion
 
@@ -201,40 +206,31 @@ namespace XYS.Report.Lis.Model
             this.TechnicianImage = null;
             this.CheckerImage = null;
         }
-        public void CreateImageCollection()
+
+        public void RemoveReportItem(Type type)
         {
-            lock (this.m_imageCollection)
+            if (type != null)
             {
-                if (this.m_imageCollection == null)
-                {
-                    this.m_imageCollection = new ReportImagesElement();
-                }
-            }
-        }
-        public void RemoveReportItem(string typeName)
-        {
-            if (!string.IsNullOrEmpty(typeName))
-            {
-                if (this.m_reportItemTable.ContainsKey(typeName))
+                if (this.m_reportItemTable.ContainsKey(type))
                 {
                     lock (this.m_reportItemTable)
                     {
-                        this.m_reportItemTable.Remove(typeName);
+                        this.m_reportItemTable.Remove(type);
                     }
                 }
             }
         }
-        public List<ILisReportElement> GetReportItem(string typeName)
+        public List<ILisReportElement> GetReportItem(Type type)
         {
-            if (!string.IsNullOrEmpty(typeName))
+            if (type != null)
             {
-                List<ILisReportElement> result = this.m_reportItemTable[typeName] as List<ILisReportElement>;
+                List<ILisReportElement> result = this.m_reportItemTable[type] as List<ILisReportElement>;
                 if (result == null)
                 {
                     result = new List<ILisReportElement>(10);
                     lock (this.m_reportItemTable)
                     {
-                        this.m_reportItemTable[typeName] = result;
+                        this.m_reportItemTable[type] = result;
                     }
                 }
                 return result;

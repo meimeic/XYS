@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Common;
-
 using XYS.Report.Lis.Util;
 using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
@@ -42,6 +41,7 @@ namespace XYS.Report.Lis.Filler
         protected virtual void FillReport(ReportReportElement rre, ReportPK RK)
         {
             //默认的报告项
+            FillElement(rre, RK);
             FillElement(rre.ReportExam, RK);
             FillElement(rre.ReportPatient, RK);
             //可选的报告项
@@ -53,7 +53,7 @@ namespace XYS.Report.Lis.Filler
                 {
                     if (IsFill(type))
                     {
-                        tempList = rre.GetReportItem(type.Name);
+                        tempList = rre.GetReportItem(type);
                         FillElements(tempList, RK, type);
                     }
                 }

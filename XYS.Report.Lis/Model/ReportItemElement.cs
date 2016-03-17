@@ -12,16 +12,16 @@ namespace XYS.Report.Lis.Model
         private int m_parItemNo;
         private string m_itemCName;
         private string m_itemEName;
-        private double m_itemValue;
-        private string m_itemDesc;
+        //private double m_itemValue;
+        //private string m_itemDesc;
         private string m_itemResult;
-        private string m_itemStandard;
+        //private string m_itemStandard;
         private string m_resultStatus;
         private string m_itemUnit;
         private string m_refRange;
         private int m_dispOrder;
         private int m_secretGrade;
-        private int m_prec;
+        //private int m_prec;
         #endregion
 
         #region 公共构造方法
@@ -67,32 +67,33 @@ namespace XYS.Report.Lis.Model
             set { this.m_itemEName = value; }
         }
 
-        [Column(true)]
-        public double ItemValue
-        {
-            get { return this.m_itemValue; }
-            set { this.m_itemValue = value; }
-        }
-        [Column(true)]
-        public string ItemDesc
-        {
-            get { return this.m_itemDesc; }
-            set { this.m_itemDesc = value; }
-        }
+        //[Column(true)]
+        //public double ItemValue
+        //{
+        //    get { return this.m_itemValue; }
+        //    set { this.m_itemValue = value; }
+        //}
+        //[Column(true)]
+        //public string ItemDesc
+        //{
+        //    get { return this.m_itemDesc; }
+        //    set { this.m_itemDesc = value; }
+        //}
         [Export()]
+        [Column(true)]
         public string ItemResult
         {
             get { return this.m_itemResult; }
-            protected set { this.m_itemResult = value; }
+            set { this.m_itemResult = value; }
         }
 
-        [Export()]
-        [Column(true)]
-        public string ItemStandard
-        {
-            get { return this.m_itemStandard; }
-            set { this.m_itemStandard = value; }
-        }
+        //[Export()]
+        //[Column(true)]
+        //public string ItemStandard
+        //{
+        //    get { return this.m_itemStandard; }
+        //    set { this.m_itemStandard = value; }
+        //}
 
         [Export()]
         [Column(true)]
@@ -133,12 +134,12 @@ namespace XYS.Report.Lis.Model
             set { this.m_secretGrade = value; }
         }
 
-        [Column(true)]
-        public int Prec
-        {
-            get { return this.m_prec; }
-            set { this.m_prec = value; }
-        }
+        //[Column(true)]
+        //public int Prec
+        //{
+        //    get { return this.m_prec; }
+        //    set { this.m_prec = value; }
+        //}
         #endregion
 
         #region 方法

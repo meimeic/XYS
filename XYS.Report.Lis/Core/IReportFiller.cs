@@ -1,6 +1,5 @@
 ﻿using System;
 
-using XYS.Common;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Core
 {
@@ -14,7 +13,7 @@ namespace XYS.Report.Lis.Core
     public interface IReportFiller
     {
         string FillerName { get; }
-        void Fill(ReportReportElement report, ReportPK RK);
+        void Fill(ReportReportElement report, LisReportPK RK);
         //void Fill(List<IReportElement> reportElementList, ReportPK RK, Type type);
     }
 }

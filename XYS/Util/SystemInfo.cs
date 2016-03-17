@@ -689,7 +689,14 @@ namespace XYS.Util
         {
             if (capacity > 0)
             {
-                return new Hashtable(capacity, new MyCaseInsensitiveComparer());
+                try
+                {
+                    return new Hashtable(capacity, new MyCaseInsensitiveComparer());
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
             }
             return new Hashtable(new MyCaseInsensitiveComparer());
         }
@@ -753,13 +760,20 @@ namespace XYS.Util
             private CaseInsensitiveComparer caseInsensitiveComparer;
             public MyCaseInsensitiveComparer()
             {
-                this.caseInsensitiveComparer = CaseInsensitiveComparer.DefaultInvariant;
+                try
+                {
+                    this.caseInsensitiveComparer = CaseInsensitiveComparer.DefaultInvariant;
+                }
+                catch (Exception ex)
+                {
+ 
+                }
             }
             public MyCaseInsensitiveComparer(CultureInfo culture)
             {
                 this.caseInsensitiveComparer = new CaseInsensitiveComparer(culture);
             }
-            public bool Equals(object x, object y)
+            public new bool Equals(object x, object y)
             {
                 if (this.caseInsensitiveComparer.Compare(x, y) == 0)
                 {

@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MongoDB.Bson, Version=2.2.3.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\MongoDB.Bson.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -40,11 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\ConfiguratorAttribute.cs" />
+    <Compile Include="Config\RepositoryAttribute.cs" />
     <Compile Include="Config\XmlConfigurator.cs" />
     <Compile Include="Config\XmlConfiguratorAttribute.cs" />
     <Compile Include="Config\XmlLisParamConfigurator.cs" />
     <Compile Include="Core\ILisReportElement.cs" />
     <Compile Include="Core\ILisReporter.cs" />
+    <Compile Include="Core\LisReportPK.cs" />
+    <Compile Include="Core\ReporterKey.cs" />
     <Compile Include="Core\ReportImpl.cs" />
     <Compile Include="Core\RepositorySelector.cs" />
     <Compile Include="Core\HandlerResult.cs" />
@@ -78,7 +86,8 @@
     <Compile Include="Model\ReportCustomElement.cs" />
     <Compile Include="Model\ReportExamElement.cs" />
     <Compile Include="Model\ReportGraphElement.cs" />
-    <Compile Include="Model\ReportImagesElement.cs" />
+    <Compile Include="Model\ReportImageElement.cs" />
+    <Compile Include="Model\ReportImageByteElement.cs" />
     <Compile Include="Model\ReportInfoElement.cs" />
     <Compile Include="Model\ReportItemElement.cs" />
     <Compile Include="Model\ReportKVElement.cs" />
@@ -89,11 +98,13 @@
     <Compile Include="Repository\DefaultReporter.cs" />
     <Compile Include="Repository\DefaultReporterFactory.cs" />
     <Compile Include="Repository\IReporterFactory.cs" />
+    <Compile Include="Repository\IReporterRepository.cs" />
+    <Compile Include="Repository\IXmlRepositoryConfigurator.cs" />
     <Compile Include="Repository\Reporter.cs" />
     <Compile Include="Repository\Hierarchy.cs" />
     <Compile Include="Repository\ReporterRepositorySkeleton.cs" />
     <Compile Include="Repository\ReporterStrategy.cs" />
-    <Compile Include="Repository\XmlLisConfigurator.cs" />
+    <Compile Include="Repository\XmlHierarchyConfigurator.cs" />
     <Compile Include="Require.cs" />
     <Compile Include="Util\ConfigManager.cs" />
     <Compile Include="Util\LisImage.cs" />
@@ -105,7 +116,26 @@
       <Name>XYS</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="DAL\Mongo\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="lib\MongoDB.Bson.dll" />
+    <Content Include="lib\MongoDB.Bson.pdb" />
+    <Content Include="lib\MongoDB.Bson.xml" />
+    <Content Include="lib\MongoDB.Driver.Core.dll" />
+    <Content Include="lib\MongoDB.Driver.Core.pdb" />
+    <Content Include="lib\MongoDB.Driver.Core.xml" />
+    <Content Include="lib\MongoDB.Driver.dll" />
+    <Content Include="lib\MongoDB.Driver.GridFS.dll" />
+    <Content Include="lib\MongoDB.Driver.GridFS.pdb" />
+    <Content Include="lib\MongoDB.Driver.GridFS.xml" />
+    <Content Include="lib\MongoDB.Driver.Legacy.dll" />
+    <Content Include="lib\MongoDB.Driver.Legacy.pdb" />
+    <Content Include="lib\MongoDB.Driver.Legacy.xml" />
+    <Content Include="lib\MongoDB.Driver.pdb" />
+    <Content Include="lib\MongoDB.Driver.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

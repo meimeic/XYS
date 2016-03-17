@@ -4,8 +4,7 @@ using System.Reflection;
 using System.Collections;
 
 using XYS.Util;
-using XYS.Config;
-using XYS.Repository;
+using XYS.Report.Lis.Repository;
 namespace XYS.Report.Lis.Config
 {
     [AttributeUsage(AttributeTargets.Assembly)]

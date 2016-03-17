@@ -9,12 +9,12 @@ using XYS.Report.Lis.Filler;
 using XYS.Report.Lis.Handler;
 namespace XYS.Report.Lis.Repository
 {
-    public class XmlLisConfigurator
+    public class XmlHierarchyConfigurator
     {
         #region 字段
         private Hashtable m_reporterBag;
         private Hierarchy m_repository;
-        private static Type declaringType = typeof(XmlLisConfigurator);
+        private static Type declaringType = typeof(XmlHierarchyConfigurator);
         #endregion
 
         #region 私有常量
@@ -38,7 +38,7 @@ namespace XYS.Report.Lis.Repository
         #endregion
 
         #region 构造函数
-        public XmlLisConfigurator(Hierarchy repository)
+        public XmlHierarchyConfigurator(Hierarchy repository)
         {
             this.m_repository = repository;
             this.m_reporterBag = new Hashtable();
@@ -56,7 +56,7 @@ namespace XYS.Report.Lis.Repository
             if (rootElementName != CONFIGURATION_TAG)
             {
                 //
-                ConsoleInfo.Error(declaringType, "XmlHierarchyConfigurator:Xml element is - not a <" + CONFIGURATION_TAG + "> element.");
+                ConsoleInfo.Error(declaringType, "Xml element is - not a <" + CONFIGURATION_TAG + "> element.");
                 return;
             }
             foreach (XmlNode currentNode in element.ChildNodes)
@@ -68,7 +68,7 @@ namespace XYS.Report.Lis.Repository
                     if (currentElement.LocalName == REPORTER_STRATEGY_STACK_TAG)
                     {
                         this.m_repository.ClearStrategy();
-                        ConsoleInfo.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterStrategyMap by <" + REPORTER_STRATEGY_STACK_TAG + "> element");
+                        ConsoleInfo.Debug(declaringType, "Begin Configrue ReporterStrategyMap by <" + REPORTER_STRATEGY_STACK_TAG + "> element");
                         foreach (XmlNode node in currentElement.ChildNodes)
                         {
                             if (node.NodeType == XmlNodeType.Element)
@@ -80,7 +80,7 @@ namespace XYS.Report.Lis.Repository
                                 }
                             }
                         }
-                        ConsoleInfo.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterStrategyMap");
+                        ConsoleInfo.Debug(declaringType, "End Configrue ReporterStrategyMap");
                     }
                     //策略节点
                     else if (currentElement.LocalName == REPORTER_STRATEGY_TAG)
@@ -91,17 +91,17 @@ namespace XYS.Report.Lis.Repository
                     else if (currentElement.LocalName == FILL_STACK_TAG)
                     {
                         this.m_repository.ClearFiller();
-                        ConsoleInfo.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterFillMap by <" + FILL_STACK_TAG + "> element");
+                        ConsoleInfo.Debug(declaringType, "Begin Configrue ReporterFillMap by <" + FILL_STACK_TAG + "> element");
                         ParseFillStack(currentElement);
-                        ConsoleInfo.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterFillMap");
+                        ConsoleInfo.Debug(declaringType, "End Configrue ReporterFillMap");
                     }
                     //处理集合
                     else if (currentElement.LocalName == HANDLER_STACK_TAG)
                     {
                         this.m_repository.ClearHandler();
-                        ConsoleInfo.Debug(declaringType, "XmlHierarchyConfigurator:Begin Configrue ReporterHandlerMap by <" + HANDLER_STACK_TAG + "> element");
+                        ConsoleInfo.Debug(declaringType, "Begin Configrue ReporterHandlerMap by <" + HANDLER_STACK_TAG + "> element");
                         ParseHandlerStack(currentElement);
-                        ConsoleInfo.Debug(declaringType, "XmlHierarchyConfigurator:End Configrue ReporterHandlerMap");
+                        ConsoleInfo.Debug(declaringType, "End Configrue ReporterHandlerMap");
                     }
                     else
                     {
@@ -114,11 +114,11 @@ namespace XYS.Report.Lis.Repository
         protected void ParseStrategy(XmlElement reporterElement)
         {
             string strategyName = reporterElement.GetAttribute(NAME_ATTR);
-            ConsoleInfo.Debug(declaringType, "XmlHierarchyConfigurator:Loading Strategy [" + strategyName + "]");
+            ConsoleInfo.Debug(declaringType, "Loading Strategy [" + strategyName + "]");
             ReporterStrategy strategy = new ReporterStrategy(strategyName);
             ParseChildrenOfStrategyElement(reporterElement, strategy);
             this.m_repository.AddStrategy(strategy);
-            ConsoleInfo.Debug(declaringType, "XmlHierarchyConfigurator:Loaded Strategy [" + strategyName + "]");
+            ConsoleInfo.Debug(declaringType, "Loaded Strategy [" + strategyName + "]");
         }
         protected void ParseChildrenOfStrategyElement(XmlElement element, ReporterStrategy strategy)
         {
@@ -189,7 +189,7 @@ namespace XYS.Report.Lis.Repository
         protected void ParseFill(XmlElement fillElement)
         {
             string fillName = fillElement.GetAttribute(NAME_ATTR);
-            ConsoleInfo.Debug(declaringType, "XmlHierarchyConfigurator:Configuring Filler [" + fillName + "]");
+            ConsoleInfo.Debug(declaringType, "Configuring Filler [" + fillName + "]");
             object[] param = new object[] { fillName };
             string typeName = fillElement.GetAttribute(TYPE_ATTR);
             try
@@ -198,7 +198,7 @@ namespace XYS.Report.Lis.Repository
                 if (filler != null)
                 {
                     this.m_repository.AddFiller(filler);
-                    ConsoleInfo.Debug(declaringType, "XmlHierarchyConfigurator:Configured Filler [" + fillName + "]");
+                    ConsoleInfo.Debug(declaringType, "Configured Filler [" + fillName + "]");
                 }
             }
             catch (Exception ex)
@@ -224,7 +224,7 @@ namespace XYS.Report.Lis.Repository
         protected void ParseHandler(XmlElement handlerElement)
         {
             string handlerName = handlerElement.GetAttribute(NAME_ATTR);
-            ConsoleInfo.Debug(declaringType, "XmlHierarchyConfigurator:Configuring Handler [" + handlerName + "]");
+            ConsoleInfo.Debug(declaringType, "Configuring Handler [" + handlerName + "]");
             object[] param = new object[] { handlerName };
             string typeName = handlerElement.GetAttribute(TYPE_ATTR);
             try
@@ -233,7 +233,7 @@ namespace XYS.Report.Lis.Repository
                 if (handler != null)
                 {
                     this.m_repository.AddHandler(handler);
-                    ConsoleInfo.Debug(declaringType, "XmlHierarchyConfigurator:Configured Handler [" + handlerName + "]");
+                    ConsoleInfo.Debug(declaringType, "Configured Handler [" + handlerName + "]");
                 }
             }
             catch (Exception ex)

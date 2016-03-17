@@ -3,12 +3,11 @@ using System.Data;
 using System.Reflection;
 using System.Collections.Generic;
 
-using XYS.DAL;
 using XYS.Common;
 using XYS.Report.Lis.Core;
 namespace XYS.Report.Lis.DAL
 {
-    public class LisReportCommonDAL:IReportDAL
+    public class LisReportCommonDAL
     {
         public LisReportCommonDAL()
         { }

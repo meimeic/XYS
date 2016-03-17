@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Text;
 using System.Data;
+using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.DAL;
-using XYS.Common;
-
 using XYS.Report.Lis;
+using XYS.Report.Lis.Core;
 namespace XYS.Report.Lis.DAL
 {
-    public class LisReportPKDAL:IReportPKDAL
+    public class LisReportPKDAL
     {
-        public List<ReportPK> GetReportKey(Require require)
+        public List<LisReportPK> GetReportKey(Require require)
         {
-            ReportPK temp;
-            List<ReportPK> result = new List<ReportPK>();
+            LisReportPK temp;
+            List<LisReportPK> result = new List<LisReportPK>();
             string sql = GetSQLString(require);
             DataTable dt = GetDataTable(sql);
             if (dt.Rows.Count > 0)
             {
                 foreach (DataRow dr in dt.Rows)
                 {
-                    temp = SetReportKey(dr);
+                    temp = new LisReportPK();
+                    SetReportKey(dr, temp);
                     result.Add(temp);
                 }
             }
@@ -123,16 +123,12 @@ namespace XYS.Report.Lis.DAL
                 return "";
             }
         }
-        protected ReportPK SetReportKey(DataRow dr)
+        protected void SetReportKey(DataRow dr, LisReportPK PK)
         {
-            KeyColumn temp;
-            ReportPK key = new ReportPK();
-            foreach (DataColumn dc in dr.Table.Columns)
-            {
-                temp = new KeyColumn(dc.ColumnName, dr[dc]);
-                key.AddColumn(temp);
-            }
-            return key;
+            PK.SampleNo = dr["sampleno"].ToString();
+            PK.ReceiveDate = (DateTime)dr["receivedate"];
+            PK.SectionNo = Convert.ToInt32(dr["sectionno"]);
+            PK.TestTypeNo = Convert.ToInt32(dr["testtypeno"]);
         }
         protected DataTable GetDataTable(string sql)
         {

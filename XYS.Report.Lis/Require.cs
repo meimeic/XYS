@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace XYS.Report
+namespace XYS.Report.Lis
 {
     public class Require
     {
@@ -14,10 +14,10 @@ namespace XYS.Report
         private DateTime m_startDateTime; //起始日期
         private DateTime m_endDateTime; // 终止日期
 
+        private string m_orderByField;
+        private Dictionary<string, object> m_likeDictionary;
         private Dictionary<string, object> m_equalDictionary;
         private Dictionary<string, object> m_notEqualDictionary;
-        private Dictionary<string, object> m_likeDictionary;
-        private string m_orderByField;
         public Require()
             : this(TOP)
         { }

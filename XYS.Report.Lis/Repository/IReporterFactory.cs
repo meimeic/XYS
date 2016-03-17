@@ -1,7 +1,6 @@
-﻿using System;
+﻿using XYS.Common;
 
-using XYS.Common;
-using XYS.Repository;
+using XYS.Report.Lis.Core;
 namespace XYS.Report.Lis.Repository
 {
    public interface IReporterFactory

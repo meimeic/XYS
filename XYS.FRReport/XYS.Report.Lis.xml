@@ -9,33 +9,37 @@
             <handler-ref ref="ReportPatientHandler"/>
             <handler-ref ref="ReportItemHandler"/>
             <handler-ref ref="ReportGraphHandler"/>
+            <handler-ref ref="ReportKVHandler"/>
             <handler-ref ref="ReportCustomHandler"/>
             <handler-ref ref="ReportReportHandler"/>
           </handler-ref-stack>
         </reporter-strategy>
       </reporter-strategy-stack>
       <fill-stack>
-        <fill name="ReportFillByDB" type="XYS.Lis.Fill.ReportFillByDB"/>
+        <fill name="ReportFillByDB" type="XYS.Report.Lis.Filler.ReportFillByDB"/>
       </fill-stack>
       <handler-stack>
-        <handler name="ReportExamHandler" type="XYS.Lis.Handler.ReportExamHandler"/>
-        <handler name="ReportPatientHandler" type="XYS.Lis.Handler.ReportPatientHandler"/>
-        <handler name="ReportItemHandler" type="XYS.Lis.Handler.ReportItemHandler"/>
-        <handler name="ReportGraphHandler" type="XYS.Lis.Handler.ReportGraphHandler"/>
-        <handler name="ReportCustomHandler" type="XYS.Lis.Handler.ReportCustomHandler"/>
-        <handler name="ReportReportHandler" type="XYS.Lis.Handler.ReportReportHandler"/>
+        <handler name="ReportExamHandler" type="XYS.Report.Lis.Handler.ReportExamHandler"/>
+        <handler name="ReportPatientHandler" type="XYS.Report.Lis.Handler.ReportPatientHandler"/>
+        <handler name="ReportItemHandler" type="XYS.Report.Lis.Handler.ReportItemHandler"/>
+        <handler name="ReportGraphHandler" type="XYS.Report.Lis.Handler.ReportGraphHandler"/>
+        <handler name="ReportKVHandler" type="XYS.Report.Lis.Handler.ReportKVHandler"/>
+        <handler name="ReportCustomHandler" type="XYS.Report.Lis.Handler.ReportCustomHandler"/>
+        <handler name="ReportReportHandler" type="XYS.Report.Lis.Handler.ReportReportHandler"/>
       </handler-stack>
     </lis-report>
     <lis-param>
       <reportElements>
         <!-- ReportElement = 1,InfoElement,ItemElement,GraphElement,CustomElement,NoneElement-->
-        <reportElement name="ReportReportElement" type="XYS.Report.Model.Lis.ReportReportElement" explain=""/>
-        <reportElement name="ReportExamElement" type="XYS.Report.Model.Lis.ReportExamElement" explain=""/>
-        <reportElement name="ReportPatientElement" type="XYS.Report.Model.Lis.ReportPatientElement" explain=""/>
-        <reportElement name="ReportItemElement" type="XYS.Report.Model.Lis.ReportItemElement" explain=""/>
-        <reportElement name="ReportGraphElement" type="XYS.Report.Model.Lis.ReportGraphElement" explain=""/>
-        <reportElement name="ReportCustomElement" type="XYS.Report.Model.Lis.ReportCustomElement" explain=""/>
-        <reportElement name="ReportKVElement" type="XYS.Report.Model.Lis.ReportKVElement" explain=""/>
+        <reportElement name="ReportReportElement" type="XYS.Report.Lis.Model.ReportReportElement" explain=""/>
+        <reportElement name="ReportExamElement" type="XYS.Report.Lis.Model.ReportExamElement" explain=""/>
+        <reportElement name="ReportPatientElement" type="XYS.Report.Lis.Model.ReportPatientElement" explain=""/>
+        <reportElement name="ReportItemElement" type="XYS.Report.Lis.Model.ReportItemElement" explain=""/>
+        <reportElement name="ReportGraphElement" type="XYS.Report.Lis.Model.ReportGraphElement" explain=""/>
+        <reportElement name="ReportImageByteElement" type="XYS.Report.Lis.Model.ReportImageByteElement" explain=""/>
+        <reportElement name="ReportImagePathElement" type="XYS.Report.Lis.Model.ReportImagePathElement" explain=""/>
+        <reportElement name="ReportCustomElement" type="XYS.Report.Lis.Model.ReportCustomElement" explain=""/>
+        <reportElement name="ReportKVElement" type="XYS.Report.Lis.Model.ReportKVElement" explain=""/>
       </reportElements>
       <reportSections>
         <reportSection name="2" alias="临检XE2000" value="2" fillElements="ReportItemElement" fillTag="" />

@@ -24,6 +24,7 @@ namespace XYS.Report.Lis.Handler
             : base(handlerName)
         {
             this.m_convertItemMap = new Hashtable(16);
+            this.InitItem2CustomMap();
         }
         #endregion
 
@@ -55,9 +56,9 @@ namespace XYS.Report.Lis.Handler
         {
             //报告级操作
             ReportItemElement rie = null;
-            List<ILisReportElement> itemList = report.GetReportItem(typeof(ReportItemElement).Name);
-            ReportKVElement kv = new ReportKVElement();
-            if (IsExist(itemList))
+            List<ILisReportElement> itemList = report.GetReportItem(typeof(ReportItemElement));
+            ReportKVElement kv = GetKVElement(report.SectionNo);
+            if (IsExist(itemList) && kv != null)
             {
                 for (int i = itemList.Count - 1; i >= 0; i--)
                 {
@@ -67,9 +68,6 @@ namespace XYS.Report.Lis.Handler
                         itemList.RemoveAt(i);
                         continue;
                     }
-                    //设置ParItemList 检验大项集合
-                    SetParItemListByItem(report.ParItemList, rie);
-
                     //元素转换
                     if (Convert2KVElement(rie, kv))
                     {
@@ -85,9 +83,13 @@ namespace XYS.Report.Lis.Handler
                 }
                 if (kv.Count > 0)
                 {
-                    List<ILisReportElement> kvList = report.GetReportItem(typeof(ReportKVElement).Name);
+                    List<ILisReportElement> kvList = report.GetReportItem(typeof(ReportKVElement));
                     kvList.Add(kv);
                 }
+            }
+            else
+            {
+                OperateElementList(itemList);
             }
             return true;
         }

@@ -4,8 +4,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
-using XYS.Common;
-using XYS.Repository;
 
 using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Filler;
@@ -77,7 +75,7 @@ namespace XYS.Report.Lis.Repository
             ArrayList configurationMessages = new ArrayList();
             using (new ConsoleInfo.InfoReceivedAdapter(configurationMessages))
             {
-                XmlLisConfigurator config = new XmlLisConfigurator(this);
+                XmlHierarchyConfigurator config = new XmlHierarchyConfigurator(this);
                 config.Configure(element);
             }
             Configured = true;
@@ -87,7 +85,7 @@ namespace XYS.Report.Lis.Repository
 
         #region 实现父类抽象方法
         //查看某个名字的reporter是否存在
-        public override IReporter Exists(ReporterKey key)
+        public override ILisReporter Exists(ReporterKey key)
         {
             if (key == null)
             {
@@ -96,7 +94,7 @@ namespace XYS.Report.Lis.Repository
             return this.m_key2ReporterMap[key] as Reporter;
         }
         //根据名称获取reporter
-        public override IReporter GetReporter(ReporterKey key)
+        public override ILisReporter GetReporter(ReporterKey key)
         {
             if (key == null)
             {

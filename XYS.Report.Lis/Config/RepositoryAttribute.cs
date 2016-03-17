@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace XYS.Config
+namespace XYS.Report.Lis.Config
 {
     [AttributeUsage(AttributeTargets.Assembly,AllowMultiple=false)]
     [Serializable]

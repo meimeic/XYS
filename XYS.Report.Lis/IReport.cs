@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XYS.Model;
-using XYS.Common;
+using XYS.Report.Lis.Core;
 namespace XYS.Report.Lis
 {
     public interface IReport
     {
-        bool InitReport(IReportElement report, ReportPK key);
-        bool InitReport(IReportElement report, Require require);
-        bool InitReports(List<IReportElement> reportList, List<ReportPK> keyList);
-        bool InitReports(List<IReportElement> reportList, Require require);
+        bool InitReport(ILisReportElement report, LisReportPK key);
+        bool InitReport(ILisReportElement report, Require require);
+        bool InitReports(List<ILisReportElement> reportList, List<LisReportPK> keyList);
+        bool InitReports(List<ILisReportElement> reportList, Require require);
     }
 }

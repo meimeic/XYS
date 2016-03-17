@@ -2,9 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Model;
 using XYS.Common;
-using XYS.Repository;
 
 using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
@@ -75,14 +73,14 @@ namespace XYS.Report.Lis.Repository
         {
             get { return this.m_hierarchy; }
         }
-        public void FillReport(IReportElement report, ReportPK RK)
+        public void FillReport(ILisReportElement report, ReportPK RK)
         {
             if (IsLisReport(report))
             {
                 this.Filler.Fill((ReportReportElement)report, RK);
             }
         }
-        public bool OptionReport(IReportElement report)
+        public bool OptionReport(ILisReportElement report)
         {
             if (IsLisReport(report))
             {
@@ -93,7 +91,7 @@ namespace XYS.Report.Lis.Repository
         #endregion
 
         #region 实现ILisReporter接口
-        public bool IsLisReport(IReportElement report)
+        public bool IsLisReport(ILisReportElement report)
         {
             ReportReportElement rre = report as ReportReportElement;
             if (rre != null)

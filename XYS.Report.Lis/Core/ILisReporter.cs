@@ -1,10 +1,20 @@
 ﻿using System;
-using XYS.Model;
-using XYS.Common;
+
+using XYS.Report.Lis.Repository;
 namespace XYS.Report.Lis.Core
 {
-    public interface ILisReporter : IReporter
+    public interface ILisReporter
     {
-        bool IsLisReport(IReportElement report);
+        IReporterRepository Repository { get; }
+
+        #region
+        void FillReport(ILisReportElement report, LisReportPK RK);
+        #endregion
+
+        #region
+        bool OptionReport(ILisReportElement report);
+        #endregion
+
+        bool IsLisReport(ILisReportElement report);
     }
 }

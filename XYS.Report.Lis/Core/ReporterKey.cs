@@ -1,5 +1,5 @@
 ﻿using System;
-namespace XYS.Common
+namespace XYS.Report.Lis.Core
 {
     public class ReporterKey
     {
