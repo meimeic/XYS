@@ -31,15 +31,6 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateElement(ILisReportElement element)
-        {
-            ReportGraphElement rge = element as ReportGraphElement;
-            if (rge != null)
-            {
-                return true;
-            }
-            return false;
-        }
         protected override bool OperateReport(ReportReportElement report)
         {
             List<ILisReportElement> graphList = report.GetReportItem(typeof(ReportGraphElement));

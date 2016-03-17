@@ -44,7 +44,7 @@ namespace XYS.Report.Lis.Filler
         #endregion
 
         #region 实现父类抽象方法
-        protected override void FillElement(ILisReportElement reportElement, ReportPK RK)
+        protected override void FillElement(ILisReportElement reportElement, LisReportPK RK)
         {
             string sql = GenderSql(reportElement, RK);
             if (sql != null)
@@ -52,7 +52,7 @@ namespace XYS.Report.Lis.Filler
                 this.D_FillElement(reportElement, sql);
             }
         }
-        protected override void FillElements(List<ILisReportElement> reportElementList, ReportPK RK, Type type)
+        protected override void FillElements(List<ILisReportElement> reportElementList, LisReportPK RK, Type type)
         {
             string sql = GenderSql(type, RK);
             this.D_FillElements(reportElementList, type, sql);
@@ -71,7 +71,7 @@ namespace XYS.Report.Lis.Filler
         #endregion
 
         #region 生成sql语句
-        protected string GenderSql(ILisReportElement element, ReportPK RK)
+        protected string GenderSql(ILisReportElement element, LisReportPK RK)
         {
             string where = GenderWhere(RK);
             AbstractFillElement e = element as AbstractFillElement;
@@ -85,7 +85,7 @@ namespace XYS.Report.Lis.Filler
             }
             return null;
         }
-        protected string GenderSql(Type type, ReportPK RK)
+        protected string GenderSql(Type type, LisReportPK RK)
         {
             return GenderPreSQL(type) + GenderWhere(RK);
         }
@@ -107,39 +107,19 @@ namespace XYS.Report.Lis.Filler
             sb.Append(type.Name);
             return sb.ToString();
         }
-        protected string GenderWhere(ReportPK RK)
+        protected string GenderWhere(LisReportPK RK)
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append(" where ");
-            foreach (KeyColumn kc in RK.KeySet)
-            {
-                //int
-                if (kc.Value.GetType().FullName == "System.Int32")
-                {
-                    sb.Append(kc.Name);
-                    sb.Append("=");
-                    sb.Append(kc.Value);
-                }
-                //datetime
-                else if (kc.Value.GetType().FullName == "System.DateTime")
-                {
-                    DateTime dt = (DateTime)kc.Value;
-                    sb.Append(kc.Name);
-                    sb.Append("='");
-                    sb.Append(dt.Date.ToString("yyyy-MM-dd"));
-                    sb.Append("'");
-                }
-                //其他类型
-                else
-                {
-                    sb.Append(kc.Name);
-                    sb.Append("='");
-                    sb.Append(kc.Value.ToString());
-                    sb.Append("'");
-                }
-                sb.Append(" and ");
-            }
-            sb.Remove(sb.Length - 5, 5);
+            sb.Append(" where");
+            sb.Append(" receivedate='");
+            sb.Append(RK.ReceiveDate.ToString("yyyy-MM-dd"));
+            sb.Append("' and sectionno=");
+            sb.Append(RK.SectionNo);
+            sb.Append(" and testtypeno=");
+            sb.Append(RK.TestTypeNo);
+            sb.Append(" and sampleno='");
+            sb.Append(RK.SampleNo);
+            sb.Append("'");
             return sb.ToString();
         }
         private bool IsColumn(PropertyInfo prop)

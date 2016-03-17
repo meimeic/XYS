@@ -82,9 +82,9 @@ namespace XYS.FRReport.PDFService
             FillElement(report, ds);
             FillElement(report.ReportExam, ds);
             FillElement(report.ReportPatient, ds);
-            if (report.ReportImage != null)
+            if (report.ReportImageMap != null)
             {
-                FillElement(report.ReportImage, ds);
+                FillElement(report.ReportImageMap, ds);
             }
             if (report.ReportItemTable.Count > 0)
             {

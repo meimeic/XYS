@@ -41,31 +41,10 @@ namespace XYS.Report.Lis.Handler
             }
             return HandlerResult.Fail;
         }
-
         #endregion
 
         #region 抽象方法(处理元素)
-        protected abstract bool OperateElement(ILisReportElement element);
         protected abstract bool OperateReport(ReportReportElement report);
-        #endregion
-
-        #region 受保护的虚方法
-        protected virtual void OperateElementList(List<ILisReportElement> reportElementList)
-        {
-            bool result = false;
-            if (IsExist(reportElementList))
-            {
-                for (int i = reportElementList.Count - 1; i >= 0; i--)
-                {
-                    result = OperateElement(reportElementList[i]);
-                    //是否删除元素
-                    if (!result)
-                    {
-                        reportElementList.RemoveAt(i);
-                    }
-                }
-            }
-        }
         #endregion
 
         #region 辅助方法
@@ -76,6 +55,16 @@ namespace XYS.Report.Lis.Handler
                 return true;
             }
             return false;
+        }
+        protected List<ReportKVElement> GetReportKVList(ReportReportElement report)
+        {
+            List<ReportKVElement> kvList = report.ReportKVList;
+            if (kvList == null)
+            {
+                kvList = new List<ReportKVElement>(2);
+                report.ReportKVList = kvList;
+            }
+            return kvList;
         }
         protected bool IsReport(Type type)
         {

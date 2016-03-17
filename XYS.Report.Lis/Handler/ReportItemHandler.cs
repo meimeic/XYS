@@ -12,7 +12,7 @@ namespace XYS.Report.Lis.Handler
     {
         #region 字段
         private static readonly string m_defaultHandlerName = "ReportItemHandler";
-        private readonly Hashtable m_convertItemMap;
+        private readonly List<int> m_convertItemList;
         #endregion
 
         #region 构造函数
@@ -23,116 +23,80 @@ namespace XYS.Report.Lis.Handler
         public ReportItemHandler(string handlerName)
             : base(handlerName)
         {
-            this.m_convertItemMap = new Hashtable(16);
-            this.InitItem2CustomMap();
+            this.m_convertItemList = new List<int>(20);
+            InitConvertItemList();
         }
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateElement(ILisReportElement element)
-        {
-            //元素级操作
-            ReportItemElement rie = element as ReportItemElement;
-            if (rie != null)
-            {
-                //删除此项
-                if (ItemIsDelete(rie))
-                {
-                    return false;
-                }
-                //不删除，检验项处理操作
-                if (rie.ItemNo == 50004360 || rie.ItemNo == 50004370)
-                {
-                    if (rie.RefRange != null)
-                    {
-                        rie.RefRange = rie.RefRange.Replace(";", SystemInfo.NewLine);
-                    }
-                }
-                return true;
-            }
-            return false;
-        }
         protected override bool OperateReport(ReportReportElement report)
         {
             //报告级操作
             ReportItemElement rie = null;
             List<ILisReportElement> itemList = report.GetReportItem(typeof(ReportItemElement));
-            ReportKVElement kv = GetKVElement(report.SectionNo);
-            if (IsExist(itemList) && kv != null)
+            ReportKVElement kv = new ReportKVElement();
+            if (IsExist(itemList))
             {
-                for (int i = itemList.Count - 1; i >= 0; i--)
+                foreach (ILisReportElement item in itemList)
                 {
-                    rie = itemList[i] as ReportItemElement;
+                    rie = item as ReportItemElement;
                     if (rie == null)
                     {
-                        itemList.RemoveAt(i);
                         continue;
                     }
                     //元素转换
                     if (Convert2KVElement(rie, kv))
                     {
-                        itemList.RemoveAt(i);
                         continue;
                     }
                     //元素处理
-                    if (!OperateElement(rie))
+                    if (!OperateItem(rie))
                     {
-                        itemList.RemoveAt(i);
                         continue;
                     }
+                    report.ReportItemList.Add(rie);
                 }
                 if (kv.Count > 0)
                 {
-                    List<ILisReportElement> kvList = report.GetReportItem(typeof(ReportKVElement));
+                    List<ReportKVElement> kvList = GetReportKVList(report);
                     kvList.Add(kv);
                 }
             }
-            else
-            {
-                OperateElementList(itemList);
-            }
+            report.RemoveReportItem(typeof(ReportItemElement));
             return true;
         }
-        #endregion
-
-        #region item内部处理逻辑
         #endregion
 
         #region item项转换成KV项
         private bool Convert2KVElement(ReportItemElement rie, ReportKVElement kv)
         {
-            string key = this.m_convertItemMap[rie.ItemNo] as string;
-            if (key != null)
+            if (m_convertItemList.Contains(rie.ItemNo))
             {
-                kv.Add(key, rie.ItemResult);
+                kv.Add(rie.ItemCName, rie.ItemResult);
                 return true;
             }
             return false;
         }
-        //获取kv 若所在小组不需要kve 则返回null
-        private ReportKVElement GetKVElement(int sectionNo)
-        {
-            ReportKVElement kve = null;
-            switch (sectionNo)
-            {
-                case 2:
-                case 27:
-                    kve = new ReportKVElement();
-                    kve.Name = "ManTable";
-                    break;
-                case 11:
-                    kve = new ReportKVElement();
-                    kve.Name = "RanTable";
-                    break;
-                default:
-                    break;
-            }
-            return kve;
-        }
         #endregion
 
-        #region 是否删除检验项
-        private bool ItemIsDelete(ReportItemElement rie)
+         #region 检验项处理逻辑
+        protected bool OperateItem(ReportItemElement rie)
+        {
+            if (ItemDelete(rie))
+            {
+                return false;
+            }
+            //不删除，检验项处理操作
+            if (rie.ItemNo == 50004360 || rie.ItemNo == 50004370)
+            {
+                if (rie.RefRange != null)
+                {
+                    rie.RefRange = rie.RefRange.Replace(";", SystemInfo.NewLine);
+                }
+            }
+            return true;
+        }
+        private bool ItemDelete(ReportItemElement rie)
         {
             return IsRemoveBySecret(rie.SecretGrade);
         }
@@ -149,40 +113,28 @@ namespace XYS.Report.Lis.Handler
         }
         #endregion
 
-        #region 设置检验大项集合
-        private void SetParItemListByItem(List<int> parItemList, ReportItemElement rie)
-        {
-            if (!parItemList.Contains(rie.ParItemNo))
-            {
-                parItemList.Add(rie.ParItemNo);
-            }
-        }
-        #endregion
-
         #region 调用的方法
-        private void InitItem2CustomMap()
+        private void InitConvertItemList()
         {
-            this.m_convertItemMap.Clear();
-            lock (this.m_convertItemMap)
-            {
-                this.m_convertItemMap.Add(90009288, "Column0");
-                this.m_convertItemMap.Add(90009289, "Column1");
-                this.m_convertItemMap.Add(90009290, "Column2");
-                this.m_convertItemMap.Add(90009291, "Column3");
-                this.m_convertItemMap.Add(90009292, "Column4");
-                this.m_convertItemMap.Add(90009293, "Column5");
-                this.m_convertItemMap.Add(90009294, "Column6");
-                this.m_convertItemMap.Add(90009295, "Column7");
-                this.m_convertItemMap.Add(90009296, "Column8");
-                this.m_convertItemMap.Add(90009297, "Column9");
-                this.m_convertItemMap.Add(90009300, "Column10");
-                this.m_convertItemMap.Add(90009301, "Column11");
+            m_convertItemList.Clear();
 
-                this.m_convertItemMap.Add(90008528, "Column8");
-                this.m_convertItemMap.Add(90008797, "Column9");
-                this.m_convertItemMap.Add(90008798, "Column10");
-                this.m_convertItemMap.Add(90008799, "Column11");
-            }
+            m_convertItemList.Add(90009288);
+            m_convertItemList.Add(90009289);
+            m_convertItemList.Add(90009290);
+            m_convertItemList.Add(90009291);
+            m_convertItemList.Add(90009292);
+            m_convertItemList.Add(90009293);
+            m_convertItemList.Add(90009294);
+            m_convertItemList.Add(90009295);
+            m_convertItemList.Add(90009296);
+            m_convertItemList.Add(90009297);
+            m_convertItemList.Add(90009300);
+            m_convertItemList.Add(90009301);
+
+            m_convertItemList.Add(90008528);
+            m_convertItemList.Add(90008797);
+            m_convertItemList.Add(90008798);
+            m_convertItemList.Add(90008799);
         }
         //private bool ItemConvert2Custom(ReportItemElement rie, List<ILisReportElement> customList)
         //{

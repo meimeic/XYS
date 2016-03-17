@@ -23,28 +23,36 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateElement(ILisReportElement element)
-        {
-            ReportCustomElement rce = element as ReportCustomElement;
-            if (rce != null)
-            {
-                //ReportCustomElement 处理
-                return true;
-            }
-            return false;
-        }
         protected override bool OperateReport(ReportReportElement report)
         {
             //
-            return OperateCustom(report);
+            ReportKVElement kv = null;
+            ReportCustomElement rce = null;
+            List<ILisReportElement> customList = report.GetReportItem(typeof(ReportCustomElement));
+            if (IsExist(customList))
+            {
+                List<ReportKVElement> kvList = GetReportKVList(report);
+                foreach (ILisReportElement custom in customList)
+                {
+                    rce = custom as ReportCustomElement;
+                    if (rce != null)
+                    {
+                        kv = new ReportKVElement();
+                        ConvertCustom2KV(rce, kv);
+                        kvList.Add(kv);
+                    }
+                }
+            }
+            report.RemoveReportItem(typeof(ReportCustomElement));
+            return true;
         }
         #endregion
         
         //可以添加一些custom项的内部处理逻辑
         #region 内部处理逻辑
-        private bool OperateCustom(ReportReportElement rre)
+        protected void ConvertCustom2KV(ReportCustomElement rce,ReportKVElement kv)
         {
-            return true;
+
         }
         #endregion
     }

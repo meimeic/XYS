@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections;
-
-using XYS.Util;
 namespace XYS.Report.Lis.Model
 {
     public class ReportKVElement : AbstractInnerElement
@@ -43,10 +41,6 @@ namespace XYS.Report.Lis.Model
             {
                 lock (this.m_kvTable)
                 {
-                    if (this.m_kvTable.Count > DEFAULT_CAPACITY)
-                    {
-                        throw SystemInfo.CreateArgumentOutOfRangeException("ItemCount", this.m_kvTable.Count, "KV项已达到上限，无法再添加！");
-                    }
                     this.m_kvTable[key] = value;
                 }
             }
