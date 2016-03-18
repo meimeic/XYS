@@ -92,6 +92,16 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XYS.Report.Lis\XYS.Report.Lis.csproj">
+      <Project>{d3ba9322-4f50-47ff-be2f-424ff88c0126}</Project>
+      <Name>XYS.Report.Lis</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XYS\XYS.csproj">
+      <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
+      <Name>XYS</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

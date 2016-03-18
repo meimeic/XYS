@@ -10,6 +10,7 @@ namespace XYS.Report.Lis
 
         private int m_max;// 最大记录数
         private int m_interval;  //时间间隔
+
         private bool m_dateLimit; //是否启用时间限制
         private DateTime m_startDateTime; //起始日期
         private DateTime m_endDateTime; // 终止日期
@@ -28,7 +29,7 @@ namespace XYS.Report.Lis
         public Require(int max, int interval)
         {
             this.m_max = max;
-            this.m_dateLimit = true;
+            this.m_dateLimit = false;
             this.m_interval = interval;
             this.m_startDateTime = System.DateTime.Now.AddDays(0 - this.m_interval);
             this.m_endDateTime = System.DateTime.Now;

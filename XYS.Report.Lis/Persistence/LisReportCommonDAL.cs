@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using XYS.Common;
 using XYS.Report.Lis.Core;
-namespace XYS.Report.Lis.DAL
+namespace XYS.Report.Lis.Persistence
 {
     public class LisReportCommonDAL
     {

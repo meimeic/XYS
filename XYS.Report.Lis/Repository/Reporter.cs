@@ -2,8 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Common;
-
 using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Repository
@@ -73,7 +71,7 @@ namespace XYS.Report.Lis.Repository
         {
             get { return this.m_hierarchy; }
         }
-        public void FillReport(ILisReportElement report, ReportPK RK)
+        public void FillReport(ILisReportElement report, LisReportPK RK)
         {
             if (IsLisReport(report))
             {

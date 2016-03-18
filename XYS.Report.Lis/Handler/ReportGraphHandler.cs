@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 
+using XYS.Util;
+
 using XYS.Report.Lis.Util;
 using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
@@ -13,7 +15,7 @@ namespace XYS.Report.Lis.Handler
     public class ReportGraphHandler : ReportHandlerSkeleton
     {
         #region 字段
-        private static readonly string BasicUri = "10.1.10.245:8090";
+        //private static readonly string BasicUri = "http://10.1.10.245:8090";
         private static readonly string m_defaultHandlerName = "ReportGraphHandler";
         private readonly Hashtable m_parItemNo2NormalImage;
         #endregion
@@ -36,8 +38,7 @@ namespace XYS.Report.Lis.Handler
             List<ILisReportElement> graphList = report.GetReportItem(typeof(ReportGraphElement));
             if (IsExist(graphList))
             {
-                string imagePrefix = GenderImagePrefix(report.ReportExam.SectionNo, report.ReportExam.TestTypeNo, report.ReportExam.SampleNo);
-                UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), imagePrefix);
+                UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"));
             }
             report.RemoveReportItem(typeof(ReportGraphElement));
             return true;
@@ -141,10 +142,10 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region
-        protected void UploadImages(List<ILisReportElement> graphList, string receiveDate, string imagePrefix)
+        protected void UploadImages(List<ILisReportElement> graphList, string receiveDate)
         {
             WebClient wc = null;
-            string imageName = null;
+            string fileName = null;
             ReportGraphElement rge = null;
             foreach (ILisReportElement element in graphList)
             {
@@ -152,35 +153,52 @@ namespace XYS.Report.Lis.Handler
                 if (rge != null)
                 {
                     wc = new WebClient();
-                    imageName = GenderImageName(imagePrefix, rge.GraphName);
-                    InitWebClient(wc, receiveDate, imageName);
-                    wc.UploadDataAsync(new Uri("/lis"), "POST", rge.GraphImage);
+                    fileName = GenderFileName();
+                    InitWebClient(wc, receiveDate, fileName,rge.GraphName);
+                    wc.UploadDataAsync(new Uri("http://10.1.10.245:8090/lis"), "POST", rge.GraphImage);
                 }
             }
         }
-        private string GenderImagePrefix(int sectionNo, int testTypeNo, string sampleNo)
+        private string GenderFileName()
         {
+            return RandomOperate.GetRandomCode(8) + ".jpg";
+        }
+        private void PrePostData(byte[] postData)
+        {
+            string boundary = DateTime.Now.Ticks.ToString("x");
             StringBuilder sb = new StringBuilder();
-            sb.Append(sectionNo);
-            sb.Append('_');
-            sb.Append(testTypeNo);
-            sb.Append('_');
-            sb.Append(sampleNo);
-            sb.Append('_');
-            return sb.ToString();
+            sb.Append("--");
+            sb.Append(boundary);
+            sb.Append(SystemInfo.NewLine);
+            sb.Append("Content-Disposition: form-data;");
+            sb.Append("name=fname;"); 
+            sb.Append(SystemInfo.NewLine);
+            sb.Append(SystemInfo.NewLine);
+            sb.Append(RandomOperate.GetRandomCode(8) + ".jpg");
+            sb.Append(SystemInfo.NewLine);
+
+            sb.Append("--");
+            sb.Append(boundary);
+            sb.Append(SystemInfo.NewLine);
+            sb.Append("Content-Disposition: form-data;");
+            sb.Append("name=Filedata;");
+            sb.Append(RandomOperate.GetRandomCode(8) + ".jpg");
+            sb.Append(SystemInfo.NewLine);
+            sb.Append("Content-Type:application/octet-stream");
+            sb.Append(SystemInfo.NewLine);
+            sb.Append(SystemInfo.NewLine);
+            string h = sb.ToString();
+            postData = Encoding.UTF8.GetBytes(h);
         }
-        private string GenderImageName(string imagePrefix, string Name)
+        private void InitWebClient(WebClient wc, string receiveDate, string fileName,string imageName)
         {
-            return imagePrefix+Name+".jpg";
-        }
-        private void InitWebClient(WebClient wc, string receiveDate, string imageName)
-        {
-            wc.BaseAddress = BasicUri;
             wc.Encoding = Encoding.UTF8;
 
             wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            wc.Headers.Add("Accept-Language", "utf-8");
 
-            wc.QueryString.Add("receivedate", receiveDate);
+            wc.QueryString.Add("folder", receiveDate);
+            wc.QueryString.Add("filename", fileName);
             wc.QueryString.Add("imagename", imageName);
 
             wc.UploadDataCompleted += new UploadDataCompletedEventHandler(Pic_UploadDataCompleted);
@@ -202,6 +220,17 @@ namespace XYS.Report.Lis.Handler
                 return true;
             }
             return false;
+        }
+
+        private Dictionary<string, string> GetImageMap(ReportReportElement report)
+        {
+            Dictionary<string, string> imageMap = report.ReportImageMap;
+            if (imageMap == null)
+            {
+                imageMap = new Dictionary<string, string>(2);
+                report.ReportImageMap = imageMap;
+            }
+            return imageMap;
         }
         #endregion
     }

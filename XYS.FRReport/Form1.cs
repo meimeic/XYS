@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
 using XYS.FRReport.PDFService;
 
 namespace XYS.FRReport
@@ -21,7 +20,7 @@ namespace XYS.FRReport
 
         private void button1_Click(object sender, EventArgs e)
         {
-            LisService.GetPDF("1602237330");
+            LisService.GetPDF("1602222720");
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Collections;
-namespace XYS.Report.Lis.DAL
+namespace XYS.Report.Lis.Persistence
 {
     public class CommonDAL
     {

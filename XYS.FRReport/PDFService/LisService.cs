@@ -61,7 +61,7 @@ namespace XYS.FRReport.PDFService
         }
         private static void GenderPDF()
         {
-            string modelFullName =SystemInfo.GetFileFullName(SystemInfo.ApplicationBaseDirectory,"PrintModel\\Lis\\lj-xuechanggui.frx");
+            string modelFullName = SystemInfo.GetFileFullName(SystemInfo.ApplicationBaseDirectory, "PrintModel\\Lis\\lj-xuechanggui.frx");
             if (modelFullName == null)
             {
                 throw new ArgumentNullException("modelName");
@@ -80,26 +80,21 @@ namespace XYS.FRReport.PDFService
         private static void FillReport(ReportReportElement report, DataSet ds)
         {
             FillElement(report, ds);
-            FillElement(report.ReportExam, ds);
-            FillElement(report.ReportPatient, ds);
-            if (report.ReportImageMap != null)
-            {
-                FillElement(report.ReportImageMap, ds);
-            }
-            if (report.ReportItemTable.Count > 0)
-            {
-                Type type = null;
-                List<ILisReportElement> elementList = null;
-                foreach (DictionaryEntry de in report.ReportItemTable)
-                {
-                    type = de.Key as Type;
-                    elementList = de.Value as List<ILisReportElement>;
-                    if (IsExport(type)&&IsExist(elementList))
-                    {
-                        FillElements(elementList, ds, type);
-                    }
-                }
-            }
+
+            //if (report.ReportItemTable.Count > 0)
+            //{
+            //    Type type = null;
+            //    List<ILisReportElement> elementList = null;
+            //    foreach (DictionaryEntry de in report.ReportItemTable)
+            //    {
+            //        type = de.Key as Type;
+            //        elementList = de.Value as List<ILisReportElement>;
+            //        if (IsExport(type) && IsExist(elementList))
+            //        {
+            //            FillElements(elementList, ds, type);
+            //        }
+            //    }
+            //}
         }
         private static void FillElement(ILisReportElement element, DataSet ds)
         {

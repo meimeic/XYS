@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Report.Lis;
-using XYS.Report.Lis.DAL;
 using XYS.Report.Lis.Model;
+using XYS.Report.Lis.Persistence;
 namespace XYS.Report.Lis.Core
 {
     public class ReportImpl : IReport
@@ -70,7 +70,7 @@ namespace XYS.Report.Lis.Core
         }
         public bool InitReports(List<ILisReportElement> reportList, Require require)
         {
-            List<ReportPK> keyList = GetReportKeyList(require);
+            List<LisReportPK> keyList = GetReportKeyList(require);
             return InitReports(reportList, keyList);
         }
         #endregion

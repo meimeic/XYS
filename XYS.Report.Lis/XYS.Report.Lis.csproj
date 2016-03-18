@@ -65,11 +65,11 @@
     <Compile Include="Core\LisSection.cs" />
     <Compile Include="Core\LisSectionMap.cs" />
     <Compile Include="Core\ReporterManager.cs" />
-    <Compile Include="DAL\CommonDAL.cs" />
-    <Compile Include="DAL\DbHelperOleDb.cs" />
-    <Compile Include="DAL\DbHelperSQL.cs" />
-    <Compile Include="DAL\LisReportCommonDAL.cs" />
-    <Compile Include="DAL\LisReportPKDAL.cs" />
+    <Compile Include="Persistence\CommonDAL.cs" />
+    <Compile Include="Persistence\DbHelperOleDb.cs" />
+    <Compile Include="Persistence\DbHelperSQL.cs" />
+    <Compile Include="Persistence\LisReportCommonDAL.cs" />
+    <Compile Include="Persistence\LisReportPKDAL.cs" />
     <Compile Include="Filler\ReportFillByDB.cs" />
     <Compile Include="Filler\ReportFillSkeleton.cs" />
     <Compile Include="Handler\ReportCustomHandler.cs" />
@@ -117,7 +117,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DAL\Mongo\" />
+    <Folder Include="Persistence\Mongo\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="lib\MongoDB.Bson.dll" />

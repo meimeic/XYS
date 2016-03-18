@@ -9,10 +9,5 @@ namespace ZhTest
         private static readonly string MongoConnectionStr = "10.1.10.246:27017";
         private static MongoClient MClient = new MongoClient(MongoConnectionStr);
         private static IMongoDatabase MDB = MClient.GetDatabase("digitlab");
-
-        private static IMongoCollection<BsonDocument> 
-        public static void AddReport()
-        {
-        }
     }
 }

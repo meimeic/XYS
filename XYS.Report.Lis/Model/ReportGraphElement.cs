@@ -3,9 +3,6 @@ namespace XYS.Report.Lis.Model
 {
     public class ReportGraphElement : AbstractFillElement
     {
-        #region 私有静态字段
-        #endregion
-
         #region 私有字段
         private string m_graphName;
         private byte[] m_graphImage;
@@ -35,9 +32,6 @@ namespace XYS.Report.Lis.Model
             get { return this.m_graphImage; }
             set { this.m_graphImage = value; }
         }
-        #endregion
-
-        #region 方法
         #endregion
     }
 }

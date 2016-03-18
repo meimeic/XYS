@@ -120,6 +120,7 @@ namespace XYS.Report.Lis.Model
         #endregion
 
         #region 实例属性
+        [Column(true)]
         public string ReportID
         {
             get { return this.m_reportID; }

@@ -1,5 +1,6 @@
 ﻿using System;
 
+using XYS.Util;
 using XYS.Report.Lis.Util;
 using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
@@ -23,22 +24,22 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类方法
-        protected override bool OperateElement(ILisReportElement element)
-        {
-            return true;
-        }
         protected override bool OperateReport(ReportReportElement rre)
         {
-            //设置备注
-            if (!string.IsNullOrEmpty(rre.Checker))
+            //formmemo 处理
+            if (rre.SectionNo == 10)
             {
-                rre.CheckerImage = LisPUser.GetSignImage(rre.Checker);
+                if (rre.FormMemo != null)
+                {
+                    rre.FormMemo = rre.FormMemo.Replace(";", SystemInfo.NewLine);
+                }
             }
-            if (string.IsNullOrEmpty(rre.Technician))
+           //cid 处理
+            if (rre.CID != null)
             {
-                rre.TechnicianImage = LisPUser.GetSignImage(rre.Technician);
+                rre.CID.Trim();
             }
-            SetRemark(rre);
+
             return true;
         }
         #endregion
@@ -51,6 +52,10 @@ namespace XYS.Report.Lis.Handler
             //    rre.Remark = "带*为天津市临床检测中心认定的相互认可检验项目";
             //}
         }
+        #endregion
+
+        #region
+
         #endregion
     }
 }

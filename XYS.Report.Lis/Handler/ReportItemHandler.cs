@@ -34,7 +34,7 @@ namespace XYS.Report.Lis.Handler
             //报告级操作
             ReportItemElement rie = null;
             List<ILisReportElement> itemList = report.GetReportItem(typeof(ReportItemElement));
-            ReportKVElement kv = new ReportKVElement();
+            ReportKVElement kv = GetKVElement(report.SectionNo);
             if (IsExist(itemList))
             {
                 foreach (ILisReportElement item in itemList)
@@ -45,9 +45,12 @@ namespace XYS.Report.Lis.Handler
                         continue;
                     }
                     //元素转换
-                    if (Convert2KVElement(rie, kv))
+                    if (kv != null)
                     {
-                        continue;
+                        if (Convert2KVElement(rie, kv))
+                        {
+                            continue;
+                        }
                     }
                     //元素处理
                     if (!OperateItem(rie))
@@ -56,7 +59,7 @@ namespace XYS.Report.Lis.Handler
                     }
                     report.ReportItemList.Add(rie);
                 }
-                if (kv.Count > 0)
+                if (KVExsit(kv))
                 {
                     List<ReportKVElement> kvList = GetReportKVList(report);
                     kvList.Add(kv);
@@ -76,6 +79,25 @@ namespace XYS.Report.Lis.Handler
                 return true;
             }
             return false;
+        }
+        private ReportKVElement GetKVElement(int sectionNo)
+        {
+            ReportKVElement kve = null;
+            switch (sectionNo)
+            {
+                case 2:
+                case 27:
+                    kve = new ReportKVElement();
+                    kve.Name = "ManTable";
+                    break;
+                case 11:
+                    kve = new ReportKVElement();
+                    kve.Name = "RanTable";
+                    break;
+                default:
+                    break;
+            }
+            return kve;
         }
         #endregion
 

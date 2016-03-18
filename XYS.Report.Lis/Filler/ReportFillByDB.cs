@@ -4,9 +4,9 @@ using System.Reflection;
 using System.Collections.Generic;
 
 using XYS.Common;
-using XYS.Report.Lis.DAL;
 using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
+using XYS.Report.Lis.Persistence;
 namespace XYS.Report.Lis.Filler
 {
     public class ReportFillByDB : ReportFillSkeleton

@@ -5,12 +5,9 @@
         <reporter-strategy name="DefaultStrategy">
           <fill-ref ref="ReportFillByDB"/>
           <handler-ref-stack>
-            <handler-ref ref="ReportExamHandler"/>
-            <handler-ref ref="ReportPatientHandler"/>
             <handler-ref ref="ReportItemHandler"/>
-            <handler-ref ref="ReportGraphHandler"/>
-            <handler-ref ref="ReportKVHandler"/>
             <handler-ref ref="ReportCustomHandler"/>
+            <handler-ref ref="ReportGraphHandler"/>
             <handler-ref ref="ReportReportHandler"/>
           </handler-ref-stack>
         </reporter-strategy>
@@ -19,12 +16,9 @@
         <fill name="ReportFillByDB" type="XYS.Report.Lis.Filler.ReportFillByDB"/>
       </fill-stack>
       <handler-stack>
-        <handler name="ReportExamHandler" type="XYS.Report.Lis.Handler.ReportExamHandler"/>
-        <handler name="ReportPatientHandler" type="XYS.Report.Lis.Handler.ReportPatientHandler"/>
         <handler name="ReportItemHandler" type="XYS.Report.Lis.Handler.ReportItemHandler"/>
-        <handler name="ReportGraphHandler" type="XYS.Report.Lis.Handler.ReportGraphHandler"/>
-        <handler name="ReportKVHandler" type="XYS.Report.Lis.Handler.ReportKVHandler"/>
         <handler name="ReportCustomHandler" type="XYS.Report.Lis.Handler.ReportCustomHandler"/>
+        <handler name="ReportGraphHandler" type="XYS.Report.Lis.Handler.ReportGraphHandler"/>
         <handler name="ReportReportHandler" type="XYS.Report.Lis.Handler.ReportReportHandler"/>
       </handler-stack>
     </lis-report>
@@ -32,12 +26,8 @@
       <reportElements>
         <!-- ReportElement = 1,InfoElement,ItemElement,GraphElement,CustomElement,NoneElement-->
         <reportElement name="ReportReportElement" type="XYS.Report.Lis.Model.ReportReportElement" explain=""/>
-        <reportElement name="ReportExamElement" type="XYS.Report.Lis.Model.ReportExamElement" explain=""/>
-        <reportElement name="ReportPatientElement" type="XYS.Report.Lis.Model.ReportPatientElement" explain=""/>
         <reportElement name="ReportItemElement" type="XYS.Report.Lis.Model.ReportItemElement" explain=""/>
         <reportElement name="ReportGraphElement" type="XYS.Report.Lis.Model.ReportGraphElement" explain=""/>
-        <reportElement name="ReportImageByteElement" type="XYS.Report.Lis.Model.ReportImageByteElement" explain=""/>
-        <reportElement name="ReportImagePathElement" type="XYS.Report.Lis.Model.ReportImagePathElement" explain=""/>
         <reportElement name="ReportCustomElement" type="XYS.Report.Lis.Model.ReportCustomElement" explain=""/>
         <reportElement name="ReportKVElement" type="XYS.Report.Lis.Model.ReportKVElement" explain=""/>
       </reportElements>
@@ -45,7 +35,7 @@
         <reportSection name="2" alias="临检XE2000" value="2" fillElements="ReportItemElement" fillTag="" />
         <reportSection name="27" alias="临检XE5000" value="27" fillElements="ReportItemElement" fillTag=""/>
         <reportSection name="62" alias="临检夜班" value="62" fillElements="ReportItemElement" fillTag="" />
-        <reportSection name="28" alias="临检UF1000I" value="28" fillElements="ReportItemElement" fillTag="" />
+        <reportSection name="28" alias="临检UF1000I" value="28" fillElements="ReportItemElement,ReportGraphElement" fillTag="" />
         <reportSection name="17" alias="生化AU2700" value="17" fillElements="ReportItemElement" fillTag=""/>
         <reportSection name="23" alias="生化血气" value="23" fillElements="ReportItemElement" fillTag=""/>
         <reportSection name="29" alias="生化AU480" value="29" fillElements="ReportItemElement" fillTag=""/>

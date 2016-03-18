@@ -61,6 +61,7 @@
     <Compile Include="Util\ConsoleInfo.cs" />
     <Compile Include="Util\PropertiesDictionary.cs" />
     <Compile Include="Util\PropertyEntry.cs" />
+    <Compile Include="Util\RandomOperate.cs" />
     <Compile Include="Util\ReadOnlyPropertiesDictionary.cs" />
     <Compile Include="Util\SystemInfo.cs" />
   </ItemGroup>
