@@ -10,11 +10,11 @@ namespace XYS.Report.Lis.Util
 {
     public class ConfigManager
     {
-        #region
+        #region 私有常量
         private static readonly Type declaringType = typeof(ConfigManager);
         #endregion
 
-        #region
+        #region 构造函数
         private ConfigManager()
         { }
         static ConfigManager()

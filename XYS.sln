@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.FRReport", "XYS.FRRepor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Report.Lis", "XYS.Report.Lis\XYS.Report.Lis.csproj", "{D3BA9322-4F50-47FF-BE2F-424FF88C0126}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhTest", "ZhTest\ZhTest.csproj", "{DCF1DC98-0FD0-46BC-95E2-051620F1100A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhTest", "ZhTest\ZhTest.csproj", "{0DC983E9-832E-4EF6-80C2-5C15F5C076B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +35,10 @@ Global
 		{D3BA9322-4F50-47FF-BE2F-424FF88C0126}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3BA9322-4F50-47FF-BE2F-424FF88C0126}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3BA9322-4F50-47FF-BE2F-424FF88C0126}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DCF1DC98-0FD0-46BC-95E2-051620F1100A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DCF1DC98-0FD0-46BC-95E2-051620F1100A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DCF1DC98-0FD0-46BC-95E2-051620F1100A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DCF1DC98-0FD0-46BC-95E2-051620F1100A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DC983E9-832E-4EF6-80C2-5C15F5C076B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DC983E9-832E-4EF6-80C2-5C15F5C076B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DC983E9-832E-4EF6-80C2-5C15F5C076B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DC983E9-832E-4EF6-80C2-5C15F5C076B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

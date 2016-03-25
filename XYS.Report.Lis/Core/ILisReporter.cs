@@ -1,5 +1,6 @@
 ﻿using System;
 
+using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Repository;
 namespace XYS.Report.Lis.Core
 {
@@ -8,13 +9,12 @@ namespace XYS.Report.Lis.Core
         IReporterRepository Repository { get; }
 
         #region
-        void FillReport(ILisReportElement report, LisReportPK RK);
+        void FillReport(ReportReportElement report, LisReportPK RK);
         #endregion
 
         #region
-        bool OptionReport(ILisReportElement report);
+        bool OptionReport(ReportReportElement report);
         #endregion
 
-        bool IsLisReport(ILisReportElement report);
     }
 }

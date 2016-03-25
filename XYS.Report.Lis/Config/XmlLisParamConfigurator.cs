@@ -21,7 +21,7 @@ namespace XYS.Report.Lis.Config
         private static readonly string TYPE_ATTR = "type";
         private static readonly string VALUE_ATTR = "value";
         private static readonly string NAME_ATTR = "name";
-        private static readonly string IMAGE_FLAG_ATTR = "imageFlag";
+        //private static readonly string IMAGE_FLAG_ATTR = "imageFlag";
         private static readonly string IMAGE_NAME_ATTR = "imageName";
 
         private static readonly string FILL_ELEMENTS_ATTR = "fillElements";
@@ -123,7 +123,6 @@ namespace XYS.Report.Lis.Config
                 if (value > 0)
                 {
                     LisParItem parItem = new LisParItem(value, name);
-                    parItem.ImageFlag = GetBoolean(element.GetAttribute(IMAGE_FLAG_ATTR));
                     parItem.ImageName = element.GetAttribute(IMAGE_NAME_ATTR);
                     parItemMap.Add(parItem);
                 }

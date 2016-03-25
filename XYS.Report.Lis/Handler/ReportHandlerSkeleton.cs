@@ -56,23 +56,13 @@ namespace XYS.Report.Lis.Handler
             }
             return false;
         }
-        protected bool KVExsit(ReportKVElement kv)
+        protected bool KVExsit(ReportKVCollection kv)
         {
             if (kv != null && kv.Count > 0)
             {
                 return true;
             }
             return false;
-        }
-        protected List<ReportKVElement> GetReportKVList(ReportReportElement report)
-        {
-            List<ReportKVElement> kvList = report.ReportKVList;
-            if (kvList == null)
-            {
-                kvList = new List<ReportKVElement>(2);
-                report.ReportKVList = kvList;
-            }
-            return kvList;
         }
         protected bool IsReport(Type type)
         {

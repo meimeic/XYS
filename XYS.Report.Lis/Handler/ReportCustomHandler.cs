@@ -25,21 +25,16 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类抽象方法
         protected override bool OperateReport(ReportReportElement report)
         {
-            //
-            ReportKVElement kv = null;
             ReportCustomElement rce = null;
             List<ILisReportElement> customList = report.GetReportItem(typeof(ReportCustomElement));
             if (IsExist(customList))
             {
-                List<ReportKVElement> kvList = GetReportKVList(report);
                 foreach (ILisReportElement custom in customList)
                 {
                     rce = custom as ReportCustomElement;
                     if (rce != null)
                     {
-                        kv = new ReportKVElement();
-                        ConvertCustom2KV(rce, kv);
-                        kvList.Add(kv);
+                        ConvertCustom2KV(rce, report.ReportKVCollection);
                     }
                 }
             }
@@ -47,10 +42,10 @@ namespace XYS.Report.Lis.Handler
             return true;
         }
         #endregion
-        
+
         //可以添加一些custom项的内部处理逻辑
         #region 内部处理逻辑
-        protected void ConvertCustom2KV(ReportCustomElement rce,ReportKVElement kv)
+        protected void ConvertCustom2KV(ReportCustomElement rce, Dictionary<string,object> kv)
         {
 
         }

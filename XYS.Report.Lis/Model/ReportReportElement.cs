@@ -6,10 +6,12 @@ using XYS.Util;
 using XYS.Model;
 using XYS.Common;
 using XYS.Report.Lis.Core;
+
+using MongoDB.Bson.Serialization.Options;
+using MongoDB.Bson.Serialization.Attributes;
 namespace XYS.Report.Lis.Model
 {
-    [Export()]
-    public class ReportReportElement : AbstractFillElement, IPatientElement
+    public class ReportReportElement : ILisReportElement, IPatientElement
     {
         #region 私有实例字段
         private string m_reportID;
@@ -56,21 +58,20 @@ namespace XYS.Report.Lis.Model
         private string m_clinicalDiagnosis;
         private string m_explanation;
 
-        //
-        private readonly Hashtable m_reportItemTable;
-
-        private Dictionary<string,string> m_reportImageMap;
         private List<ReportItemElement> m_reportItemList;
-        private List<ReportKVElement> m_reportKVList;
+        private Dictionary<string, string> m_reportImageMap;
+        private Dictionary<string,string> m_reportKVCollection;
+      
+        private readonly Hashtable m_reportItemTable;
         #endregion
 
         #region 公共构造函数
         public ReportReportElement()
         {
             this.m_remarkFlag = 0;
-            this.m_reportKVList = null;
-            this.m_reportImageMap = null;
             this.m_reportItemList = new List<ReportItemElement>(20);
+            this.m_reportImageMap = null;
+            this.m_reportKVCollection = null;
             this.m_reportItemTable = SystemInfo.CreateCaseInsensitiveHashtable(3);
         }
         #endregion
@@ -79,36 +80,31 @@ namespace XYS.Report.Lis.Model
         #endregion
 
         #region 实现IPatientElement接口
-        [Export()]
-        [Column(true)]
+        [Column]
         public string PatientName
         {
             get { return this.m_patientName; }
             set { this.m_patientName = value; }
-        }
-        [Export()]
-        [Column(true)]
+        }       
+        [Column]  
         public string GenderName
         {
             get { return this.m_genderName; }
             set { this.m_genderName = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public string AgeStr
         {
             get { return this.m_ageStr; }
             set { this.m_ageStr = value; }
         }
-        [Export()]
-        [Column(true)]
+       [Column]
         public string PatientID
         {
             get { return this.m_pid; }
             set { this.m_pid = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public string ClinicName
         {
             get { return this.m_clinicName; }
@@ -116,97 +112,85 @@ namespace XYS.Report.Lis.Model
         }
         #endregion
 
-        #region 实现抽象类方法
-        #endregion
-
         #region 实例属性
-        [Column(true)]
+        [BsonId]
+        [Column]
         public string ReportID
         {
             get { return this.m_reportID; }
             set { this.m_reportID = value; }
         }
 
-        [Column(true)]
+        [Column]
         public int SectionNo
         {
             get { return this.m_sectionNo; }
             set { this.m_sectionNo = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public string SerialNo
         {
             get { return this.m_serialNo; }
             set { this.m_serialNo = value; }
         }
 
-        [Export()]
-        [Column(true)]
+        [Column]
         public string SampleNo
         {
             get { return this.m_sampleNo; }
             set { this.m_sampleNo = value; }
         }
-        [Column(true)]
+        [Column]
         public int SampleTypeNo
         {
             get { return this.m_sampleTypeNo; }
             set { this.m_sampleTypeNo = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public string SampleTypeName
         {
             get { return this.m_sampleTypeName; }
             set { this.m_sampleTypeName = value; }
         }
 
-        [Export()]
-        [Column(true)]
+        [Column]
         public string FormMemo
         {
             get { return this.m_formMemo; }
             set { this.m_formMemo = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public string FormComment
         {
             get { return this.m_formComment; }
             set { this.m_formComment = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public string FormComment2
         {
             get { return this.m_formComment2; }
             set { this.m_formComment2 = value; }
         }
 
-        [Export()]
-        [Column(true)]
+        [Column]
         public string Technician
         {
             get { return this.m_technician; }
             set { this.m_technician = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public string Checker
         {
             get { return this.m_checker; }
             set { this.m_checker = value; }
         }
 
-        [Export()]
         public string ReportTitle
         {
             get { return this.m_reportTitle; }
             set { this.m_reportTitle = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public string ParItemName
         {
             get { return this.m_parItemName; }
@@ -214,127 +198,119 @@ namespace XYS.Report.Lis.Model
         }
         
         //备注标识 0表示没有备注 1 表示备注已设置  2 表示备注未设置
+        [BsonIgnore]
         public int RemarkFlag
         {
             get { return this.m_remarkFlag; }
             set { this.m_remarkFlag = value; }
         }
-        [Export()]
         public string Remark
         {
             get { return this.m_remark; }
             set { this.m_remark = value; }
         }
 
-        [Export()]
-        [Column(true)]
+        [Column]
         public DateTime ReceiveDateTime
         {
             get { return this.m_receiveDateTime; }
             set { this.m_receiveDateTime = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public DateTime CollectDateTime
         {
             get { return this.m_collectDateTime; }
             set { this.m_collectDateTime = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public DateTime InceptDateTime
         {
             get { return m_inceptDateTime; }
             set { m_inceptDateTime = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public DateTime TestDateTime
         {
             get { return m_testDateTime; }
             set { m_testDateTime = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public DateTime CheckDateTime
         {
             get { return m_checkDateTime; }
             set { m_checkDateTime = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public DateTime SecondeCheckDateTime
         {
             get { return m_secondCheckDateTime; }
             set { m_secondCheckDateTime = value; }
         }
 
-        [Export()]
-        [Column(true)]
+        [Column]
         public string CID
         {
             get { return this.m_cid; }
             set { this.m_cid = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public int VisitTimes
         {
             get { return this.m_visitTimes; }
             set { this.m_visitTimes = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public string BedNo
         {
             get { return this.m_bedNo; }
             set { this.m_bedNo = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public string DeptName
         {
             get { return this.m_deptName; }
             set { this.m_deptName = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public string Doctor
         {
             get { return this.m_doctor; }
             set { this.m_doctor = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public string ClinicalDiagnosis
         {
             get { return this.m_clinicalDiagnosis; }
             set { this.m_clinicalDiagnosis = value; }
         }
-        [Export()]
-        [Column(true)]
+        [Column]
         public string Explanation
         {
             get { return this.m_explanation; }
             set { this.m_explanation = value; }
         }
-        
+
+        [BsonDictionaryOptions(DictionaryRepresentation.Document)]
         public Dictionary<string,string> ReportImageMap
         {
             get { return this.m_reportImageMap; }
             set { this.m_reportImageMap = value; }
         }
+
+        [BsonDictionaryOptions(DictionaryRepresentation.Document)]
+        public Dictionary<string, string> ReportKVCollection
+        {
+            get { return this.m_reportKVCollection; }
+            set { this.m_reportKVCollection = value; }
+        }
+        
         public List<ReportItemElement> ReportItemList
         {
             get { return this.m_reportItemList; }
             set { this.m_reportItemList = value; }
         }
-        public List<ReportKVElement> ReportKVList
-        {
-            get { return this.m_reportKVList; }
-            set { this.m_reportKVList = value; }
-        }
-
+        
+        [BsonIgnore]
         public Hashtable ReportItemTable
         {
             get { return this.m_reportItemTable; }
@@ -342,7 +318,6 @@ namespace XYS.Report.Lis.Model
         #endregion
 
         #region 公共方法
-
         public void Init()
         {
         }
@@ -353,7 +328,6 @@ namespace XYS.Report.Lis.Model
             this.RemarkFlag = 0;
             this.Remark = "";
         }
-
         public void RemoveReportItem(Type type)
         {
             if (type != null)

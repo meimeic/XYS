@@ -2,16 +2,15 @@
 using System.Collections;
 namespace XYS.Report.Lis.Model
 {
-    public class ReportKVElement : AbstractInnerElement
+    public class ReportKVCollection : AbstractInnerElement
     {
         #region 字段
-        private string m_name;
         private readonly Hashtable m_kvTable;
         private static readonly int DEFAULT_CAPACITY = 20;
         #endregion
 
         #region 构造函数
-        public ReportKVElement()
+        public ReportKVCollection()
             : base()
         {
             this.m_kvTable = new Hashtable(DEFAULT_CAPACITY);
@@ -19,11 +18,6 @@ namespace XYS.Report.Lis.Model
         #endregion
 
         #region  属性
-        public string Name
-        {
-            get { return this.m_name; }
-            set { this.m_name = value; }
-        }
         public Hashtable KVTable
         {
             get { return this.m_kvTable; }

@@ -48,11 +48,8 @@ namespace XYS.Report.Lis.Filler
                 List<ILisReportElement> tempList = null;
                 foreach (Type type in availableElementList)
                 {
-                    if (IsFill(type))
-                    {
-                        tempList = rre.GetReportItem(type);
-                        FillElements(tempList, RK, type);
-                    }
+                    tempList = rre.GetReportItem(type);
+                    FillElements(tempList, RK, type);
                 }
             }
         }
@@ -81,18 +78,6 @@ namespace XYS.Report.Lis.Filler
             {
                 ConfigManager.InitSection2FillElementTable(this.m_section2FillTypeMap);
             }
-        }
-        protected bool IsFill(Type type)
-        {
-            if (type != null)
-            {
-                return typeof(AbstractFillElement).IsAssignableFrom(type);
-            }
-            return false;
-        }
-        protected bool IsFill(ILisReportElement element)
-        {
-            return element is AbstractFillElement;
         }
         protected bool IsReport(Type type)
         {

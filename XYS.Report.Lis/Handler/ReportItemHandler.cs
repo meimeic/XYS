@@ -34,7 +34,6 @@ namespace XYS.Report.Lis.Handler
             //报告级操作
             ReportItemElement rie = null;
             List<ILisReportElement> itemList = report.GetReportItem(typeof(ReportItemElement));
-            ReportKVElement kv = GetKVElement(report.SectionNo);
             if (IsExist(itemList))
             {
                 foreach (ILisReportElement item in itemList)
@@ -45,12 +44,9 @@ namespace XYS.Report.Lis.Handler
                         continue;
                     }
                     //元素转换
-                    if (kv != null)
+                    if (Convert2KVElement(rie, report.ReportKVCollection))
                     {
-                        if (Convert2KVElement(rie, kv))
-                        {
-                            continue;
-                        }
+                        continue;
                     }
                     //元素处理
                     if (!OperateItem(rie))
@@ -59,11 +55,6 @@ namespace XYS.Report.Lis.Handler
                     }
                     report.ReportItemList.Add(rie);
                 }
-                if (KVExsit(kv))
-                {
-                    List<ReportKVElement> kvList = GetReportKVList(report);
-                    kvList.Add(kv);
-                }
             }
             report.RemoveReportItem(typeof(ReportItemElement));
             return true;
@@ -71,7 +62,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region item项转换成KV项
-        private bool Convert2KVElement(ReportItemElement rie, ReportKVElement kv)
+        private bool Convert2KVElement(ReportItemElement rie, Dictionary<string,object> kv)
         {
             if (m_convertItemList.Contains(rie.ItemNo))
             {
@@ -79,25 +70,6 @@ namespace XYS.Report.Lis.Handler
                 return true;
             }
             return false;
-        }
-        private ReportKVElement GetKVElement(int sectionNo)
-        {
-            ReportKVElement kve = null;
-            switch (sectionNo)
-            {
-                case 2:
-                case 27:
-                    kve = new ReportKVElement();
-                    kve.Name = "ManTable";
-                    break;
-                case 11:
-                    kve = new ReportKVElement();
-                    kve.Name = "RanTable";
-                    break;
-                default:
-                    break;
-            }
-            return kve;
         }
         #endregion
 
@@ -153,10 +125,10 @@ namespace XYS.Report.Lis.Handler
             m_convertItemList.Add(90009300);
             m_convertItemList.Add(90009301);
 
-            m_convertItemList.Add(90008528);
-            m_convertItemList.Add(90008797);
-            m_convertItemList.Add(90008798);
-            m_convertItemList.Add(90008799);
+            //m_convertItemList.Add(90008528);
+            //m_convertItemList.Add(90008797);
+            //m_convertItemList.Add(90008798);
+            //m_convertItemList.Add(90008799);
         }
         //private bool ItemConvert2Custom(ReportItemElement rie, List<ILisReportElement> customList)
         //{

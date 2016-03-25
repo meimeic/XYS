@@ -46,16 +46,8 @@ namespace XYS.Report.Lis.Persistence
         //填充对象属性
         protected void FillData(ILisReportElement element, DataRow dr, DataColumnCollection columns)
         {
-            PropertyInfo prop = null;
-            PropertyInfo[] props = element.GetType().GetProperties();
-            foreach (DataColumn dc in columns)
-            {
-                prop = GetProperty(props, dc.ColumnName);
-                if (IsColumn(prop))
-                {
-                    FillProperty(element, prop, dr[dc]);
-                }
-            }
+            Type type = element.GetType();
+            FillData(element, type, dr, columns);
         }
         protected void FillData(ILisReportElement element, Type type, DataRow dr, DataColumnCollection columns)
         {

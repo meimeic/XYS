@@ -37,9 +37,8 @@ namespace XYS.Report.Lis.Handler
            //cid 处理
             if (rre.CID != null)
             {
-                rre.CID.Trim();
+                rre.CID=rre.CID.Trim();
             }
-
             return true;
         }
         #endregion

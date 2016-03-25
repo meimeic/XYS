@@ -13,6 +13,7 @@ using XYS.Report.Lis;
 using XYS.Report.Lis.Util;
 using XYS.Report.Lis.Core;
 using XYS.Report.Lis.Model;
+using XYS.Report.Lis.Persistence.Mongo;
 
 using XYS.FRReport.Util;
 namespace XYS.FRReport.PDFService
@@ -55,8 +56,9 @@ namespace XYS.FRReport.PDFService
             PDF_REPORT.Clear();
             req.EqualFields.Add("serialno", serialNo);
             PDFReporter.InitReport(PDF_REPORT, req);
-            FillReport(PDF_REPORT, PDF_DS);
-            GenderPDF();
+            PDFReporter.InsertToMongo(PDF_REPORT);
+            //FillReport(PDF_REPORT, PDF_DS);
+            //GenderPDF();
             return null;
         }
         private static void GenderPDF()

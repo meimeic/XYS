@@ -4,11 +4,9 @@ namespace XYS.Report.Lis.Core
     public class LisParItem
     {
         #region 字段
-        private readonly int m_parItemNo;
-
-        private bool m_imageFlag;
         private string m_imageName;
         private string m_parItemName;
+        private readonly int m_parItemNo;
         #endregion
 
         #region 构造函数
@@ -18,7 +16,6 @@ namespace XYS.Report.Lis.Core
         }
         public LisParItem(int itemNo, string parItemName)
         {
-            this.m_imageFlag = false;
             this.m_parItemNo = itemNo;
             this.m_parItemName = parItemName;
         }
@@ -33,11 +30,6 @@ namespace XYS.Report.Lis.Core
         public int ParItemNo
         {
             get { return this.m_parItemNo; }
-        }
-        public bool ImageFlag
-        {
-            get { return this.m_imageFlag; }
-            set { this.m_imageFlag = value; }
         }
         public string ImageName
         {

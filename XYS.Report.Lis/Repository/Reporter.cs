@@ -71,32 +71,13 @@ namespace XYS.Report.Lis.Repository
         {
             get { return this.m_hierarchy; }
         }
-        public void FillReport(ILisReportElement report, LisReportPK RK)
+        public void FillReport(ReportReportElement report, LisReportPK RK)
         {
-            if (IsLisReport(report))
-            {
-                this.Filler.Fill((ReportReportElement)report, RK);
-            }
+            this.Filler.Fill(report, RK);
         }
-        public bool OptionReport(ILisReportElement report)
+        public bool OptionReport(ReportReportElement report)
         {
-            if (IsLisReport(report))
-            {
-                return this.HandlerEvent((ReportReportElement)report);
-            }
-            return false;
-        }
-        #endregion
-
-        #region 实现ILisReporter接口
-        public bool IsLisReport(ILisReportElement report)
-        {
-            ReportReportElement rre = report as ReportReportElement;
-            if (rre != null)
-            {
-                return true;
-            }
-            return false;
+            return this.HandlerEvent(report);
         }
         #endregion
 

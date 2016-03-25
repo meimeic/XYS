@@ -1,7 +1,9 @@
 ﻿using XYS.Common;
+using XYS.Report.Lis.Core;
+
 namespace XYS.Report.Lis.Model
 {
-    public class ReportGraphElement : AbstractFillElement
+    public class ReportGraphElement : ILisReportElement
     {
         #region 私有字段
         private string m_graphName;
@@ -10,15 +12,10 @@ namespace XYS.Report.Lis.Model
 
         #region 公共构造函数
         public ReportGraphElement()
-            : this(null)
-        { }
-        public ReportGraphElement(string sql)
-            : base(sql)
         { }
         #endregion
 
         #region 公共属性
-
         [Column(true)]
         public string GraphName
         {

@@ -25,7 +25,6 @@ namespace XYS.Report.Lis.Repository
     public class Hierarchy : ReporterRepositorySkeleton, IXmlRepositoryConfigurator
     {
         #region 私有字段
-        private Reporter m_defaultReporter;
         private Hashtable m_key2ReporterMap;
         private IReportFiller m_defaultFiller;
         private IReporterFactory m_defaultFactory;

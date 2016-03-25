@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using XYS.Report.Lis;
 using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Persistence;
+using XYS.Report.Lis.Persistence.Mongo;
+
 namespace XYS.Report.Lis.Core
 {
     public class ReportImpl : IReport
@@ -35,20 +37,21 @@ namespace XYS.Report.Lis.Core
         #endregion
 
         #region 实现IReport接口
-        public bool InitReport(ILisReportElement report, LisReportPK key)
+        public bool InitReport(ReportReportElement report, LisReportPK key)
         {
             this.Reporter.FillReport(report, key);
             return this.Reporter.OptionReport(report);
         }
-        public bool InitReport(ILisReportElement report, Require require)
+        public bool InitReport(ReportReportElement report, Require require)
         {
             LisReportPK RK = GetReportKey(require);
             return InitReport(report, RK);
         }
-        public bool InitReports(List<ILisReportElement> reportList, List<LisReportPK> keyList)
+        public bool InitReports(List<ReportReportElement> reportList, List<LisReportPK> keyList)
         {
             if (reportList != null)
             {
+                reportList.Clear();
                 bool result = false;
                 ReportReportElement report = null;
                 foreach (LisReportPK rk in keyList)
@@ -68,7 +71,7 @@ namespace XYS.Report.Lis.Core
             }
             return false;
         }
-        public bool InitReports(List<ILisReportElement> reportList, Require require)
+        public bool InitReports(List<ReportReportElement> reportList, Require require)
         {
             List<LisReportPK> keyList = GetReportKeyList(require);
             return InitReports(reportList, keyList);
@@ -76,10 +79,6 @@ namespace XYS.Report.Lis.Core
         #endregion
 
         #region 获取报告键
-        protected virtual List<LisReportPK> GetReportKeyList(Require require)
-        {
-            return this.ReportKeyDAL.GetReportKey(require);
-        }
         protected virtual LisReportPK GetReportKey(Require require)
         {
             List<LisReportPK> result = this.ReportKeyDAL.GetReportKey(require);
@@ -89,6 +88,15 @@ namespace XYS.Report.Lis.Core
             }
             return null;
         }
+        protected virtual List<LisReportPK> GetReportKeyList(Require require)
+        {
+            return this.ReportKeyDAL.GetReportKey(require);
+        }
         #endregion
+
+        public void InsertToMongo(ReportReportElement report)
+        {
+            MongoService.Insert(report);
+        }
     }
 }

@@ -15,9 +15,8 @@ namespace XYS.Report.Lis.Handler
     public class ReportGraphHandler : ReportHandlerSkeleton
     {
         #region 字段
-        //private static readonly string BasicUri = "http://10.1.10.245:8090";
         private static readonly string m_defaultHandlerName = "ReportGraphHandler";
-        private readonly Hashtable m_parItemNo2NormalImage;
+        private readonly Hashtable m_normalIMageURI;
         #endregion
 
         #region 构造函数
@@ -28,7 +27,7 @@ namespace XYS.Report.Lis.Handler
         public ReportGraphHandler(string handlerName)
             : base(handlerName)
         {
-            this.m_parItemNo2NormalImage = new Hashtable(20);
+            this.m_normalIMageURI = new Hashtable(20);
         }
         #endregion
 
@@ -38,7 +37,12 @@ namespace XYS.Report.Lis.Handler
             List<ILisReportElement> graphList = report.GetReportItem(typeof(ReportGraphElement));
             if (IsExist(graphList))
             {
-                UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"));
+                Dictionary<string, string> imageMap=new Dictionary<string,string>(4);
+                UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"),imageMap);
+                if (imageMap.Count > 0)
+                {
+                    report.ReportImageMap = imageMap;
+                }
             }
             report.RemoveReportItem(typeof(ReportGraphElement));
             return true;
@@ -142,7 +146,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region
-        protected void UploadImages(List<ILisReportElement> graphList, string receiveDate)
+        protected void UploadImages(List<ILisReportElement> graphList, string folderName,Dictionary<string,string> imageMap)
         {
             WebClient wc = null;
             string fileName = null;
@@ -153,15 +157,17 @@ namespace XYS.Report.Lis.Handler
                 if (rge != null)
                 {
                     wc = new WebClient();
-                    fileName = GenderFileName();
-                    InitWebClient(wc, receiveDate, fileName,rge.GraphName);
-                    wc.UploadDataAsync(new Uri("http://10.1.10.245:8090/lis"), "POST", rge.GraphImage);
+                    fileName = GenderGUIDName();
+                    InitWebClient(wc, folderName, fileName);
+                    byte[] response=wc.UploadData("/lis", "POST", rge.GraphImage);
+                    string res = System.Text.Encoding.UTF8.GetString(response);
+                    imageMap.Add(rge.GraphName, res);
                 }
             }
         }
-        private string GenderFileName()
+        private string GenderGUIDName()
         {
-            return RandomOperate.GetRandomCode(8) + ".jpg";
+            return SystemInfo.NewGuid().ToString() + ".jpg";
         }
         private void PrePostData(byte[] postData)
         {
@@ -190,18 +196,17 @@ namespace XYS.Report.Lis.Handler
             string h = sb.ToString();
             postData = Encoding.UTF8.GetBytes(h);
         }
-        private void InitWebClient(WebClient wc, string receiveDate, string fileName,string imageName)
+        private void InitWebClient(WebClient wc, string folderName, string fileName)
         {
+            wc.BaseAddress = "http://10.1.11.10:8090";
+
             wc.Encoding = Encoding.UTF8;
 
             wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
             wc.Headers.Add("Accept-Language", "utf-8");
 
-            wc.QueryString.Add("folder", receiveDate);
+            wc.QueryString.Add("folder", folderName);
             wc.QueryString.Add("filename", fileName);
-            wc.QueryString.Add("imagename", imageName);
-
-            wc.UploadDataCompleted += new UploadDataCompletedEventHandler(Pic_UploadDataCompleted);
         }
         private void Pic_UploadDataCompleted(object sender, UploadDataCompletedEventArgs e)
         {
@@ -221,7 +226,6 @@ namespace XYS.Report.Lis.Handler
             }
             return false;
         }
-
         private Dictionary<string, string> GetImageMap(ReportReportElement report)
         {
             Dictionary<string, string> imageMap = report.ReportImageMap;
