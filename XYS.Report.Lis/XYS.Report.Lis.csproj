@@ -119,19 +119,14 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="lib\MongoDB.Bson.dll" />
-    <Content Include="lib\MongoDB.Bson.pdb" />
     <Content Include="lib\MongoDB.Bson.xml" />
     <Content Include="lib\MongoDB.Driver.Core.dll" />
-    <Content Include="lib\MongoDB.Driver.Core.pdb" />
     <Content Include="lib\MongoDB.Driver.Core.xml" />
     <Content Include="lib\MongoDB.Driver.dll" />
     <Content Include="lib\MongoDB.Driver.GridFS.dll" />
-    <Content Include="lib\MongoDB.Driver.GridFS.pdb" />
     <Content Include="lib\MongoDB.Driver.GridFS.xml" />
     <Content Include="lib\MongoDB.Driver.Legacy.dll" />
-    <Content Include="lib\MongoDB.Driver.Legacy.pdb" />
     <Content Include="lib\MongoDB.Driver.Legacy.xml" />
-    <Content Include="lib\MongoDB.Driver.pdb" />
     <Content Include="lib\MongoDB.Driver.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
