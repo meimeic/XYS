@@ -73,17 +73,7 @@ namespace XYS.Report.Lis.Filler
         #region 生成sql语句
         protected string GenderSql(ILisReportElement element, LisReportPK RK)
         {
-            string where = GenderWhere(RK);
-            AbstractFillElement e = element as AbstractFillElement;
-            if (e != null)
-            {
-                if (string.IsNullOrEmpty(e.SearchSQL))
-                {
-                    return GenderPreSQL(element.GetType()) + GenderWhere(RK);
-                }
-                return e.SearchSQL + GenderWhere(RK);
-            }
-            return null;
+            return GenderSql(element.GetType(), RK);
         }
         protected string GenderSql(Type type, LisReportPK RK)
         {
@@ -137,27 +127,6 @@ namespace XYS.Report.Lis.Filler
         #endregion
 
         #region 辅助方法
-        //protected virtual Hashtable ReportKey2Table(ReportKey key)
-        //{
-        //    Hashtable keyTable = new Hashtable(5);
-        //    foreach (KeyColumn k in key.KeySet)
-        //    {
-        //        keyTable.Add(k.Name, k.Value);
-        //    }
-        //    return keyTable;
-        //}
-        //private bool IsTable(Type type)
-        //{
-        //    object[] attrs = type.GetCustomAttributes(typeof(TableAttribute), true);
-        //    if (attrs != null && attrs.Length > 0)
-        //    {
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        return false;
-        //    }
-        //}
         #endregion
     }
 }

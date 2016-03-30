@@ -1,10 +1,12 @@
-﻿using XYS.Common;
+﻿using System;
+
+using XYS.Common;
 using XYS.Report.Lis.Core;
 
 using MongoDB.Bson.Serialization.Attributes;
 namespace XYS.Report.Lis.Model
 {
-    public class ReportItemElement : ILisReportElement
+    public class ReportItemElement : ILisReportElement, IComparable<ReportItemElement>
     {
         #region 私有字段
         private int m_itemNo;
@@ -95,6 +97,20 @@ namespace XYS.Report.Lis.Model
         {
             get { return this.m_secretGrade; }
             set { this.m_secretGrade = value; }
+        }
+        #endregion
+
+        #region 实现比较方法
+        public int CompareTo(ReportItemElement element)
+        {
+            if (element == null)
+            {
+                return 1;
+            }
+            else
+            {
+                return this.DispOrder - element.DispOrder;
+            }
         }
         #endregion
     }

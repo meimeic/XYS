@@ -8,9 +8,11 @@ namespace XYS.Report.Lis
 {
     public class ReportManager
     {
-
+        #region
         private static readonly Hashtable RepositoryMap = new Hashtable(2);
+        #endregion
 
+        #region
         public static IReport Exists(ReporterKey key)
         {
             return Exists(Assembly.GetCallingAssembly(), key);
@@ -19,6 +21,7 @@ namespace XYS.Report.Lis
         {
             return WrapReporter(ReporterManager.Exists(repositoryAssembly, key));
         }
+        #endregion
 
         #region
         public static IReport GetReporter(ReporterKey key)
@@ -90,6 +93,7 @@ namespace XYS.Report.Lis
         }
         #endregion
 
+        #region
         private static IReport WrapReporter(ILisReporter reporter)
         {
             Hashtable ReportMap = RepositoryMap[reporter.Repository] as Hashtable;
@@ -106,5 +110,6 @@ namespace XYS.Report.Lis
             }
             return reportImpl;
         }
+        #endregion
     }
 }

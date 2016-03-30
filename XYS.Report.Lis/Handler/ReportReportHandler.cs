@@ -53,8 +53,5 @@ namespace XYS.Report.Lis.Handler
         }
         #endregion
 
-        #region
-
-        #endregion
     }
 }

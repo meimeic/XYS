@@ -34,6 +34,7 @@ namespace XYS.Report.Lis.Handler
             //报告级操作
             ReportItemElement rie = null;
             List<ILisReportElement> itemList = report.GetReportItem(typeof(ReportItemElement));
+            Dictionary<string, string> kvCollection = new Dictionary<string, string>(11);
             if (IsExist(itemList))
             {
                 foreach (ILisReportElement item in itemList)
@@ -44,7 +45,7 @@ namespace XYS.Report.Lis.Handler
                         continue;
                     }
                     //元素转换
-                    if (Convert2KVElement(rie, report.ReportKVCollection))
+                    if (Convert2KVElement(rie, kvCollection))
                     {
                         continue;
                     }
@@ -55,6 +56,10 @@ namespace XYS.Report.Lis.Handler
                     }
                     report.ReportItemList.Add(rie);
                 }
+                if (kvCollection.Count > 0)
+                {
+                    report.ReportKVCollection = kvCollection;
+                }
             }
             report.RemoveReportItem(typeof(ReportItemElement));
             return true;
@@ -62,7 +67,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region item项转换成KV项
-        private bool Convert2KVElement(ReportItemElement rie, Dictionary<string,object> kv)
+        private bool Convert2KVElement(ReportItemElement rie, Dictionary<string, string> kv)
         {
             if (m_convertItemList.Contains(rie.ItemNo))
             {

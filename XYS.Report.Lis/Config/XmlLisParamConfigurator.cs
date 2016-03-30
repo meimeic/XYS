@@ -25,7 +25,7 @@ namespace XYS.Report.Lis.Config
         private static readonly string IMAGE_NAME_ATTR = "imageName";
 
         private static readonly string FILL_ELEMENTS_ATTR = "fillElements";
-        private static readonly string FILL_TAG_ATTR = "fillTag";
+       // private static readonly string FILL_TAG_ATTR = "fillTag";
 
         public XmlLisParamConfigurator()
         {

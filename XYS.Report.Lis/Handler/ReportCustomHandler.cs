@@ -45,7 +45,7 @@ namespace XYS.Report.Lis.Handler
 
         //可以添加一些custom项的内部处理逻辑
         #region 内部处理逻辑
-        protected void ConvertCustom2KV(ReportCustomElement rce, Dictionary<string,object> kv)
+        protected void ConvertCustom2KV(ReportCustomElement rce, Dictionary<string,string> kv)
         {
 
         }

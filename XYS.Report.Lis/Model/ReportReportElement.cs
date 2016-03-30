@@ -18,7 +18,7 @@ namespace XYS.Report.Lis.Model
 
         private int m_sectionNo;
         private string m_serialNo;
-        
+
         private string m_sampleNo;
         private int m_sampleTypeNo;
         private string m_sampleTypeName;
@@ -60,8 +60,8 @@ namespace XYS.Report.Lis.Model
 
         private List<ReportItemElement> m_reportItemList;
         private Dictionary<string, string> m_reportImageMap;
-        private Dictionary<string,string> m_reportKVCollection;
-      
+        private Dictionary<string, string> m_reportKVCollection;
+
         private readonly Hashtable m_reportItemTable;
         #endregion
 
@@ -69,9 +69,9 @@ namespace XYS.Report.Lis.Model
         public ReportReportElement()
         {
             this.m_remarkFlag = 0;
-            this.m_reportItemList = new List<ReportItemElement>(20);
             this.m_reportImageMap = null;
             this.m_reportKVCollection = null;
+            this.m_reportItemList = new List<ReportItemElement>(20);
             this.m_reportItemTable = SystemInfo.CreateCaseInsensitiveHashtable(3);
         }
         #endregion
@@ -85,8 +85,8 @@ namespace XYS.Report.Lis.Model
         {
             get { return this.m_patientName; }
             set { this.m_patientName = value; }
-        }       
-        [Column]  
+        }
+        [Column]
         public string GenderName
         {
             get { return this.m_genderName; }
@@ -98,7 +98,7 @@ namespace XYS.Report.Lis.Model
             get { return this.m_ageStr; }
             set { this.m_ageStr = value; }
         }
-       [Column]
+        [Column]
         public string PatientID
         {
             get { return this.m_pid; }
@@ -196,7 +196,7 @@ namespace XYS.Report.Lis.Model
             get { return this.m_parItemName; }
             set { this.m_parItemName = value; }
         }
-        
+
         //备注标识 0表示没有备注 1 表示备注已设置  2 表示备注未设置
         [BsonIgnore]
         public int RemarkFlag
@@ -291,7 +291,7 @@ namespace XYS.Report.Lis.Model
         }
 
         [BsonDictionaryOptions(DictionaryRepresentation.Document)]
-        public Dictionary<string,string> ReportImageMap
+        public Dictionary<string, string> ReportImageMap
         {
             get { return this.m_reportImageMap; }
             set { this.m_reportImageMap = value; }
@@ -303,13 +303,13 @@ namespace XYS.Report.Lis.Model
             get { return this.m_reportKVCollection; }
             set { this.m_reportKVCollection = value; }
         }
-        
+
         public List<ReportItemElement> ReportItemList
         {
             get { return this.m_reportItemList; }
             set { this.m_reportItemList = value; }
         }
-        
+
         [BsonIgnore]
         public Hashtable ReportItemTable
         {

@@ -9,7 +9,7 @@ namespace XYS.Report.Lis.Persistence.Mongo
 {
     class MongoService
     {
-        private static readonly string MongoConnectionStr = "mongodb://10.1.11.10:27017";
+        private static readonly string MongoConnectionStr = "mongodb://10.1.10.246:27017";
         static MongoClient MClient = new MongoClient(MongoConnectionStr);
         public static void Insert(ReportReportElement report)
         {

@@ -22,14 +22,14 @@ namespace XYS.Report.Lis.Core
         #endregion
 
         #region 属性
+        public int ParItemNo
+        {
+            get { return this.m_parItemNo; }
+        }
         public string ParItemName
         {
             get { return this.m_parItemName; }
             set { this.m_parItemName = value; }
-        }
-        public int ParItemNo
-        {
-            get { return this.m_parItemNo; }
         }
         public string ImageName
         {

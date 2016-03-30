@@ -16,7 +16,7 @@ namespace XYS.Report.Lis.Handler
     {
         #region 字段
         private static readonly string m_defaultHandlerName = "ReportGraphHandler";
-        private readonly Hashtable m_normalIMageURI;
+        private readonly Hashtable m_normalImageUri;
         #endregion
 
         #region 构造函数
@@ -27,7 +27,7 @@ namespace XYS.Report.Lis.Handler
         public ReportGraphHandler(string handlerName)
             : base(handlerName)
         {
-            this.m_normalIMageURI = new Hashtable(20);
+            this.m_normalImageUri = new Hashtable(20);
         }
         #endregion
 
@@ -198,7 +198,7 @@ namespace XYS.Report.Lis.Handler
         }
         private void InitWebClient(WebClient wc, string folderName, string fileName)
         {
-            wc.BaseAddress = "http://10.1.11.10:8090";
+            wc.BaseAddress = "http://10.1.10.245:8090";
 
             wc.Encoding = Encoding.UTF8;
 
