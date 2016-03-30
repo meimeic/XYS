@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的常规信息通过下列特性集
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("XYS.Report.WebService")]
+[assembly: AssemblyTitle("XYS.Report.WS")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("XYS.Report.WebService")]
+[assembly: AssemblyProduct("XYS.Report.WS")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于 typelib 的 ID
-[assembly: Guid("e8fb318b-b0a8-4280-89a7-a4cefed24ae9")]
+[assembly: Guid("7d38166c-e175-44d9-bd70-d959abcda7ba")]
 
 // 程序集的版本信息由下列四个值组成:
 //

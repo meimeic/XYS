@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Services;
 
-namespace XYS.Report.WebService
+namespace XYS.Report.WS
 {
     /// <summary>
     /// ReportStatus 的摘要说明

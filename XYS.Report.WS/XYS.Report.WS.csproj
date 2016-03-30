@@ -7,12 +7,12 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{7825038C-800A-4E12-A641-76E69A23DE8F}</ProjectGuid>
+    <ProjectGuid>{AB1D2774-0AED-4EC8-BACD-6EE4F3091FC1}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XYS.Report.WebService</RootNamespace>
-    <AssemblyName>XYS.Report.WebService</AssemblyName>
+    <RootNamespace>XYS.Report.WS</RootNamespace>
+    <AssemblyName>XYS.Report.WS</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -79,9 +79,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>51449</DevelopmentServerPort>
+          <DevelopmentServerPort>22246</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:51449/</IISUrl>
+          <IISUrl>http://localhost:22246/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
