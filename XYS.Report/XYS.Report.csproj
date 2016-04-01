@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F43981AC-83E5-4AE8-A9EE-93DB0A9A35B9}</ProjectGuid>
+    <ProjectGuid>{6E28B938-9E77-48FF-8142-DB607D0F055D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XYS</RootNamespace>
-    <AssemblyName>XYS</AssemblyName>
+    <RootNamespace>XYS.Report</RootNamespace>
+    <AssemblyName>XYS.Report</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +20,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,40 +28,45 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\IReporter.cs" />
-    <Compile Include="Common\ReportException.cs" />
-    <Compile Include="Common\XYSException.cs" />
-    <Compile Include="Util\CustomCollection.cs" />
-    <Compile Include="Common\ExportAttribute.cs" />
-    <Compile Include="Common\FRExportAttribute.cs" />
-    <Compile Include="Common\IConvert.cs" />
-    <Compile Include="Common\IOptionHandler.cs" />
-    <Compile Include="Common\KeyColumn.cs" />
-    <Compile Include="Common\ReportPK.cs" />
-    <Compile Include="Common\SearchRequire.cs" />
-    <Compile Include="Common\TableAttribute.cs" />
-    <Compile Include="Common\ColumnAttribute.cs" />
-    <Compile Include="Model\IExportElement.cs" />
-    <Compile Include="Model\IPatientElement.cs" />
-    <Compile Include="Model\IReportElement.cs" />
+    <Compile Include="Class1.cs" />
+    <Compile Include="IReportElement.cs" />
+    <Compile Include="IReportHandler.cs" />
+    <Compile Include="IReportKey.cs" />
+    <Compile Include="HandlerResult.cs" />
+    <Compile Include="Lis\Handler\ReportFillByDBHandler.cs" />
+    <Compile Include="Lis\Handler\ReportGraphHandler.cs" />
+    <Compile Include="Lis\Handler\ReportHandlerSkeleton.cs" />
+    <Compile Include="Lis\Handler\ReportItemHandler.cs" />
+    <Compile Include="Lis\IReporter.cs" />
+    <Compile Include="Lis\LisReportPK.cs" />
+    <Compile Include="Lis\Model\AbstractSubFillElement.cs" />
+    <Compile Include="ISubElement.cs" />
+    <Compile Include="Lis\Model\ReportCustomElement.cs" />
+    <Compile Include="Lis\Model\ReportGraphElement.cs" />
+    <Compile Include="Lis\Model\ReportItemElement.cs" />
+    <Compile Include="Lis\Model\ReportReportElement.cs" />
+    <Compile Include="Lis\Persistence\CommonDAL.cs" />
+    <Compile Include="Lis\Persistence\DbHelperOleDb.cs" />
+    <Compile Include="Lis\Persistence\DbHelperSQL.cs" />
+    <Compile Include="Lis\Persistence\LisReportCommonDAL.cs" />
+    <Compile Include="Lis\Persistence\LisReportPKDAL.cs" />
+    <Compile Include="Lis\Reporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Util\ConsoleInfo.cs" />
-    <Compile Include="Util\PropertiesDictionary.cs" />
-    <Compile Include="Util\PropertyEntry.cs" />
-    <Compile Include="Util\RandomOperate.cs" />
-    <Compile Include="Util\ReadOnlyPropertiesDictionary.cs" />
-    <Compile Include="Util\SystemInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XYS\XYS.csproj">
+      <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
+      <Name>XYS</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
