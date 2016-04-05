@@ -10,7 +10,8 @@ namespace XYS.Report.Lis.Persistence
     public class LisReportCommonDAL
     {
         public LisReportCommonDAL()
-        { }
+        {
+        }
         public void Fill(ILisReportElement element, string sql)
         {
             DataTable dt = GetDataTable(sql);
@@ -111,6 +112,7 @@ namespace XYS.Report.Lis.Persistence
             return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
         }
         
+
         protected DataTable GetDataTable(string sql)
         {
             DataTable dt = null;

@@ -1,7 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Text;
-using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -13,6 +13,7 @@ namespace XYS.Report.Lis.Handler
     public class ReportGraphHandler : ReportHandlerSkeleton
     {
         #region 字段
+        private static readonly string m_baseURI="http://10.1.10.245:8090";
         private static readonly string m_defaultHandlerName = "ReportGraphHandler";
         private readonly Hashtable m_normalImageUri;
         #endregion
@@ -48,162 +49,103 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region graph项的内部处理逻辑
-        //protected void Convert2ImageCollection(List<ILisReportElement> graphList, AbstractInnerElement imageCollection)
-        //{
-        //    if (imageCollection == null)
-        //    {
-        //        throw new ArgumentNullException("ImageCollection");
-        //    }
-        //    string propertyName = null;
-        //    PropertyInfo imageProperty = null;
-        //    Type type = imageCollection.GetType();
-        //    ReportGraphElement rge = null;
-        //    foreach (ILisReportElement element in graphList)
-        //    {
-        //        rge = element as ReportGraphElement;
-        //        if (rge != null)
-        //        {
-        //            propertyName = GetPropertyName(rge.GraphName);
-        //            if (propertyName != null)
-        //            {
-        //                imageProperty = type.GetProperty(propertyName);
-        //                if (imageProperty != null)
-        //                {
-        //                    SetImageProperty(imageProperty, rge.GraphImage, imageCollection);
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-        //private string GetPropertyName(string graphName)
-        //{
-        //    if (this.m_graphName2PropertyName.Count == 0)
-        //    {
-        //        InitgraphName2PropertyName();
-        //    }
-        //    if (graphName != null)
-        //    {
-        //        return this.m_graphName2PropertyName[graphName] as string;
-        //    }
-        //    return null;
-        //}
-        //private void SetImageProperty(PropertyInfo pro, object value, AbstractInnerElement imageCollection)
-        //{
-        //    try
-        //    {
-        //        pro.SetValue(imageCollection, value, null);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
         #endregion
 
         #region 图片项添加处理
-        //private void AddNormalGraph(List<int> parItemList, AbstractInnerElement imageCollection)
-        //{
-        //    if (imageCollection == null)
-        //    {
-        //        throw new ArgumentNullException("ImageCollection");
-        //    }
-        //    Type type = imageCollection.GetType();
-        //    string propertyName = GetPropertyName("normal");
-        //    if (parItemList.Count > 0 && propertyName != null)
-        //    {
-        //        PropertyInfo imageProperty = type.GetProperty(propertyName);
-        //        if (imageProperty != null)
-        //        {
-        //            object imageValue = null;
-        //            foreach (int parItemNo in parItemList)
-        //            {
-        //                imageValue = this.m_parItemNo2NormalImage[parItemNo];
-        //                if (imageValue != null)
-        //                {
-        //                    SetImageProperty(imageProperty, imageValue, imageCollection);
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-        //private void InitParItem2NormalImage()
-        //{
-        //    lock (this.m_parItemNo2NormalImage)
-        //    {
-        //        ConfigManager.InitParItem2NormalImageTable(this.m_parItemNo2NormalImage);
-        //    }
-        //}
-        //private void InitgraphName2PropertyName()
-        //{
-        //    lock (this.m_graphName2PropertyName)
-        //    {
-        //    }
-        //}
         #endregion
 
         #region 图片上传
         protected void UploadImages(List<AbstractSubFillElement> graphList, string folderName, Dictionary<string, string> imageMap)
         {
             WebClient wc = null;
-            string fileName = null;
-            ReportGraphElement rge = null;
-            foreach (AbstractSubFillElement element in graphList)
+            string boundary = GenderBoundary();
+            byte[] postData = GenderPostData(graphList, boundary);
+            InitWebClient(wc, boundary, postData.Length);
+            try
             {
-                rge = element as ReportGraphElement;
-                if (rge != null)
-                {
-                    wc = new WebClient();
-                    fileName = GenderGUIDName();
-                    InitWebClient(wc, folderName, fileName);
-                    byte[] response = wc.UploadData("/lis/image", "POST", rge.GraphImage);
-                    string res = System.Text.Encoding.UTF8.GetString(response);
-                    imageMap.Add(rge.GraphName, res);
-                }
+                byte[] respose = wc.UploadData("/upload/lis", "POST", postData);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
         private string GenderGUIDName()
         {
             return SystemInfo.NewGuid().ToString() + ".jpg";
         }
-        private void PrePostData(byte[] postData)
+        private byte[] GenderPostData(List<AbstractSubFillElement> graphList, string boundary)
         {
-            string boundary = DateTime.Now.Ticks.ToString("x");
-            StringBuilder sb = new StringBuilder();
-            sb.Append("--");
-            sb.Append(boundary);
-            sb.Append(SystemInfo.NewLine);
-            sb.Append("Content-Disposition: form-data;");
-            sb.Append("name=fname;");
-            sb.Append(SystemInfo.NewLine);
-            sb.Append(SystemInfo.NewLine);
-            sb.Append(RandomOperate.GetRandomCode(8) + ".jpg");
-            sb.Append(SystemInfo.NewLine);
-
-            sb.Append("--");
-            sb.Append(boundary);
-            sb.Append(SystemInfo.NewLine);
-            sb.Append("Content-Disposition: form-data;");
-            sb.Append("name=Filedata;");
-            sb.Append(RandomOperate.GetRandomCode(8) + ".jpg");
-            sb.Append(SystemInfo.NewLine);
-            sb.Append("Content-Type:application/octet-stream");
-            sb.Append(SystemInfo.NewLine);
-            sb.Append(SystemInfo.NewLine);
-            string h = sb.ToString();
-            postData = Encoding.UTF8.GetBytes(h);
+            int imageSeque = 1;
+            string fileName = null;
+            string formName = null;
+            ReportGraphElement rge = null;
+            MemoryStream stream = new MemoryStream();
+            foreach (AbstractSubFillElement element in graphList)
+            {
+                rge = element as ReportGraphElement;
+                if (rge != null)
+                {
+                    fileName = GenderGUIDName();
+                    formName = GenderFormName(imageSeque);
+                    WriteImageData(rge.GraphImage, boundary, formName, fileName, stream);
+                    imageSeque++;
+                }
+            }
+            WritePostFooterData(boundary, stream);
+            //读取内容
+            stream.Position = 0;
+            byte[] postBuffer = new byte[stream.Length];
+            stream.Read(postBuffer, 0, postBuffer.Length);
+            stream.Close();
+            //
+            return postBuffer;
         }
-        private void InitWebClient(WebClient wc, string path, string file)
+        private string GenderFormName(int i)
         {
-            wc.BaseAddress = "http://10.1.10.245:8090";
+            return "image" + i;
+        }
+        private string GenderPostHeader(string boundary, string formName, string fileName)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(SystemInfo.NewLine);
+            sb.Append("Content-Disposition: form-data;");
+            sb.Append("name=\"");
+            sb.Append(formName);
+            sb.Append("\";filename=\"");
+            sb.Append(fileName);
+            sb.Append("\"");
+            sb.Append(SystemInfo.NewLine);
+            sb.Append("Content-Type:image/jpg");
+            sb.Append(SystemInfo.NewLine);
+            sb.Append(SystemInfo.NewLine);
+            return sb.ToString();
+        }
+        private string GenderPostFooter(string boundary)
+        {
+            return boundary + "--";
+        }
+        private void WriteImageData(byte[] imageData, string boundary, string formName, string fileName, MemoryStream stream)
+        {
+            string postHeader = GenderPostHeader(boundary, formName, fileName);
+            byte[] headerBytes = Encoding.UTF8.GetBytes(postHeader);
+            stream.Write(headerBytes, 0, headerBytes.Length);
+            stream.Write(imageData, 0, imageData.Length);
+        }
+        private void WritePostFooterData(string boundary, MemoryStream stream)
+        {
+            string postFooter = GenderPostFooter(boundary);
+            byte[] footerBytes = Encoding.UTF8.GetBytes(postFooter);
+            stream.Write(footerBytes, 0, footerBytes.Length);
+        }
+        private void InitWebClient(WebClient wc, string boundary,int length)
+        {
+            wc.BaseAddress = m_baseURI;
 
             wc.Encoding = Encoding.UTF8;
-
-            wc.Headers.Add("Content-Type", "application/x-www-form-urlencoded");
+            wc.Headers.Add("Content-Length",length.ToString());
+            wc.Headers.Add("Content-Type", "multipart/form-data;boundary="+boundary);
             wc.Headers.Add("Accept-Language", "utf-8");
-
-            wc.QueryString.Add("path", path);
-            wc.QueryString.Add("filename", file);
         }
         private void Pic_UploadDataCompleted(object sender, UploadDataCompletedEventArgs e)
         {
@@ -211,6 +153,10 @@ namespace XYS.Report.Lis.Handler
             {
                 string returnMessage = Encoding.Default.GetString(e.Result);
             }
+        }
+        private string GenderBoundary()
+        {
+            return "----------------" + DateTime.Now.Ticks.ToString("x");
         }
         #endregion
 
