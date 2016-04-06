@@ -24,7 +24,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateReport(ReportReportElement report)
+        protected override HandlerResult OperateReport(ReportReportElement report)
         {
             //报告级操作
             ReportItemElement rie = null;
@@ -42,14 +42,17 @@ namespace XYS.Report.Lis.Handler
                     report.ReportItemCollection.Add(rie);
                 }
             }
-            report.RemoveReportItem(typeof(ReportItemElement));
-            return true;
+            return new HandlerResult();
         }
         #endregion
 
         #region 检验项处理逻辑
         protected bool OperateItem(ReportItemElement rie)
         {
+            if (rie == null)
+            {
+                return false;
+            }
             if (ItemDelete(rie))
             {
                 return false;

@@ -40,21 +40,16 @@ namespace XYS.Report.Lis.Handler
                 bool result = UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), imageMap);
                 if (result)
                 {
+                    report.ReportImageMap = imageMap;
                     return new HandlerResult();
                 }
                 else
                 {
-                    return new HandlerResult(0, "upload image failed!");
+                    return new HandlerResult(0, "upload images failed!");
                 }
             }
             return new HandlerResult();
         }
-        #endregion
-
-        #region graph项的内部处理逻辑
-        #endregion
-
-        #region 图片项添加处理
         #endregion
 
         #region 图片上传
@@ -109,6 +104,10 @@ namespace XYS.Report.Lis.Handler
         {
             return "image" + i;
         }
+        private string GenderBoundary()
+        {
+            return "----------------" + DateTime.Now.Ticks.ToString("x");
+        }
         private string GenderPostHeader(string boundary, string formName, string fileName)
         {
             StringBuilder sb = new StringBuilder();
@@ -145,43 +144,10 @@ namespace XYS.Report.Lis.Handler
         private void InitWebClient(WebClient wc, string boundary, int length)
         {
             wc.BaseAddress = m_baseURI;
-
             wc.Encoding = Encoding.UTF8;
             wc.Headers.Add("Content-Length", length.ToString());
             wc.Headers.Add("Content-Type", "multipart/form-data;boundary=" + boundary);
             wc.Headers.Add("Accept-Language", "utf-8");
-        }
-        private void Pic_UploadDataCompleted(object sender, UploadDataCompletedEventArgs e)
-        {
-            if (e.Error == null)
-            {
-                string returnMessage = Encoding.Default.GetString(e.Result);
-            }
-        }
-        private string GenderBoundary()
-        {
-            return "----------------" + DateTime.Now.Ticks.ToString("x");
-        }
-        #endregion
-
-        #region
-        private bool IsExist(Dictionary<string, string> dic)
-        {
-            if (dic != null && dic.Count > 0)
-            {
-                return true;
-            }
-            return false;
-        }
-        private Dictionary<string, string> GetImageMap(ReportReportElement report)
-        {
-            Dictionary<string, string> imageMap = report.ReportImageMap;
-            if (imageMap == null)
-            {
-                imageMap = new Dictionary<string, string>(2);
-                report.ReportImageMap = imageMap;
-            }
-            return imageMap;
         }
         #endregion
     }

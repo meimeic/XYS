@@ -49,10 +49,12 @@
     <Compile Include="IReportHandler.cs" />
     <Compile Include="IReportKey.cs" />
     <Compile Include="HandlerResult.cs" />
+    <Compile Include="Lis\Handler\ReportCustomHandler.cs" />
     <Compile Include="Lis\Handler\ReportFillByDBHandler.cs" />
     <Compile Include="Lis\Handler\ReportGraphHandler.cs" />
     <Compile Include="Lis\Handler\ReportHandlerSkeleton.cs" />
     <Compile Include="Lis\Handler\ReportItemHandler.cs" />
+    <Compile Include="Lis\Handler\ReportReportHandler.cs" />
     <Compile Include="Lis\IReporter.cs" />
     <Compile Include="Lis\LisReportPK.cs" />
     <Compile Include="Lis\Model\AbstractSubFillElement.cs" />

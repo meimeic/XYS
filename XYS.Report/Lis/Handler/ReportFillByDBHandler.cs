@@ -142,7 +142,7 @@ namespace XYS.Report.Lis.Handler
         }
         #endregion
 
-        #region
+        #region 辅助方法
         protected virtual List<Type> GetAvailableInsideElements(LisReportPK RK)
         {
             if (this.m_section2FillTypeMap.Count == 0)
