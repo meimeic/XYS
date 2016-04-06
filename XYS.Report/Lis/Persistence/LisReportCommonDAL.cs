@@ -17,7 +17,6 @@ namespace XYS.Report.Lis.Persistence
             if (dt != null && dt.Rows.Count > 0)
             {
                 FillData(element, element.GetType(), dt.Rows[0], dt.Columns);
-                //AfterFill(element);
             }
         }
         public void FillList(List<AbstractSubFillElement> elementList, Type elementType, string sql)

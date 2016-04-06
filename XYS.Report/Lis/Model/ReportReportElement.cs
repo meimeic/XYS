@@ -322,23 +322,6 @@ namespace XYS.Report.Lis.Model
             this.RemarkFlag = 0;
             this.Remark = "";
         }
-        public void CreateImageMap()
-        {
-            this.m_reportImageMap = new Dictionary<string, string>();
-        }
-        public void RemoveReportItem(Type type)
-        {
-            if (type != null)
-            {
-                if (this.m_reportItemTable.ContainsKey(type))
-                {
-                    lock (this.m_reportItemTable)
-                    {
-                        this.m_reportItemTable.Remove(type);
-                    }
-                }
-            }
-        }
         public List<AbstractSubFillElement> GetReportItem(Type type)
         {
             if (type != null)

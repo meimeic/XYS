@@ -5,8 +5,7 @@ using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Report.Lis;
-using XYS.Report.Lis.Core;
+using XYS.Report;
 namespace XYS.Report.Lis.Persistence
 {
     public class LisReportPKDAL

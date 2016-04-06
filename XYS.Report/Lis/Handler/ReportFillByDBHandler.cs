@@ -49,7 +49,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateReport(ReportReportElement report)
+        protected override HandlerResult OperateReport(ReportReportElement report)
         {
             if (report.PK.Configured)
             {
@@ -67,9 +67,9 @@ namespace XYS.Report.Lis.Handler
                         FillSubElements(tempList, PK, type);
                     }
                 }
-                return true;
+                return new HandlerResult();
             }
-            return false;
+            return new HandlerResult(0, "this report search key is not config!");
         }
         #endregion
 

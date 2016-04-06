@@ -34,18 +34,14 @@ namespace XYS.Report.Lis.Handler
             ReportReportElement rep = report as ReportReportElement;
             if (rep != null)
             {
-                bool result = OperateReport(rep);
-                if (result)
-                {
-                    return HandlerResult.Continue;
-                }
+                    return  OperateReport(rep);
             }
-            return HandlerResult.Fail;
+            return new HandlerResult(0,"this object is not a report!");
         }
         #endregion
 
         #region 抽象方法(处理元素)
-        protected abstract bool OperateReport(ReportReportElement report);
+        protected abstract HandlerResult OperateReport(ReportReportElement report);
         #endregion
 
         #region 辅助方法

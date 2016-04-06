@@ -8,53 +8,17 @@ namespace XYS.Report.Lis
     public abstract class Reporter : IReporter
     {
         #region 变量
-        private readonly string m_callerName;
-        private readonly string m_strategyName;
-
         private IReportHandler m_headHandler;
         private IReportHandler m_tailHandler;
         #endregion
 
         #region 构造函数
-        protected Reporter(string callerName, string strategyName)
+        protected Reporter()
         {
-            this.m_callerName = callerName;
-            this.m_strategyName = strategyName;
         }
         #endregion
 
         #region 实例属性
-        public virtual IReportFiller DefaultFill
-        {
-            get
-            {
-                if (this.m_defaultFill == null)
-                {
-                    this.InitDefault();
-                }
-                return this.m_defaultFill;
-            }
-        }
-        public virtual IReportFiller Filler
-        {
-            get
-            {
-                if (this.m_filler == null)
-                {
-                    return this.DefaultFill;
-                }
-                else
-                {
-                    return this.m_filler;
-                }
-            }
-            set { this.m_filler = value; }
-        }
-        public virtual Hierarchy Hierarchy
-        {
-            get { return this.m_hierarchy; }
-            set { this.m_hierarchy = value; }
-        }
         public virtual IReportHandler HandlerHead
         {
             get { return this.m_headHandler; }
@@ -62,17 +26,10 @@ namespace XYS.Report.Lis
         #endregion
 
         #region 实现IReport接口
-        public IReporterRepository Repository
+        public string OperateReport(ReportReportElement report)
         {
-            get { return this.m_hierarchy; }
-        }
-        public void FillReport(ReportReportElement report, LisReportPK RK)
-        {
-            this.Filler.Fill(report, RK);
-        }
-        public bool OptionReport(ReportReportElement report)
-        {
-            return this.HandlerEvent(report);
+             HandlerEvent(report);
+             return "";
         }
         #endregion
 

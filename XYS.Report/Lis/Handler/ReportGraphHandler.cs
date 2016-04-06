@@ -13,7 +13,7 @@ namespace XYS.Report.Lis.Handler
     public class ReportGraphHandler : ReportHandlerSkeleton
     {
         #region 字段
-        private static readonly string m_baseURI="http://10.1.10.245:8090";
+        private static readonly string m_baseURI = "http://10.1.10.245:8090";
         private static readonly string m_defaultHandlerName = "ReportGraphHandler";
         private readonly Hashtable m_normalImageUri;
         #endregion
@@ -31,20 +31,23 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool OperateReport(ReportReportElement report)
+        protected override HandlerResult OperateReport(ReportReportElement report)
         {
             List<AbstractSubFillElement> graphList = report.GetReportItem(typeof(ReportGraphElement));
             if (IsExist(graphList))
             {
                 Dictionary<string, string> imageMap = new Dictionary<string, string>(4);
-                UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), imageMap);
-                if (imageMap.Count > 0)
+                bool result = UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), imageMap);
+                if (result)
                 {
-                    report.ReportImageMap = imageMap;
+                    return new HandlerResult();
+                }
+                else
+                {
+                    return new HandlerResult(0, "upload image failed!");
                 }
             }
-            report.RemoveReportItem(typeof(ReportGraphElement));
-            return true;
+            return new HandlerResult();
         }
         #endregion
 
@@ -55,7 +58,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 图片上传
-        protected void UploadImages(List<AbstractSubFillElement> graphList, string folderName, Dictionary<string, string> imageMap)
+        protected bool UploadImages(List<AbstractSubFillElement> graphList, string folderName, Dictionary<string, string> imageMap)
         {
             WebClient wc = null;
             string boundary = GenderBoundary();
@@ -64,10 +67,11 @@ namespace XYS.Report.Lis.Handler
             try
             {
                 byte[] respose = wc.UploadData("/upload/lis", "POST", postData);
+                return true;
             }
             catch (Exception ex)
             {
-                throw ex;
+                return false;
             }
         }
         private string GenderGUIDName()
@@ -138,13 +142,13 @@ namespace XYS.Report.Lis.Handler
             byte[] footerBytes = Encoding.UTF8.GetBytes(postFooter);
             stream.Write(footerBytes, 0, footerBytes.Length);
         }
-        private void InitWebClient(WebClient wc, string boundary,int length)
+        private void InitWebClient(WebClient wc, string boundary, int length)
         {
             wc.BaseAddress = m_baseURI;
 
             wc.Encoding = Encoding.UTF8;
-            wc.Headers.Add("Content-Length",length.ToString());
-            wc.Headers.Add("Content-Type", "multipart/form-data;boundary="+boundary);
+            wc.Headers.Add("Content-Length", length.ToString());
+            wc.Headers.Add("Content-Type", "multipart/form-data;boundary=" + boundary);
             wc.Headers.Add("Accept-Language", "utf-8");
         }
         private void Pic_UploadDataCompleted(object sender, UploadDataCompletedEventArgs e)
