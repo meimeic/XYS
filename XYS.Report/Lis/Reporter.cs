@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Report.Lis.Model;
+using XYS.Report.Lis.Handler;
 namespace XYS.Report.Lis
 {
     public abstract class Reporter : IReporter
     {
-        #region 变量
+        #region 私有字段
         private IReportHandler m_headHandler;
         private IReportHandler m_tailHandler;
         #endregion
@@ -15,6 +16,7 @@ namespace XYS.Report.Lis
         #region 构造函数
         protected Reporter()
         {
+            this.InitReporter();
         }
         #endregion
 
@@ -28,55 +30,51 @@ namespace XYS.Report.Lis
         #region 实现IReport接口
         public string OperateReport(ReportReportElement report)
         {
-             HandlerEvent(report);
-             return "";
+            HandlerResult result = HandlerEvent(report);
+            return result.Message;
         }
         #endregion
 
         #region 受保护的虚方法
-        protected virtual bool HandlerEvent(ReportReportElement element)
+        protected virtual HandlerResult HandlerEvent(ReportReportElement element)
         {
+            HandlerResult result = null;
             IReportHandler handler = this.HandlerHead;
             while (handler != null)
             {
-                switch (handler.ReportOption(element))
+                result = handler.ReportOption(element);
+                switch (result.StatusCode)
                 {
-                    case HandlerResult.Fail:
-                        return false;
-                    case HandlerResult.HasErrorButContinue:
+                    case 0:
+                        return result;
+                    case 1:
                         handler = handler.Next;
-                        break;
-                    case HandlerResult.Continue:
-                        handler = handler.Next;
-                        break;
-                    case HandlerResult.Success:
-                        handler = null;
                         break;
                     default:
-                        return true;
+                        handler = handler.Next;
+                        break;
                 }
             }
-            return true;
-        }
-        protected virtual void AddHandler(Hashtable handlerTable, IList<string> handlerNameList)
+            return result;
+        }     
+        protected virtual void InitReporter()
         {
-            IReportHandler handler;
-            //清空
-            this.m_headHandler = this.m_tailHandler = null;
-            foreach (string name in handlerNameList)
-            {
-                handler = handlerTable[name] as IReportHandler;
-                if (handler != null)
-                {
-                    AddHandler(handler);
-                }
-            }
+            IReportHandler handler = new ReportFillByDBHandler();
+            AddHandler(handler);
+            handler = new ReportItemHandler();
+            AddHandler(handler);
+            handler = new ReportGraphHandler();
+            AddHandler(handler);
+            handler = new ReportCustomHandler();
+            AddHandler(handler);
+            handler = new ReportReportHandler();
+            AddHandler(handler);
         }
-        protected virtual void AddHandler(IReportHandler handler)
+        protected void AddHandler(IReportHandler handler)
         {
             if (handler == null)
             {
-                throw new ArgumentNullException("filter param must not be null");
+                throw new ArgumentNullException("handler param must not be null");
             }
             if (this.m_headHandler == null)
             {
@@ -88,45 +86,9 @@ namespace XYS.Report.Lis
                 this.m_tailHandler = handler;
             }
         }
-        protected virtual void SetFiller(Hashtable fillerTable, string fillerName)
-        {
-            IReportFiller filler = fillerTable[fillerName] as IReportFiller;
-            if (filler != null)
-            {
-                this.Filler = filler;
-            }
-        }
         #endregion
 
-        #region 私有方法
-        private void InitDefault()
-        {
-            if (this.Hierarchy == null)
-            {
-                throw new ArgumentNullException("Hierarchy");
-            }
-            if (this.m_defaultFill == null)
-            {
-                this.m_defaultFill = this.Hierarchy.DefaultFiller;
-            }
-        }
-        #endregion
-
-        #region 初始化
-        public virtual void InitReporter()
-        {
-            if (this.Hierarchy == null)
-            {
-                throw new ArgumentNullException("Hierarchy");
-            }
-            ReporterStrategy stratrgy = this.Hierarchy.StrategyMap[this.m_strategyName] as ReporterStrategy;
-            if (stratrgy == null)
-            {
-                throw new ArgumentNullException("can not find the stratrgy [" + this.m_strategyName + "]");
-            }
-            SetFiller(this.Hierarchy.FillerMap, stratrgy.FillerName);
-            AddHandler(this.Hierarchy.HandlerMap, stratrgy.HandlerList);
-        }
+        #region 重置
         public virtual void Reset()
         {
             lock (this)
