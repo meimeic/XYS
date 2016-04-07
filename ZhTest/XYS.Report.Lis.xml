@@ -1,101 +1,77 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-  <lisConfig>
-    <lis-report>
-      <reporter-strategy-stack>
-        <reporter-strategy name="DefaultStrategy">
-          <fill-ref ref="ReportFillByDB"/>
-          <handler-ref-stack>
-            <handler-ref ref="ReportItemHandler"/>
-            <handler-ref ref="ReportCustomHandler"/>
-            <handler-ref ref="ReportGraphHandler"/>
-            <handler-ref ref="ReportReportHandler"/>
-          </handler-ref-stack>
-        </reporter-strategy>
-      </reporter-strategy-stack>
-      <fill-stack>
-        <fill name="ReportFillByDB" type="XYS.Report.Lis.Filler.ReportFillByDB"/>
-      </fill-stack>
-      <handler-stack>
-        <handler name="ReportItemHandler" type="XYS.Report.Lis.Handler.ReportItemHandler"/>
-        <handler name="ReportCustomHandler" type="XYS.Report.Lis.Handler.ReportCustomHandler"/>
-        <handler name="ReportGraphHandler" type="XYS.Report.Lis.Handler.ReportGraphHandler"/>
-        <handler name="ReportReportHandler" type="XYS.Report.Lis.Handler.ReportReportHandler"/>
-      </handler-stack>
-    </lis-report>
-    <lis-param>
-      <reportElements>
-        <!-- ReportElement = 1,InfoElement,ItemElement,GraphElement,CustomElement,NoneElement-->
-        <reportElement name="ReportReportElement" type="XYS.Report.Lis.Model.ReportReportElement" explain=""/>
-        <reportElement name="ReportItemElement" type="XYS.Report.Lis.Model.ReportItemElement" explain=""/>
-        <reportElement name="ReportGraphElement" type="XYS.Report.Lis.Model.ReportGraphElement" explain=""/>
-        <reportElement name="ReportCustomElement" type="XYS.Report.Lis.Model.ReportCustomElement" explain=""/>
-      </reportElements>
-      <reportSections>
-        <reportSection name="2" alias="临检XE2000" value="2" fillElements="ReportItemElement" fillTag="" />
-        <reportSection name="27" alias="临检XE5000" value="27" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="62" alias="临检夜班" value="62" fillElements="ReportItemElement" fillTag="" />
-        <reportSection name="28" alias="临检UF1000I" value="28" fillElements="ReportItemElement,ReportGraphElement" fillTag="" />
-        <reportSection name="17" alias="生化AU2700" value="17" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="23" alias="生化血气" value="23" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="29" alias="生化AU480" value="29" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="34" alias="生化荧光免疫" value="34" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="5" alias="免疫IMMAGE" value="5" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="19" alias="免疫TECAN150" value="19" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="20" alias="免疫DXI800" value="20" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="21" alias="免疫SUNRISE" value="21" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="25" alias="免疫BN11" value="25" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="30" alias="免疫手工" value="30" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="33" alias="免疫i2000" value="33" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="35" alias="免疫spife4000" value="35" fillElements="ReportItemElement,ReportGraphElement" fillTag=""/>
-        <reportSection name="63" alias="免疫Immulite1000" value="63" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="14" alias="免疫细胞培养" value="14" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="4" alias="出凝血" value="4" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="24" alias="血小板" value="24" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="18" alias="溶血" value="18" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="11" alias="分子遗传" value="11" fillElements="ReportItemElement,ReportGraphElement" fillTag=""/>
-        <reportSection name="10" alias="流式细胞" value="10" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="3" alias="细胞化学" value="3" fillElements="ReportItemElement" fillTag=""/>
-        <reportSection name="45" alias="分子生物" value="45" fillElements="ReportItemElement,ReportGraphElement" fillTag=""/>
-      </reportSections>
-      <parItems>
-        <parItem name="50006570" alias="染色体杂交AML1/ETO" value="50006570" imageFlag="true" imageName="AML1-ETO.jpg"/>
-        <parItem name="90009363" alias="染色体杂交ATM/CEP11" value="90009363" imageFlag="true" imageName="ATM-CEP11.jpg"/>
-        <parItem name="90008499" alias="染色体杂交BCL2" value="90008499" imageFlag="true" imageName="BCL2.jpg"/>
-        <parItem name="90008738" alias="染色体杂交BCL6" value="90008738" imageFlag="true" imageName="BCL6.jpg"/>
-        <parItem name="50006569" alias="染色体杂交BCR/ABL" value="50006569" imageFlag="true" imageName="BCR-ABL.jpg"/>
-        <parItem name="90009026" alias="染色体杂交BCR/ABL/ASS1" value="90009026" imageFlag="true" imageName="BCR-ABL-ASS1.jpg"/>
-        <parItem name="50006576" alias="染色体杂交CBFB" value="50006576" imageFlag="true" imageName="CBFB.jpg"/>
-        <parItem name="50006583" alias="染色体杂交CCND1/IgH" value="50006583" imageFlag="true" imageName="CCND1-IgH.jpg"/>
-        <parItem name="90009367" alias="染色体杂交CDKN2A/CEP9" value="90009367" imageFlag="true" imageName="CDKN2A.jpg"/>
-        <parItem name="90008735" alias="染色体杂交CEP12" value="90008735" imageFlag="true" imageName="CEP12.jpg"/>
-        <parItem name="90008495" alias="染色体杂交CEP7/D7S486" value="90008495" imageFlag="true" imageName="D7S486-CEP7.jpg"/>
-        <parItem name="50006573" alias="染色体杂交CEPX/Y" value="50006573" imageFlag="true" imageName="CEPX-CEPY.jpg"/>
-        <parItem name="90008729" alias="染色体杂交CKS1B/CDKN2C" value="90008729" imageFlag="true" imageName="CKS1B-CDKN2C.jpg"/>
-        <parItem name="90009373" alias="染色体杂交CRLF2" value="90009373" imageFlag="true" imageName="CRLF2.jpg"/>
-        <parItem name="90009370" alias="染色体杂交D13S319/LAMP1" value="90009370" imageFlag="true" imageName="D13S319.jpg"/>
-        <parItem name="90008497" alias="染色体杂交D20S108" value="90008497" imageFlag="true" imageName="D20S108.jpg"/>
-        <parItem name="90008494" alias="染色体杂交D5S721/EGR1" value="90008494" imageFlag="true" imageName="EGR1-D5S721.jpg"/>
-        <parItem name="90008741" alias="染色体杂交EVI1(3q26)" value="90008741" imageFlag="true" imageName="EVI1.jpg"/>
-        <parItem name="90008730" alias="染色体杂交FGFR1/D8Z2" value="90008730" imageFlag="true" imageName="FGFR1-D8Z2.jpg"/>
-        <parItem name="50006574" alias="染色体杂交IGH" value="50006574" imageFlag="true" imageName="IgH.jpg"/>
-        <parItem name="90009041" alias="染色体杂交IgH/BCL2" value="90009041" imageFlag="true" imageName="IGH-BCL2.jpg"/>
-        <parItem name="50006582" alias="染色体杂交IgH/FGFR3" value="50006582" imageFlag="true" imageName="FGFR3-IgH.jpg"/>
-        <parItem name="50006581" alias="染色体杂交IgH/MAF" value="50006581" imageFlag="true" imageName="MAF-IgH.jpg"/>
-        <parItem name="90009364" alias="染色体杂交IgH/MAFB" value="90009364" imageFlag="true" imageName="IGH-MAFB.jpg"/>
-        <parItem name="90009038" alias="染色体杂交IgH/MYC" value="90009038" imageFlag="true" imageName="IGH-MYC.jpg"/>
-        <parItem name="50006575" alias="染色体杂交MLL" value="50006575" imageFlag="true" imageName="MLL.jpg"/>
-        <parItem name="50006579" alias="染色体杂交MYC" value="50006579" imageFlag="true" imageName="MYC.jpg"/>
-        <parItem name="90008744" alias="染色体杂交MYC" value="90008744" imageFlag="true" imageName="MYC.jpg"/>
-        <parItem name="90009376" alias="染色体杂交P2RY8" value="90009376" imageFlag="true" imageName="P2RY8.jpg"/>
-        <parItem name="90009362" alias="染色体杂交P53/CEP17" value="90009362" imageFlag="true" imageName="P53-CEP17.jpg"/>
-        <parItem name="90009032" alias="染色体杂交PDGFRA" value="90009032" imageFlag="true" imageName="PDGFRA.jpg"/>
-        <parItem name="90009035" alias="染色体杂交PDGFRB" value="90009035" imageFlag="true" imageName="PDGFRB.jpg"/>
-        <parItem name="50006571" alias="染色体杂交PML/RARa" value="50006571" imageFlag="true" imageName="PML-RARA.jpg"/>
-        <parItem name="90009029" alias="染色体杂交RARα" value="90009029" imageFlag="true" imageName="RARA.jpg"/>
-        <parItem name="50006578" alias="染色体杂交RB-1" value="50006578" imageFlag="true" imageName="RB-1.jpg"/>
-        <parItem name="90008496" alias="染色体杂交TCF3/PBX1" value="90008496" imageFlag="true" imageName="TCF3-PBX1.jpg"/>
-        <parItem name="50006572" alias="染色体杂交TEL/AML1" value="50006572" imageFlag="true" imageName="TEL-AML1.jpg"/>
-        <parItem name="50006577" alias="染色体杂交San_Ti8" value="50006577" imageFlag="true" imageName="SANTI8.jpg"/>
-      </parItems>
-    </lis-param>
-  </lisConfig>
+<lisConfig>
+  <lis-param>
+    <reportElements>
+      <reportElement name="ReportItemElement" type="XYS.Report.Lis.Model.ReportItemElement" explain=""/>
+      <reportElement name="ReportGraphElement" type="XYS.Report.Lis.Model.ReportGraphElement" explain=""/>
+      <reportElement name="ReportCustomElement" type="XYS.Report.Lis.Model.ReportCustomElement" explain=""/>
+    </reportElements>
+    <reportSections>
+      <reportSection name="临检XE2000" value="2" fillElements="ReportItemElement" fillTag="" />
+      <reportSection name="临检XE5000" value="27" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="临检夜班" value="62" fillElements="ReportItemElement" fillTag="" />
+      <reportSection name="临检UF1000I" value="28" fillElements="ReportItemElement,ReportGraphElement" fillTag="" />
+      <reportSection name="生化AU2700" value="17" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="生化血气" value="23" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="生化AU480" value="29" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="生化荧光免疫" value="34" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫IMMAGE" value="5" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫TECAN150" value="19" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫DXI800" value="20" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫SUNRISE" value="21" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫BN11" value="25" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫手工" value="30" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫i2000" value="33" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫spife4000" value="35" fillElements="ReportItemElement,ReportGraphElement" fillTag=""/>
+      <reportSection name="免疫Immulite1000" value="63" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫细胞培养" value="14" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="出凝血" value="4" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="血小板" value="24" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="溶血" value="18" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="分子遗传" value="11" fillElements="ReportItemElement,ReportGraphElement" fillTag=""/>
+      <reportSection name="流式细胞" value="10" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="细胞化学" value="3" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="分子生物" value="45" fillElements="ReportItemElement,ReportGraphElement" fillTag=""/>
+    </reportSections>
+    <parItems>
+      <parItem name="染色体杂交AML1/ETO" value="50006570" imageName="AML1-ETO.jpg"/>
+      <parItem name="染色体杂交ATM/CEP11" value="90009363" imageName="ATM-CEP11.jpg"/>
+      <parItem name="染色体杂交BCL2" value="90008499" imageName="BCL2.jpg"/>
+      <parItem name="染色体杂交BCL6" value="90008738" imageName="BCL6.jpg"/>
+      <parItem name="染色体杂交BCR/ABL" value="50006569" imageName="BCR-ABL.jpg"/>
+      <parItem name="染色体杂交BCR/ABL/ASS1" value="90009026" imageName="BCR-ABL-ASS1.jpg"/>
+      <parItem name="染色体杂交CBFB" value="50006576" imageName="CBFB.jpg"/>
+      <parItem name="染色体杂交CCND1/IgH" value="50006583" imageName="CCND1-IgH.jpg"/>
+      <parItem name="染色体杂交CDKN2A/CEP9" value="90009367" imageName="CDKN2A.jpg"/>
+      <parItem name="染色体杂交CEP12" value="90008735" imageName="CEP12.jpg"/>
+      <parItem name="染色体杂交CEP7/D7S486" value="90008495" imageName="D7S486-CEP7.jpg"/>
+      <parItem name="染色体杂交CEPX/Y" value="50006573" imageName="CEPX-CEPY.jpg"/>
+      <parItem name="染色体杂交CKS1B/CDKN2C" value="90008729" imageName="CKS1B-CDKN2C.jpg"/>
+      <parItem name="染色体杂交CRLF2" value="90009373" imageName="CRLF2.jpg"/>
+      <parItem name="染色体杂交D13S319/LAMP1" value="90009370" imageName="D13S319.jpg"/>
+      <parItem name="染色体杂交D20S108" value="90008497" imageName="D20S108.jpg"/>
+      <parItem name="染色体杂交D5S721/EGR1" value="90008494" imageName="EGR1-D5S721.jpg"/>
+      <parItem name="染色体杂交EVI1(3q26)" value="90008741" imageName="EVI1.jpg"/>
+      <parItem name="染色体杂交FGFR1/D8Z2" value="90008730" imageName="FGFR1-D8Z2.jpg"/>
+      <parItem name="染色体杂交IGH" value="50006574" imageName="IgH.jpg"/>
+      <parItem name="染色体杂交IgH/BCL2" value="90009041" imageName="IGH-BCL2.jpg"/>
+      <parItem name="染色体杂交IgH/FGFR3" value="50006582" imageName="FGFR3-IgH.jpg"/>
+      <parItem name="染色体杂交IgH/MAF" value="50006581" imageName="MAF-IgH.jpg"/>
+      <parItem name="染色体杂交IgH/MAFB" value="90009364" imageName="IGH-MAFB.jpg"/>
+      <parItem name="染色体杂交IgH/MYC" value="90009038" imageName="IGH-MYC.jpg"/>
+      <parItem name="染色体杂交MLL" value="50006575" imageName="MLL.jpg"/>
+      <parItem name="染色体杂交MYC" value="50006579" imageName="MYC.jpg"/>
+      <parItem name="染色体杂交MYC" value="90008744" imageName="MYC.jpg"/>
+      <parItem name="染色体杂交P2RY8" value="90009376" imageName="P2RY8.jpg"/>
+      <parItem name="染色体杂交P53/CEP17" value="90009362" imageName="P53-CEP17.jpg"/>
+      <parItem name="染色体杂交PDGFRA" value="90009032" imageName="PDGFRA.jpg"/>
+      <parItem name="染色体杂交PDGFRB" value="90009035" imageName="PDGFRB.jpg"/>
+      <parItem name="染色体杂交PML/RARa" value="50006571" imageName="PML-RARA.jpg"/>
+      <parItem name="染色体杂交RARα" value="90009029" imageName="RARA.jpg"/>
+      <parItem name="染色体杂交RB-1" value="50006578" imageName="RB-1.jpg"/>
+      <parItem name="染色体杂交TCF3/PBX1" value="90008496" imageName="TCF3-PBX1.jpg"/>
+      <parItem name="染色体杂交TEL/AML1" value="50006572" imageName="TEL-AML1.jpg"/>
+      <parItem name="染色体杂交San_Ti8" value="50006577" imageName="SANTI8.jpg"/>
+    </parItems>
+  </lis-param>
+</lisConfig>

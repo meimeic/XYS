@@ -55,7 +55,7 @@ namespace XYS.Report.Lis.Handler
         #region 图片上传
         protected bool UploadImages(List<AbstractSubFillElement> graphList, string folderName, Dictionary<string, string> imageMap)
         {
-            WebClient wc = null;
+            WebClient wc = new WebClient();
             string boundary = GenderBoundary();
             byte[] postData = GenderPostData(graphList, boundary);
             InitWebClient(wc, boundary, postData.Length);
@@ -106,11 +106,13 @@ namespace XYS.Report.Lis.Handler
         }
         private string GenderBoundary()
         {
-            return "----------------" + DateTime.Now.Ticks.ToString("x");
+            return "--------------" + DateTime.Now.Ticks.ToString("x");
         }
         private string GenderPostHeader(string boundary, string formName, string fileName)
         {
             StringBuilder sb = new StringBuilder();
+            sb.Append("--");
+            sb.Append(boundary);
             sb.Append(SystemInfo.NewLine);
             sb.Append("Content-Disposition: form-data;");
             sb.Append("name=\"");
@@ -126,7 +128,7 @@ namespace XYS.Report.Lis.Handler
         }
         private string GenderPostFooter(string boundary)
         {
-            return boundary + "--";
+            return "--" + boundary + "--";
         }
         private void WriteImageData(byte[] imageData, string boundary, string formName, string fileName, MemoryStream stream)
         {
@@ -134,6 +136,9 @@ namespace XYS.Report.Lis.Handler
             byte[] headerBytes = Encoding.UTF8.GetBytes(postHeader);
             stream.Write(headerBytes, 0, headerBytes.Length);
             stream.Write(imageData, 0, imageData.Length);
+            //添加回车
+            byte[] LFBytes = Encoding.UTF8.GetBytes(SystemInfo.NewLine);
+            stream.Write(LFBytes, 0, LFBytes.Length);
         }
         private void WritePostFooterData(string boundary, MemoryStream stream)
         {
@@ -145,7 +150,6 @@ namespace XYS.Report.Lis.Handler
         {
             wc.BaseAddress = m_baseURI;
             wc.Encoding = Encoding.UTF8;
-            wc.Headers.Add("Content-Length", length.ToString());
             wc.Headers.Add("Content-Type", "multipart/form-data;boundary=" + boundary);
             wc.Headers.Add("Accept-Language", "utf-8");
         }

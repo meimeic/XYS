@@ -33,12 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MongoDB.Bson">
-      <HintPath>..\XYS.Report.Lis\lib\MongoDB.Bson.dll</HintPath>
-    </Reference>
-    <Reference Include="MongoDB.Driver">
-      <HintPath>..\XYS.Report.Lis\lib\MongoDB.Driver.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -86,6 +80,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\XYS.Report\XYS.Report.csproj">
+      <Project>{6e28b938-9e77-48ff-8142-db607d0f055d}</Project>
+      <Name>XYS.Report</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XYS\XYS.csproj">
       <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
       <Name>XYS</Name>

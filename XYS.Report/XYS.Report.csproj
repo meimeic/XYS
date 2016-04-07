@@ -50,12 +50,14 @@
     <Compile Include="IReportHandler.cs" />
     <Compile Include="IReportKey.cs" />
     <Compile Include="HandlerResult.cs" />
+    <Compile Include="Lis\DefaultReporter.cs" />
     <Compile Include="Lis\Handler\ReportCustomHandler.cs" />
     <Compile Include="Lis\Handler\ReportFillByDBHandler.cs" />
     <Compile Include="Lis\Handler\ReportGraphHandler.cs" />
     <Compile Include="Lis\Handler\ReportHandlerSkeleton.cs" />
     <Compile Include="Lis\Handler\ReportItemHandler.cs" />
     <Compile Include="Lis\Handler\ReportReportHandler.cs" />
+    <Compile Include="Lis\IReport.cs" />
     <Compile Include="Lis\IReporter.cs" />
     <Compile Include="Lis\LisReportPK.cs" />
     <Compile Include="Lis\Model\AbstractSubFillElement.cs" />
@@ -69,8 +71,12 @@
     <Compile Include="Lis\Persistence\DbHelperSQL.cs" />
     <Compile Include="Lis\Persistence\LisReportCommonDAL.cs" />
     <Compile Include="Lis\Persistence\LisReportPKDAL.cs" />
+    <Compile Include="Lis\Persistence\Mongo\MongoService.cs" />
     <Compile Include="Lis\Reporter.cs" />
+    <Compile Include="Lis\ReportImpl.cs" />
+    <Compile Include="Lis\ReportWrapper.cs" />
     <Compile Include="Lis\Util\ConfigManager.cs" />
+    <Compile Include="Lis\ReportManager.cs" />
     <Compile Include="Lis\Util\SubElement.cs" />
     <Compile Include="Lis\Util\SubElementMap.cs" />
     <Compile Include="Lis\Util\LisParItem.cs" />

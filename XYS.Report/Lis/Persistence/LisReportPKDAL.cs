@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Report;
+using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Persistence
 {
     public class LisReportPKDAL
@@ -27,6 +28,37 @@ namespace XYS.Report.Lis.Persistence
             }
             return result;
         }
+        public void InitReportKey(Require require,LisReportPK PK)
+        {
+            string sql = GetSQLString(require);
+            DataTable dt = GetDataTable(sql);
+            if (dt.Rows.Count > 0)
+            {
+                SetReportKey(dt.Rows[0], PK);
+            }
+        }
+        public void InitReportKey(Require require, List<LisReportPK> PKList)
+        {
+            LisReportPK temp;
+            string sql = GetSQLString(require);
+            DataTable dt = GetDataTable(sql);
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    temp = new LisReportPK();
+                    SetReportKey(dr, temp);
+                    PKList.Add(temp);
+                }
+            }
+        }
+        public void InitReportKey(Require require, ReportReportElement report)
+        {
+            LisReportPK PK = report.PK as LisReportPK;
+            InitReportKey(require, PK);
+            PK.Configured = true;
+        }
+
         protected string GetSQLString(Require require)
         {
             StringBuilder sb = new StringBuilder();

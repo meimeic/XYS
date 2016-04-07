@@ -1,27 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
   <lisConfig>
-    <lis-report>
-      <reporter-strategy-stack>
-        <reporter-strategy name="DefaultStrategy">
-          <fill-ref ref="ReportFillByDB"/>
-          <handler-ref-stack>
-            <handler-ref ref="ReportItemHandler"/>
-            <handler-ref ref="ReportCustomHandler"/>
-            <handler-ref ref="ReportGraphHandler"/>
-            <handler-ref ref="ReportReportHandler"/>
-          </handler-ref-stack>
-        </reporter-strategy>
-      </reporter-strategy-stack>
-      <fill-stack>
-        <fill name="ReportFillByDB" type="XYS.Report.Lis.Filler.ReportFillByDB"/>
-      </fill-stack>
-      <handler-stack>
-        <handler name="ReportItemHandler" type="XYS.Report.Lis.Handler.ReportItemHandler"/>
-        <handler name="ReportCustomHandler" type="XYS.Report.Lis.Handler.ReportCustomHandler"/>
-        <handler name="ReportGraphHandler" type="XYS.Report.Lis.Handler.ReportGraphHandler"/>
-        <handler name="ReportReportHandler" type="XYS.Report.Lis.Handler.ReportReportHandler"/>
-      </handler-stack>
-    </lis-report>
     <lis-param>
       <reportElements>
         <!-- ReportElement = 1,InfoElement,ItemElement,GraphElement,CustomElement,NoneElement-->

@@ -15,7 +15,7 @@ namespace XYS.Report
         private DateTime m_startDateTime; //起始日期
         private DateTime m_endDateTime; // 终止日期
 
-        private string m_orderByField;
+        //private string m_orderByField;
         private Dictionary<string, object> m_likeDictionary;
         private Dictionary<string, object> m_equalDictionary;
         private Dictionary<string, object> m_notEqualDictionary;

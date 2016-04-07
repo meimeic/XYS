@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Handler;
+using XYS.Report.Lis.Persistence;
 namespace XYS.Report.Lis
 {
     public abstract class Reporter : IReporter
@@ -30,6 +31,7 @@ namespace XYS.Report.Lis
         #region 实现IReport接口
         public string OperateReport(ReportReportElement report)
         {
+
             HandlerResult result = HandlerEvent(report);
             return result.Message;
         }
