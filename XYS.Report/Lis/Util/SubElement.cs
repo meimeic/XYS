@@ -3,7 +3,7 @@
 using XYS.Util;
 namespace XYS.Report.Lis.Util
 {
-    public class LisElement
+    public class SubElement
     {
         #region 私有字段
         private string m_name;
@@ -11,18 +11,18 @@ namespace XYS.Report.Lis.Util
         #endregion
 
         #region
-        public LisElement(Type type)
+        public SubElement(Type type)
             : this(null, type)
         { }
-        public LisElement(string typeName)
+        public SubElement(string typeName)
             : this(null, typeName)
         { }
-        public LisElement(string name, Type type)
+        public SubElement(string name, Type type)
         {
             this.m_type = type;
             this.m_name = name;
         }
-        public LisElement(string name, string typeName)
+        public SubElement(string name, string typeName)
         {
             if (string.IsNullOrEmpty(typeName))
             {

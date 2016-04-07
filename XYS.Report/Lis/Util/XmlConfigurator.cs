@@ -2,11 +2,13 @@
 using System.Xml;
 
 using XYS.Util;
-using XYS.Report.Lis.Util;
-namespace XYS.Report.Lis
+namespace XYS.Report.Lis.Util
 {
-    public class XmlLisParamConfigurator
+    public class XmlConfigurator
     {
+
+        private static readonly Type declaringType = typeof(XmlConfigurator);
+
         private static readonly string CONFIGURATION_TAG = "lis-param";
 
         private static readonly string REPORT_ELEMENTS_TAG = "reportElements";
@@ -27,26 +29,59 @@ namespace XYS.Report.Lis
         private static readonly string FILL_ELEMENTS_ATTR = "fillElements";
        // private static readonly string FILL_TAG_ATTR = "fillTag";
 
-        public XmlLisParamConfigurator()
+        public XmlConfigurator()
         {
         }
 
-        public static void ConfigSectionMap(LisSectionMap sectionMap)
+        public static void Configure(XmlElement element)
         {
-            XmlElement sectionsElement = GetTargetElement(REPORT_SECTIONS_TAG);
-            if (sectionsElement != null)
+            if (element == null)
             {
-                foreach (XmlNode node in sectionsElement.ChildNodes)
+                return;
+            }
+            string rootElementName = element.LocalName;
+            if (rootElementName != CONFIGURATION_TAG)
+            {
+                //
+                ConsoleInfo.Error(declaringType, "Xml element is - not a <" + CONFIGURATION_TAG + "> element.");
+                return;
+            }
+            foreach (XmlNode currentNode in element.ChildNodes)
+            {
+                if (currentNode.NodeType == XmlNodeType.Element)
                 {
-                    if (node.NodeType == XmlNodeType.Element)
+                    XmlElement currentElement = (XmlElement)currentNode;
+                    if (currentElement.LocalName == REPORT_ELEMENTS_TAG)
                     {
-                        XmlElement currentElement = (XmlElement)node;
-                        ConfigSection(currentElement, sectionMap);
+                        ConfigElementMap(currentElement);
+                    }
+                    else if (currentElement.LocalName == REPORT_SECTIONS_TAG)
+                    {
+                        ConfigSectionMap(currentElement);
+                    }
+                    else if (currentElement.LocalName == PAR_ITEMS_TAG)
+                    {
+ 
                     }
                 }
             }
         }
-        private static void ConfigSection(XmlElement element, LisSectionMap sectionMap)
+
+        public static void ConfigSectionMap(XmlElement element)
+        {
+            if (element != null)
+            {
+                foreach (XmlNode node in element.ChildNodes)
+                {
+                    if (node.NodeType == XmlNodeType.Element)
+                    {
+                        XmlElement currentElement = (XmlElement)node;
+                        ConfigSection(currentElement);
+                    }
+                }
+            }
+        }
+        private static void ConfigSection(XmlElement element)
         {
             if (element.LocalName == REPORT_SECTION_TAG)
             {
@@ -65,27 +100,26 @@ namespace XYS.Report.Lis
                             section.AddFillElement(ele);
                         }
                     }
-                    sectionMap.Add(section);
+                    ConfigManager.AddSection(section);
                 }
             }
         }
 
-        public static void ConfigElementMap(LisElementMap elementMap)
+        public static void ConfigElementMap(XmlElement element)
         {
-            XmlElement reportElements = GetTargetElement(REPORT_ELEMENTS_TAG);
-            if (reportElements != null)
+            if (element != null)
             {
-                foreach (XmlNode node in reportElements.ChildNodes)
+                foreach (XmlNode node in element.ChildNodes)
                 {
                     if (node.NodeType == XmlNodeType.Element)
                     {
                         XmlElement currentElement = (XmlElement)node;
-                        ConfigElement(currentElement, elementMap);
+                        ConfigElement(currentElement);
                     }
                 }
             }
         }
-        private static void ConfigElement(XmlElement element, LisElementMap elementMap)
+        private static void ConfigElement(XmlElement element)
         {
             if (element.LocalName == REPORT_ELEMENT_TAG)
             {
@@ -93,28 +127,27 @@ namespace XYS.Report.Lis
                 string typeName = element.GetAttribute(TYPE_ATTR);
                 if (!string.IsNullOrEmpty(typeName))
                 {
-                    LisElement ele = new LisElement(name, typeName);
-                    elementMap.Add(ele);
+                    SubElement ele = new SubElement(name, typeName);
+                    ConfigManager.AddSubElement(ele);
                 }
             }
         }
 
-        public static void ConfigParItemMap(LisParItemMap parItemMap)
+        public static void ConfigParItemMap(XmlElement element)
         {
-            XmlElement parItemElement = GetTargetElement(PAR_ITEMS_TAG);
-            if (parItemElement != null)
+            if (element != null)
             {
-                foreach (XmlNode node in parItemElement.ChildNodes)
+                foreach (XmlNode node in element.ChildNodes)
                 {
                     if (node.NodeType == XmlNodeType.Element)
                     {
                         XmlElement currentElement = (XmlElement)node;
-                        ConfigParItem(currentElement, parItemMap);
+                        ConfigParItem(currentElement);
                     }
                 }
             }
         }
-        private static void ConfigParItem(XmlElement element, LisParItemMap parItemMap)
+        private static void ConfigParItem(XmlElement element)
         {
             if (element.LocalName == PAR_ITEM_TAG)
             {
@@ -124,48 +157,9 @@ namespace XYS.Report.Lis
                 {
                     LisParItem parItem = new LisParItem(value, name);
                     parItem.ImageName = element.GetAttribute(IMAGE_NAME_ATTR);
-                    parItemMap.Add(parItem);
+                    ConfigManager.AddParItem(parItem);
                 }
             }
-        }
-
-        private static XmlElement GetTargetElement(string targetTag)
-        {
-            XmlElement configElement = XmlConfigurator.GetParamConfigurationElement(CONFIGURATION_TAG);
-            if (configElement != null)
-            {
-                foreach (XmlNode node in configElement.ChildNodes)
-                {
-                    if (node.NodeType == XmlNodeType.Element)
-                    {
-                        if (node.LocalName == targetTag)
-                        {
-                            return node as XmlElement;
-                        }
-                    }
-                }
-            }
-            return null;
-        }
-        private static XmlElement GetTargetElement(XmlElement sourceElement, string targetTag)
-        {
-            if (sourceElement.LocalName != CONFIGURATION_TAG)
-            {
-                //错误
-                return null;
-            }
-            foreach (XmlNode node in sourceElement.ChildNodes)
-            {
-                if (node.NodeType == XmlNodeType.Element)
-                {
-                    XmlElement element = (XmlElement)node;
-                    if (element.LocalName == targetTag)
-                    {
-                        return element;
-                    }
-                }
-            }
-            return null;
         }
 
         #region 辅助方法

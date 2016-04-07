@@ -108,10 +108,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XYS.Report.Lis\XYS.Report.Lis.csproj">
-      <Project>{d3ba9322-4f50-47ff-be2f-424ff88c0126}</Project>
-      <Name>XYS.Report.Lis</Name>
-    </ProjectReference>
     <ProjectReference Include="..\XYS\XYS.csproj">
       <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
       <Name>XYS</Name>

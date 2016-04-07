@@ -35,28 +35,7 @@ namespace XYS.Report.Lis
         }
         #endregion
 
-        #region 受保护的虚方法
-        protected virtual HandlerResult HandlerEvent(ReportReportElement element)
-        {
-            HandlerResult result = null;
-            IReportHandler handler = this.HandlerHead;
-            while (handler != null)
-            {
-                result = handler.ReportOption(element);
-                switch (result.StatusCode)
-                {
-                    case 0:
-                        return result;
-                    case 1:
-                        handler = handler.Next;
-                        break;
-                    default:
-                        handler = handler.Next;
-                        break;
-                }
-            }
-            return result;
-        }     
+        #region 受保护的虚方法    
         protected virtual void InitReporter()
         {
             IReportHandler handler = new ReportFillByDBHandler();
@@ -85,6 +64,27 @@ namespace XYS.Report.Lis
                 this.m_tailHandler.Next = handler;
                 this.m_tailHandler = handler;
             }
+        }
+        protected virtual HandlerResult HandlerEvent(ReportReportElement element)
+        {
+            HandlerResult result = null;
+            IReportHandler handler = this.HandlerHead;
+            while (handler != null)
+            {
+                result = handler.ReportOption(element);
+                switch (result.StatusCode)
+                {
+                    case 0:
+                        return result;
+                    case 1:
+                        handler = handler.Next;
+                        break;
+                    default:
+                        handler = handler.Next;
+                        break;
+                }
+            }
+            return result;
         }
         #endregion
 

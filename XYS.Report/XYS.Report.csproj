@@ -39,6 +39,7 @@
       <HintPath>lib\MongoDB.Driver.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -70,13 +71,13 @@
     <Compile Include="Lis\Persistence\LisReportPKDAL.cs" />
     <Compile Include="Lis\Reporter.cs" />
     <Compile Include="Lis\Util\ConfigManager.cs" />
-    <Compile Include="Lis\Util\LisElement.cs" />
-    <Compile Include="Lis\Util\LisElementMap.cs" />
+    <Compile Include="Lis\Util\SubElement.cs" />
+    <Compile Include="Lis\Util\SubElementMap.cs" />
     <Compile Include="Lis\Util\LisParItem.cs" />
     <Compile Include="Lis\Util\LisParItemMap.cs" />
     <Compile Include="Lis\Util\LisSection.cs" />
     <Compile Include="Lis\Util\LisSectionMap.cs" />
-    <Compile Include="Lis\XmlLisParamConfigurator.cs" />
+    <Compile Include="Lis\Util\XmlConfigurator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Require.cs" />
   </ItemGroup>

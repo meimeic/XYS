@@ -2,6 +2,8 @@
 
 using XYS.Report;
 using XYS.Common;
+
+using MongoDB.Bson.Serialization.Attributes;
 namespace XYS.Report.Lis.Model
 {
     public class ReportItemElement : AbstractSubFillElement, IComparable<ReportItemElement>

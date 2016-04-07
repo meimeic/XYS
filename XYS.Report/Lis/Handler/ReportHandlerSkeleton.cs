@@ -29,7 +29,7 @@ namespace XYS.Report.Lis.Handler
         {
             get { return this.m_handlerName; }
         }
-        public virtual HandlerResult ReportOptions(IReportElement report)
+        public virtual HandlerResult ReportOption(IReportElement report)
         {
             ReportReportElement rep = report as ReportReportElement;
             if (rep != null)

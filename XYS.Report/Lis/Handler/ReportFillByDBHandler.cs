@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Common;
+using XYS.Report.Lis.Util;
 using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Persistence;
 namespace XYS.Report.Lis.Handler
