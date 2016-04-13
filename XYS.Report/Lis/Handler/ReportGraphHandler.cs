@@ -5,17 +5,19 @@ using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 
-using XYS.Util;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;  
 
+using XYS.Util;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
     public class ReportGraphHandler : ReportHandlerSkeleton
     {
         #region 字段
-        private static readonly string m_baseURI = "http://10.1.10.245:8090";
-        private static readonly string m_defaultHandlerName = "ReportGraphHandler";
         private readonly Hashtable m_normalImageUri;
+        private static readonly string m_baseURI = "http://10.1.11.10:8090";
+        private static readonly string m_defaultHandlerName = "ReportGraphHandler";
         #endregion
 
         #region 构造函数
@@ -36,11 +38,9 @@ namespace XYS.Report.Lis.Handler
             List<AbstractSubFillElement> graphList = report.GetReportItem(typeof(ReportGraphElement));
             if (IsExist(graphList))
             {
-                Dictionary<string, string> imageMap = new Dictionary<string, string>(4);
-                bool result = UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), imageMap);
+                bool result = UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), report.ReportImageMap);
                 if (result)
                 {
-                    report.ReportImageMap = imageMap;
                     return new HandlerResult();
                 }
                 else
@@ -53,31 +53,91 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 图片上传
-        protected bool UploadImages(List<AbstractSubFillElement> graphList, string folderName, Dictionary<string, string> imageMap)
+        protected bool UploadImages(List<AbstractSubFillElement> graphList, string folder, Dictionary<string, string> imageMap)
         {
             WebClient wc = new WebClient();
+
+            //多张图片上传
             string boundary = GenderBoundary();
             byte[] postData = GenderPostData(graphList, boundary);
-            InitWebClient(wc, boundary, postData.Length);
+            InitWebClient(wc, boundary, folder);
             try
             {
-                byte[] respose = wc.UploadData("/upload/lis", "POST", postData);
+                byte[] respose = wc.UploadData("/upload", "POST", postData);
+                string res = Encoding.UTF8.GetString(respose);
+                List<WebResult> resList = JsonConvert.DeserializeObject<List<WebResult>>(res);
+                foreach(WebResult wr in resList)
+                {
+                    if (wr.code == 0)
+                    {
+                        imageMap.Add(wr.name, wr.imageUrl);
+                    }
+                }
                 return true;
             }
             catch (Exception ex)
             {
                 return false;
             }
+
+
+            //单张图片上传
+            //byte[] postData = null;
+            //string boundary = null;
+            //string imageName = null;
+            //ReportGraphElement rge = null;
+            //foreach (AbstractSubFillElement element in graphList)
+            //{
+            //    rge = element as ReportGraphElement;
+            //    if (rge != null)
+            //    {
+            //        imageName = rge.GraphName;
+            //        boundary = GenderBoundary();
+            //        InitWebClient(wc, boundary, folder);
+            //        postData = GenderPostData(rge, boundary);
+            //        try
+            //        {
+            //            byte[] respose = wc.UploadData("/upload/lis", "POST", postData);
+            //            string res = Encoding.UTF8.GetString(respose);
+            //            string[] ress = res.Split(new char[] { ';' });
+            //            if (ress.Length > 0)
+            //            {
+            //                if (ress[0].Equals("0"))
+            //                {
+            //                    imageMap.Add(imageName, ress[1]);
+            //                }
+            //            }
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //        }
+            //    }
+            //}
         }
         private string GenderGUIDName()
         {
-            return SystemInfo.NewGuid().ToString() + ".jpg";
+            return SystemInfo.NewGuid().ToString();
         }
+        //单张图片上传
+        private byte[] GenderPostData(ReportGraphElement graph, string boundary)
+        {
+            string fileName = GenderGUIDName();
+            MemoryStream stream = new MemoryStream();
+
+            WriteImageData(graph.GraphImage, boundary, "graph", fileName, stream);
+            WritePostFooterData(boundary, stream);
+
+            stream.Position = 0;
+            byte[] postBuffer = new byte[stream.Length];
+            stream.Read(postBuffer, 0, postBuffer.Length);
+            stream.Close();
+
+            return postBuffer;
+        }
+        //多张图片上传
         private byte[] GenderPostData(List<AbstractSubFillElement> graphList, string boundary)
         {
-            int imageSeque = 1;
             string fileName = null;
-            string formName = null;
             ReportGraphElement rge = null;
             MemoryStream stream = new MemoryStream();
             foreach (AbstractSubFillElement element in graphList)
@@ -86,9 +146,7 @@ namespace XYS.Report.Lis.Handler
                 if (rge != null)
                 {
                     fileName = GenderGUIDName();
-                    formName = GenderFormName(imageSeque);
-                    WriteImageData(rge.GraphImage, boundary, formName, fileName, stream);
-                    imageSeque++;
+                    WriteImageData(rge.GraphImage, boundary, rge.GraphName, fileName, stream);
                 }
             }
             WritePostFooterData(boundary, stream);
@@ -97,7 +155,6 @@ namespace XYS.Report.Lis.Handler
             byte[] postBuffer = new byte[stream.Length];
             stream.Read(postBuffer, 0, postBuffer.Length);
             stream.Close();
-            //
             return postBuffer;
         }
         private string GenderFormName(int i)
@@ -121,7 +178,7 @@ namespace XYS.Report.Lis.Handler
             sb.Append(fileName);
             sb.Append("\"");
             sb.Append(SystemInfo.NewLine);
-            sb.Append("Content-Type:image/jpg");
+            sb.Append("Content-Type:image/jpeg");
             sb.Append(SystemInfo.NewLine);
             sb.Append(SystemInfo.NewLine);
             return sb.ToString();
@@ -146,12 +203,25 @@ namespace XYS.Report.Lis.Handler
             byte[] footerBytes = Encoding.UTF8.GetBytes(postFooter);
             stream.Write(footerBytes, 0, footerBytes.Length);
         }
-        private void InitWebClient(WebClient wc, string boundary, int length)
+        private void InitWebClient(WebClient wc, string boundary, string folder)
         {
             wc.BaseAddress = m_baseURI;
             wc.Encoding = Encoding.UTF8;
-            wc.Headers.Add("Content-Type", "multipart/form-data;boundary=" + boundary);
-            wc.Headers.Add("Accept-Language", "utf-8");
+            wc.Headers.Set("Content-Type", "multipart/form-data;boundary=" + boundary);
+            wc.Headers.Set("Accept-Language", "utf-8");
+            wc.QueryString.Set("folder", folder);
+        }
+        #endregion
+
+        #region 内部类
+        class WebResult {
+            WebResult()
+            {
+            }
+            public int code { get; set; }
+            public string name { get; set; }
+            public string imageUrl { get; set; }
+            public string message { get; set; }
         }
         #endregion
     }

@@ -1,8 +1,10 @@
-﻿using XYS.Report;
+﻿using System;
+
+using XYS.Report;
 using XYS.Common;
 namespace XYS.Report.Lis.Model
 {
-    public class ReportGraphElement : AbstractSubFillElement
+    public class ReportGraphElement : AbstractSubFillElement,IComparable<ReportGraphElement>
     {
         #region 私有字段
         private string m_graphName;
@@ -29,5 +31,19 @@ namespace XYS.Report.Lis.Model
             set { this.m_graphImage = value; }
         }
         #endregion
+
+       #region 实现比较方法
+        public int CompareTo(ReportGraphElement element)
+        {
+            if (element == null)
+            {
+                return 1;
+            }
+            else
+            {
+                return this.GraphName.CompareTo(element.GraphName);
+            }
+        }
+       #endregion
     }
 }

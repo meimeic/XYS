@@ -38,6 +38,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -56,6 +60,7 @@
     <Compile Include="Lis\Handler\ReportGraphHandler.cs" />
     <Compile Include="Lis\Handler\ReportHandlerSkeleton.cs" />
     <Compile Include="Lis\Handler\ReportItemHandler.cs" />
+    <Compile Include="Lis\Handler\ReportMongoHandler.cs" />
     <Compile Include="Lis\Handler\ReportReportHandler.cs" />
     <Compile Include="Lis\IReport.cs" />
     <Compile Include="Lis\IReporter.cs" />
@@ -66,6 +71,7 @@
     <Compile Include="Lis\Model\ReportGraphElement.cs" />
     <Compile Include="Lis\Model\ReportItemElement.cs" />
     <Compile Include="Lis\Model\ReportReportElement.cs" />
+    <Compile Include="Lis\MongoReporter.cs" />
     <Compile Include="Lis\Persistence\CommonDAL.cs" />
     <Compile Include="Lis\Persistence\DbHelperOleDb.cs" />
     <Compile Include="Lis\Persistence\DbHelperSQL.cs" />
@@ -104,6 +110,11 @@
     <Content Include="lib\MongoDB.Driver.Legacy.dll" />
     <Content Include="lib\MongoDB.Driver.Legacy.xml" />
     <Content Include="lib\MongoDB.Driver.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

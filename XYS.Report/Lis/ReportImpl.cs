@@ -27,22 +27,67 @@ namespace XYS.Report.Lis
         #endregion
 
         #region 实现ireport接口
-        public string operate(ReportReportElement report)
+        public HandlerResult operate(ReportReportElement report)
         {
             return this.Reporter.OperateReport(report);
         }
-
-        public string operate(Require req, ReportReportElement report)
+        public List<ReportReportElement> GetReports(Require req)
         {
-            InitReportPK(req, report);
-            return operate(report);
+            ReportReportElement rre = null;
+            List<LisReportPK> PKList = new List<LisReportPK>();
+            List<ReportReportElement> reportList = new List<ReportReportElement>();
+            InitReportPK(req, PKList);
+            if (PKList.Count > 0)
+            {
+                foreach (LisReportPK pk in PKList)
+                {
+                    rre = new ReportReportElement();
+                    rre.LisPK = pk;
+                    reportList.Add(rre);
+                }
+            }
+            return reportList;
+        }
+        public List<ReportReportElement> GetReports(string where)
+        {
+            ReportReportElement rre = null;
+            List<LisReportPK> PKList = new List<LisReportPK>();
+            List<ReportReportElement> reportList = new List<ReportReportElement>();
+            InitReportPK(where, PKList);
+            if (PKList.Count > 0)
+            {
+                foreach (LisReportPK pk in PKList)
+                {
+                    rre = new ReportReportElement();
+                    rre.LisPK = pk;
+                    reportList.Add(rre);
+                }
+            }
+            return reportList;
+        }
+
+        public List<LisReportPK> GetReportPK(Require req)
+        {
+            List<LisReportPK> PKList = new List<LisReportPK>();
+            InitReportPK(req, PKList);
+            return PKList;
+        }
+        public List<LisReportPK> GetReportPK(string where)
+        {
+            List<LisReportPK> PKList = new List<LisReportPK>();
+            InitReportPK(where, PKList);
+            return PKList;
         }
         #endregion
 
         #region 私有方法
-        private void InitReportPK(Require req,ReportReportElement report)
+        private void InitReportPK(Require req, List<LisReportPK> PKList)
         {
-            this.PKDAL.InitReportKey(req,report);
+            this.PKDAL.InitReportKey(req, PKList);
+        }
+        private void InitReportPK(string where, List<LisReportPK> PKList)
+        {
+            this.PKDAL.InitReportKey(where, PKList);
         }
         #endregion
     }

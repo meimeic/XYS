@@ -52,25 +52,21 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类抽象方法
         protected override HandlerResult OperateReport(ReportReportElement report)
         {
-            if (report.PK.Configured)
+            LisReportPK PK = report.LisPK;
+            //填充报告
+            FillReportElement(report, PK);
+            //填充子项
+            List<Type> availableElementList = this.GetAvailableInsideElements(PK);
+            if (availableElementList != null && availableElementList.Count > 0)
             {
-                LisReportPK PK = report.PK as LisReportPK;
-                //填充报告
-                FillReportElement(report, PK);
-                //填充子项
-                List<Type> availableElementList = this.GetAvailableInsideElements(PK);
-                if (availableElementList != null && availableElementList.Count > 0)
+                List<AbstractSubFillElement> tempList = null;
+                foreach (Type type in availableElementList)
                 {
-                    List<AbstractSubFillElement> tempList = null;
-                    foreach (Type type in availableElementList)
-                    {
-                        tempList = report.GetReportItem(type);
-                        FillSubElements(tempList, PK, type);
-                    }
+                    tempList = report.GetReportItem(type);
+                    FillSubElements(tempList, PK, type);
                 }
-                return new HandlerResult();
             }
-            return new HandlerResult(0, "this report search key is not config!");
+            return new HandlerResult();
         }
         #endregion
 

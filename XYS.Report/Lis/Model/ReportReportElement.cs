@@ -16,6 +16,7 @@ namespace XYS.Report.Lis.Model
         #region 私有实例字段
         private LisReportPK m_reportPK;
 
+        private int m_final;
         private string m_reportID;
 
         private int m_sectionNo;
@@ -71,15 +72,16 @@ namespace XYS.Report.Lis.Model
         public ReportReportElement()
         {
             this.m_remarkFlag = 0;
-            this.m_reportImageMap = null;
-            this.m_reportCustomCollection = null;
             this.m_reportPK = new LisReportPK();
+            this.m_reportImageMap = new Dictionary<string, string>(4);
             this.m_reportItemCollection = new List<ReportItemElement>(20);
+            this.m_reportCustomCollection = new List<ReportCustomElement>(2);
             this.m_reportItemTable = SystemInfo.CreateCaseInsensitiveHashtable(3);
         }
         #endregion
 
         #region 实现IReportElement接口
+        [BsonIgnore]
         public IReportKey PK
         {
             get { return this.m_reportPK; }
@@ -88,30 +90,35 @@ namespace XYS.Report.Lis.Model
 
         #region 实现IPatientElement接口
         [Column]
+        [BsonElement(Order = 1)]
         public string PatientName
         {
             get { return this.m_patientName; }
             set { this.m_patientName = value; }
         }
         [Column]
+        [BsonElement(Order = 2)]
         public string GenderName
         {
             get { return this.m_genderName; }
             set { this.m_genderName = value; }
         }
         [Column]
+        [BsonElement(Order = 3)]
         public string AgeStr
         {
             get { return this.m_ageStr; }
             set { this.m_ageStr = value; }
         }
         [Column]
+        [BsonElement(Order = 5)]
         public string PatientID
         {
             get { return this.m_pid; }
             set { this.m_pid = value; }
         }
         [Column]
+        [BsonElement(Order = 6)]
         public string ClinicName
         {
             get { return this.m_clinicName; }
@@ -120,8 +127,21 @@ namespace XYS.Report.Lis.Model
         #endregion
 
         #region 实例属性
-        [BsonId]
+        [BsonIgnore]
+        public LisReportPK LisPK
+        {
+            get { return this.m_reportPK; }
+            set { this.m_reportPK = value; }
+        }
+
+        [BsonElement(Order = 34)]
+        public int Final
+        {
+            get { return m_final; }
+            set { m_final = value; }
+        }
         [Column]
+        [BsonElement(Order = 13)]
         public string ReportID
         {
             get { return this.m_reportID; }
@@ -129,12 +149,14 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
+        [BsonElement(Order = 15)]
         public int SectionNo
         {
             get { return this.m_sectionNo; }
             set { this.m_sectionNo = value; }
         }
         [Column]
+        [BsonElement(Order = 14)]
         public string SerialNo
         {
             get { return this.m_serialNo; }
@@ -142,18 +164,21 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
+        [BsonElement(Order = 16)]
         public string SampleNo
         {
             get { return this.m_sampleNo; }
             set { this.m_sampleNo = value; }
         }
         [Column]
+        [BsonElement(Order = 17)]
         public int SampleTypeNo
         {
             get { return this.m_sampleTypeNo; }
             set { this.m_sampleTypeNo = value; }
         }
         [Column]
+        [BsonElement(Order = 18)]
         public string SampleTypeName
         {
             get { return this.m_sampleTypeName; }
@@ -161,18 +186,21 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
+        [BsonElement(Order = 28)]
         public string FormMemo
         {
             get { return this.m_formMemo; }
             set { this.m_formMemo = value; }
         }
         [Column]
+        [BsonElement(Order = 29)]
         public string FormComment
         {
             get { return this.m_formComment; }
             set { this.m_formComment = value; }
         }
         [Column]
+        [BsonElement(Order = 30)]
         public string FormComment2
         {
             get { return this.m_formComment2; }
@@ -180,24 +208,28 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
+        [BsonElement(Order = 26)]
         public string Technician
         {
             get { return this.m_technician; }
             set { this.m_technician = value; }
         }
         [Column]
+        [BsonElement(Order = 27)]
         public string Checker
         {
             get { return this.m_checker; }
             set { this.m_checker = value; }
         }
 
+        [BsonElement(Order = 33)]
         public string ReportTitle
         {
             get { return this.m_reportTitle; }
             set { this.m_reportTitle = value; }
         }
         [Column]
+        [BsonElement(Order = 31)]
         public string ParItemName
         {
             get { return this.m_parItemName; }
@@ -211,6 +243,7 @@ namespace XYS.Report.Lis.Model
             get { return this.m_remarkFlag; }
             set { this.m_remarkFlag = value; }
         }
+        [BsonElement(Order = 32)]
         public string Remark
         {
             get { return this.m_remark; }
@@ -218,96 +251,121 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
+        [BsonElement(Order = 19)]
         public DateTime ReceiveDateTime
         {
             get { return this.m_receiveDateTime; }
             set { this.m_receiveDateTime = value; }
         }
         [Column]
+        [BsonElement(Order = 20)]
         public DateTime CollectDateTime
         {
             get { return this.m_collectDateTime; }
             set { this.m_collectDateTime = value; }
         }
         [Column]
+        [BsonElement(Order = 21)]
         public DateTime InceptDateTime
         {
             get { return m_inceptDateTime; }
             set { m_inceptDateTime = value; }
         }
         [Column]
+        [BsonElement(Order = 22)]
         public DateTime TestDateTime
         {
             get { return m_testDateTime; }
             set { m_testDateTime = value; }
         }
         [Column]
+        [BsonElement(Order = 23)]
         public DateTime CheckDateTime
         {
             get { return m_checkDateTime; }
             set { m_checkDateTime = value; }
         }
         [Column]
+        [BsonElement(Order = 24)]
         public DateTime SecondeCheckDateTime
         {
             get { return m_secondCheckDateTime; }
             set { m_secondCheckDateTime = value; }
         }
+        [BsonElement(Order = 25)]
+        public DateTime CreateDateTime
+        {
+            get { return DateTime.Now; }
+        }
 
         [Column]
+        [BsonElement(Order = 4)]
         public string CID
         {
             get { return this.m_cid; }
             set { this.m_cid = value; }
         }
         [Column]
+        [BsonElement(Order = 7)]
         public int VisitTimes
         {
             get { return this.m_visitTimes; }
             set { this.m_visitTimes = value; }
         }
         [Column]
+        [BsonElement(Order = 8)]
         public string BedNo
         {
             get { return this.m_bedNo; }
             set { this.m_bedNo = value; }
         }
         [Column]
+        [BsonElement(Order = 9)]
         public string DeptName
         {
             get { return this.m_deptName; }
             set { this.m_deptName = value; }
         }
         [Column]
+        [BsonElement(Order = 10)]
         public string Doctor
         {
             get { return this.m_doctor; }
             set { this.m_doctor = value; }
         }
         [Column]
+        [BsonElement(Order = 11)]
         public string ClinicalDiagnosis
         {
             get { return this.m_clinicalDiagnosis; }
             set { this.m_clinicalDiagnosis = value; }
         }
         [Column]
+        [BsonElement(Order = 12)]
         public string Explanation
         {
             get { return this.m_explanation; }
             set { this.m_explanation = value; }
         }
 
+        [BsonElement(Order = 35)]
         [BsonDictionaryOptions(DictionaryRepresentation.Document)]
         public Dictionary<string, string> ReportImageMap
         {
             get { return this.m_reportImageMap; }
             set { this.m_reportImageMap = value; }
         }
-
+        [BsonElement(Order = 36)]
         public List<ReportItemElement> ReportItemCollection
         {
             get { return this.m_reportItemCollection; }
             set { this.m_reportItemCollection = value; }
+        }
+        [BsonElement(Order = 37)]
+        public List<ReportCustomElement> ReportCustomCollection
+        {
+            get { return this.m_reportCustomCollection; }
+            set { this.m_reportCustomCollection = value; }
         }
         #endregion
 
@@ -317,7 +375,12 @@ namespace XYS.Report.Lis.Model
         }
         public void Clear()
         {
+            this.ReportImageMap.Clear();
             this.m_reportItemTable.Clear();
+            this.ReportItemCollection.Clear();
+            this.ReportCustomCollection.Clear();
+            //非填充项清空
+            this.LisPK = null;
             this.ReportTitle = "";
             this.RemarkFlag = 0;
             this.Remark = "";

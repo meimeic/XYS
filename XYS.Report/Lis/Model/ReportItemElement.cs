@@ -29,6 +29,7 @@ namespace XYS.Report.Lis.Model
 
         #region 公共属性
         [Column]
+        [BsonElement(Order = 1)]
         public int ItemNo
         {
             get { return this.m_itemNo; }
@@ -36,6 +37,7 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
+        [BsonElement(Order = 2)]
         public int ParItemNo
         {
             get { return this.m_parItemNo; }
@@ -43,6 +45,7 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
+        [BsonElement(Order = 3)]
         public string ItemCName
         {
             get { return this.m_itemCName; }
@@ -50,6 +53,7 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
+        [BsonElement(Order = 4)]
         public string ItemEName
         {
             get { return this.m_itemEName; }
@@ -57,6 +61,7 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
+        [BsonElement(Order = 5)]
         public string ItemResult
         {
             get { return this.m_itemResult; }
@@ -64,6 +69,7 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
+        [BsonElement(Order = 6)]
         public string ResultStatus
         {
             get { return this.m_resultStatus; }
@@ -71,6 +77,7 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
+        [BsonElement(Order = 7)]
         public string ItemUnit
         {
             get { return this.m_itemUnit; }
@@ -78,6 +85,7 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
+        [BsonElement(Order = 8)]
         public string RefRange
         {
             get { return this.m_refRange; }
@@ -85,6 +93,7 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
+        [BsonElement(Order = 9)]
         public int DispOrder
         {
             get { return this.m_dispOrder; }

@@ -13,7 +13,7 @@ namespace XYS.Report.Lis
             IReport impl = ReportMap[type] as IReport;
             if (impl == null)
             {
-                DefaultReporter reporter = new DefaultReporter();
+                IReporter reporter = new MongoReporter();
                 impl = new ReportImpl(reporter);
                 ReportMap[type] = impl;
             }

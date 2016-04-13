@@ -7,7 +7,7 @@ namespace XYS.Report.Lis
         public DefaultReporter()
             : base()
         {
-
+            this.InitReporter();
         }
     }
 }

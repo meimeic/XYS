@@ -6,7 +6,10 @@ namespace XYS.Report.Lis
 {
     public interface IReport
     {
-        string operate(ReportReportElement report);
-        string operate(Require req, ReportReportElement report);
+        HandlerResult operate(ReportReportElement report);
+        List<ReportReportElement> GetReports(Require req);
+        List<ReportReportElement> GetReports(string where);
+        List<LisReportPK> GetReportPK(Require req);
+        List<LisReportPK> GetReportPK(string where);
     }
 }

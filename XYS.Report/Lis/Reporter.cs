@@ -17,7 +17,6 @@ namespace XYS.Report.Lis
         #region 构造函数
         protected Reporter()
         {
-            this.InitReporter();
         }
         #endregion
 
@@ -29,11 +28,13 @@ namespace XYS.Report.Lis
         #endregion
 
         #region 实现IReport接口
-        public string OperateReport(ReportReportElement report)
+        public HandlerResult OperateReport(ReportReportElement report)
         {
-
-            HandlerResult result = HandlerEvent(report);
-            return result.Message;
+            if (report.LisPK == null || !report.LisPK.Configured)
+            {
+                return new HandlerResult(0, "search key is null or not config");
+            }
+            return HandlerEvent(report);
         }
         #endregion
 
@@ -67,7 +68,7 @@ namespace XYS.Report.Lis
                 this.m_tailHandler = handler;
             }
         }
-        protected virtual HandlerResult HandlerEvent(ReportReportElement element)
+        protected HandlerResult HandlerEvent(ReportReportElement element)
         {
             HandlerResult result = null;
             IReportHandler handler = this.HandlerHead;

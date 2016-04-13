@@ -11,30 +11,14 @@ namespace XYS.Report.Lis.Persistence
 {
     public class LisReportPKDAL
     {
-        public List<LisReportPK> GetReportKey(Require require)
-        {
-            LisReportPK temp;
-            List<LisReportPK> result = new List<LisReportPK>();
-            string sql = GetSQLString(require);
-            DataTable dt = GetDataTable(sql);
-            if (dt.Rows.Count > 0)
-            {
-                foreach (DataRow dr in dt.Rows)
-                {
-                    temp = new LisReportPK();
-                    SetReportKey(dr, temp);
-                    result.Add(temp);
-                }
-            }
-            return result;
-        }
-        public void InitReportKey(Require require,LisReportPK PK)
+        public void InitReportKey(Require require, LisReportPK PK)
         {
             string sql = GetSQLString(require);
             DataTable dt = GetDataTable(sql);
             if (dt.Rows.Count > 0)
             {
                 SetReportKey(dt.Rows[0], PK);
+                PK.Configured = true;
             }
         }
         public void InitReportKey(Require require, List<LisReportPK> PKList)
@@ -48,17 +32,32 @@ namespace XYS.Report.Lis.Persistence
                 {
                     temp = new LisReportPK();
                     SetReportKey(dr, temp);
+                    temp.Configured = true;
                     PKList.Add(temp);
                 }
             }
         }
-        public void InitReportKey(Require require, ReportReportElement report)
+        public void InitReportKey(string where,List<LisReportPK> PKList)
         {
-            LisReportPK PK = report.PK as LisReportPK;
-            InitReportKey(require, PK);
-            PK.Configured = true;
+            LisReportPK temp = null;
+            string sql = GetSQLString(where);
+            DataTable dt = GetDataTable(sql);
+            if (dt.Rows.Count > 0)
+            {
+                foreach (DataRow dr in dt.Rows)
+                {
+                    temp = new LisReportPK();
+                    SetReportKey(dr, temp);
+                    temp.Configured = true;
+                    PKList.Add(temp);
+                }
+            }
         }
 
+        protected string GetSQLString(string where)
+        {
+            return "select receivedate,sectionno,testtypeno,sampleno from reportform " + where;
+        }
         protected string GetSQLString(Require require)
         {
             StringBuilder sb = new StringBuilder();

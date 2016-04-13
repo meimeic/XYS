@@ -22,21 +22,26 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类方法
-        protected override HandlerResult OperateReport(ReportReportElement rre)
+        protected override HandlerResult OperateReport(ReportReportElement report)
         {
             //formmemo 处理
-            if (rre.SectionNo == 10)
+            if (report.SectionNo == 10)
             {
-                if (rre.FormMemo != null)
+                if (report.FormMemo != null)
                 {
-                    rre.FormMemo = rre.FormMemo.Replace(";", SystemInfo.NewLine);
+                    report.FormMemo = report.FormMemo.Replace(";", SystemInfo.NewLine);
                 }
             }
             //cid 处理
-            if (rre.CID != null)
+            if (report.CID != null)
             {
-                rre.CID = rre.CID.Trim();
+                report.CID = report.CID.Trim();
             }
+
+            //reportitem排序
+            report.ReportItemCollection.Sort();
+
+            //返回值
             return new HandlerResult();
         }
         #endregion
