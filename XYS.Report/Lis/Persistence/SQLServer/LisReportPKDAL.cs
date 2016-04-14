@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 using XYS.Report;
 using XYS.Report.Lis.Model;
-namespace XYS.Report.Lis.Persistence
+namespace XYS.Report.Lis.Persistence.SQLServer
 {
     public class LisReportPKDAL
     {

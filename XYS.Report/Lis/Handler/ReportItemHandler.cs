@@ -39,6 +39,12 @@ namespace XYS.Report.Lis.Handler
                     {
                         continue;
                     }
+                    //
+                    if (!report.SuperItemList.Contains(rie.ParItemNo))
+                    {
+                        report.SuperItemList.Add(rie.ParItemNo);
+                    }
+                    //
                     report.ReportItemCollection.Add(rie);
                 }
             }

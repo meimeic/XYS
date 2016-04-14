@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 using XYS.Common;
 using XYS.Report.Lis.Model;
-namespace XYS.Report.Lis.Persistence
+namespace XYS.Report.Lis.Persistence.SQLServer
 {
     public class LisReportCommonDAL
     {

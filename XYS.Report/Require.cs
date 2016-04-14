@@ -5,7 +5,7 @@ namespace XYS.Report
 {
     public class Require
     {
-        private readonly static int TOP = 100;
+        private readonly static int TOP = 10000;
         private readonly static int m_defaultInterval = 30;
 
         private int m_max;// 最大记录数

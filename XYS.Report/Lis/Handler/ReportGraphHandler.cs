@@ -14,9 +14,10 @@ namespace XYS.Report.Lis.Handler
 {
     public class ReportGraphHandler : ReportHandlerSkeleton
     {
-        #region 字段
+        #region 私有字段
         private readonly Hashtable m_normalImageUri;
-        private static readonly string m_baseURI = "http://10.1.11.10:8090";
+        private static readonly string  ImageServer="http://static.xys.com";
+        private static readonly string UploadUri = "http://10.1.11.10:8090";
         private static readonly string m_defaultHandlerName = "ReportGraphHandler";
         #endregion
 
@@ -29,6 +30,7 @@ namespace XYS.Report.Lis.Handler
             : base(handlerName)
         {
             this.m_normalImageUri = new Hashtable(20);
+            this.InitNormalImageUriTable();
         }
         #endregion
 
@@ -41,6 +43,10 @@ namespace XYS.Report.Lis.Handler
                 bool result = UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), report.ReportImageMap);
                 if (result)
                 {
+                    if (report.SectionNo == 11)
+                    {
+                        AddNormalImageBySuperItem(report.SuperItemList, report.ReportImageMap);
+                    }
                     return new HandlerResult();
                 }
                 else
@@ -65,12 +71,19 @@ namespace XYS.Report.Lis.Handler
             {
                 byte[] respose = wc.UploadData("/upload", "POST", postData);
                 string res = Encoding.UTF8.GetString(respose);
-                List<WebResult> resList = JsonConvert.DeserializeObject<List<WebResult>>(res);
-                foreach(WebResult wr in resList)
+                List<WebImage> resList = JsonConvert.DeserializeObject<List<WebImage>>(res);
+                foreach (WebImage wi in resList)
                 {
-                    if (wr.code == 0)
+                    if (string.IsNullOrEmpty(wi.Path))
                     {
-                        imageMap.Add(wr.name, wr.imageUrl);
+                        if (wi.Path[0] == '/')
+                        {
+                            imageMap.Add(wi.Name, ImageServer + wi.Path);
+                        }
+                        else
+                        {
+                            imageMap.Add(wi.Name, ImageServer + "/" + wi.Path);
+                        }
                     }
                 }
                 return true;
@@ -205,7 +218,7 @@ namespace XYS.Report.Lis.Handler
         }
         private void InitWebClient(WebClient wc, string boundary, string folder)
         {
-            wc.BaseAddress = m_baseURI;
+            wc.BaseAddress = UploadUri;
             wc.Encoding = Encoding.UTF8;
             wc.Headers.Set("Content-Type", "multipart/form-data;boundary=" + boundary);
             wc.Headers.Set("Accept-Language", "utf-8");
@@ -213,15 +226,72 @@ namespace XYS.Report.Lis.Handler
         }
         #endregion
 
+        #region 私有方法
+        private void InitNormalImageUriTable()
+        {
+            this.m_normalImageUri.Clear();
+            this.m_normalImageUri.Add(50006570, "/image/lis/report/normal/AML1-ETO.jpg");
+            this.m_normalImageUri.Add(90009363, "/image/lis/report/normal/ATM-CEP11.jpg");
+            this.m_normalImageUri.Add(90008499, "/image/lis/report/normal/BCL2.jpg");
+            this.m_normalImageUri.Add(90008738, "/image/lis/report/normal/BCL6.jpg");
+            this.m_normalImageUri.Add(50006569, "/image/lis/report/normal/BCR-ABL.jpg");
+            this.m_normalImageUri.Add(90009026, "/image/lis/report/normal/BCR-ABL-ASS1.jpg");
+            this.m_normalImageUri.Add(50006576, "/image/lis/report/normal/CBFB.jpg");
+            this.m_normalImageUri.Add(50006583, "/image/lis/report/normal/CCND1-IgH.jpg");
+            this.m_normalImageUri.Add(90009367, "/image/lis/report/normal/CDKN2A.jpg");
+            this.m_normalImageUri.Add(90008735, "/image/lis/report/normal/CEP12.jpg");
+            this.m_normalImageUri.Add(90008495, "/image/lis/report/normal/D7S486-CEP7.jpg");
+            this.m_normalImageUri.Add(50006573, "/image/lis/report/normal/CEPX-CEPY.jpg");
+            this.m_normalImageUri.Add(90008729, "/image/lis/report/normal/CKS1B-CDKN2C.jpg");
+            this.m_normalImageUri.Add(90009373, "/image/lis/report/normal/CRLF2.jpg");
+            this.m_normalImageUri.Add(90009370, "/image/lis/report/normal/D13S319.jpg");
+            this.m_normalImageUri.Add(90008497, "/image/lis/report/normal/D20S108.jpg");
+            this.m_normalImageUri.Add(90008494, "/image/lis/report/normal/EGR1-D5S721.jpg");
+            this.m_normalImageUri.Add(90008741, "/image/lis/report/normal/EVI1.jpg");
+            this.m_normalImageUri.Add(90008730, "/image/lis/report/normal/FGFR1-D8Z2.jpg");
+            this.m_normalImageUri.Add(50006574, "/image/lis/report/normal/IgH.jpg");
+            this.m_normalImageUri.Add(90009041, "/image/lis/report/normal/IGH-BCL2.jpg");
+            this.m_normalImageUri.Add(50006582, "/image/lis/report/normal/FGFR3-IgH.jpg");
+            this.m_normalImageUri.Add(50006581, "/image/lis/report/normal/MAF-IgH.jpg");
+            this.m_normalImageUri.Add(90009364, "/image/lis/report/normal/IGH-MAFB.jpg");
+            this.m_normalImageUri.Add(90009038, "/image/lis/report/normal/IGH-MYC.jpg");
+            this.m_normalImageUri.Add(50006575, "/image/lis/report/normal/MLL.jpg");
+            this.m_normalImageUri.Add(50006579, "/image/lis/report/normal/MYC.jpg");
+            this.m_normalImageUri.Add(90008744, "/image/lis/report/normal/MYC.jpg");
+            this.m_normalImageUri.Add(90009376, "/image/lis/report/normal/P2RY8.jpg");
+            this.m_normalImageUri.Add(90009362, "/image/lis/report/normal/P53-CEP17.jpg");
+            this.m_normalImageUri.Add(90009032, "/image/lis/report/normal/PDGFRA.jpg");
+            this.m_normalImageUri.Add(90009035, "/image/lis/report/normal/PDGFRB.jpg");
+            this.m_normalImageUri.Add(50006571, "/image/lis/report/normal/PML-RARA.jpg");
+            this.m_normalImageUri.Add(90009029, "/image/lis/report/normal/RARA.jpg");
+            this.m_normalImageUri.Add(50006578, "/image/lis/report/normal/RB-1.jpg");
+            this.m_normalImageUri.Add(90008496, "/image/lis/report/normal/TCF3-PBX1.jpg");
+            this.m_normalImageUri.Add(50006572, "/image/lis/report/normal/TEL-AML1.jpg");
+            this.m_normalImageUri.Add(50006577, "/image/lis/report/normal/SANTI8.jpg");
+        }
+        private void AddNormalImageBySuperItem(List<int> superItem,Dictionary<string,string> imageMap)
+        {
+            foreach (int su in superItem)
+            {
+                string path = this.m_normalImageUri[su] as string;
+                if (path != null)
+                {
+                    imageMap["normal"] = ImageServer + path;
+                    return;
+                }
+            }
+        }
+        #endregion
+
         #region 内部类
-        class WebResult {
-            WebResult()
+        class WebImage
+        {
+            WebImage()
             {
             }
-            public int code { get; set; }
-            public string name { get; set; }
-            public string imageUrl { get; set; }
-            public string message { get; set; }
+            public string Name { get; set; }
+            public string Path { get; set; }
+            public string Message { get; set; }
         }
         #endregion
     }

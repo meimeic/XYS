@@ -4,7 +4,7 @@ using System.Collections;
 using XYS.Util;
 namespace XYS.Report.Lis.Util
 {
-    public class SubElementMap
+    public class FillElementMap
     {
         #region 字段
         private static readonly int m_capacity = 4;
@@ -12,11 +12,11 @@ namespace XYS.Report.Lis.Util
         #endregion
 
         #region 构造函数
-        public SubElementMap()
+        public FillElementMap()
             : this(m_capacity)
         {
         }
-        public SubElementMap(int c)
+        public FillElementMap(int c)
         {
             this.m_name2ElementMap = SystemInfo.CreateCaseInsensitiveHashtable(c);
         }
@@ -27,13 +27,13 @@ namespace XYS.Report.Lis.Util
         {
             get { return this.m_name2ElementMap.Count; }
         }
-        public SubElement this[string name]
+        public FillElement this[string name]
         {
             get
             {
                 lock (this)
                 {
-                    return this.m_name2ElementMap[name] as SubElement;
+                    return this.m_name2ElementMap[name] as FillElement;
                 }
             }
         }
@@ -44,7 +44,7 @@ namespace XYS.Report.Lis.Util
         #endregion
 
         #region 方法
-        public void Add(SubElement element)
+        public void Add(FillElement element)
         {
             if (element == null)
             {

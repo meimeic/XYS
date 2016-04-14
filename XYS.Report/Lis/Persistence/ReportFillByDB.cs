@@ -8,9 +8,9 @@ using XYS.Common;
 using XYS.Report.Lis.Util;
 using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Persistence.SQLServer;
-namespace XYS.Report.Lis.Handler
+namespace XYS.Report.Lis.Persistence
 {
-    public class ReportFillByDBHandler : ReportHandlerSkeleton
+    public class ReportFillByDB
     {
         #region 只读字段
         private static readonly string m_defaultHandlerName = "ReportFillHandler";
@@ -22,12 +22,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 构造函数
-        public ReportFillByDBHandler()
-            : this(m_defaultHandlerName)
-        {
-        }
-        public ReportFillByDBHandler(string handlerName)
-            : base(handlerName)
+        public ReportFillByDB()
         {
             this.m_section2FillTypeMap = new Hashtable(20);
             this.InitFillElementTable();

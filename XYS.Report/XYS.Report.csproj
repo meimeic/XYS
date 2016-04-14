@@ -38,6 +38,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>lib\MongoDB.Driver.dll</HintPath>
     </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.2.3.3, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\MongoDB.Driver.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -72,19 +76,20 @@
     <Compile Include="Lis\Model\ReportItemElement.cs" />
     <Compile Include="Lis\Model\ReportReportElement.cs" />
     <Compile Include="Lis\MongoReporter.cs" />
-    <Compile Include="Lis\Persistence\CommonDAL.cs" />
-    <Compile Include="Lis\Persistence\DbHelperOleDb.cs" />
-    <Compile Include="Lis\Persistence\DbHelperSQL.cs" />
-    <Compile Include="Lis\Persistence\LisReportCommonDAL.cs" />
-    <Compile Include="Lis\Persistence\LisReportPKDAL.cs" />
+    <Compile Include="Lis\Persistence\IReportFill.cs" />
     <Compile Include="Lis\Persistence\Mongo\MongoService.cs" />
+    <Compile Include="Lis\Persistence\ReportFillByDB.cs" />
+    <Compile Include="Lis\Persistence\SQLServer\DbHelperOleDb.cs" />
+    <Compile Include="Lis\Persistence\SQLServer\DbHelperSQL.cs" />
+    <Compile Include="Lis\Persistence\SQLServer\LisReportCommonDAL.cs" />
+    <Compile Include="Lis\Persistence\SQLServer\LisReportPKDAL.cs" />
     <Compile Include="Lis\Reporter.cs" />
     <Compile Include="Lis\ReportImpl.cs" />
     <Compile Include="Lis\ReportWrapper.cs" />
     <Compile Include="Lis\Util\ConfigManager.cs" />
     <Compile Include="Lis\ReportManager.cs" />
-    <Compile Include="Lis\Util\SubElement.cs" />
-    <Compile Include="Lis\Util\SubElementMap.cs" />
+    <Compile Include="Lis\Util\FillElement.cs" />
+    <Compile Include="Lis\Util\FillElementMap.cs" />
     <Compile Include="Lis\Util\LisParItem.cs" />
     <Compile Include="Lis\Util\LisParItemMap.cs" />
     <Compile Include="Lis\Util\LisSection.cs" />
@@ -116,6 +121,7 @@
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

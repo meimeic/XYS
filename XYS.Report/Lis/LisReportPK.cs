@@ -2,9 +2,9 @@
 using XYS.Report;
 namespace XYS.Report.Lis
 {
-    public class LisReportPK:IReportKey
+    public class LisReportPK : IReportKey
     {
-        #region
+        #region 字段
         private bool m_config;
         private int m_sectionNo;
         private int m_testTypeNo;
@@ -12,13 +12,14 @@ namespace XYS.Report.Lis
         private DateTime m_receiveDate;
         #endregion
 
-        #region
+        #region 构造函数
         public LisReportPK()
         {
             this.m_config = false;
         }
         #endregion
 
+        #region 属性
         public int SectionNo
         {
             get { return this.m_sectionNo; }
@@ -39,16 +40,18 @@ namespace XYS.Report.Lis
             get { return this.m_receiveDate; }
             set { this.m_receiveDate = value; }
         }
+        #endregion
 
+        #region 方法
         public string ID
         {
             get { return this.m_receiveDate.ToString("yyyyMMdd") + "-" + this.m_sectionNo + "-" + this.m_testTypeNo + "-" + this.m_sampleNo; }
         }
-
         public bool Configured
         {
             get { return this.m_config; }
             set { this.m_config = value; }
         }
+        #endregion
     }
 }

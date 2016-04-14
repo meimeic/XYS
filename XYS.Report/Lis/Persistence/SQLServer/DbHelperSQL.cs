@@ -2,7 +2,7 @@
 using System.Data;
 using System.Data.SqlClient;
 using System.Configuration;
-namespace XYS.Report.Lis.Persistence
+namespace XYS.Report.Lis.Persistence.SQLServer
 {
     public abstract class DbHelperSQL
     {

@@ -13,8 +13,8 @@ namespace XYS.Report.Lis.Util
         #region 私有常量
         private static readonly Type declaringType = typeof(ConfigManager);
 
-        private static readonly SubElementMap ELEMENT_MAP = new SubElementMap(4);
-        private static readonly LisParItemMap PARITEM_MAP = new LisParItemMap(40);
+        private static readonly FillElementMap ELEMENT_MAP = new FillElementMap(4);
+        //private static readonly LisParItemMap PARITEM_MAP = new LisParItemMap(40);
         private static readonly LisSectionMap SECTION_MAP = new LisSectionMap(20);
         #endregion
 
@@ -32,30 +32,30 @@ namespace XYS.Report.Lis.Util
         {
             SECTION_MAP.Add(section);
         }
-        public static void AddSubElement(SubElement element)
+        public static void AddSubElement(FillElement element)
         {
             ELEMENT_MAP.Add(element);
         }
-        public static void AddParItem(LisParItem parItem)
-        {
-            PARITEM_MAP.Add(parItem);
-        }
+        //public static void AddParItem(LisParItem parItem)
+        //{
+        //    PARITEM_MAP.Add(parItem);
+        //}
         #endregion
 
         #region
-        public static void InitNo2NormalImageUriTable(Hashtable table)
-        {
-            table.Clear();
-            LisParItem parItem = null;
-            foreach (object item in PARITEM_MAP.AllParItem)
-            {
-                parItem = item as LisParItem;
-                if (parItem != null)
-                {
-                    table[parItem.ParItemNo] = parItem.ImageName;
-                }
-            }
-        }
+        //public static void InitNo2NormalImageUriTable(Hashtable table)
+        //{
+        //    table.Clear();
+        //    LisParItem parItem = null;
+        //    foreach (object item in PARITEM_MAP.AllParItem)
+        //    {
+        //        parItem = item as LisParItem;
+        //        if (parItem != null)
+        //        {
+        //            table[parItem.ParItemNo] = parItem.ImageName;
+        //        }
+        //    }
+        //}
         public static void InitSection2FillElementTable(Hashtable table)
         {
             table.Clear();
@@ -64,7 +64,7 @@ namespace XYS.Report.Lis.Util
                 InternalConfigure();
             }
             LisSection section = null;
-            SubElement element = null;
+            FillElement element = null;
             List<Type> tempList = null;
             foreach (object rs in SECTION_MAP.AllReporterSection)
             {

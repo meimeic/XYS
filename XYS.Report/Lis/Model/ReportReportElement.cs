@@ -14,10 +14,11 @@ namespace XYS.Report.Lis.Model
     public class ReportReportElement : AbstractSubFillElement, IReportElement, IPatientElement
     {
         #region 私有实例字段
+        private Guid m_id;
         private LisReportPK m_reportPK;
 
         private int m_final;
-        private string m_reportID;
+        //private string m_reportID;
 
         private int m_sectionNo;
         private string m_serialNo;
@@ -46,6 +47,7 @@ namespace XYS.Report.Lis.Model
         private DateTime m_testDateTime;
         private DateTime m_checkDateTime;
         private DateTime m_secondCheckDateTime;
+        private DateTime m_createDateTime;
         //患者信息
         private string m_patientName;
         private string m_genderName;
@@ -61,6 +63,7 @@ namespace XYS.Report.Lis.Model
         private string m_clinicalDiagnosis;
         private string m_explanation;
 
+        private List<int> m_superItemList;
         private Dictionary<string, string> m_reportImageMap;
         private List<ReportItemElement> m_reportItemCollection;
         private List<ReportCustomElement> m_reportCustomCollection;
@@ -72,7 +75,7 @@ namespace XYS.Report.Lis.Model
         public ReportReportElement()
         {
             this.m_remarkFlag = 0;
-            this.m_reportPK = new LisReportPK();
+            this.m_superItemList = new List<int>(3);
             this.m_reportImageMap = new Dictionary<string, string>(4);
             this.m_reportItemCollection = new List<ReportItemElement>(20);
             this.m_reportCustomCollection = new List<ReportCustomElement>(2);
@@ -127,6 +130,13 @@ namespace XYS.Report.Lis.Model
         #endregion
 
         #region 实例属性
+        [BsonId]
+        public Guid ID
+        {
+            get { return this.m_id; }
+            set { this.m_id = value; }
+        }
+
         [BsonIgnore]
         public LisReportPK LisPK
         {
@@ -134,18 +144,23 @@ namespace XYS.Report.Lis.Model
             set { this.m_reportPK = value; }
         }
 
+        [BsonElement(Order = 13)]
+        public string ReportID
+        {
+            get
+            {
+                if (this.LisPK != null)
+                {
+                    return this.LisPK.ID;
+                }
+                return "Unkown";
+            }
+        }
         [BsonElement(Order = 34)]
         public int Final
         {
             get { return m_final; }
             set { m_final = value; }
-        }
-        [Column]
-        [BsonElement(Order = 13)]
-        public string ReportID
-        {
-            get { return this.m_reportID; }
-            set { this.m_reportID = value; }
         }
 
         [Column]
@@ -252,6 +267,7 @@ namespace XYS.Report.Lis.Model
 
         [Column]
         [BsonElement(Order = 19)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime ReceiveDateTime
         {
             get { return this.m_receiveDateTime; }
@@ -259,6 +275,7 @@ namespace XYS.Report.Lis.Model
         }
         [Column]
         [BsonElement(Order = 20)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CollectDateTime
         {
             get { return this.m_collectDateTime; }
@@ -266,6 +283,7 @@ namespace XYS.Report.Lis.Model
         }
         [Column]
         [BsonElement(Order = 21)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime InceptDateTime
         {
             get { return m_inceptDateTime; }
@@ -273,6 +291,7 @@ namespace XYS.Report.Lis.Model
         }
         [Column]
         [BsonElement(Order = 22)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime TestDateTime
         {
             get { return m_testDateTime; }
@@ -280,6 +299,7 @@ namespace XYS.Report.Lis.Model
         }
         [Column]
         [BsonElement(Order = 23)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CheckDateTime
         {
             get { return m_checkDateTime; }
@@ -287,15 +307,26 @@ namespace XYS.Report.Lis.Model
         }
         [Column]
         [BsonElement(Order = 24)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime SecondeCheckDateTime
         {
             get { return m_secondCheckDateTime; }
             set { m_secondCheckDateTime = value; }
         }
+
         [BsonElement(Order = 25)]
+        [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CreateDateTime
         {
-            get { return DateTime.Now; }
+            get
+            {
+                if (this.m_createDateTime == default(DateTime))
+                {
+                    this.m_createDateTime = DateTime.Now;
+                }
+                return this.m_createDateTime;
+            }
+            set { this.m_createDateTime = value; }
         }
 
         [Column]
@@ -348,6 +379,12 @@ namespace XYS.Report.Lis.Model
             set { this.m_explanation = value; }
         }
 
+        [BsonElement(Order = 36)]
+        public List<int> SuperItemList
+        {
+            get { return this.m_superItemList; }
+            set { this.m_superItemList = value; }
+        }
         [BsonElement(Order = 35)]
         [BsonDictionaryOptions(DictionaryRepresentation.Document)]
         public Dictionary<string, string> ReportImageMap
@@ -355,13 +392,13 @@ namespace XYS.Report.Lis.Model
             get { return this.m_reportImageMap; }
             set { this.m_reportImageMap = value; }
         }
-        [BsonElement(Order = 36)]
+        [BsonElement(Order = 37)]
         public List<ReportItemElement> ReportItemCollection
         {
             get { return this.m_reportItemCollection; }
             set { this.m_reportItemCollection = value; }
         }
-        [BsonElement(Order = 37)]
+        [BsonElement(Order = 38)]
         public List<ReportCustomElement> ReportCustomCollection
         {
             get { return this.m_reportCustomCollection; }

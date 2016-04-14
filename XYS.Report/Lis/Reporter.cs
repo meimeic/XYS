@@ -32,13 +32,13 @@ namespace XYS.Report.Lis
         {
             if (report.LisPK == null || !report.LisPK.Configured)
             {
-                return new HandlerResult(0, "search key is null or not config");
+                throw new ArgumentNullException("the report key is null or not config!");
             }
             return HandlerEvent(report);
         }
         #endregion
 
-        #region 受保护的虚方法    
+        #region 受保护的虚方法
         protected virtual void InitReporter()
         {
             IReportHandler handler = new ReportFillByDBHandler();
