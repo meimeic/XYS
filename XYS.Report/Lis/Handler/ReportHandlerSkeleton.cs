@@ -9,13 +9,11 @@ namespace XYS.Report.Lis.Handler
     {
         #region 私有字段
         private IReportHandler m_nextHandler;
-        private readonly string m_handlerName;
         #endregion
 
         #region 构造函数
-        protected ReportHandlerSkeleton(string name)
+        protected ReportHandlerSkeleton()
         {
-            this.m_handlerName = name;
         }
         #endregion
 
@@ -25,18 +23,30 @@ namespace XYS.Report.Lis.Handler
             get { return this.m_nextHandler; }
             set { this.m_nextHandler = value; }
         }
-        public virtual string HandlerName
-        {
-            get { return this.m_handlerName; }
-        }
         public virtual HandlerResult ReportOption(IReportElement report)
         {
             ReportReportElement rep = report as ReportReportElement;
             if (rep != null)
             {
-                    return  OperateReport(rep);
+                HandlerResult result = OperateReport(rep);
+                if (result.Code == -1)
+                {
+                    return result;
+                }
+
+                if (this.Next != null)
+                {
+                    return this.Next.ReportOption(report);
+                }
+                else
+                {
+                    return new HandlerResult(1, this.GetType(), "this handlers have been fully successfully executed ", rep.PK);
+                }
             }
-            return new HandlerResult(0,"this object is not a report!");
+            else
+            {
+                return new HandlerResult(-1, this.GetType(),"this object is not a report!");
+            }
         }
         #endregion
 

@@ -8,17 +8,9 @@ namespace XYS.Report.Lis.Handler
 {
     public class ReportItemHandler : ReportHandlerSkeleton
     {
-        #region 字段
-        private static readonly string m_defaultHandlerName = "ReportItemHandler";
-        #endregion
-
         #region 构造函数
         public ReportItemHandler()
-            : this(m_defaultHandlerName)
-        {
-        }
-        public ReportItemHandler(string handlerName)
-            : base(handlerName)
+            : base()
         {
         }
         #endregion
@@ -34,21 +26,21 @@ namespace XYS.Report.Lis.Handler
                 foreach (AbstractSubFillElement item in itemList)
                 {
                     rie = item as ReportItemElement;
-                    //元素处理
+                    //检验项处理
                     if (!OperateItem(rie))
                     {
                         continue;
                     }
-                    //
+                    //设置检验大项集合
                     if (!report.SuperItemList.Contains(rie.ParItemNo))
                     {
                         report.SuperItemList.Add(rie.ParItemNo);
                     }
-                    //
+                    //将合法检验项添加到输出集合中
                     report.ReportItemCollection.Add(rie);
                 }
             }
-            return new HandlerResult();
+            return new HandlerResult(0, "handle reportitem successfully and continue!");
         }
         #endregion
 
@@ -59,11 +51,12 @@ namespace XYS.Report.Lis.Handler
             {
                 return false;
             }
-            if (ItemDelete(rie))
+            //判断检验项是否合法
+            if (IsLegal(rie))
             {
                 return false;
             }
-            //不删除，检验项处理操作
+            //合法，检验项处理操作
             if (rie.ItemNo == 50004360 || rie.ItemNo == 50004370)
             {
                 if (rie.RefRange != null)
@@ -73,11 +66,13 @@ namespace XYS.Report.Lis.Handler
             }
             return true;
         }
-        private bool ItemDelete(ReportItemElement rie)
+        //检验项是否合法
+        private bool IsLegal(ReportItemElement rie)
         {
-            return IsRemoveBySecret(rie.SecretGrade);
+            return IsLegalBySecret(rie.SecretGrade);
         }
-        protected bool IsRemoveBySecret(int secretGrade)
+        //根据保密等级判断检验项是否合法
+        protected bool IsLegalBySecret(int secretGrade)
         {
             if (secretGrade > 0)
             {

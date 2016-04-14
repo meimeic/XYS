@@ -10,22 +10,25 @@ using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Persistence.SQLServer;
 namespace XYS.Report.Lis.Persistence
 {
-    public class ReportFillByDB
+    public class ReportFillByDB : IReportFiller
     {
         #region 只读字段
-        private static readonly string m_defaultHandlerName = "ReportFillHandler";
+        private static readonly Hashtable Section2FillTypeMap;
         #endregion
 
         #region 变量
         private LisReportCommonDAL m_reportDAL;
-        private readonly Hashtable m_section2FillTypeMap;
         #endregion
 
         #region 构造函数
+        static ReportFillByDB()
+        {
+            Section2FillTypeMap = new Hashtable(20);
+            ReportFillByDB.InitFillElementTable();
+        }
         public ReportFillByDB()
         {
-            this.m_section2FillTypeMap = new Hashtable(20);
-            this.InitFillElementTable();
+            this.m_reportDAL = new LisReportCommonDAL();
         }
         #endregion
 
@@ -44,14 +47,14 @@ namespace XYS.Report.Lis.Persistence
         }
         #endregion
 
-        #region 实现父类抽象方法
-        protected override HandlerResult OperateReport(ReportReportElement report)
+        #region 实现方法
+        public void FillReport(ReportReportElement report)
         {
             LisReportPK PK = report.LisPK;
             //填充报告
             FillReportElement(report, PK);
             //填充子项
-            List<Type> availableElementList = this.GetAvailableInsideElements(PK);
+            List<Type> availableElementList = GetAvailableFillElements(PK);
             if (availableElementList != null && availableElementList.Count > 0)
             {
                 List<AbstractSubFillElement> tempList = null;
@@ -61,11 +64,10 @@ namespace XYS.Report.Lis.Persistence
                     FillSubElements(tempList, PK, type);
                 }
             }
-            return new HandlerResult();
         }
         #endregion
 
-        #region
+        #region 填充数据
         private void FillReportElement(AbstractSubFillElement report, LisReportPK PK)
         {
             string sql = GenderSql(report, PK);
@@ -135,20 +137,16 @@ namespace XYS.Report.Lis.Persistence
         #endregion
 
         #region 辅助方法
-        protected virtual List<Type> GetAvailableInsideElements(LisReportPK RK)
+        private static void InitFillElementTable()
         {
-            if (this.m_section2FillTypeMap.Count == 0)
+            lock (Section2FillTypeMap)
             {
-                InitFillElementTable();
+                ConfigManager.InitSection2FillElementTable(Section2FillTypeMap);
             }
-            return this.m_section2FillTypeMap[RK.SectionNo] as List<Type>;
         }
-        private void InitFillElementTable()
+        protected static List<Type> GetAvailableFillElements(LisReportPK RK)
         {
-            lock (this.m_section2FillTypeMap)
-            {
-                ConfigManager.InitSection2FillElementTable(this.m_section2FillTypeMap);
-            }
+            return Section2FillTypeMap[RK.SectionNo] as List<Type>;
         }
         #endregion
     }

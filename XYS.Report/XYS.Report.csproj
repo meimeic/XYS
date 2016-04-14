@@ -60,11 +60,11 @@
     <Compile Include="HandlerResult.cs" />
     <Compile Include="Lis\DefaultReporter.cs" />
     <Compile Include="Lis\Handler\ReportCustomHandler.cs" />
-    <Compile Include="Lis\Handler\ReportFillByDBHandler.cs" />
     <Compile Include="Lis\Handler\ReportGraphHandler.cs" />
     <Compile Include="Lis\Handler\ReportHandlerSkeleton.cs" />
+    <Compile Include="Lis\Handler\ReportHeadHandler.cs" />
     <Compile Include="Lis\Handler\ReportItemHandler.cs" />
-    <Compile Include="Lis\Handler\ReportMongoHandler.cs" />
+    <Compile Include="Lis\Persistence\ReportMongo.cs" />
     <Compile Include="Lis\Handler\ReportReportHandler.cs" />
     <Compile Include="Lis\IReport.cs" />
     <Compile Include="Lis\IReporter.cs" />
@@ -76,7 +76,7 @@
     <Compile Include="Lis\Model\ReportItemElement.cs" />
     <Compile Include="Lis\Model\ReportReportElement.cs" />
     <Compile Include="Lis\MongoReporter.cs" />
-    <Compile Include="Lis\Persistence\IReportFill.cs" />
+    <Compile Include="Lis\Persistence\IReportFiller.cs" />
     <Compile Include="Lis\Persistence\Mongo\MongoService.cs" />
     <Compile Include="Lis\Persistence\ReportFillByDB.cs" />
     <Compile Include="Lis\Persistence\SQLServer\DbHelperOleDb.cs" />

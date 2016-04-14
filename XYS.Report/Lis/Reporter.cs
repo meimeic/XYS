@@ -7,11 +7,16 @@ using XYS.Report.Lis.Handler;
 using XYS.Report.Lis.Persistence;
 namespace XYS.Report.Lis
 {
+
     public abstract class Reporter : IReporter
     {
         #region 私有字段
         private IReportHandler m_headHandler;
         private IReportHandler m_tailHandler;
+        #endregion
+
+        #region
+        Action<ReportReportElement> FillHandler=null;
         #endregion
 
         #region 构造函数
@@ -27,7 +32,7 @@ namespace XYS.Report.Lis
         }
         #endregion
 
-        #region 实现IReport接口
+        #region 实现IReporter接口
         public HandlerResult OperateReport(ReportReportElement report)
         {
             if (report.LisPK == null || !report.LisPK.Configured)
@@ -41,7 +46,7 @@ namespace XYS.Report.Lis
         #region 受保护的虚方法
         protected virtual void InitReporter()
         {
-            IReportHandler handler = new ReportFillByDBHandler();
+            IReportHandler handler = new ReportHeadHandler();
             AddHandler(handler);
             handler = new ReportItemHandler();
             AddHandler(handler);
@@ -68,6 +73,28 @@ namespace XYS.Report.Lis
                 this.m_tailHandler = handler;
             }
         }
+        protected void AddHandler(IReportHandler current, IReportHandler tail)
+        {
+            tail.Next = current;
+            tail = current;
+        }
+        protected void InitHandlerChain(IReportHandler head)
+        {
+            IReportHandler tailHandler = head;
+            IReportHandler currentHandler = null;
+            //检验项处理器
+            currentHandler = new ReportItemHandler();
+            AddHandler(currentHandler, tailHandler);
+            //图片项处理器
+            currentHandler = new ReportGraphHandler();
+            AddHandler(currentHandler, tailHandler);
+            //自定义项处理器
+            currentHandler = new ReportCustomHandler();
+            AddHandler(currentHandler, tailHandler);
+            //报告处理器
+            currentHandler = new ReportReportHandler();
+            AddHandler(currentHandler, tailHandler);
+        }
         protected HandlerResult HandlerEvent(ReportReportElement element)
         {
             HandlerResult result = null;
@@ -75,7 +102,7 @@ namespace XYS.Report.Lis
             while (handler != null)
             {
                 result = handler.ReportOption(element);
-                switch (result.StatusCode)
+                switch (result.Code)
                 {
                     case 0:
                         return result;

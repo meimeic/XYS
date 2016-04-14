@@ -3,21 +3,16 @@
 using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Persistence.Mongo;
 
-namespace XYS.Report.Lis.Handler
+namespace XYS.Report.Lis.Persistence
 {
-    public class ReportMongoHandler : ReportHandlerSkeleton
+    public class ReportMongo
     {
         #region 字段
-        private static readonly string m_defaultHandlerName = "ReportMongoHandler";
         #endregion
 
         #region 构造函数
-        public ReportMongoHandler()
-            : this(m_defaultHandlerName)
-        {
-        }
-        public ReportMongoHandler(string handlerName)
-            : base(handlerName)
+
+        public ReportMongo()
         {
         }
         #endregion

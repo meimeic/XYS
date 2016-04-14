@@ -6,17 +6,9 @@ namespace XYS.Report.Lis.Handler
 {
     public class ReportReportHandler : ReportHandlerSkeleton
     {
-        #region 变量
-        private static readonly string m_defaultHandlerName = "ReportReportHandler";
-        #endregion
-
         #region 构造函数
         public ReportReportHandler()
-            : this(m_defaultHandlerName)
-        {
-        }
-        public ReportReportHandler(string handlerName)
-            : base(handlerName)
+            : base()
         {
         }
         #endregion
@@ -32,6 +24,7 @@ namespace XYS.Report.Lis.Handler
                     report.FormMemo = report.FormMemo.Replace(";", SystemInfo.NewLine);
                 }
             }
+
             //cid 处理
             if (report.CID != null)
             {
@@ -42,7 +35,7 @@ namespace XYS.Report.Lis.Handler
             report.ReportItemCollection.Sort();
 
             //返回值
-            return new HandlerResult();
+            return new HandlerResult(0, "handle ReportReportElement successfully and continue!");
         }
         #endregion
 

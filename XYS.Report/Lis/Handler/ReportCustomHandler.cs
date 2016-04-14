@@ -6,17 +6,9 @@ namespace XYS.Report.Lis.Handler
 {
     public class ReportCustomHandler : ReportHandlerSkeleton
     {
-        #region 只读字段
-        private static readonly string m_defaultHandlerName = "ReportCustomHandler";
-        #endregion
-
         #region 构造函数
         public ReportCustomHandler()
-            : this(m_defaultHandlerName)
-        {
-        }
-        public ReportCustomHandler(string handlerName)
-            : base(handlerName)
+            : base()
         {
         }
         #endregion
@@ -28,17 +20,20 @@ namespace XYS.Report.Lis.Handler
             List<AbstractSubFillElement> customList = report.GetReportItem(typeof(ReportCustomElement));
             if (IsExist(customList))
             {
+                foreach (AbstractSubFillElement custom in customList)
+                {
+                    rce = custom as ReportCustomElement;
+                    if (rce != null)
+                    {
+                        //custom项处理
+                    }
+                }
             }
-            return new HandlerResult();
+            return new HandlerResult(0, "there is no ReportCustomElement to handle and continue!");
         }
         #endregion
 
-        //可以添加一些custom项的内部处理逻辑
-        #region 内部处理逻辑
-        protected void ConvertCustom2KV(ReportCustomElement rce, Dictionary<string,string> kv)
-        {
-
-        }
+        #region custom内部处理逻辑
         #endregion
     }
 }
