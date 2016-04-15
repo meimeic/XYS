@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 using XYS.Report.Lis.Model;
-using XYS.Report.Lis.Persistence.SQLServer;
+using XYS.Report.Lis.IO.SQLServer;
 namespace XYS.Report.Lis
 {
     public class ReportImpl:ReportWrapper,IReport

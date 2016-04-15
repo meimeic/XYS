@@ -81,7 +81,6 @@
     <Compile Include="Lis\Model\ReportGraphElement.cs" />
     <Compile Include="Lis\Model\ReportItemElement.cs" />
     <Compile Include="Lis\Model\ReportReportElement.cs" />
-    <Compile Include="Lis\MongoReporter.cs" />
     <Compile Include="Lis\Reporter.cs" />
     <Compile Include="Lis\ReportImpl.cs" />
     <Compile Include="Lis\ReportWrapper.cs" />

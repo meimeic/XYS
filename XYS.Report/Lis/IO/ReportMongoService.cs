@@ -77,7 +77,7 @@ namespace XYS.Report.Lis.IO
         #endregion
 
         #region 异步方法
-        public async Task InsertAsync(ReportReportElement report, HandlerResult result, Action<ReportReportElement, HandlerResult> callback = null)
+        public async Task InsertAsync(ReportReportElement report, HandlerResult result, Func<ReportReportElement, HandlerResult, Task> callback = null)
         {
             if (result.Code != -1)
             {
@@ -99,8 +99,9 @@ namespace XYS.Report.Lis.IO
             }
             if (callback != null)
             {
-                callback(report, result);
+                await callback(report, result);
             }
+            return;
         }
         #endregion
 
