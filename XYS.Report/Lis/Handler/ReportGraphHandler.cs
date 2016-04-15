@@ -39,19 +39,17 @@ namespace XYS.Report.Lis.Handler
             if (IsExist(graphList))
             {
                 HandlerResult result = UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), report.ReportImageMap);
-                if (result.Code == 0)
+                if (result.Code == -1)
                 {
-                    if (report.SectionNo == 11)
-                    {
-                        AddNormalImageBySuperItem(report.SuperItemList, report.ReportImageMap);
-                    }
+                    result.ReportKey = report.PK;
+                    return result;
                 }
-                //设置reportKey
-                result.ReportKey = report.PK;
-
-                return result;
+                if (report.SectionNo == 11)
+                {
+                    AddNormalImageBySuperItem(report.SuperItemList, report.ReportImageMap);
+                }
             }
-            return new HandlerResult(0, "there is no ReportGraphElement to handle and continue!");
+            return new HandlerResult(0, "handle ReportGraphElement successfully and continue!");
         }
         #endregion
 

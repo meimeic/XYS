@@ -45,7 +45,7 @@ namespace XYS.Report.Lis.Handler
             }
             else
             {
-                return new HandlerResult(-1, this.GetType(),"this object is not a report!");
+                return new HandlerResult(-1, this.GetType(), "this object is not a report!");
             }
         }
         #endregion

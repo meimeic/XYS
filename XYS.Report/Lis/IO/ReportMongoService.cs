@@ -13,20 +13,42 @@ namespace XYS.Report.Lis.IO
 {
     public class ReportMongoService
     {
+        #region
         static MongoClient MClient;
         static IMongoDatabase LisMDB;
         private static readonly string MongoConnectionStr = "mongodb://10.1.11.10:27017";
+        #endregion
+        
+        #region
         static ReportMongoService()
         {
             MClient = new MongoClient(MongoConnectionStr);
             LisMDB = MClient.GetDatabase("lis");
         }
+        public ReportMongoService()
+        { 
+        }
+        #endregion
 
-        public void Insert(ReportReportElement report)
+        #region 同步方法
+        public HandlerResult Insert(ReportReportElement report)
         {
             report.Final = 1;
-            IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
-            ReportCollection.InsertOne(report);
+            try
+            {
+                IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
+                ReportCollection.InsertOne(report);
+                return new HandlerResult(1, "save to mongo sucessfully");
+            }
+            catch (Exception ex)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("fialed when save report to mongo,error message:");
+                sb.Append(ex.Message);
+                sb.Append(SystemInfo.NewLine);
+                sb.Append(ex.ToString());
+                return new HandlerResult(-1, this.GetType(), sb.ToString(), report.PK);
+            }
         }
         public void Insert(IEnumerable<ReportReportElement> reportList)
         {
@@ -50,9 +72,10 @@ namespace XYS.Report.Lis.IO
                 }
             }
         }
+        #endregion
 
-        #region
-        public async Task<HandlerResult> InsertAsync(ReportReportElement report, Func<ReportReportElement, HandlerResult> callback)
+        #region 异步方法
+        public async Task<HandlerResult> InsertAsync(ReportReportElement report, Func<ReportReportElement, HandlerResult> callback=null)
         {
             IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
             try
