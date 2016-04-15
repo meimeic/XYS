@@ -4,15 +4,14 @@ namespace XYS.Report.Lis.Handler
 {
     public class ReportHeadHandler : ReportHandlerSkeleton
     {
-        #region
+        #region 构造函数
         public ReportHeadHandler()
             : base()
         {
-
         }
         #endregion
 
-        #region
+        #region 实现父类抽象方法
         protected override HandlerResult OperateReport(ReportReportElement report)
         {
             return new HandlerResult(0, "the ReportHeadHandler do nothing just only the head,so continue!");

@@ -4,7 +4,7 @@ using System.Collections;
 using System.Data.OleDb;
 using System.Configuration;
 using System.Collections.Specialized;
-namespace XYS.Report.Lis.Persistence.SQLServer
+namespace XYS.Report.Lis.IO.Utility
 {
     /// <summary>
     /// 数据访问基础类(基于OleDb)

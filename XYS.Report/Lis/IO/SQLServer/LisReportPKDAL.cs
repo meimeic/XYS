@@ -7,10 +7,15 @@ using System.Collections.Generic;
 
 using XYS.Report;
 using XYS.Report.Lis.Model;
-namespace XYS.Report.Lis.Persistence.SQLServer
+using XYS.Report.Lis.IO.Utility;
+namespace XYS.Report.Lis.IO.SQLServer
 {
     public class LisReportPKDAL
     {
+        public LisReportPKDAL()
+        { 
+        }
+
         public void InitReportKey(Require require, LisReportPK PK)
         {
             string sql = GetSQLString(require);
@@ -54,6 +59,13 @@ namespace XYS.Report.Lis.Persistence.SQLServer
             }
         }
 
+        protected void SetReportKey(DataRow dr, LisReportPK PK)
+        {
+            PK.SampleNo = dr["sampleno"].ToString();
+            PK.ReceiveDate = (DateTime)dr["receivedate"];
+            PK.SectionNo = Convert.ToInt32(dr["sectionno"]);
+            PK.TestTypeNo = Convert.ToInt32(dr["testtypeno"]);
+        }
         protected string GetSQLString(string where)
         {
             return "select receivedate,sectionno,testtypeno,sampleno from reportform " + where;
@@ -153,18 +165,12 @@ namespace XYS.Report.Lis.Persistence.SQLServer
                 return "";
             }
         }
-        protected void SetReportKey(DataRow dr, LisReportPK PK)
-        {
-            PK.SampleNo = dr["sampleno"].ToString();
-            PK.ReceiveDate = (DateTime)dr["receivedate"];
-            PK.SectionNo = Convert.ToInt32(dr["sectionno"]);
-            PK.TestTypeNo = Convert.ToInt32(dr["testtypeno"]);
-        }
         protected DataTable GetDataTable(string sql)
         {
             DataTable dt = DbHelperSQL.Query(sql).Tables["dt"];
             return dt;
         }
+      
         private bool IsExist(Dictionary<string, object> dic)
         {
             if (dic != null && dic.Count > 0)

@@ -1,32 +1,33 @@
 ﻿using System;
-using System.Text;
-using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
 
+using XYS.Util;
 using XYS.Common;
 using XYS.Report.Lis.Util;
 using XYS.Report.Lis.Model;
-using XYS.Report.Lis.Persistence.SQLServer;
-namespace XYS.Report.Lis.Persistence
+using XYS.Report.Lis.IO.SQLServer;
+
+namespace XYS.Report.Lis.IO
 {
-    public class ReportFillByDB : IReportFiller
+    public delegate HandlerResult FillReportComplete(ReportReportElement report);
+    public class ReportFillService
     {
-        #region 只读字段
+        #region 字段
+        private LisReportCommonDAL m_reportDAL;
         private static readonly Hashtable Section2FillTypeMap;
         #endregion
 
-        #region 变量
-        private LisReportCommonDAL m_reportDAL;
-        #endregion
-
         #region 构造函数
-        static ReportFillByDB()
+        static ReportFillService()
         {
             Section2FillTypeMap = new Hashtable(20);
-            ReportFillByDB.InitFillElementTable();
+            ReportFillService.InitFillElementTable();
         }
-        public ReportFillByDB()
+        public ReportFillService()
         {
             this.m_reportDAL = new LisReportCommonDAL();
         }
@@ -48,11 +49,16 @@ namespace XYS.Report.Lis.Persistence
         #endregion
 
         #region 实现方法
-        public void FillReport(ReportReportElement report)
+        public HandlerResult FillReport(ReportReportElement report)
         {
+            HandlerResult result = null;
             LisReportPK PK = report.LisPK;
             //填充报告
-            FillReportElement(report, PK);
+            result = FillReportElement(report, PK);
+            if (result.Code == -1)
+            {
+                return result;
+            }
             //填充子项
             List<Type> availableElementList = GetAvailableFillElements(PK);
             if (availableElementList != null && availableElementList.Count > 0)
@@ -61,22 +67,75 @@ namespace XYS.Report.Lis.Persistence
                 foreach (Type type in availableElementList)
                 {
                     tempList = report.GetReportItem(type);
-                    FillSubElements(tempList, PK, type);
+                    result = FillSubElements(tempList, PK, type);
+                    if (result.Code == -1)
+                    {
+                        return result;
+                    }
                 }
             }
+            return result;
+        }
+        #endregion
+
+        #region
+        public async Task<HandlerResult> FillReportAsync(ReportReportElement report, Func<ReportReportElement, HandlerResult> callback)
+        {
+            HandlerResult result = await FillReportTask(report);
+            if (result.Code != -1 && callback != null)
+            {
+                return callback(report);
+            }
+            else
+            {
+                return result;
+            }
+        }
+        private Task<HandlerResult> FillReportTask(ReportReportElement report)
+        {
+            return Task.Run(() =>
+            {
+                return this.FillReport(report);
+            });
         }
         #endregion
 
         #region 填充数据
-        private void FillReportElement(AbstractSubFillElement report, LisReportPK PK)
+        private HandlerResult FillReportElement(AbstractSubFillElement report, LisReportPK PK)
         {
             string sql = GenderSql(report, PK);
-            this.ReportDAL.Fill(report, sql);
+            try
+            {
+                this.ReportDAL.Fill(report, sql);
+                return new HandlerResult(0, "fill report successfully and continue!");
+            }
+            catch (Exception ex)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("fill ReportReportElement failed! error message:");
+                sb.Append(ex.Message);
+                sb.Append(SystemInfo.NewLine);
+                sb.Append(ex.ToString());
+                return new HandlerResult(-1, this.GetType(), sb.ToString());
+            }
         }
-        private void FillSubElements(List<AbstractSubFillElement> subElementList, LisReportPK PK, Type type)
+        private HandlerResult FillSubElements(List<AbstractSubFillElement> subElementList, LisReportPK PK, Type type)
         {
             string sql = GenderSql(type, PK);
-            this.ReportDAL.FillList(subElementList, type, sql);
+            try
+            {
+                this.ReportDAL.FillList(subElementList, type, sql);
+                return new HandlerResult(0, "fill subelements successfully and continue!");
+            }
+            catch (Exception ex)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append("fill SubReportElements failed! error message:");
+                sb.Append(ex.Message);
+                sb.Append(SystemInfo.NewLine);
+                sb.Append(ex.ToString());
+                return new HandlerResult(-1, this.GetType(), sb.ToString());
+            }
         }
         #endregion
 

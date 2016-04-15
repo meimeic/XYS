@@ -51,7 +51,7 @@ namespace XYS.Report.Lis.Handler
 
                 return result;
             }
-            return new HandlerResult(0,"there is no ReportGraphElement to handle and continue!");
+            return new HandlerResult(0, "there is no ReportGraphElement to handle and continue!");
         }
         #endregion
 
@@ -92,7 +92,7 @@ namespace XYS.Report.Lis.Handler
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                return new HandlerResult(-1, this.GetType(),sb.ToString());
+                return new HandlerResult(-1, this.GetType(), sb.ToString());
             }
             //单张图片上传
             //byte[] postData = null;
@@ -127,7 +127,7 @@ namespace XYS.Report.Lis.Handler
             //    }
             //}
         }
-        
+
         private string GenderGUIDName()
         {
             return SystemInfo.NewGuid().ToString();
@@ -148,7 +148,7 @@ namespace XYS.Report.Lis.Handler
 
             return postBuffer;
         }
-        
+
         //多张图片上传
         private byte[] GenderPostData(List<AbstractSubFillElement> graphList, string boundary)
         {

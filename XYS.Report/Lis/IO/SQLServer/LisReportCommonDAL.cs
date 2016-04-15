@@ -5,12 +5,18 @@ using System.Collections.Generic;
 
 using XYS.Common;
 using XYS.Report.Lis.Model;
-namespace XYS.Report.Lis.Persistence.SQLServer
+using XYS.Report.Lis.IO.Utility;
+namespace XYS.Report.Lis.IO.SQLServer
 {
     public class LisReportCommonDAL
     {
+        #region
         public LisReportCommonDAL()
-        { }
+        {
+        }
+        #endregion
+
+        #region
         public void Fill(AbstractSubFillElement element, string sql)
         {
             DataTable dt = GetDataTable(sql);
@@ -41,7 +47,9 @@ namespace XYS.Report.Lis.Persistence.SQLServer
                 }
             }
         }
+        #endregion
 
+        #region
         //填充对象属性
         protected void FillData(AbstractSubFillElement element, DataRow dr, DataColumnCollection columns)
         {
@@ -60,7 +68,6 @@ namespace XYS.Report.Lis.Persistence.SQLServer
                 }
             }
         }
-
         protected bool FillProperty(AbstractSubFillElement element, PropertyInfo p, DataRow dr)
         {
             try
@@ -104,12 +111,10 @@ namespace XYS.Report.Lis.Persistence.SQLServer
                 return false;
             }
         }
-        
         protected object DefaultForType(Type targetType)
         {
             return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
         }
-        
         protected DataTable GetDataTable(string sql)
         {
             DataTable dt = null;
@@ -119,19 +124,9 @@ namespace XYS.Report.Lis.Persistence.SQLServer
             }
             return dt;
         }
-        private PropertyInfo GetProperty(PropertyInfo[] props, string propName)
-        {
-            PropertyInfo p = null;
-            foreach (PropertyInfo prop in props)
-            {
-                if (StrEqual(prop.Name, propName))
-                {
-                    p = prop;
-                    break;
-                }
-            }
-            return p;
-        }
+        #endregion
+
+        #region
         private bool IsColumn(PropertyInfo prop)
         {
             if (prop != null)
@@ -148,5 +143,19 @@ namespace XYS.Report.Lis.Persistence.SQLServer
         {
             return str1.ToLower().Equals(str2.ToLower());
         }
+        private PropertyInfo GetProperty(PropertyInfo[] props, string propName)
+        {
+            PropertyInfo p = null;
+            foreach (PropertyInfo prop in props)
+            {
+                if (StrEqual(prop.Name, propName))
+                {
+                    p = prop;
+                    break;
+                }
+            }
+            return p;
+        }
+        #endregion
     }
 }

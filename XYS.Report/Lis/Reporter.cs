@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
+using XYS.Report.Lis.IO;
 using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Handler;
-using XYS.Report.Lis.Persistence;
 namespace XYS.Report.Lis
 {
 
     public abstract class Reporter : IReporter
     {
         #region 私有字段
-        private IReportHandler m_headHandler;
-        private IReportHandler m_tailHandler;
+        private ReportFillService m_filler;
+        private ReportHandleService m_handler;
+        private ReportMongoService m_mongo;
         #endregion
 
         #region
@@ -39,8 +41,13 @@ namespace XYS.Report.Lis
             {
                 throw new ArgumentNullException("the report key is null or not config!");
             }
+
             return HandlerEvent(report);
         }
+        #endregion
+
+        #region
+
         #endregion
 
         #region 受保护的虚方法
@@ -73,13 +80,11 @@ namespace XYS.Report.Lis
                 this.m_tailHandler = handler;
             }
         }
-        protected void AddHandler(IReportHandler current, IReportHandler tail)
-        {
-            tail.Next = current;
-            tail = current;
-        }
+        
         protected void InitHandlerChain(IReportHandler head)
         {
+            //lock (this.m_addHandlerLock)
+            //{
             IReportHandler tailHandler = head;
             IReportHandler currentHandler = null;
             //检验项处理器
@@ -94,7 +99,14 @@ namespace XYS.Report.Lis
             //报告处理器
             currentHandler = new ReportReportHandler();
             AddHandler(currentHandler, tailHandler);
+            //}
         }
+        protected void AddHandler(IReportHandler current, IReportHandler tail)
+        {
+            tail.Next = current;
+            tail = current;
+        }
+        
         protected HandlerResult HandlerEvent(ReportReportElement element)
         {
             HandlerResult result = null;

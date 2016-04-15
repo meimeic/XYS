@@ -61,10 +61,16 @@
     <Compile Include="Lis\DefaultReporter.cs" />
     <Compile Include="Lis\Handler\ReportCustomHandler.cs" />
     <Compile Include="Lis\Handler\ReportGraphHandler.cs" />
+    <Compile Include="Lis\Handler\ReportHandleService.cs" />
     <Compile Include="Lis\Handler\ReportHandlerSkeleton.cs" />
     <Compile Include="Lis\Handler\ReportHeadHandler.cs" />
     <Compile Include="Lis\Handler\ReportItemHandler.cs" />
-    <Compile Include="Lis\Persistence\ReportMongo.cs" />
+    <Compile Include="Lis\IO\ReportFillService.cs" />
+    <Compile Include="Lis\IO\ReportMongoService.cs" />
+    <Compile Include="Lis\IO\Utility\DbHelperOleDb.cs" />
+    <Compile Include="Lis\IO\Utility\DbHelperSQL.cs" />
+    <Compile Include="Lis\IO\SQLServer\LisReportCommonDAL.cs" />
+    <Compile Include="Lis\IO\SQLServer\LisReportPKDAL.cs" />
     <Compile Include="Lis\Handler\ReportReportHandler.cs" />
     <Compile Include="Lis\IReport.cs" />
     <Compile Include="Lis\IReporter.cs" />
@@ -76,13 +82,6 @@
     <Compile Include="Lis\Model\ReportItemElement.cs" />
     <Compile Include="Lis\Model\ReportReportElement.cs" />
     <Compile Include="Lis\MongoReporter.cs" />
-    <Compile Include="Lis\Persistence\IReportFiller.cs" />
-    <Compile Include="Lis\Persistence\Mongo\MongoService.cs" />
-    <Compile Include="Lis\Persistence\ReportFillByDB.cs" />
-    <Compile Include="Lis\Persistence\SQLServer\DbHelperOleDb.cs" />
-    <Compile Include="Lis\Persistence\SQLServer\DbHelperSQL.cs" />
-    <Compile Include="Lis\Persistence\SQLServer\LisReportCommonDAL.cs" />
-    <Compile Include="Lis\Persistence\SQLServer\LisReportPKDAL.cs" />
     <Compile Include="Lis\Reporter.cs" />
     <Compile Include="Lis\ReportImpl.cs" />
     <Compile Include="Lis\ReportWrapper.cs" />
@@ -121,7 +120,9 @@
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Lis\IO\Mongo\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
