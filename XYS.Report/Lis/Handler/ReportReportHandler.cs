@@ -14,7 +14,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类方法
-        protected override HandlerResult OperateReport(ReportReportElement report)
+        protected override void OperateReport(ReportReportElement report, HandlerResult result)
         {
             //formmemo 处理
             if (report.SectionNo == 10)
@@ -35,7 +35,8 @@ namespace XYS.Report.Lis.Handler
             report.ReportItemCollection.Sort();
 
             //返回值
-            return new HandlerResult(0, "handle ReportReportElement successfully and continue!");
+            this.SetHandlerResult(result, 0, "handle ReportReportElement successfully and continue!");
+            return;
         }
         #endregion
 

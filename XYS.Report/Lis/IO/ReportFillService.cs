@@ -49,15 +49,14 @@ namespace XYS.Report.Lis.IO
         #endregion
 
         #region 同步方法
-        public HandlerResult FillReport(ReportReportElement report)
+        public void FillReport(ReportReportElement report, HandlerResult result)
         {
-            HandlerResult result = null;
             LisReportPK PK = report.LisPK;
             //填充报告元素
-            result = FillReportElement(report, PK);
+            FillReportElement(report, PK, result);
             if (result.Code == -1)
             {
-                return result;
+                return;
             }
             //填充子项
             List<Type> availableElementList = GetAvailableFillElements(PK);
@@ -67,22 +66,25 @@ namespace XYS.Report.Lis.IO
                 foreach (Type type in availableElementList)
                 {
                     tempList = report.GetReportItem(type);
-                    result = FillSubElements(tempList, PK, type);
+                    FillSubElements(tempList, PK, type, result);
                     if (result.Code == -1)
                     {
-                        return result;
+                        return;
                     }
                 }
             }
-            return result;
         }
         #endregion
 
         #region 异步方法
         public async Task FillReportAsync(ReportReportElement report, HandlerResult result, Action<ReportReportElement, HandlerResult> callback = null)
         {
-            await FillReportTask(report, result);
-            if (result.Code != -1 && callback != null)
+            if (result.Code != -1)
+            {
+                await FillReportTask(report, result);
+            }
+
+            if (callback != null)
             {
                 callback(report, result);
             }
@@ -98,7 +100,7 @@ namespace XYS.Report.Lis.IO
                 this.Fill(report, result);
             });
         }
-        private void Fill(ReportReportElement report, HandlerResult handlerResult)
+        private void Fill(ReportReportElement report, HandlerResult result)
         {
             string sql = null;
             LisReportCommonDAL lisDAL = new LisReportCommonDAL();
@@ -108,6 +110,7 @@ namespace XYS.Report.Lis.IO
             try
             {
                 lisDAL.Fill(report, sql);
+                this.SetHandlerResult(result, 0, "fill ReportReportElement successfully and continue!");
             }
             catch (Exception ex)
             {
@@ -116,7 +119,8 @@ namespace XYS.Report.Lis.IO
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                this.SetHandlerResult(handlerResult, -1, this.GetType(), sb.ToString(), report.PK);
+                this.SetHandlerResult(result, -1, this.GetType(), sb.ToString(), report.PK);
+                return;
             }
             //填充子项
             List<Type> availableElementList = GetAvailableFillElements(report.LisPK);
@@ -130,6 +134,7 @@ namespace XYS.Report.Lis.IO
                     try
                     {
                         this.ReportDAL.FillList(tempList, type, sql);
+                        this.SetHandlerResult(result, 0, "fill SubReportElements successfully and continue!");
                     }
                     catch (Exception ex)
                     {
@@ -138,22 +143,24 @@ namespace XYS.Report.Lis.IO
                         sb.Append(ex.Message);
                         sb.Append(SystemInfo.NewLine);
                         sb.Append(ex.ToString());
-                        this.SetHandlerResult(handlerResult, -1, this.GetType(), sb.ToString(), report.PK);
+                        this.SetHandlerResult(result, -1, this.GetType(), sb.ToString(), report.PK);
+                        return;
                     }
                 }
             }
-            this.SetHandlerResult(handlerResult, 1, "fill report successfully");
+            this.SetHandlerResult(result, 1, "fill report successfully");
         }
         #endregion
 
         #region 填充数据
-        private HandlerResult FillReportElement(AbstractSubFillElement report, LisReportPK PK)
+        private void FillReportElement(AbstractSubFillElement report, LisReportPK PK,HandlerResult result)
         {
             string sql = GenderSql(report, PK);
             try
             {
                 this.ReportDAL.Fill(report, sql);
-                return new HandlerResult(0, "fill report successfully and continue!");
+                this.SetHandlerResult(result, 0, "fill report successfully and continue!");
+                return;
             }
             catch (Exception ex)
             {
@@ -162,16 +169,18 @@ namespace XYS.Report.Lis.IO
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                return new HandlerResult(-1, this.GetType(), sb.ToString(),PK);
+                this.SetHandlerResult(result, -1, this.GetType(), sb.ToString(), PK);
+                return;
             }
         }
-        private HandlerResult FillSubElements(List<AbstractSubFillElement> subElementList, LisReportPK PK, Type type)
+        private void FillSubElements(List<AbstractSubFillElement> subElementList, LisReportPK PK, Type type,HandlerResult result)
         {
             string sql = GenderSql(type, PK);
             try
             {
                 this.ReportDAL.FillList(subElementList, type, sql);
-                return new HandlerResult(0, "fill subelements successfully and continue!");
+                this.SetHandlerResult(result, 0, "fill subelements successfully and continue!");
+                return;
             }
             catch (Exception ex)
             {
@@ -180,7 +189,8 @@ namespace XYS.Report.Lis.IO
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                return new HandlerResult(-1, this.GetType(), sb.ToString(),PK);
+                this.SetHandlerResult(result, -1, this.GetType(), sb.ToString(), PK);
+                return;
             }
         }
         #endregion

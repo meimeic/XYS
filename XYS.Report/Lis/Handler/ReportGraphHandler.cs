@@ -33,28 +33,30 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override HandlerResult OperateReport(ReportReportElement report)
+        protected override void OperateReport(ReportReportElement report, HandlerResult result)
         {
             List<AbstractSubFillElement> graphList = report.GetReportItem(typeof(ReportGraphElement));
             if (IsExist(graphList))
             {
-                HandlerResult result = UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), report.ReportImageMap);
+                UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), report.ReportImageMap, result);
                 if (result.Code == -1)
                 {
                     result.ReportKey = report.PK;
-                    return result;
+                    return;
                 }
                 if (report.SectionNo == 11)
                 {
                     AddNormalImageBySuperItem(report.SuperItemList, report.ReportImageMap);
                 }
+                return;
             }
-            return new HandlerResult(0, "handle ReportGraphElement successfully and continue!");
+            this.SetHandlerResult(result, 0, "there is no ReportGraphElement to handle and continue!");
+            return;
         }
         #endregion
 
         #region 图片上传
-        protected HandlerResult UploadImages(List<AbstractSubFillElement> graphList, string folder, Dictionary<string, string> imageMap)
+        protected void UploadImages(List<AbstractSubFillElement> graphList, string folder, Dictionary<string, string> imageMap,HandlerResult result)
         {
             WebClient wc = new WebClient();
             //多张图片上传
@@ -81,7 +83,8 @@ namespace XYS.Report.Lis.Handler
                         }
                     }
                 }
-                return new HandlerResult(0, "upload report image successfully and continue!");
+                this.SetHandlerResult(result, 0, "upload report image successfully and continue!");
+                return;
             }
             catch (Exception ex)
             {
@@ -90,7 +93,8 @@ namespace XYS.Report.Lis.Handler
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                return new HandlerResult(-1, this.GetType(), sb.ToString());
+                this.SetHandlerResult(result, -1, this.GetType(), sb.ToString());
+                return;
             }
             //单张图片上传
             //byte[] postData = null;

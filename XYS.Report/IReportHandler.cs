@@ -3,6 +3,6 @@
     public interface IReportHandler
     {
         IReportHandler Next { get; set; }
-        HandlerResult ReportOption(IReportElement report);
+        void ReportOption(IReportElement report,HandlerResult result);
     }
 }

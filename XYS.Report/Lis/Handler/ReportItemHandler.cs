@@ -16,7 +16,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override HandlerResult OperateReport(ReportReportElement report)
+        protected override void OperateReport(ReportReportElement report, HandlerResult result)
         {
             //报告级操作
             ReportItemElement rie = null;
@@ -40,7 +40,8 @@ namespace XYS.Report.Lis.Handler
                     report.ReportItemCollection.Add(rie);
                 }
             }
-            return new HandlerResult(0, "handle reportitem successfully and continue!");
+            this.SetHandlerResult(result, 0, "handle reportitem successfully and continue!");
+            return;
         }
         #endregion
 

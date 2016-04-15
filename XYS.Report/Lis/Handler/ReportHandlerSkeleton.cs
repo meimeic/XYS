@@ -23,35 +23,37 @@ namespace XYS.Report.Lis.Handler
             get { return this.m_nextHandler; }
             set { this.m_nextHandler = value; }
         }
-        public virtual HandlerResult ReportOption(IReportElement report)
+        public virtual void ReportOption(IReportElement report, HandlerResult result)
         {
             ReportReportElement rep = report as ReportReportElement;
             if (rep != null)
             {
-                HandlerResult result = OperateReport(rep);
+                OperateReport(rep, result);
+                //错误就退出
                 if (result.Code == -1)
                 {
-                    return result;
+                    return;
                 }
-
+                //
                 if (this.Next != null)
                 {
-                    return this.Next.ReportOption(report);
+                    this.Next.ReportOption(report, result);
                 }
                 else
                 {
-                    return new HandlerResult(1, this.GetType(), "this handlers have been fully successfully executed ", rep.PK);
+                    return;
                 }
             }
             else
             {
-                return new HandlerResult(-1, this.GetType(), "this object is not a report!");
+                this.SetHandlerResult(result, -1, this.GetType(), "this object is not a report!");
+                return;
             }
         }
         #endregion
 
         #region 抽象方法(处理元素)
-        protected abstract HandlerResult OperateReport(ReportReportElement report);
+        protected abstract void OperateReport(ReportReportElement report, HandlerResult result);
         #endregion
 
         #region 辅助方法
@@ -70,6 +72,22 @@ namespace XYS.Report.Lis.Handler
         protected bool IsReport(IReportElement report)
         {
             return report is ReportReportElement;
+        }
+
+        protected void SetHandlerResult(HandlerResult result, int code, string message)
+        {
+            result.Code = code;
+            result.Message = message;
+        }
+        protected void SetHandlerResult(HandlerResult result, int code, Type type, string message)
+        {
+            SetHandlerResult(result, code, message);
+            result.FinalType = type;
+        }
+        protected void SetHandlerResult(HandlerResult result, int code, Type type, string message, IReportKey key)
+        {
+            SetHandlerResult(result, code, type, message);
+            result.ReportKey = key;
         }
         #endregion
     }
