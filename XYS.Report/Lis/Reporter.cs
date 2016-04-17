@@ -23,6 +23,10 @@ namespace XYS.Report.Lis
         #region 构造函数
         protected Reporter()
         {
+            this.m_filler = new ReportFillService();
+            this.m_handler = new ReportHandleService();
+            this.m_mongo = new ReportMongoService();
+            this.m_extraOperate = new ExraOperateReport(Log);
         }
         #endregion
 
@@ -73,21 +77,29 @@ namespace XYS.Report.Lis
         {
             return this.m_handler.HandleReportAsync(report, result, HandleReportComplete);
         }
-        //private Task HandleReportComplete(ReportReportElement report, HandlerResult result)
-        //{
-        //    return this.m_mongo.InsertAsync(report, result, SaveReportComplete);
-        //}
         private Task HandleReportComplete(ReportReportElement report, HandlerResult result)
         {
-            return this.m_mongo.InsertAsync(report, result);
+            return this.m_mongo.InsertAsync(report, result, SaveReportComplete);
         }
         private Task SaveReportComplete(ReportReportElement report, HandlerResult result)
         {
-            return this.m_extraOperate(report, result);
+            if (this.m_extraOperate != null)
+            {
+                return this.m_extraOperate(report, result);
+            }
+            return null;
         }
         #endregion
 
         #region 辅助方法
+        private Task Log(ReportReportElement report, HandlerResult result)
+        {
+            return Task.Run(() =>
+            {
+                Console.WriteLine(report.ReportID + ";"+result.Code);
+            });
+        }
+
         protected void SetHandlerResult(HandlerResult result, int code, string message)
         {
             result.Code = code;
