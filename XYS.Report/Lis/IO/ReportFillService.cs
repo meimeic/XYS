@@ -12,7 +12,7 @@ using XYS.Report.Lis.Model;
 using XYS.Report.Lis.IO.SQLServer;
 namespace XYS.Report.Lis.IO
 {
-    public delegate HandlerResult FillReportComplete(ReportReportElement report);
+    public delegate HandleResult FillReportComplete(ReportReportElement report);
     public class ReportFillService
     {
         #region 字段
@@ -48,12 +48,12 @@ namespace XYS.Report.Lis.IO
         #endregion
 
         #region 同步方法
-        public void FillReport(ReportReportElement report, HandlerResult result)
+        public void FillReport(ReportReportElement report)
         {
             LisReportPK PK = report.LisPK;
             //填充报告元素
-            FillReportElement(report, PK, result);
-            if (result.Code == -1)
+            FillReportElement(report, PK, report.HandleResult);
+            if (report.HandleResult.ResultCode == -1)
             {
                 return;
             }
@@ -61,41 +61,41 @@ namespace XYS.Report.Lis.IO
             List<Type> availableElementList = GetAvailableFillElements(PK);
             if (availableElementList != null && availableElementList.Count > 0)
             {
-                List<AbstractSubFillElement> tempList = null;
+                List<AbstractFillElement> tempList = null;
                 foreach (Type type in availableElementList)
                 {
                     tempList = report.GetReportItem(type);
-                    FillSubElements(tempList, PK, type, result);
-                    if (result.Code == -1)
+                    FillSubElements(tempList, PK, type, report.HandleResult);
+                    if (report.HandleResult.ResultCode == -1)
                     {
                         return;
                     }
                 }
             }
+            this.SetHandlerResult(report.HandleResult, 2, "fill report successfully");
         }
         #endregion
 
         #region 异步方法
-        public async Task FillReportAsync(ReportReportElement report, HandlerResult result, Func<ReportReportElement, HandlerResult, Task> callback = null)
+        public async Task FillReportAsync(ReportReportElement report, Func<ReportReportElement, Task> callback = null)
         {
-            if (result.Code != -1)
+            if (report.HandleResult.ResultCode != -1)
             {
-                await FillReportTask(report, result);
+                await FillReportTask(report);
             }
-
             if (callback != null)
             {
-                await callback(report, result);
+                await callback(report);
             }
         }
-        private Task FillReportTask(ReportReportElement report, HandlerResult result)
+        private Task FillReportTask(ReportReportElement report)
         {
             return Task.Run(() =>
             {
-                this.Fill(report, result);
+                this.Fill(report);
             });
         }
-        private void Fill(ReportReportElement report, HandlerResult result)
+        private void Fill(ReportReportElement report)
         {
             string sql = null;
             LisReportCommonDAL lisDAL = new LisReportCommonDAL();
@@ -105,7 +105,7 @@ namespace XYS.Report.Lis.IO
             try
             {
                 lisDAL.Fill(report, sql);
-                this.SetHandlerResult(result, 0, "fill ReportReportElement successfully and continue!");
+                this.SetHandlerResult(report.HandleResult, 1, "fill ReportReportElement successfully and continue!");
             }
             catch (Exception ex)
             {
@@ -114,14 +114,14 @@ namespace XYS.Report.Lis.IO
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                this.SetHandlerResult(result, -1, this.GetType(), sb.ToString(), report.PK);
+                this.SetHandlerResult(report.HandleResult, -1, this.GetType(), sb.ToString());
                 return;
             }
             //填充子项
             List<Type> availableElementList = GetAvailableFillElements(report.LisPK);
             if (availableElementList != null && availableElementList.Count > 0)
             {
-                List<AbstractSubFillElement> tempList = null;
+                List<AbstractFillElement> tempList = null;
                 foreach (Type type in availableElementList)
                 {
                     tempList = report.GetReportItem(type);
@@ -129,7 +129,7 @@ namespace XYS.Report.Lis.IO
                     try
                     {
                         this.ReportDAL.FillList(tempList, type, sql);
-                        this.SetHandlerResult(result, 0, "fill SubReportElements successfully and continue!");
+                        this.SetHandlerResult(report.HandleResult, 1, "fill SubReportElements successfully and continue!");
                     }
                     catch (Exception ex)
                     {
@@ -138,24 +138,23 @@ namespace XYS.Report.Lis.IO
                         sb.Append(ex.Message);
                         sb.Append(SystemInfo.NewLine);
                         sb.Append(ex.ToString());
-                        this.SetHandlerResult(result, -1, this.GetType(), sb.ToString(), report.PK);
+                        this.SetHandlerResult(report.HandleResult, -1, this.GetType(), sb.ToString());
                         return;
                     }
                 }
             }
-            this.SetHandlerResult(result, 1, "fill report successfully");
+            this.SetHandlerResult(report.HandleResult, 2, "fill report successfully");
         }
         #endregion
 
         #region 填充数据
-        private void FillReportElement(AbstractSubFillElement report, LisReportPK PK,HandlerResult result)
+        private void FillReportElement(AbstractFillElement report, LisReportPK PK, HandleResult result)
         {
             string sql = GenderSql(report, PK);
             try
             {
                 this.ReportDAL.Fill(report, sql);
-                this.SetHandlerResult(result, 0, "fill report successfully and continue!");
-                return;
+                this.SetHandlerResult(result, 1, "fill report successfully and continue!");
             }
             catch (Exception ex)
             {
@@ -164,18 +163,16 @@ namespace XYS.Report.Lis.IO
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                this.SetHandlerResult(result, -1, this.GetType(), sb.ToString(), PK);
-                return;
+                this.SetHandlerResult(result, -1, this.GetType(), sb.ToString());
             }
         }
-        private void FillSubElements(List<AbstractSubFillElement> subElementList, LisReportPK PK, Type type,HandlerResult result)
+        private void FillSubElements(List<AbstractFillElement> subElementList, LisReportPK PK, Type type, HandleResult result)
         {
             string sql = GenderSql(type, PK);
             try
             {
                 this.ReportDAL.FillList(subElementList, type, sql);
-                this.SetHandlerResult(result, 0, "fill subelements successfully and continue!");
-                return;
+                this.SetHandlerResult(result, 1, "fill subelements successfully and continue!");
             }
             catch (Exception ex)
             {
@@ -184,14 +181,13 @@ namespace XYS.Report.Lis.IO
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                this.SetHandlerResult(result, -1, this.GetType(), sb.ToString(), PK);
-                return;
+                this.SetHandlerResult(result, -1, this.GetType(), sb.ToString());
             }
         }
         #endregion
 
         #region 生成sql语句
-        protected string GenderSql(AbstractSubFillElement element, LisReportPK PK)
+        protected string GenderSql(AbstractFillElement element, LisReportPK PK)
         {
             return GenderSql(element.GetType(), PK);
         }
@@ -259,20 +255,15 @@ namespace XYS.Report.Lis.IO
             return Section2FillTypeMap[RK.SectionNo] as List<Type>;
         }
 
-        protected void SetHandlerResult(HandlerResult result, int code, string message)
+        protected void SetHandlerResult(HandleResult result, int code, string message)
         {
-            result.Code = code;
+            result.ResultCode = code;
             result.Message = message;
         }
-        protected void SetHandlerResult(HandlerResult result, int code, Type type, string message)
+        protected void SetHandlerResult(HandleResult result, int code, Type type, string message)
         {
             SetHandlerResult(result, code, message);
-            result.FinalType = type;
-        }
-        protected void SetHandlerResult(HandlerResult result, int code, Type type, string message, IReportKey key)
-        {
-            SetHandlerResult(result, code, type, message);
-            result.ReportKey = key;
+            result.HandleType = type;
         }
         #endregion
     }

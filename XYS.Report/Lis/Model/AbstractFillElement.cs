@@ -2,18 +2,18 @@
 
 namespace XYS.Report.Lis.Model
 {
-    public class AbstractSubFillElement:ISubElement
+    public class AbstractFillElement : IFillElement
     {
         #region 私有字段
         #endregion
 
         #region 构造函数
-        protected AbstractSubFillElement()
+        protected AbstractFillElement()
         {
         }
         #endregion
 
-        #region 实现ISubElement接口
+        #region 实现IFillElement接口
         #endregion
     }
 }

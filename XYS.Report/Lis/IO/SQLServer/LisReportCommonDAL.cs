@@ -17,7 +17,7 @@ namespace XYS.Report.Lis.IO.SQLServer
         #endregion
 
         #region
-        public void Fill(AbstractSubFillElement element, string sql)
+        public void Fill(AbstractFillElement element, string sql)
         {
             DataTable dt = GetDataTable(sql);
             if (dt != null && dt.Rows.Count > 0)
@@ -25,17 +25,17 @@ namespace XYS.Report.Lis.IO.SQLServer
                 FillData(element, element.GetType(), dt.Rows[0], dt.Columns);
             }
         }
-        public void FillList(List<AbstractSubFillElement> elementList, Type elementType, string sql)
+        public void FillList(List<AbstractFillElement> elementList, Type elementType, string sql)
         {
             DataTable dt = GetDataTable(sql);
             if (dt != null && dt.Rows.Count > 0)
             {
-                AbstractSubFillElement element;
+                AbstractFillElement element;
                 foreach (DataRow dr in dt.Rows)
                 {
                     try
                     {
-                        element = (AbstractSubFillElement)elementType.Assembly.CreateInstance(elementType.FullName);
+                        element = (AbstractFillElement)elementType.Assembly.CreateInstance(elementType.FullName);
                         FillData(element, dr, dt.Columns);
                         //AfterFill(element);
                         elementList.Add(element);
@@ -51,12 +51,12 @@ namespace XYS.Report.Lis.IO.SQLServer
 
         #region
         //填充对象属性
-        protected void FillData(AbstractSubFillElement element, DataRow dr, DataColumnCollection columns)
+        protected void FillData(AbstractFillElement element, DataRow dr, DataColumnCollection columns)
         {
             Type type = element.GetType();
             FillData(element, type, dr, columns);
         }
-        protected void FillData(AbstractSubFillElement element, Type type, DataRow dr, DataColumnCollection columns)
+        protected void FillData(AbstractFillElement element, Type type, DataRow dr, DataColumnCollection columns)
         {
             PropertyInfo prop = null;
             foreach (DataColumn dc in columns)
@@ -68,7 +68,7 @@ namespace XYS.Report.Lis.IO.SQLServer
                 }
             }
         }
-        protected bool FillProperty(AbstractSubFillElement element, PropertyInfo p, DataRow dr)
+        protected bool FillProperty(AbstractFillElement element, PropertyInfo p, DataRow dr)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace XYS.Report.Lis.IO.SQLServer
                 return false;
             }
         }
-        protected bool FillProperty(AbstractSubFillElement element, PropertyInfo p, object v)
+        protected bool FillProperty(AbstractFillElement element, PropertyInfo p, object v)
         {
             try
             {

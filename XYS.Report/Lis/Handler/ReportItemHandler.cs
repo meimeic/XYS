@@ -16,14 +16,14 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override void OperateReport(ReportReportElement report, HandlerResult result)
+        protected override void OperateReport(ReportReportElement report)
         {
             //报告级操作
             ReportItemElement rie = null;
-            List<AbstractSubFillElement> itemList = report.GetReportItem(typeof(ReportItemElement));
+            List<AbstractFillElement> itemList = report.GetReportItem(typeof(ReportItemElement));
             if (IsExist(itemList))
             {
-                foreach (AbstractSubFillElement item in itemList)
+                foreach (AbstractFillElement item in itemList)
                 {
                     rie = item as ReportItemElement;
                     //检验项处理
@@ -40,8 +40,7 @@ namespace XYS.Report.Lis.Handler
                     report.ReportItemCollection.Add(rie);
                 }
             }
-            this.SetHandlerResult(result, 0, "handle reportitem successfully and continue!");
-            return;
+            this.SetHandlerResult(report.HandleResult, 1, "handle reportitem successfully and continue!");
         }
         #endregion
 

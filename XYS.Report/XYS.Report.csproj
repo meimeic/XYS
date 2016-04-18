@@ -57,7 +57,7 @@
     <Compile Include="IReportElement.cs" />
     <Compile Include="IReportHandler.cs" />
     <Compile Include="IReportKey.cs" />
-    <Compile Include="HandlerResult.cs" />
+    <Compile Include="HandleResult.cs" />
     <Compile Include="Lis\DefaultReporter.cs" />
     <Compile Include="Lis\Handler\ReportCustomHandler.cs" />
     <Compile Include="Lis\Handler\ReportGraphHandler.cs" />
@@ -65,6 +65,7 @@
     <Compile Include="Lis\Handler\ReportHandlerSkeleton.cs" />
     <Compile Include="Lis\Handler\ReportHeadHandler.cs" />
     <Compile Include="Lis\Handler\ReportItemHandler.cs" />
+    <Compile Include="Lis\IFillElement.cs" />
     <Compile Include="Lis\IO\ReportFillService.cs" />
     <Compile Include="Lis\IO\ReportMongoService.cs" />
     <Compile Include="Lis\IO\Utility\DbHelperOleDb.cs" />
@@ -74,8 +75,7 @@
     <Compile Include="Lis\Handler\ReportReportHandler.cs" />
     <Compile Include="Lis\IReport.cs" />
     <Compile Include="Lis\LisReportPK.cs" />
-    <Compile Include="Lis\Model\AbstractSubFillElement.cs" />
-    <Compile Include="ISubElement.cs" />
+    <Compile Include="Lis\Model\AbstractFillElement.cs" />
     <Compile Include="Lis\Model\ReportCustomElement.cs" />
     <Compile Include="Lis\Model\ReportGraphElement.cs" />
     <Compile Include="Lis\Model\ReportItemElement.cs" />

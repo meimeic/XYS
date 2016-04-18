@@ -33,15 +33,14 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override void OperateReport(ReportReportElement report, HandlerResult result)
+        protected override void OperateReport(ReportReportElement report)
         {
-            List<AbstractSubFillElement> graphList = report.GetReportItem(typeof(ReportGraphElement));
+            List<AbstractFillElement> graphList = report.GetReportItem(typeof(ReportGraphElement));
             if (IsExist(graphList))
             {
-                UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), report.ReportImageMap, result);
-                if (result.Code == -1)
+                UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), report.ReportImageMap, report.HandleResult);
+                if (report.HandleResult.ResultCode == -1)
                 {
-                    result.ReportKey = report.PK;
                     return;
                 }
                 if (report.SectionNo == 11)
@@ -50,12 +49,12 @@ namespace XYS.Report.Lis.Handler
                 }
                 return;
             }
-            this.SetHandlerResult(result, 0, "there is no ReportGraphElement to handle and continue!");
+            this.SetHandlerResult(report.HandleResult, 1, "there is no ReportGraphElement to handle and continue!");
         }
         #endregion
 
         #region 图片上传
-        protected void UploadImages(List<AbstractSubFillElement> graphList, string folder, Dictionary<string, string> imageMap,HandlerResult result)
+        protected void UploadImages(List<AbstractFillElement> graphList, string folder, Dictionary<string, string> imageMap,HandleResult result)
         {
             WebClient wc = new WebClient();
             //多张图片上传
@@ -83,11 +82,11 @@ namespace XYS.Report.Lis.Handler
                     }
                     else
                     {
-                        this.SetHandlerResult(result, -1, this.GetType(),"the image server have some error!");
+                        this.SetHandlerResult(result, -1, this.GetType(), "the image server have some unkown error,upload image(s) failed!");
                         return;
                     }
                 }
-                this.SetHandlerResult(result, 0, "upload report image successfully and continue!");
+                this.SetHandlerResult(result, 1, "upload report image successfully and continue!");
             }
             catch (Exception ex)
             {
@@ -154,12 +153,12 @@ namespace XYS.Report.Lis.Handler
         }
 
         //多张图片上传
-        private byte[] GenderPostData(List<AbstractSubFillElement> graphList, string boundary)
+        private byte[] GenderPostData(List<AbstractFillElement> graphList, string boundary)
         {
             string fileName = null;
             ReportGraphElement rge = null;
             MemoryStream stream = new MemoryStream();
-            foreach (AbstractSubFillElement element in graphList)
+            foreach (AbstractFillElement element in graphList)
             {
                 rge = element as ReportGraphElement;
                 if (rge != null)

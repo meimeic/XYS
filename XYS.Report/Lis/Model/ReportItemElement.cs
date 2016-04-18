@@ -6,7 +6,7 @@ using XYS.Common;
 using MongoDB.Bson.Serialization.Attributes;
 namespace XYS.Report.Lis.Model
 {
-    public class ReportItemElement : AbstractSubFillElement, IComparable<ReportItemElement>
+    public class ReportItemElement : AbstractFillElement, IComparable<ReportItemElement>
     {
         #region 私有字段
         private int m_itemNo;

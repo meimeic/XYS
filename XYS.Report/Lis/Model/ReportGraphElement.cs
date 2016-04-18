@@ -4,7 +4,7 @@ using XYS.Report;
 using XYS.Common;
 namespace XYS.Report.Lis.Model
 {
-    public class ReportGraphElement : AbstractSubFillElement,IComparable<ReportGraphElement>
+    public class ReportGraphElement : AbstractFillElement,IComparable<ReportGraphElement>
     {
         #region 私有字段
         private string m_graphName;

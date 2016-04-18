@@ -32,31 +32,31 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 同步方法
-        public void HandleReport(ReportReportElement report, HandlerResult result)
+        public void HandleReport(ReportReportElement report)
         {
-            this.HeadHandler.ReportOption(report, result);
+            this.HeadHandler.ReportOption(report);
         }
         #endregion
 
         #region 异步方法
-        public async Task HandleReportAsync(ReportReportElement report, HandlerResult result, Func<ReportReportElement, HandlerResult, Task> callback = null)
+        public async Task HandleReportAsync(ReportReportElement report, Func<ReportReportElement, Task> callback = null)
         {
-            if (result.Code != -1)
+            if (report.HandleResult.ResultCode != -1)
             {
-                await HandleReportTask(report, result);
+                await HandleReportTask(report);
             }
             if (callback != null)
             {
-                await callback(report, result);
+                await callback(report);
             }
         }
-        protected Task HandleReportTask(ReportReportElement report, HandlerResult result)
+        protected Task HandleReportTask(ReportReportElement report)
         {
             return Task.Run(() =>
             {
                 IReportHandler header = new ReportHeadHandler();
                 this.InitHandlerChain(header);
-                header.ReportOption(report, result);
+                header.ReportOption(report);
             });
         }
         #endregion

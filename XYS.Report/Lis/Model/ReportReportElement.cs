@@ -11,14 +11,13 @@ using MongoDB.Bson.Serialization.Options;
 using MongoDB.Bson.Serialization.Attributes;
 namespace XYS.Report.Lis.Model
 {
-    public class ReportReportElement : AbstractSubFillElement, IReportElement, IPatientElement
+    public class ReportReportElement : AbstractFillElement, IReportElement, IPatientElement
     {
         #region 私有实例字段
         private Guid m_id;
         private LisReportPK m_reportPK;
-
+        private HandleResult m_handleResult;
         private int m_final;
-        //private string m_reportID;
 
         private int m_sectionNo;
         private string m_serialNo;
@@ -76,6 +75,7 @@ namespace XYS.Report.Lis.Model
         {
             this.m_remarkFlag = 0;
             this.m_superItemList = new List<int>(3);
+            this.m_handleResult = new HandleResult();
             this.m_reportImageMap = new Dictionary<string, string>(4);
             this.m_reportItemCollection = new List<ReportItemElement>(20);
             this.m_reportCustomCollection = new List<ReportCustomElement>(2);
@@ -88,6 +88,11 @@ namespace XYS.Report.Lis.Model
         public IReportKey PK
         {
             get { return this.m_reportPK; }
+        }
+        [BsonIgnore]
+        public HandleResult HandleResult
+        {
+            get { return this.m_handleResult; }
         }
         #endregion
 
@@ -422,14 +427,14 @@ namespace XYS.Report.Lis.Model
             this.RemarkFlag = 0;
             this.Remark = "";
         }
-        public List<AbstractSubFillElement> GetReportItem(Type type)
+        public List<AbstractFillElement> GetReportItem(Type type)
         {
             if (type != null)
             {
-                List<AbstractSubFillElement> result = this.m_reportItemTable[type] as List<AbstractSubFillElement>;
+                List<AbstractFillElement> result = this.m_reportItemTable[type] as List<AbstractFillElement>;
                 if (result == null)
                 {
-                    result = new List<AbstractSubFillElement>(10);
+                    result = new List<AbstractFillElement>(10);
                     lock (this.m_reportItemTable)
                     {
                         this.m_reportItemTable[type] = result;

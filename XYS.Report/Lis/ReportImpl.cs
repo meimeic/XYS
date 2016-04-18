@@ -28,17 +28,17 @@ namespace XYS.Report.Lis
         #endregion
 
         #region 实现ireport接口
-        public void Operate(ReportReportElement report, HandlerResult result)
+        public void Operate(ReportReportElement report, HandleResult result)
         {
             this.Reporter.OperateReport(report, result);
             return;
         }
-        public void OperateAsync(List<ReportReportElement> reportList, Action<ReportReportElement, HandlerResult> callbak = null)
+        public void OperateAsync(List<ReportReportElement> reportList, Action<ReportReportElement, HandleResult> callbak = null)
         {
-            HandlerResult result = null;
+            HandleResult result = null;
             foreach (ReportReportElement report in reportList)
             {
-                result = new HandlerResult();
+                result = new HandleResult();
                 this.Reporter.OperateReportAsync(report, result, callbak);
             }
         }

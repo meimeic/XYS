@@ -23,7 +23,7 @@ namespace ZhTest
         }
         private void button1_Click(object sender, EventArgs e)
         {
-            HandlerResult result = null;
+            HandleResult result = null;
             Require req = new Require();
             req.EqualFields.Add("SerialNo", "1601047306");
             req.EqualFields.Add("sectionno", 11);

@@ -14,13 +14,13 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override void OperateReport(ReportReportElement report, HandlerResult result)
+        protected override void OperateReport(ReportReportElement report)
         {
             ReportCustomElement rce = null;
-            List<AbstractSubFillElement> customList = report.GetReportItem(typeof(ReportCustomElement));
+            List<AbstractFillElement> customList = report.GetReportItem(typeof(ReportCustomElement));
             if (IsExist(customList))
             {
-                foreach (AbstractSubFillElement custom in customList)
+                foreach (AbstractFillElement custom in customList)
                 {
                     rce = custom as ReportCustomElement;
                     if (rce != null)
@@ -29,7 +29,7 @@ namespace XYS.Report.Lis.Handler
                     }
                 }
             }
-            this.SetHandlerResult(result, 0, "there is no ReportCustomElement to handle and continue!");
+            this.SetHandlerResult(report.HandleResult, 1, "there is no ReportCustomElement to handle and continue!");
         }
         #endregion
 

@@ -9,7 +9,7 @@ using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Handler;
 namespace XYS.Report.Lis
 {
-    public delegate Task ExraOperateReport(ReportReportElement report, HandlerResult result);
+    public delegate Task ExraOperateReport(ReportReportElement report, HandleResult result);
 
     public abstract class Reporter
     {
@@ -34,7 +34,7 @@ namespace XYS.Report.Lis
         #endregion
 
         #region 同步实现
-        public void OperateReport(ReportReportElement report, HandlerResult result)
+        public void OperateReport(ReportReportElement report, HandleResult result)
         {
             if (report.LisPK == null || !report.LisPK.Configured)
             {
@@ -43,13 +43,13 @@ namespace XYS.Report.Lis
             }
 
             this.m_filler.FillReport(report, result);
-            if (result.Code == -1)
+            if (result.ResultCode == -1)
             {
                 return;
             }
 
             this.m_handler.HandleReport(report, result);
-            if (result.Code == -1)
+            if (result.ResultCode == -1)
             {
                 return;
             }
@@ -60,7 +60,7 @@ namespace XYS.Report.Lis
         #endregion
 
         #region 异步实现
-        public async Task OperateReportAsync(ReportReportElement report, HandlerResult result, Action<ReportReportElement, HandlerResult> callback = null)
+        public async Task OperateReportAsync(ReportReportElement report, HandleResult result, Action<ReportReportElement, HandleResult> callback = null)
         {
             await OperateReportTask(report, result);
             if (callback != null)
@@ -71,19 +71,19 @@ namespace XYS.Report.Lis
         #endregion
 
         #region 异步辅助方法
-        private Task OperateReportTask(ReportReportElement report, HandlerResult result)
+        private Task OperateReportTask(ReportReportElement report, HandleResult result)
         {
             return this.m_filler.FillReportAsync(report, result, FillReportComplete);
         }
-        private Task FillReportComplete(ReportReportElement report, HandlerResult result)
+        private Task FillReportComplete(ReportReportElement report, HandleResult result)
         {
             return this.m_handler.HandleReportAsync(report, result, HandleReportComplete);
         }
-        private Task HandleReportComplete(ReportReportElement report, HandlerResult result)
+        private Task HandleReportComplete(ReportReportElement report, HandleResult result)
         {
             return this.m_mongo.InsertAsync(report, result, SaveReportComplete);
         }
-        private Task SaveReportComplete(ReportReportElement report, HandlerResult result)
+        private Task SaveReportComplete(ReportReportElement report, HandleResult result)
         {
             if (this.m_extraOperate != null)
             {
@@ -94,7 +94,7 @@ namespace XYS.Report.Lis
         #endregion
 
         #region 辅助方法
-        private Task Log(ReportReportElement report, HandlerResult result)
+        private Task Log(ReportReportElement report, HandleResult result)
         {
             return Task.Run(() =>
             {
@@ -102,24 +102,24 @@ namespace XYS.Report.Lis
                 sb.Append("ReportID:");
                 sb.Append(report.ReportID);
                 sb.Append("    ReportStatus:");
-                sb.Append(result.Code);
+                sb.Append(result.ResultCode);
                 sb.Append("    Message:");
                 sb.Append(result.Message);
                 Console.WriteLine(sb.ToString());
             });
         }
 
-        protected void SetHandlerResult(HandlerResult result, int code, string message)
+        protected void SetHandlerResult(HandleResult result, int code, string message)
         {
-            result.Code = code;
+            result.ResultCode = code;
             result.Message = message;
         }
-        protected void SetHandlerResult(HandlerResult result, int code, Type type, string message)
+        protected void SetHandlerResult(HandleResult result, int code, Type type, string message)
         {
             SetHandlerResult(result, code, message);
-            result.FinalType = type;
+            result.HandleType = type;
         }
-        protected void SetHandlerResult(HandlerResult result, int code, Type type, string message, IReportKey key)
+        protected void SetHandlerResult(HandleResult result, int code, Type type, string message, IReportKey key)
         {
             SetHandlerResult(result, code, type, message);
             result.ReportKey = key;

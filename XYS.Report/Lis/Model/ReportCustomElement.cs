@@ -3,7 +3,7 @@ using XYS.Common;
 using MongoDB.Bson.Serialization.Attributes;
 namespace XYS.Report.Lis.Model
 {
-    public class ReportCustomElement : AbstractSubFillElement
+    public class ReportCustomElement : AbstractFillElement
     {
         #region 私有字段
         private string m_name;

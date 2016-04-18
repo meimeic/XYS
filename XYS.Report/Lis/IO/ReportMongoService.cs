@@ -31,15 +31,13 @@ namespace XYS.Report.Lis.IO
         #endregion
 
         #region 同步方法
-        public void Insert(ReportReportElement report, HandlerResult result)
+        public void Insert(ReportReportElement report)
         {
-            report.Final = 1;
             try
             {
                 IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
                 ReportCollection.InsertOne(report);
-                this.SetHandlerResult(result, 1, "save to mongo sucessfully");
-                return;
+                this.SetHandlerResult(report.HandleResult, 2, "save to mongo sucessfully");
             }
             catch (Exception ex)
             {
@@ -48,14 +46,12 @@ namespace XYS.Report.Lis.IO
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                this.SetHandlerResult(result, -1, this.GetType(), sb.ToString(), report.PK);
-                return;
+                this.SetHandlerResult(report.HandleResult, -1, this.GetType(), sb.ToString());
             }
         }
         public void Insert(IEnumerable<ReportReportElement> reportList)
         {
-            IMongoDatabase db = MClient.GetDatabase("lis");
-            IMongoCollection<ReportReportElement> ReportCollection = db.GetCollection<ReportReportElement>("report");
+            IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
             ReportCollection.InsertMany(reportList);
         }
         public void Query()
@@ -77,15 +73,15 @@ namespace XYS.Report.Lis.IO
         #endregion
 
         #region 异步方法
-        public async Task InsertAsync(ReportReportElement report, HandlerResult result, Func<ReportReportElement, HandlerResult, Task> callback = null)
+        public async Task InsertAsync(ReportReportElement report, Func<ReportReportElement, Task> callback = null)
         {
-            if (result.Code != -1)
+            if (report.HandleResult.ResultCode != -1)
             {
                 try
                 {
                     IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
                     await ReportCollection.InsertOneAsync(report);
-                    this.SetHandlerResult(result, 1, this.GetType(), "save to mongo sucessfully", report.PK);
+                    this.SetHandlerResult(report.HandleResult, 2, this.GetType(), "save to mongo sucessfully");
                 }
                 catch (Exception ex)
                 {
@@ -94,12 +90,12 @@ namespace XYS.Report.Lis.IO
                     sb.Append(ex.Message);
                     sb.Append(SystemInfo.NewLine);
                     sb.Append(ex.ToString());
-                    this.SetHandlerResult(result, -1, this.GetType(), sb.ToString(), report.PK);
+                    this.SetHandlerResult(report.HandleResult, -1, this.GetType(), sb.ToString());
                 }
             }
             if (callback != null)
             {
-                await callback(report, result);
+                await callback(report);
             }
         }
         public async Task InsertAsync()
@@ -108,21 +104,16 @@ namespace XYS.Report.Lis.IO
         }
         #endregion
 
-        #region
-        protected void SetHandlerResult(HandlerResult result, int code, string message)
+        #region 辅助方法
+        protected void SetHandlerResult(HandleResult result, int code, string message)
         {
-            result.Code = code;
+            result.ResultCode = code;
             result.Message = message;
         }
-        protected void SetHandlerResult(HandlerResult result, int code, Type type, string message)
+        protected void SetHandlerResult(HandleResult result, int code, Type type, string message)
         {
             SetHandlerResult(result, code, message);
-            result.FinalType = type;
-        }
-        protected void SetHandlerResult(HandlerResult result, int code, Type type, string message, IReportKey key)
-        {
-            SetHandlerResult(result, code, type, message);
-            result.ReportKey = key;
+            result.HandleType = type;
         }
         #endregion
     }
