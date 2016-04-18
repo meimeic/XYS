@@ -73,7 +73,6 @@
     <Compile Include="Lis\IO\SQLServer\LisReportPKDAL.cs" />
     <Compile Include="Lis\Handler\ReportReportHandler.cs" />
     <Compile Include="Lis\IReport.cs" />
-    <Compile Include="Lis\IReporter.cs" />
     <Compile Include="Lis\LisReportPK.cs" />
     <Compile Include="Lis\Model\AbstractSubFillElement.cs" />
     <Compile Include="ISubElement.cs" />
@@ -101,18 +100,6 @@
       <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
       <Name>XYS</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="lib\MongoDB.Bson.dll" />
-    <Content Include="lib\MongoDB.Bson.xml" />
-    <Content Include="lib\MongoDB.Driver.Core.dll" />
-    <Content Include="lib\MongoDB.Driver.Core.xml" />
-    <Content Include="lib\MongoDB.Driver.dll" />
-    <Content Include="lib\MongoDB.Driver.GridFS.dll" />
-    <Content Include="lib\MongoDB.Driver.GridFS.xml" />
-    <Content Include="lib\MongoDB.Driver.Legacy.dll" />
-    <Content Include="lib\MongoDB.Driver.Legacy.xml" />
-    <Content Include="lib\MongoDB.Driver.xml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

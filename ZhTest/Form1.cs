@@ -12,7 +12,6 @@ using System.IO;
 using XYS.Report;
 using XYS.Report.Lis;
 using XYS.Report.Lis.Model;
-using XYS.Report.Lis.Persistence.Mongo;
 namespace ZhTest
 {
     public partial class Form1 : Form
@@ -24,20 +23,24 @@ namespace ZhTest
         }
         private void button1_Click(object sender, EventArgs e)
         {
+            HandlerResult result = null;
             Require req = new Require();
             req.EqualFields.Add("SerialNo", "1602223836");
-            req.EqualFields.Add("sectionno",28);
+            req.EqualFields.Add("sectionno", 28);
             List<ReportReportElement> reportList = Report.GetReports("where SectionNo=27 and  ReceiveDate>'2016-01-01' and ReceiveDate<'2016-01-07' ");
-            foreach (ReportReportElement rre in reportList)
-            {
-                HandlerResult res= Report.operate(rre);
-                Console.WriteLine(res.Message);
-            }
+            //List<ReportReportElement> reportList = Report.GetReports(req);
+            //foreach (ReportReportElement rre in reportList)
+            //{
+            //    result = new HandlerResult();
+            //    Report.Operate(rre, result);
+            //    Console.WriteLine(result.Code + "    " + result.Message);
+            //}
+            Report.OperateAsync(reportList);
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            MongoService.Query();
+
         }
     }
 }

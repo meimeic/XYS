@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -8,7 +9,9 @@ using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Handler;
 namespace XYS.Report.Lis
 {
-    public abstract class Reporter : IReporter
+    public delegate Task ExraOperateReport(ReportReportElement report, HandlerResult result);
+
+    public abstract class Reporter
     {
         #region 私有字段
         private ReportFillService m_filler;
@@ -64,11 +67,10 @@ namespace XYS.Report.Lis
             {
                 callback(report, result);
             }
-            return;
         }
         #endregion
 
-        #region 
+        #region 异步辅助方法
         private Task OperateReportTask(ReportReportElement report, HandlerResult result)
         {
             return this.FillReportComplete(report, result);
@@ -96,7 +98,14 @@ namespace XYS.Report.Lis
         {
             return Task.Run(() =>
             {
-                Console.WriteLine(report.ReportID + ";"+result.Code);
+                StringBuilder sb = new StringBuilder();
+                sb.Append("ReportID:");
+                sb.Append(report.ReportID);
+                sb.Append("    ReportStatus:");
+                sb.Append(result.Code);
+                sb.Append("    Message:");
+                sb.Append(result.Message);
+                Console.WriteLine(sb.ToString());
             });
         }
 

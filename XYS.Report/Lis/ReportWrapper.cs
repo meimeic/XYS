@@ -8,12 +8,12 @@ namespace XYS.Report.Lis
 {
     public abstract class ReportWrapper
     {
-        private readonly IReporter m_reporter;
-        protected ReportWrapper(IReporter reporter)
+        private readonly Reporter m_reporter;
+        protected ReportWrapper(Reporter reporter)
         {
             this.m_reporter = reporter;
         }
-        public virtual IReporter Reporter
+        public virtual Reporter Reporter
         {
             get { return this.m_reporter; }
         }

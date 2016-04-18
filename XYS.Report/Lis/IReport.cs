@@ -6,7 +6,8 @@ namespace XYS.Report.Lis
 {
     public interface IReport
     {
-        void operate(ReportReportElement report,HandlerResult result);
+        void Operate(ReportReportElement report,HandlerResult result);
+        void OperateAsync(List<ReportReportElement> reportList,Action<ReportReportElement,HandlerResult> callbak=null);
         List<ReportReportElement> GetReports(Require req);
         List<ReportReportElement> GetReports(string where);
         List<LisReportPK> GetReportPK(Require req);

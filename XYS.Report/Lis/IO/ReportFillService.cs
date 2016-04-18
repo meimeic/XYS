@@ -88,7 +88,6 @@ namespace XYS.Report.Lis.IO
             {
                 await callback(report, result);
             }
-            return;
         }
         private Task FillReportTask(ReportReportElement report, HandlerResult result)
         {

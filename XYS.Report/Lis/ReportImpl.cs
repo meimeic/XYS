@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 using XYS.Report.Lis.Model;
 using XYS.Report.Lis.IO.SQLServer;
 namespace XYS.Report.Lis
 {
-    public class ReportImpl:ReportWrapper,IReport
+    public class ReportImpl : ReportWrapper, IReport
     {
         #region 字段
         private LisReportPKDAL m_pkDAL;
         #endregion
 
         #region 构造函数
-        public ReportImpl(IReporter reporter)
+        public ReportImpl(Reporter reporter)
             : base(reporter)
         {
             this.m_pkDAL = new LisReportPKDAL();
@@ -27,9 +28,19 @@ namespace XYS.Report.Lis
         #endregion
 
         #region 实现ireport接口
-        public HandlerResult operate(ReportReportElement report)
+        public void Operate(ReportReportElement report, HandlerResult result)
         {
-            return this.Reporter.OperateReport(report);
+            this.Reporter.OperateReport(report, result);
+            return;
+        }
+        public void OperateAsync(List<ReportReportElement> reportList, Action<ReportReportElement, HandlerResult> callbak = null)
+        {
+            HandlerResult result = null;
+            foreach (ReportReportElement report in reportList)
+            {
+                result = new HandlerResult();
+                this.Reporter.OperateReportAsync(report, result, callbak);
+            }
         }
         public List<ReportReportElement> GetReports(Require req)
         {

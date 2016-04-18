@@ -50,7 +50,6 @@ namespace XYS.Report.Lis.Handler
             {
                 await callback(report, result);
             }
-            return;
         }
         protected Task HandleReportTask(ReportReportElement report, HandlerResult result)
         {
@@ -59,7 +58,6 @@ namespace XYS.Report.Lis.Handler
                 IReportHandler header = new ReportHeadHandler();
                 this.InitHandlerChain(header);
                 header.ReportOption(report, result);
-                return;
             });
         }
         #endregion
