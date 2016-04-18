@@ -51,7 +51,6 @@ namespace XYS.Report.Lis.Handler
                 return;
             }
             this.SetHandlerResult(result, 0, "there is no ReportGraphElement to handle and continue!");
-            return;
         }
         #endregion
 
@@ -71,7 +70,7 @@ namespace XYS.Report.Lis.Handler
                 List<WebImage> resList = JsonConvert.DeserializeObject<List<WebImage>>(resposeStr);
                 foreach (WebImage wi in resList)
                 {
-                    if (string.IsNullOrEmpty(wi.Path))
+                    if (!string.IsNullOrEmpty(wi.Path))
                     {
                         if (wi.Path[0] == '/')
                         {
@@ -82,9 +81,13 @@ namespace XYS.Report.Lis.Handler
                             imageMap.Add(wi.Name, ImageServer + "/" + wi.Path);
                         }
                     }
+                    else
+                    {
+                        this.SetHandlerResult(result, -1, this.GetType(),"the image server have some error!");
+                        return;
+                    }
                 }
                 this.SetHandlerResult(result, 0, "upload report image successfully and continue!");
-                return;
             }
             catch (Exception ex)
             {
@@ -94,7 +97,6 @@ namespace XYS.Report.Lis.Handler
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
                 this.SetHandlerResult(result, -1, this.GetType(), sb.ToString());
-                return;
             }
             //单张图片上传
             //byte[] postData = null;

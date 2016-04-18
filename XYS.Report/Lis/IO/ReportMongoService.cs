@@ -13,13 +13,13 @@ namespace XYS.Report.Lis.IO
 {
     public class ReportMongoService
     {
-        #region
+        #region 字段
         static MongoClient MClient;
         static IMongoDatabase LisMDB;
         private static readonly string MongoConnectionStr = "mongodb://10.1.11.10:27017";
         #endregion
         
-        #region
+        #region 构造函数
         static ReportMongoService()
         {
             MClient = new MongoClient(MongoConnectionStr);
@@ -101,7 +101,10 @@ namespace XYS.Report.Lis.IO
             {
                 await callback(report, result);
             }
-            return;
+        }
+        public async Task InsertAsync()
+        {
+ 
         }
         #endregion
 

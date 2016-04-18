@@ -73,7 +73,7 @@ namespace XYS.Report.Lis
         #region 异步辅助方法
         private Task OperateReportTask(ReportReportElement report, HandlerResult result)
         {
-            return this.FillReportComplete(report, result);
+            return this.m_filler.FillReportAsync(report, result, FillReportComplete);
         }
         private Task FillReportComplete(ReportReportElement report, HandlerResult result)
         {

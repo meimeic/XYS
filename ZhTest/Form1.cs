@@ -25,9 +25,10 @@ namespace ZhTest
         {
             HandlerResult result = null;
             Require req = new Require();
-            req.EqualFields.Add("SerialNo", "1602223836");
-            req.EqualFields.Add("sectionno", 28);
-            List<ReportReportElement> reportList = Report.GetReports("where SectionNo=27 and  ReceiveDate>'2016-01-01' and ReceiveDate<'2016-01-07' ");
+            req.EqualFields.Add("SerialNo", "1601047306");
+            req.EqualFields.Add("sectionno", 11);
+            req.EqualFields.Add("SampleNo", "1600005");
+             List<ReportReportElement> reportList = Report.GetReports("where SectionNo in(2,27,28,62,17,23,29,34,5,19,20,21,25,30,33,35,63,14,4,24,18,11) and  ReceiveDate>'2016-01-01' and ReceiveDate<'2016-01-07' ");
             //List<ReportReportElement> reportList = Report.GetReports(req);
             //foreach (ReportReportElement rre in reportList)
             //{

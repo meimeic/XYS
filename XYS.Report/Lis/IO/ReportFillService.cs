@@ -10,7 +10,6 @@ using XYS.Common;
 using XYS.Report.Lis.Util;
 using XYS.Report.Lis.Model;
 using XYS.Report.Lis.IO.SQLServer;
-
 namespace XYS.Report.Lis.IO
 {
     public delegate HandlerResult FillReportComplete(ReportReportElement report);

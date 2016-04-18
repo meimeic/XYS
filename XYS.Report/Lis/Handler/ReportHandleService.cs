@@ -45,7 +45,6 @@ namespace XYS.Report.Lis.Handler
             {
                 await HandleReportTask(report, result);
             }
-
             if (callback != null)
             {
                 await callback(report, result);
@@ -87,16 +86,16 @@ namespace XYS.Report.Lis.Handler
             IReportHandler currentHandler = null;
             //检验项处理器
             currentHandler = new ReportItemHandler();
-            AddHandler(currentHandler, tailHandler);
+            AddHandler(currentHandler,ref tailHandler);
             //图片项处理器
             currentHandler = new ReportGraphHandler();
-            AddHandler(currentHandler, tailHandler);
+            AddHandler(currentHandler, ref tailHandler);
             //自定义项处理器
             currentHandler = new ReportCustomHandler();
-            AddHandler(currentHandler, tailHandler);
+            AddHandler(currentHandler, ref tailHandler);
             //报告处理器
             currentHandler = new ReportReportHandler();
-            AddHandler(currentHandler, tailHandler);
+            AddHandler(currentHandler, ref tailHandler);
             //}
         }
         protected void AddHandler(IReportHandler handler)
@@ -115,7 +114,7 @@ namespace XYS.Report.Lis.Handler
                 this.m_tailHandler = handler;
             }
         }
-        protected void AddHandler(IReportHandler current, IReportHandler tail)
+        protected void AddHandler(IReportHandler current,ref IReportHandler tail)
         {
             tail.Next = current;
             tail = current;

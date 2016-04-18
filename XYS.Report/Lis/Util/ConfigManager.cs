@@ -12,9 +12,7 @@ namespace XYS.Report.Lis.Util
     {
         #region 私有常量
         private static readonly Type declaringType = typeof(ConfigManager);
-
         private static readonly FillElementMap ELEMENT_MAP = new FillElementMap(4);
-        //private static readonly LisParItemMap PARITEM_MAP = new LisParItemMap(40);
         private static readonly LisSectionMap SECTION_MAP = new LisSectionMap(20);
         #endregion
 

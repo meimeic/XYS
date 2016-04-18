@@ -34,9 +34,11 @@ namespace XYS.Report.Lis.Handler
             //reportitem排序
             report.ReportItemCollection.Sort();
 
+            //
+            report.Final = 1;
+
             //返回值
             this.SetHandlerResult(result, 0, "handle ReportReportElement successfully and continue!");
-            return;
         }
         #endregion
 
