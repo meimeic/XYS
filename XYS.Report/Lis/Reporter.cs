@@ -9,7 +9,7 @@ using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Handler;
 namespace XYS.Report.Lis
 {
-    public delegate Task ExraOperateReport(ReportReportElement report, HandleResult result);
+    public delegate Task ExraOperateReport(ReportReportElement report);
 
     public abstract class Reporter
     {
@@ -34,67 +34,90 @@ namespace XYS.Report.Lis
         #endregion
 
         #region 同步实现
-        public void OperateReport(ReportReportElement report, HandleResult result)
+        public void OperateReport(ReportReportElement report)
         {
             if (report.LisPK == null || !report.LisPK.Configured)
             {
-                this.SetHandlerResult(result, -1, this.GetType(), "the report key is null or not config!");
+                this.SetHandlerResult(report.HandleResult, -1, this.GetType(), "the report key is null or not config!");
                 return;
             }
 
-            this.m_filler.FillReport(report, result);
-            if (result.ResultCode == -1)
+            this.m_filler.FillReport(report);
+            if (report.HandleResult.ResultCode == -1)
             {
                 return;
             }
 
-            this.m_handler.HandleReport(report, result);
-            if (result.ResultCode == -1)
+            this.m_handler.HandleReport(report);
+            if (report.HandleResult.ResultCode == -1)
             {
                 return;
             }
 
-            this.m_mongo.Insert(report, result);
+            this.m_mongo.Insert(report);
             return;
         }
         #endregion
 
         #region 异步实现
-        public async Task OperateReportAsync(ReportReportElement report, HandleResult result, Action<ReportReportElement, HandleResult> callback = null)
+        public async Task OperateReportAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
         {
-            await OperateReportTask(report, result);
+            await OperateReportTask(report);
             if (callback != null)
             {
-                callback(report, result);
+                callback(report);
             }
+        }
+        public async Task OperateReportWithSaveAsync(List<ReportReportElement> reportList,Action<ReportReportElement> callback=null)
+        {
+            await Task.Run(() => {
+                foreach (ReportReportElement report in reportList)
+                {
+                    this.m_filler.FillReport(report);
+                    if (report.HandleResult.ResultCode != -1)
+                    {
+                        this.m_handler.HandleReport(report);
+                    }
+                }
+            });
+
         }
         #endregion
 
         #region 异步辅助方法
-        private Task OperateReportTask(ReportReportElement report, HandleResult result)
+        private Task OperateReportTask(ReportReportElement report)
         {
-            return this.m_filler.FillReportAsync(report, result, FillReportComplete);
+            return this.m_filler.FillReportAsync(report, FillReportComplete);
         }
-        private Task FillReportComplete(ReportReportElement report, HandleResult result)
+        private Task FillReportComplete(ReportReportElement report)
         {
-            return this.m_handler.HandleReportAsync(report, result, HandleReportComplete);
+            return this.m_handler.HandleReportAsync(report, HandleReportComplete);
         }
-        private Task HandleReportComplete(ReportReportElement report, HandleResult result)
+        private Task HandleReportComplete(ReportReportElement report)
         {
-            return this.m_mongo.InsertAsync(report, result, SaveReportComplete);
+            return this.m_mongo.InsertAsync(report, SaveReportComplete);
         }
-        private Task SaveReportComplete(ReportReportElement report, HandleResult result)
+        private Task SaveReportComplete(ReportReportElement report)
         {
             if (this.m_extraOperate != null)
             {
-                return this.m_extraOperate(report, result);
+                return this.m_extraOperate(report);
             }
             return null;
+        }
+
+        private Task OperateReportWithoutSaveTask(ReportReportElement report)
+        {
+            return this.m_filler.FillReportAsync(report, FillReportCompleteWithoutSave);
+        }
+        private Task FillReportCompleteWithoutSave(ReportReportElement report)
+        {
+            return this.m_handler.HandleReportAsync(report);
         }
         #endregion
 
         #region 辅助方法
-        private Task Log(ReportReportElement report, HandleResult result)
+        private Task Log(ReportReportElement report)
         {
             return Task.Run(() =>
             {
@@ -102,9 +125,9 @@ namespace XYS.Report.Lis
                 sb.Append("ReportID:");
                 sb.Append(report.ReportID);
                 sb.Append("    ReportStatus:");
-                sb.Append(result.ResultCode);
+                sb.Append(report.HandleResult.ResultCode);
                 sb.Append("    Message:");
-                sb.Append(result.Message);
+                sb.Append(report.HandleResult.Message);
                 Console.WriteLine(sb.ToString());
             });
         }
@@ -118,11 +141,6 @@ namespace XYS.Report.Lis
         {
             SetHandlerResult(result, code, message);
             result.HandleType = type;
-        }
-        protected void SetHandlerResult(HandleResult result, int code, Type type, string message, IReportKey key)
-        {
-            SetHandlerResult(result, code, type, message);
-            result.ReportKey = key;
         }
         #endregion
     }

@@ -16,8 +16,9 @@ namespace XYS.Report.Lis.Model
         #region 私有实例字段
         private Guid m_id;
         private LisReportPK m_reportPK;
-        private HandleResult m_handleResult;
+        private string m_reportID;
         private int m_final;
+        private HandleResult m_handleResult;
 
         private int m_sectionNo;
         private string m_serialNo;
@@ -154,12 +155,20 @@ namespace XYS.Report.Lis.Model
         {
             get
             {
-                if (this.LisPK != null)
+                if (this.m_reportID == null)
                 {
-                    return this.LisPK.ID;
+                    if (this.LisPK != null)
+                    {
+                        this.m_reportID = this.LisPK.ID;
+                    }
+                    else
+                    {
+                        this.m_reportID = "Unkown";
+                    }
                 }
-                return "Unkown";
+                return this.m_reportID;
             }
+            set { this.m_reportID = value; }
         }
         [BsonElement(Order = 34)]
         public int Final

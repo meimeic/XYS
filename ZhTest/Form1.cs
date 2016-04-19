@@ -12,6 +12,7 @@ using System.IO;
 using XYS.Report;
 using XYS.Report.Lis;
 using XYS.Report.Lis.Model;
+using XYS.Report.Lis.IO;
 namespace ZhTest
 {
     public partial class Form1 : Form
@@ -41,7 +42,14 @@ namespace ZhTest
 
         private void button2_Click(object sender, EventArgs e)
         {
+            ReportMongoService service = new ReportMongoService();
+            service.Test();
+        }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            ReportMongoService service = new ReportMongoService();
+            service.TestAsync();
         }
     }
 }

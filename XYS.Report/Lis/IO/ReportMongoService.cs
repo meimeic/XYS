@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 using XYS.Util;
 using XYS.Report.Lis.Model;
+using XYS.Report.Lis.IO.Mongo;
 
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -16,6 +18,9 @@ namespace XYS.Report.Lis.IO
         #region 字段
         static MongoClient MClient;
         static IMongoDatabase LisMDB;
+        static FilterDefinitionBuilder<ReportReportElement> FilterBuiler;
+        static UpdateDefinitionBuilder<ReportReportElement> UpdateBuiler;
+        static ProjectionDefinitionBuilder<ReportReportElement> ProjectionBuiler;
         private static readonly string MongoConnectionStr = "mongodb://10.1.11.10:27017";
         #endregion
         
@@ -24,6 +29,9 @@ namespace XYS.Report.Lis.IO
         {
             MClient = new MongoClient(MongoConnectionStr);
             LisMDB = MClient.GetDatabase("lis");
+            FilterBuiler = Builders<ReportReportElement>.Filter;
+            UpdateBuiler = Builders<ReportReportElement>.Update;
+            ProjectionBuiler = Builders<ReportReportElement>.Projection;
         }
         public ReportMongoService()
         { 
@@ -70,6 +78,40 @@ namespace XYS.Report.Lis.IO
                 }
             }
         }
+
+        public void Test()
+        {
+            try
+            {
+                ProjectionDefinitionBuilder<ReportReportElement> projectionBuiler = Builders<ReportReportElement>.Projection;
+                ProjectionDefinition<ReportReportElement> projection = projectionBuiler.Include(r => r.SerialNo)
+                                                                                                                                          .Include(r => r.SectionNo)
+                                                                                                                                          .Include(r => r.SampleNo)
+                                                                                                                                          .Exclude(r => r.ID);
+                var rprojection = projectionBuiler.Expression(r => new { SerialNo = r.SerialNo, SectionNo = r.SectionNo, SampleNo = r.SampleNo, Final = r.Final });
+
+                //var projectionBuiler = Builders<ReportReportElement>.Projection;
+                //var projection = projectionBuiler.Include(r => r.SerialNo)
+                //                                                                                                                          .Include(r => r.SectionNo)
+                //                                                                                                                          .Include(r => r.SampleNo)
+                //                                                                                                                          .Exclude(r => r.ID);
+
+                FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ReportID, "20160104-11-1-1600024")
+                                                                                          & FilterBuiler.Eq(r => r.Final, -1);
+
+                IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
+
+                long count = ReportCollection.Count(filter);
+
+                Console.WriteLine(count);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+      
         #endregion
 
         #region 异步方法
@@ -98,13 +140,61 @@ namespace XYS.Report.Lis.IO
                 await callback(report);
             }
         }
-        public async Task InsertAsync()
+        public async Task InsertCurrentlyAsync(ReportReportElement report, Func<ReportReportElement, Task> callback = null)
         {
- 
+            if (report.HandleResult.ResultCode != -1)
+            {
+                IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
+
+                FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ReportID, report.ReportID)
+                                                                                      & FilterBuiler.Eq(r => r.Final, 1);
+
+                long count = await ReportCollection.CountAsync(filter);
+
+
+            }
+        }
+
+        public async Task TestAsync()
+        {
+            IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
+
+            FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ReportID, "20160104-11-1-1600024")
+                                                                                  & FilterBuiler.Eq(r => r.Final, 1);
+
+            UpdateDefinition<ReportReportElement> finalUpdate = UpdateBuiler.Set(r => r.Final, -1);
+
+            //ProjectionDefinition<ReportReportElement> projection = ProjectionBuiler.Include(r => r.ReportID)
+            //                                                                                                                          .Include(r => r.Final)
+            //                                                                                                                          .Include(r => r.ID);
+
+            //var projection = ProjectionBuiler.Expression(r => new { SerialNo = r.SerialNo, SectionNo = r.SectionNo, SampleNo = r.SampleNo, Final = r.Final });
+
+            ProjectionDefinition<ReportReportElement, ReportStatusProjection> projection = ProjectionBuiler.Expression(r => new ReportStatusProjection() { ID=r.ID,ReportID=r.ReportID,Final=r.Final});
+
+            FindOneAndUpdateOptions<ReportReportElement, ReportStatusProjection> options = new FindOneAndUpdateOptions<ReportReportElement, ReportStatusProjection>()
+            {
+                Projection = ProjectionBuiler.Expression(r => new ReportStatusProjection() { ID = r.ID, ReportID = r.ReportID, Final = r.Final })
+            };
+
+            Expression<Func<ReportReportElement, bool>> expFilter = rep => rep.ReportID.Equals("20160104-11-1-1600024") ;
+
+            var result =await ReportCollection.FindOneAndUpdateAsync(expFilter, finalUpdate, options);
+            if (result != null)
+            {
+                Console.WriteLine(result.Final);
+            }
+            else
+            {
+                Console.WriteLine("these is null");
+            }
         }
         #endregion
 
         #region 辅助方法
+
+
+
         protected void SetHandlerResult(HandleResult result, int code, string message)
         {
             result.ResultCode = code;

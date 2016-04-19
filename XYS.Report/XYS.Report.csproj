@@ -66,6 +66,8 @@
     <Compile Include="Lis\Handler\ReportHeadHandler.cs" />
     <Compile Include="Lis\Handler\ReportItemHandler.cs" />
     <Compile Include="Lis\IFillElement.cs" />
+    <Compile Include="Lis\IO\Mongo\AbstractReportProjection.cs" />
+    <Compile Include="Lis\IO\Mongo\ReportStatusProjection.cs" />
     <Compile Include="Lis\IO\ReportFillService.cs" />
     <Compile Include="Lis\IO\ReportMongoService.cs" />
     <Compile Include="Lis\IO\Utility\DbHelperOleDb.cs" />
@@ -106,9 +108,7 @@
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Lis\IO\Mongo\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
