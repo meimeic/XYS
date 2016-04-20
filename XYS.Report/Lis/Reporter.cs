@@ -19,7 +19,7 @@ namespace XYS.Report.Lis
         private ReportMongoService m_mongo;
         #endregion
 
-        #region
+        #region 私有变量
         private ExraOperateReport m_extraOperate;
         #endregion
 
@@ -64,7 +64,7 @@ namespace XYS.Report.Lis
         {
             await this.m_filler.FillReportAsync(report,this.FillReportComplete);
             await this.m_handler.HandleReportAsync(report,this.HandleReportComplete);
-            await this.m_mongo.InsertCurrentlyAsync(report);
+            await this.m_mongo.InsertCurrentlyAsync(report,this.SaveReportComplete);
             if (callback != null)
             {
                 callback(report);
