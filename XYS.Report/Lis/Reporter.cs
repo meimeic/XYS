@@ -93,12 +93,14 @@ namespace XYS.Report.Lis
         }
         protected void FillReportComplete(ReportReportElement report)
         {
+
         }
         protected void HandleReportComplete(ReportReportElement report)
         {
         }
         protected void SaveReportComplete(ReportReportElement report)
         {
+
         }
         #endregion
 
