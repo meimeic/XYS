@@ -38,7 +38,7 @@ namespace XYS.Report.Lis.Handler
             report.Final = 1;
 
             //返回值
-            this.SetHandlerResult(report.HandleResult, 1, "handle ReportReportElement successfully and continue!");
+            this.SetHandlerResult(report.HandleResult, 150, "handle ReportReportElement successfully and continue!");
         }
         #endregion
 

@@ -39,7 +39,7 @@ namespace XYS.Report.Lis.Handler
             if (IsExist(graphList))
             {
                 UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), report.ReportImageMap, report.HandleResult);
-                if (report.HandleResult.ResultCode == -1)
+                if (report.HandleResult.ResultCode < 0)
                 {
                     return;
                 }
@@ -49,12 +49,12 @@ namespace XYS.Report.Lis.Handler
                 }
                 return;
             }
-            this.SetHandlerResult(report.HandleResult, 1, "there is no ReportGraphElement to handle and continue!");
+            this.SetHandlerResult(report.HandleResult, 131, "there is no ReportGraphElement to handle and continue!");
         }
         #endregion
 
         #region 图片上传
-        protected void UploadImages(List<AbstractFillElement> graphList, string folder, Dictionary<string, string> imageMap,HandleResult result)
+        protected void UploadImages(List<AbstractFillElement> graphList, string folder, Dictionary<string, string> imageMap, HandleResult result)
         {
             WebClient wc = new WebClient();
             //多张图片上传
@@ -82,11 +82,11 @@ namespace XYS.Report.Lis.Handler
                     }
                     else
                     {
-                        this.SetHandlerResult(result, -1, this.GetType(), "the image server have some unkown error,upload image(s) failed!");
+                        this.SetHandlerResult(result, -132, this.GetType(), "the image server have some unkown error,upload image(s) failed!");
                         return;
                     }
                 }
-                this.SetHandlerResult(result, 1, "upload report image successfully and continue!");
+                this.SetHandlerResult(result, 130, "upload report image successfully and continue!");
             }
             catch (Exception ex)
             {
@@ -95,7 +95,7 @@ namespace XYS.Report.Lis.Handler
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                this.SetHandlerResult(result, -1, this.GetType(), sb.ToString());
+                this.SetHandlerResult(result, -131, this.GetType(), sb.ToString());
             }
             //单张图片上传
             //byte[] postData = null;

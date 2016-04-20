@@ -40,7 +40,7 @@ namespace XYS.Report.Lis.Handler
                     report.ReportItemCollection.Add(rie);
                 }
             }
-            this.SetHandlerResult(report.HandleResult, 1, "handle reportitem successfully and continue!");
+            this.SetHandlerResult(report.HandleResult, 120, "handle reportitem successfully and continue!");
         }
         #endregion
 

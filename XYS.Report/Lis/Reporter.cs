@@ -62,15 +62,18 @@ namespace XYS.Report.Lis
         #region 异步实现
         public async Task OperateReportAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
         {
-            await OperateReportTask(report);
+            await this.m_filler.FillReportAsync(report,this.FillReportComplete);
+            await this.m_handler.HandleReportAsync(report,this.HandleReportComplete);
+            await this.m_mongo.InsertCurrentlyAsync(report);
             if (callback != null)
             {
                 callback(report);
             }
         }
-        public async Task OperateReportWithSaveAsync(List<ReportReportElement> reportList,Action<ReportReportElement> callback=null)
+        public async Task OperateReportWithSaveAsync(List<ReportReportElement> reportList, Action<ReportReportElement> callback = null)
         {
-            await Task.Run(() => {
+            await Task.Run(() =>
+            {
                 foreach (ReportReportElement report in reportList)
                 {
                     this.m_filler.FillReport(report);
@@ -80,39 +83,22 @@ namespace XYS.Report.Lis
                     }
                 }
             });
-
         }
         #endregion
 
         #region 异步辅助方法
         private Task OperateReportTask(ReportReportElement report)
         {
-            return this.m_filler.FillReportAsync(report, FillReportComplete);
+            return Task.Run(() => { });
         }
-        private Task FillReportComplete(ReportReportElement report)
+        protected void FillReportComplete(ReportReportElement report)
         {
-            return this.m_handler.HandleReportAsync(report, HandleReportComplete);
         }
-        private Task HandleReportComplete(ReportReportElement report)
+        protected void HandleReportComplete(ReportReportElement report)
         {
-            return this.m_mongo.InsertAsync(report, SaveReportComplete);
         }
-        private Task SaveReportComplete(ReportReportElement report)
+        protected void SaveReportComplete(ReportReportElement report)
         {
-            if (this.m_extraOperate != null)
-            {
-                return this.m_extraOperate(report);
-            }
-            return null;
-        }
-
-        private Task OperateReportWithoutSaveTask(ReportReportElement report)
-        {
-            return this.m_filler.FillReportAsync(report, FillReportCompleteWithoutSave);
-        }
-        private Task FillReportCompleteWithoutSave(ReportReportElement report)
-        {
-            return this.m_handler.HandleReportAsync(report);
         }
         #endregion
 

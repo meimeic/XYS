@@ -67,6 +67,7 @@
     <Compile Include="Lis\Handler\ReportItemHandler.cs" />
     <Compile Include="Lis\IFillElement.cs" />
     <Compile Include="Lis\IO\Mongo\AbstractReportProjection.cs" />
+    <Compile Include="Lis\IO\Mongo\ReportInfoProjection.cs" />
     <Compile Include="Lis\IO\Mongo\ReportStatusProjection.cs" />
     <Compile Include="Lis\IO\ReportFillService.cs" />
     <Compile Include="Lis\IO\ReportMongoService.cs" />

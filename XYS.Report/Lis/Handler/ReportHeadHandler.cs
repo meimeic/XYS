@@ -14,7 +14,7 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类抽象方法
         protected override void OperateReport(ReportReportElement report)
         {
-            this.SetHandlerResult(report.HandleResult, 1, "the ReportHeadHandler do nothing just only the head,so continue!");
+            this.SetHandlerResult(report.HandleResult, 110, "the ReportHeadHandler do nothing just only the head,so continue!");
             return;
         }
         #endregion

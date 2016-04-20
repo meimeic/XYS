@@ -39,15 +39,15 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 异步方法
-        public async Task HandleReportAsync(ReportReportElement report, Func<ReportReportElement, Task> callback = null)
+        public async Task HandleReportAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
         {
-            if (report.HandleResult.ResultCode != -1)
+            if (report.HandleResult.ResultCode >= 0)
             {
                 await HandleReportTask(report);
             }
             if (callback != null)
             {
-                await callback(report);
+                callback(report);
             }
         }
         protected Task HandleReportTask(ReportReportElement report)

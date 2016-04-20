@@ -53,7 +53,7 @@ namespace XYS.Report.Lis.IO
             LisReportPK PK = report.LisPK;
             //填充报告元素
             FillReportElement(report, PK, report.HandleResult);
-            if (report.HandleResult.ResultCode == -1)
+            if (report.HandleResult.ResultCode < 0)
             {
                 return;
             }
@@ -66,26 +66,26 @@ namespace XYS.Report.Lis.IO
                 {
                     tempList = report.GetReportItem(type);
                     FillSubElements(tempList, PK, type, report.HandleResult);
-                    if (report.HandleResult.ResultCode == -1)
+                    if (report.HandleResult.ResultCode < 0)
                     {
                         return;
                     }
                 }
             }
-            this.SetHandlerResult(report.HandleResult, 2, "fill report successfully");
+            this.SetHandlerResult(report.HandleResult, 10, "fill report successfully");
         }
         #endregion
 
         #region 异步方法
-        public async Task FillReportAsync(ReportReportElement report, Func<ReportReportElement, Task> callback = null)
+        public async Task FillReportAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
         {
-            if (report.HandleResult.ResultCode != -1)
+            if (report.HandleResult.ResultCode >= 0)
             {
                 await FillReportTask(report);
             }
             if (callback != null)
             {
-                await callback(report);
+                callback(report);
             }
         }
         private Task FillReportTask(ReportReportElement report)
@@ -105,7 +105,7 @@ namespace XYS.Report.Lis.IO
             try
             {
                 lisDAL.Fill(report, sql);
-                this.SetHandlerResult(report.HandleResult, 1, "fill ReportReportElement successfully and continue!");
+                this.SetHandlerResult(report.HandleResult, 20, "fill ReportReportElement successfully and continue!");
             }
             catch (Exception ex)
             {
@@ -114,7 +114,7 @@ namespace XYS.Report.Lis.IO
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                this.SetHandlerResult(report.HandleResult, -1, this.GetType(), sb.ToString());
+                this.SetHandlerResult(report.HandleResult, -21, this.GetType(), sb.ToString());
                 return;
             }
             //填充子项
@@ -129,7 +129,7 @@ namespace XYS.Report.Lis.IO
                     try
                     {
                         this.ReportDAL.FillList(tempList, type, sql);
-                        this.SetHandlerResult(report.HandleResult, 1, "fill SubReportElements successfully and continue!");
+                        this.SetHandlerResult(report.HandleResult, 30, "fill SubReportElements successfully and continue!");
                     }
                     catch (Exception ex)
                     {
@@ -138,12 +138,12 @@ namespace XYS.Report.Lis.IO
                         sb.Append(ex.Message);
                         sb.Append(SystemInfo.NewLine);
                         sb.Append(ex.ToString());
-                        this.SetHandlerResult(report.HandleResult, -1, this.GetType(), sb.ToString());
+                        this.SetHandlerResult(report.HandleResult, -31, this.GetType(), sb.ToString());
                         return;
                     }
                 }
             }
-            this.SetHandlerResult(report.HandleResult, 2, "fill report successfully");
+            this.SetHandlerResult(report.HandleResult, 10, "fill report successfully");
         }
         #endregion
 
@@ -154,7 +154,7 @@ namespace XYS.Report.Lis.IO
             try
             {
                 this.ReportDAL.Fill(report, sql);
-                this.SetHandlerResult(result, 1, "fill report successfully and continue!");
+                this.SetHandlerResult(result, 20, "fill report successfully and continue!");
             }
             catch (Exception ex)
             {
@@ -163,7 +163,7 @@ namespace XYS.Report.Lis.IO
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                this.SetHandlerResult(result, -1, this.GetType(), sb.ToString());
+                this.SetHandlerResult(result, -21, this.GetType(), sb.ToString());
             }
         }
         private void FillSubElements(List<AbstractFillElement> subElementList, LisReportPK PK, Type type, HandleResult result)
@@ -172,7 +172,7 @@ namespace XYS.Report.Lis.IO
             try
             {
                 this.ReportDAL.FillList(subElementList, type, sql);
-                this.SetHandlerResult(result, 1, "fill subelements successfully and continue!");
+                this.SetHandlerResult(result, 30, "fill subelements successfully and continue!");
             }
             catch (Exception ex)
             {
@@ -181,7 +181,7 @@ namespace XYS.Report.Lis.IO
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                this.SetHandlerResult(result, -1, this.GetType(), sb.ToString());
+                this.SetHandlerResult(result, -31, this.GetType(), sb.ToString());
             }
         }
         #endregion

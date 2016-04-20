@@ -30,7 +30,7 @@ namespace XYS.Report.Lis.Handler
             {
                 OperateReport(rep);
                 //错误就退出
-                if (rep.HandleResult.ResultCode == -1)
+                if (rep.HandleResult.ResultCode < 0)
                 {
                     return;
                 }
@@ -41,12 +41,12 @@ namespace XYS.Report.Lis.Handler
                 }
                 else
                 {
-                    this.SetHandlerResult(rep.HandleResult, 2, "handle report successfully complete!");
+                    this.SetHandlerResult(rep.HandleResult, 100, "handle report successfully complete!");
                 }
             }
             else
             {
-                this.SetHandlerResult(report.HandleResult, -1, this.GetType(), "this object is not a lis report!");
+                this.SetHandlerResult(report.HandleResult, -101, this.GetType(), "this object is not a lis report!");
             }
         }
         #endregion

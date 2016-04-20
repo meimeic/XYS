@@ -45,22 +45,82 @@ namespace XYS.Report.Lis.IO
             {
                 IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
                 ReportCollection.InsertOne(report);
-                this.SetHandlerResult(report.HandleResult, 2, "save to mongo sucessfully");
+                this.SetHandlerResult(report.HandleResult, 200, "insert into mongo sucessfully");
             }
             catch (Exception ex)
             {
                 StringBuilder sb = new StringBuilder();
-                sb.Append("fialed when save report to mongo,error message:");
+                sb.Append("fialed when insert report into mongo,error message:");
                 sb.Append(ex.Message);
                 sb.Append(SystemInfo.NewLine);
                 sb.Append(ex.ToString());
-                this.SetHandlerResult(report.HandleResult, -1, this.GetType(), sb.ToString());
+                this.SetHandlerResult(report.HandleResult, -201, this.GetType(), sb.ToString());
             }
         }
-        public void Insert(IEnumerable<ReportReportElement> reportList)
+        public void InsertCurrently(ReportReportElement report)
         {
-            IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
-            ReportCollection.InsertMany(reportList);
+            if (report.HandleResult.ResultCode != -1)
+            {
+                FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ReportID, report.ReportID)
+                                                                                      & FilterBuiler.Eq(r => r.Final, 1);
+                UpdateDefinition<ReportReportElement> updater = UpdateBuiler.Set(r => r.Final, -1);
+
+                try
+                {
+                    IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
+                    UpdateResult res = ReportCollection.UpdateMany(filter, updater);
+                    if (res.IsAcknowledged)
+                    {
+                        //新插入
+                        if (res.ModifiedCount == 0)
+                        {
+                            ReportCollection.InsertOne(report);
+                            this.SetHandlerResult(report.HandleResult, 200, " insert into mongo sucessfully");
+                        }
+                        // 成功修改
+                        else if (res.MatchedCount > 0 && res.MatchedCount == res.ModifiedCount)
+                        {
+                            //
+                            ReportCollection.InsertOne(report);
+                            this.SetHandlerResult(report.HandleResult, 201, " update old report(s) and insert new report into mongo sucessfully");
+                        }
+                        //失败修改
+                        else
+                        {
+                            this.SetHandlerResult(report.HandleResult, 202, "not all the old report(s) has been updated,so can not insert the new report");
+                        }
+                    }
+                    else
+                    {
+                        this.SetHandlerResult(report.HandleResult, 203, "when update old report(s) occure some unkown things,so can not insert the new report");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("fialed when save report to mongo,error message:");
+                    sb.Append(ex.Message);
+                    sb.Append(SystemInfo.NewLine);
+                    sb.Append(ex.ToString());
+                    this.SetHandlerResult(report.HandleResult, -201, this.GetType(), sb.ToString());
+                }
+            }
+        }
+        public void InsertMany(IEnumerable<ReportReportElement> reportList)
+        {
+            try
+            {
+                IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
+                ReportCollection.InsertMany(reportList);
+                foreach (ReportReportElement report in reportList)
+                {
+                    this.SetHandlerResult(report.HandleResult, 2, "save to mongo sucessfully");
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
         }
         public void Query()
         {
@@ -87,7 +147,7 @@ namespace XYS.Report.Lis.IO
                 ProjectionDefinition<ReportReportElement> projection = projectionBuiler.Include(r => r.SerialNo)
                                                                                                                                           .Include(r => r.SectionNo)
                                                                                                                                           .Include(r => r.SampleNo)
-                                                                                                                                          .Exclude(r => r.ID);
+                                                                                                                                          .Include(r => r.ID);
                 var rprojection = projectionBuiler.Expression(r => new { SerialNo = r.SerialNo, SectionNo = r.SectionNo, SampleNo = r.SampleNo, Final = r.Final });
 
                 //var projectionBuiler = Builders<ReportReportElement>.Projection;
@@ -96,8 +156,10 @@ namespace XYS.Report.Lis.IO
                 //                                                                                                                          .Include(r => r.SampleNo)
                 //                                                                                                                          .Exclude(r => r.ID);
 
-                FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ReportID, "20160104-11-1-1600024")
-                                                                                          & FilterBuiler.Eq(r => r.Final, -1);
+                Guid guid = new Guid("18623c51-083b-4fa9-909c-4c06a64c32df");
+
+                FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ID,guid);
+                                                                                          //& FilterBuiler.Eq(r => r.Final, -1);
 
                 IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
 
@@ -110,12 +172,11 @@ namespace XYS.Report.Lis.IO
                 Console.WriteLine(ex.Message);
             }
         }
-
-      
+ 
         #endregion
 
         #region 异步方法
-        public async Task InsertAsync(ReportReportElement report, Func<ReportReportElement, Task> callback = null)
+        public async Task InsertAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
         {
             if (report.HandleResult.ResultCode != -1)
             {
@@ -123,7 +184,60 @@ namespace XYS.Report.Lis.IO
                 {
                     IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
                     await ReportCollection.InsertOneAsync(report);
-                    this.SetHandlerResult(report.HandleResult, 2, this.GetType(), "save to mongo sucessfully");
+                    this.SetHandlerResult(report.HandleResult, 200, "insert into mongo sucessfully");
+                }
+                catch (Exception ex)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("fialed when insert report into mongo,error message:");
+                    sb.Append(ex.Message);
+                    sb.Append(SystemInfo.NewLine);
+                    sb.Append(ex.ToString());
+                    this.SetHandlerResult(report.HandleResult, -201, this.GetType(), sb.ToString());
+                }
+            }
+            if (callback != null)
+            {
+                callback(report);
+            }
+        }
+        public async Task InsertCurrentlyAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
+        {
+            if (report.HandleResult.ResultCode != -1)
+            {
+                FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ReportID, report.ReportID)
+                                                                                         & FilterBuiler.Eq(r => r.Final, 1);
+
+                UpdateDefinition<ReportReportElement> updater = UpdateBuiler.Set(r => r.Final, -1);
+                try
+                {
+                    IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
+                    UpdateResult res = await ReportCollection.UpdateManyAsync(filter, updater);
+                    if (res.IsAcknowledged)
+                    {
+                        //新插入
+                        if (res.ModifiedCount == 0)
+                        {
+                            await ReportCollection.InsertOneAsync(report);
+                            this.SetHandlerResult(report.HandleResult, 200, " insert into mongo sucessfully");
+                        }
+                         // 成功修改
+                        else if (res.MatchedCount > 0 && res.MatchedCount == res.ModifiedCount)
+                        {
+                            //
+                            await ReportCollection.InsertOneAsync(report);
+                            this.SetHandlerResult(report.HandleResult, 201, " update old report(s) and insert new report into mongo sucessfully");
+                        }
+                        //失败修改
+                        else
+                        {
+                            this.SetHandlerResult(report.HandleResult, 202, "not all the old report(s) has been updated,so can not insert the new report");
+                        }
+                    }
+                    else
+                    {
+                        this.SetHandlerResult(report.HandleResult, 203, "when update old report(s) occure some unkown things,so can not insert the new report");
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -132,35 +246,20 @@ namespace XYS.Report.Lis.IO
                     sb.Append(ex.Message);
                     sb.Append(SystemInfo.NewLine);
                     sb.Append(ex.ToString());
-                    this.SetHandlerResult(report.HandleResult, -1, this.GetType(), sb.ToString());
+                    this.SetHandlerResult(report.HandleResult, -201, this.GetType(), sb.ToString());
+                }
+                if (callback != null)
+                {
+                    callback(report);
                 }
             }
-            if (callback != null)
-            {
-                await callback(report);
-            }
         }
-        public async Task InsertCurrentlyAsync(ReportReportElement report, Func<ReportReportElement, Task> callback = null)
-        {
-            if (report.HandleResult.ResultCode != -1)
-            {
-                IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
-
-                FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ReportID, report.ReportID)
-                                                                                      & FilterBuiler.Eq(r => r.Final, 1);
-
-                long count = await ReportCollection.CountAsync(filter);
-
-
-            }
-        }
-
         public async Task TestAsync()
         {
             IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
 
             FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ReportID, "20160104-11-1-1600024")
-                                                                                  & FilterBuiler.Eq(r => r.Final, 1);
+                                                                                      & FilterBuiler.Eq(r => r.Final, 1);
 
             UpdateDefinition<ReportReportElement> finalUpdate = UpdateBuiler.Set(r => r.Final, -1);
 
@@ -179,10 +278,23 @@ namespace XYS.Report.Lis.IO
 
             Expression<Func<ReportReportElement, bool>> expFilter = rep => rep.ReportID.Equals("20160104-11-1-1600024") ;
 
-            var result =await ReportCollection.FindOneAndUpdateAsync(expFilter, finalUpdate, options);
-            if (result != null)
+            //var result =await ReportCollection.FindOneAndUpdateAsync(expFilter, finalUpdate, options);
+            //if (result != null)
+            //{
+            //    Console.WriteLine(result.ID.ToString());
+            //}
+            //else
+            //{
+            //    Console.WriteLine("these is null");
+            //}
+
+            UpdateResult res = await ReportCollection.UpdateManyAsync(filter, finalUpdate);
+
+            if (res != null)
             {
-                Console.WriteLine(result.Final);
+                Console.WriteLine(res.IsAcknowledged);
+                Console.WriteLine(res.MatchedCount);
+                Console.WriteLine(res.ModifiedCount);
             }
             else
             {
@@ -192,8 +304,6 @@ namespace XYS.Report.Lis.IO
         #endregion
 
         #region 辅助方法
-
-
 
         protected void SetHandlerResult(HandleResult result, int code, string message)
         {
