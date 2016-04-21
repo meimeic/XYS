@@ -29,7 +29,7 @@ namespace XYS.Report.Lis.Handler
                     }
                 }
             }
-            this.SetHandlerResult(report.HandleResult, 140, "there is no ReportCustomElement to handle and continue!");
+            this.SetHandlerResult(report.HandleResult, 60, "there is no ReportCustomElement to handle and continue!");
         }
         #endregion
 

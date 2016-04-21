@@ -13,9 +13,10 @@ using MongoDB.Driver;
 using MongoDB.Bson.Serialization;
 namespace XYS.Report.Lis.IO
 {
+
     public class ReportMongoService
     {
-        #region 字段
+        #region 常量字段
         static MongoClient MClient;
         static IMongoDatabase LisMDB;
         static FilterDefinitionBuilder<ReportReportElement> FilterBuiler;
@@ -23,7 +24,11 @@ namespace XYS.Report.Lis.IO
         static ProjectionDefinitionBuilder<ReportReportElement> ProjectionBuiler;
         private static readonly string MongoConnectionStr = "mongodb://10.1.11.10:27017";
         #endregion
-        
+
+        #region 实例字段
+
+        #endregion
+
         #region 构造函数
         static ReportMongoService()
         {
@@ -34,12 +39,12 @@ namespace XYS.Report.Lis.IO
             ProjectionBuiler = Builders<ReportReportElement>.Projection;
         }
         public ReportMongoService()
-        { 
+        {
         }
         #endregion
 
         #region 同步方法
-        public void Insert(ReportReportElement report)
+        public void InsertReport(ReportReportElement report)
         {
             try
             {
@@ -57,7 +62,7 @@ namespace XYS.Report.Lis.IO
                 this.SetHandlerResult(report.HandleResult, -201, this.GetType(), sb.ToString());
             }
         }
-        public void InsertCurrently(ReportReportElement report)
+        public void InsertReportCurrently(ReportReportElement report)
         {
             if (report.HandleResult.ResultCode != -1)
             {
@@ -106,7 +111,7 @@ namespace XYS.Report.Lis.IO
                 }
             }
         }
-        public void InsertMany(IEnumerable<ReportReportElement> reportList)
+        public void InsertReportMany(IEnumerable<ReportReportElement> reportList)
         {
             try
             {
@@ -138,7 +143,6 @@ namespace XYS.Report.Lis.IO
                 }
             }
         }
-
         public void Test()
         {
             try
@@ -158,8 +162,8 @@ namespace XYS.Report.Lis.IO
 
                 Guid guid = new Guid("18623c51-083b-4fa9-909c-4c06a64c32df");
 
-                FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ID,guid);
-                                                                                          //& FilterBuiler.Eq(r => r.Final, -1);
+                FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ID, guid);
+                //& FilterBuiler.Eq(r => r.Final, -1);
 
                 IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
 
@@ -172,11 +176,10 @@ namespace XYS.Report.Lis.IO
                 Console.WriteLine(ex.Message);
             }
         }
- 
         #endregion
 
         #region 异步方法
-        public async Task InsertAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
+        public async Task InsertReportAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
         {
             if (report.HandleResult.ResultCode != -1)
             {
@@ -201,7 +204,7 @@ namespace XYS.Report.Lis.IO
                 callback(report);
             }
         }
-        public async Task InsertCurrentlyAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
+        public async Task InsertReportCurrentlyAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
         {
             if (report.HandleResult.ResultCode != -1)
             {
@@ -221,7 +224,7 @@ namespace XYS.Report.Lis.IO
                             await ReportCollection.InsertOneAsync(report);
                             this.SetHandlerResult(report.HandleResult, 200, " insert into mongo sucessfully");
                         }
-                         // 成功修改
+                        // 成功修改
                         else if (res.MatchedCount > 0 && res.MatchedCount == res.ModifiedCount)
                         {
                             //
@@ -269,14 +272,14 @@ namespace XYS.Report.Lis.IO
 
             //var projection = ProjectionBuiler.Expression(r => new { SerialNo = r.SerialNo, SectionNo = r.SectionNo, SampleNo = r.SampleNo, Final = r.Final });
 
-            ProjectionDefinition<ReportReportElement, ReportStatusProjection> projection = ProjectionBuiler.Expression(r => new ReportStatusProjection() { ID=r.ID,ReportID=r.ReportID,Final=r.Final});
+            ProjectionDefinition<ReportReportElement, ReportStatusProjection> projection = ProjectionBuiler.Expression(r => new ReportStatusProjection() { ID = r.ID, ReportID = r.ReportID, Final = r.Final });
 
             FindOneAndUpdateOptions<ReportReportElement, ReportStatusProjection> options = new FindOneAndUpdateOptions<ReportReportElement, ReportStatusProjection>()
             {
                 Projection = ProjectionBuiler.Expression(r => new ReportStatusProjection() { ID = r.ID, ReportID = r.ReportID, Final = r.Final })
             };
 
-            Expression<Func<ReportReportElement, bool>> expFilter = rep => rep.ReportID.Equals("20160104-11-1-1600024") ;
+            Expression<Func<ReportReportElement, bool>> expFilter = rep => rep.ReportID.Equals("20160104-11-1-1600024");
 
             //var result =await ReportCollection.FindOneAndUpdateAsync(expFilter, finalUpdate, options);
             //if (result != null)

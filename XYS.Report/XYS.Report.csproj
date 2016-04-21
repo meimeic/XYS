@@ -60,6 +60,7 @@
     <Compile Include="HandleResult.cs" />
     <Compile Include="Lis\DefaultReporter.cs" />
     <Compile Include="Lis\Handler\ReportCustomHandler.cs" />
+    <Compile Include="Lis\Handler\ReportFillHandler.cs" />
     <Compile Include="Lis\Handler\ReportGraphHandler.cs" />
     <Compile Include="Lis\Handler\ReportHandleService.cs" />
     <Compile Include="Lis\Handler\ReportHandlerSkeleton.cs" />

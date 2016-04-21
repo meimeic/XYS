@@ -14,7 +14,6 @@ namespace XYS.Report.Lis
     public abstract class Reporter
     {
         #region 私有字段
-        private ReportFillService m_filler;
         private ReportHandleService m_handler;
         private ReportMongoService m_mongo;
         #endregion
@@ -26,74 +25,57 @@ namespace XYS.Report.Lis
         #region 构造函数
         protected Reporter()
         {
-            this.m_filler = new ReportFillService();
             this.m_handler = new ReportHandleService();
             this.m_mongo = new ReportMongoService();
             this.m_extraOperate = new ExraOperateReport(Log);
         }
         #endregion
+        public ReportHandleService HandleService
+        {
+            get { return this.m_handler; }
+        }
+        public ReportMongoService MongoService
+        {
+            get { return this.m_mongo; }
+        }
+        #region 实例属性
+
+        #endregion
 
         #region 同步实现
-        public void OperateReport(ReportReportElement report)
+        public void OperateReport(ReportReportElement report, Action<ReportReportElement> callback = null)
         {
-            if (report.LisPK == null || !report.LisPK.Configured)
+            this.HandleService.HandleReport(report);
+            if (report.HandleResult.ResultCode > 0)
             {
-                this.SetHandlerResult(report.HandleResult, -1, this.GetType(), "the report key is null or not config!");
-                return;
+                this.MongoService.InsertReport(report);
             }
-
-            this.m_filler.FillReport(report);
-            if (report.HandleResult.ResultCode == -1)
+            if (callback != null)
             {
-                return;
+                callback(report);
             }
-
-            this.m_handler.HandleReport(report);
-            if (report.HandleResult.ResultCode == -1)
-            {
-                return;
-            }
-
-            this.m_mongo.Insert(report);
-            return;
         }
         #endregion
 
         #region 异步实现
         public async Task OperateReportAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
         {
-            await this.m_filler.FillReportAsync(report,this.FillReportComplete);
-            await this.m_handler.HandleReportAsync(report,this.HandleReportComplete);
-            await this.m_mongo.InsertCurrentlyAsync(report,this.SaveReportComplete);
+            await this.HandleService.HandleReportAsync(report);
+            await this.MongoService.InsertReportCurrentlyAsync(report);
             if (callback != null)
             {
                 callback(report);
             }
         }
-        public async Task OperateReportWithSaveAsync(List<ReportReportElement> reportList, Action<ReportReportElement> callback = null)
-        {
-            await Task.Run(() =>
-            {
-                foreach (ReportReportElement report in reportList)
-                {
-                    this.m_filler.FillReport(report);
-                    if (report.HandleResult.ResultCode != -1)
-                    {
-                        this.m_handler.HandleReport(report);
-                    }
-                }
-            });
-        }
         #endregion
 
         #region 异步辅助方法
-        private Task OperateReportTask(ReportReportElement report)
+        private Task OperateReportTask(ReportReportElement report, Action<ReportReportElement> callback = null)
         {
-            return Task.Run(() => { });
-        }
-        protected void FillReportComplete(ReportReportElement report)
-        {
-
+            return Task.Run(() =>
+            {
+                this.OperateReport(report, callback);
+            });
         }
         protected void HandleReportComplete(ReportReportElement report)
         {

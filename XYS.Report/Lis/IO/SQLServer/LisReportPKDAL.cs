@@ -76,7 +76,8 @@ namespace XYS.Report.Lis.IO.SQLServer
             string temp;
             sb.Append("select top ");
             sb.Append(require.MaxRecord.ToString());
-            sb.Append(" receivedate,sectionno,testtypeno,sampleno from reportform where patno is not null and patno<>'' and ");
+            sb.Append(" receivedate,sectionno,testtypeno,sampleno
+            from reportform where patno is not null and patno<>'' and ");
             //相等条件
             temp = GetWhereStr(require.EqualFields, 1);
             if (!temp.Equals(""))

@@ -14,32 +14,21 @@ namespace XYS.Report.Lis.Handler
         #region 构造函数
         public ReportHandleService()
         {
+            this.m_headHandler = this.m_tailHandler = new ReportFillHandler();
+            this.InitHandlerChain();
         }
         #endregion
 
-        #region 实例属性
-        public IReportHandler HeadHandler
-        {
-            get
-            {
-                if (this.m_headHandler == null)
-                {
-                    this.InitHandlerChain();
-                }
-                return this.m_headHandler;
-            }
-        }
-        #endregion
 
         #region 同步方法
         public void HandleReport(ReportReportElement report)
         {
-            this.HeadHandler.ReportOption(report);
+            this.m_headHandler.ReportOption(report);
         }
         #endregion
 
         #region 异步方法
-        public async Task HandleReportAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
+        public async Task HandleReportAsync(ReportReportElement report, Func<ReportReportElement, Task> callback = null)
         {
             if (report.HandleResult.ResultCode >= 0)
             {
@@ -47,22 +36,20 @@ namespace XYS.Report.Lis.Handler
             }
             if (callback != null)
             {
-                callback(report);
+                await callback(report);
             }
         }
         protected Task HandleReportTask(ReportReportElement report)
         {
             return Task.Run(() =>
             {
-                IReportHandler header = new ReportHeadHandler();
-                this.InitHandlerChain(header);
-                header.ReportOption(report);
+                this.m_headHandler.ReportOption(report);
             });
         }
         #endregion
 
         #region 辅助方法
-        protected void InitHandlerChain()
+        private void InitHandlerChain()
         {
             IReportHandler currentHandler = null;
             //检验项处理器
@@ -100,19 +87,8 @@ namespace XYS.Report.Lis.Handler
         }
         protected void AddHandler(IReportHandler handler)
         {
-            if (handler == null)
-            {
-                throw new ArgumentNullException("filter param must not be null");
-            }
-            if (this.m_headHandler == null)
-            {
-                this.m_headHandler = this.m_tailHandler = handler;
-            }
-            else
-            {
-                this.m_tailHandler.Next = handler;
-                this.m_tailHandler = handler;
-            }
+            this.m_tailHandler.Next = handler;
+            this.m_tailHandler = handler;
         }
         protected void AddHandler(IReportHandler current,ref IReportHandler tail)
         {

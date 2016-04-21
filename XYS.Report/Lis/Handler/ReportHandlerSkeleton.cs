@@ -41,12 +41,12 @@ namespace XYS.Report.Lis.Handler
                 }
                 else
                 {
-                    this.SetHandlerResult(rep.HandleResult, 100, "handle report successfully complete!");
+                    this.SetHandlerResult(rep.HandleResult, 10, "handle report successfully complete!");
                 }
             }
             else
             {
-                this.SetHandlerResult(report.HandleResult, -101, this.GetType(), "this object is not a lis report!");
+                this.SetHandlerResult(report.HandleResult, -11, this.GetType(), "this object is not a lis report!");
             }
         }
         #endregion
@@ -72,7 +72,6 @@ namespace XYS.Report.Lis.Handler
         {
             return report is ReportReportElement;
         }
-
         protected void SetHandlerResult(HandleResult result, int code, string message)
         {
             result.ResultCode = code;
