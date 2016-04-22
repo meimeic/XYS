@@ -13,7 +13,7 @@ namespace XYS.Report.Lis.IO.SQLServer
     public class LisReportPKDAL
     {
         public LisReportPKDAL()
-        { 
+        {
         }
 
         public void InitReportKey(Require require, LisReportPK PK)
@@ -42,7 +42,7 @@ namespace XYS.Report.Lis.IO.SQLServer
                 }
             }
         }
-        public void InitReportKey(string where,List<LisReportPK> PKList)
+        public void InitReportKey(string where, List<LisReportPK> PKList)
         {
             LisReportPK temp = null;
             string sql = GetSQLString(where);
@@ -56,6 +56,41 @@ namespace XYS.Report.Lis.IO.SQLServer
                     temp.Configured = true;
                     PKList.Add(temp);
                 }
+            }
+        }
+
+        //特殊代码处理逻辑
+        public void InitReportKey(LisReportPK PK, List<LisReportPK> PKList)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("select patno,paritemname from reportform where ");
+            sb.Append("receivedate='");
+            sb.Append(PK.ReceiveDate.ToString("yyyy-MM-dd"));
+            sb.Append("' and sectionno=");
+            sb.Append(PK.SectionNo);
+            sb.Append(" and testtypeno=");
+            sb.Append(PK.TestTypeNo);
+            sb.Append(" and sampleno='");
+            sb.Append(PK.SampleNo);
+            sb.Append("'");
+            string sql = sb.ToString();
+            DataTable dt = GetDataTable(sql);
+            if (dt.Rows.Count > 0)
+            {
+                sb.Clear();
+                sb.Append("receivedate='");
+                sb.Append(PK.ReceiveDate.ToString("yyyy-MM-dd"));
+                sb.Append("' and sectionno=");
+                sb.Append(PK.SectionNo);
+                sb.Append(" and testtypeno=");
+                sb.Append(PK.TestTypeNo);
+                sb.Append(" and patno='");
+                sb.Append(dt.Rows[0]["patno"].ToString());
+                sb.Append("' and paritemname='");
+                sb.Append(dt.Rows[0]["paritemname"].ToString());
+                sb.Append("' order by formcomment desc");
+                string where = sb.ToString();
+                this.InitReportKey(where, PKList);
             }
         }
 
@@ -76,8 +111,7 @@ namespace XYS.Report.Lis.IO.SQLServer
             string temp;
             sb.Append("select top ");
             sb.Append(require.MaxRecord.ToString());
-            sb.Append(" receivedate,sectionno,testtypeno,sampleno
-            from reportform where patno is not null and patno<>'' and ");
+            sb.Append(" receivedate,sectionno,testtypeno,sampleno from reportform where patno is not null and patno<>'' and ");
             //相等条件
             temp = GetWhereStr(require.EqualFields, 1);
             if (!temp.Equals(""))
@@ -171,7 +205,6 @@ namespace XYS.Report.Lis.IO.SQLServer
             DataTable dt = DbHelperSQL.Query(sql).Tables["dt"];
             return dt;
         }
-      
         private bool IsExist(Dictionary<string, object> dic)
         {
             if (dic != null && dic.Count > 0)

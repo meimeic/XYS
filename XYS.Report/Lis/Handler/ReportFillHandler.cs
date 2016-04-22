@@ -34,7 +34,14 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类抽象方法
         protected override void OperateReport(ReportReportElement report)
         {
-            this.Fill(report);
+            if (report.LisPK.SectionNo == 45)
+            {
+                this.FillAndMerge(report);
+            }
+            else
+            {
+                this.Fill(report);
+            }
         }
         private void Fill(ReportReportElement report)
         {
@@ -85,6 +92,67 @@ namespace XYS.Report.Lis.Handler
                 }
             }
         }
+
+        private void FillAndMerge(ReportReportElement report)
+        {
+            string sql = null;
+            LisReportPKDAL keyDAL = new LisReportPKDAL();
+            LisReportCommonDAL lisDAL = new LisReportCommonDAL();
+            List<LisReportPK> PKList = new List<LisReportPK>(5);
+
+            keyDAL.InitReportKey(report.LisPK, PKList);
+
+            Type type = null;
+            bool formConfig = false;
+            List<AbstractFillElement> tempList = null;
+            foreach (LisReportPK key in PKList)
+            {
+                if (!formConfig)
+                {
+                    sql = GenderSql(report, key);
+                    try
+                    {
+                        lisDAL.Fill(report, sql);
+                        formConfig = true;
+                        report.LisPK = key;
+                        this.SetHandlerResult(report.HandleResult, 20, "fill ReportReportElement successfully and continue!");
+                    }
+                    catch (Exception ex)
+                    {
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append("fill ReportReportElement failed! error message:");
+                        sb.Append(ex.Message);
+                        sb.Append(SystemInfo.NewLine);
+                        sb.Append(ex.ToString());
+                        this.SetHandlerResult(report.HandleResult, -21, this.GetType(), sb.ToString());
+                        return;
+                    }
+                }
+
+                //
+                type = typeof(ReportItemElement);
+                tempList = report.GetReportItem(type);
+                sql = GenderSql(type, key);
+                try
+                {
+                    lisDAL.FillList(tempList, type, sql);
+                    this.SetHandlerResult(report.HandleResult, 30, "fill SubReportElements successfully and continue!");
+                }
+                catch (Exception ex)
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append("fill SubReportElements failed! error message:");
+                    sb.Append(ex.Message);
+                    sb.Append(SystemInfo.NewLine);
+                    sb.Append(ex.ToString());
+                    this.SetHandlerResult(report.HandleResult, -31, this.GetType(), sb.ToString());
+                    return;
+                }
+
+                //
+                type = typeof(ReportCustomElement);
+            }
+        }
         #endregion
 
         #region 生成sql语句
@@ -118,43 +186,43 @@ namespace XYS.Report.Lis.Handler
         {
             StringBuilder sb = new StringBuilder();
             sb.Append(" where ");
-            //sb.Append("receivedate='");
-            //sb.Append(PK.ReceiveDate.ToString("yyyy-MM-dd"));
-            //sb.Append("' and sectionno=");
-            //sb.Append(PK.SectionNo);
-            //sb.Append(" and testtypeno=");
-            //sb.Append(PK.TestTypeNo);
-            //sb.Append(" and sampleno='");
-            //sb.Append(PK.SampleNo);
-            //sb.Append("'");
-            //return sb.ToString();
-
-            foreach (KeyColumn key in PK.KeySet)
-            {
-                if (key.Value.GetType().Equals(typeof(System.Int32)))
-                {
-                    sb.Append(key.Name);
-                    sb.Append("=");
-                    sb.Append(key.Value.ToString());
-                }
-                else if (key.Value.GetType().Equals(typeof(System.DateTime)))
-                {
-                    sb.Append(key.Name);
-                    sb.Append("='");
-                    sb.Append(((DateTime)(key.Value)).ToString("yyyy-MM-dd"));
-                    sb.Append("'");
-                }
-                else
-                {
-                    sb.Append(key.Name);
-                    sb.Append("='");
-                    sb.Append(key.Value.ToString());
-                    sb.Append("'");
-                }
-                sb.Append(" and ");
-            }
-            sb.Remove(sb.Length - 5, 5);
+            sb.Append("receivedate='");
+            sb.Append(PK.ReceiveDate.ToString("yyyy-MM-dd"));
+            sb.Append("' and sectionno=");
+            sb.Append(PK.SectionNo);
+            sb.Append(" and testtypeno=");
+            sb.Append(PK.TestTypeNo);
+            sb.Append(" and sampleno='");
+            sb.Append(PK.SampleNo);
+            sb.Append("'");
             return sb.ToString();
+
+            //foreach (KeyColumn key in PK.KeySet)
+            //{
+            //    if (key.Value.GetType().Equals(typeof(System.Int32)))
+            //    {
+            //        sb.Append(key.Name);
+            //        sb.Append("=");
+            //        sb.Append(key.Value.ToString());
+            //    }
+            //    else if (key.Value.GetType().Equals(typeof(System.DateTime)))
+            //    {
+            //        sb.Append(key.Name);
+            //        sb.Append("='");
+            //        sb.Append(((DateTime)(key.Value)).ToString("yyyy-MM-dd"));
+            //        sb.Append("'");
+            //    }
+            //    else
+            //    {
+            //        sb.Append(key.Name);
+            //        sb.Append("='");
+            //        sb.Append(key.Value.ToString());
+            //        sb.Append("'");
+            //    }
+            //    sb.Append(" and ");
+            //}
+            //sb.Remove(sb.Length - 5, 5);
+            //return sb.ToString();
         }
         private bool IsColumn(PropertyInfo prop)
         {
@@ -178,30 +246,31 @@ namespace XYS.Report.Lis.Handler
                 ConfigManager.InitSection2FillElementTable(Section2FillTypeMap);
             }
         }
-        //protected static List<Type> GetAvailableFillElements(LisReportPK RK)
-        //{
-        //    return Section2FillTypeMap[RK.SectionNo] as List<Type>;
-        //}
         protected static List<Type> GetAvailableFillElements(LisReportPK RK)
         {
-            int sectionNo = -1;
-            foreach (KeyColumn key in RK.KeySet)
-            {
-                if (key.Name.Equals("sectionno"))
-                {
-                    sectionNo = (int)key.Value;
-                    break;
-                }
-            }
-            if (sectionNo == -1)
-            {
-                return null;
-            }
-            else
-            {
-                return Section2FillTypeMap[sectionNo] as List<Type>;
-            }
+            return Section2FillTypeMap[RK.SectionNo] as List<Type>;
         }
+        
+        //protected static List<Type> GetAvailableFillElements(LisReportPK RK)
+        //{
+        //    int sectionNo = -1;
+        //    foreach (KeyColumn key in RK.KeySet)
+        //    {
+        //        if (key.Name.Equals("sectionno"))
+        //        {
+        //            sectionNo = (int)key.Value;
+        //            break;
+        //        }
+        //    }
+        //    if (sectionNo == -1)
+        //    {
+        //        return null;
+        //    }
+        //    else
+        //    {
+        //        return Section2FillTypeMap[sectionNo] as List<Type>;
+        //    }
+        //}
         protected void SetHandlerResult(HandleResult result, int code, string message)
         {
             result.ResultCode = code;
