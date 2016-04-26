@@ -5,7 +5,6 @@ using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
-
 namespace XYS.Report.Lis.Util
 {
     public class ConfigManager

@@ -119,12 +119,12 @@ namespace XYS.Report.Lis.IO
                 ReportCollection.InsertMany(reportList);
                 foreach (ReportReportElement report in reportList)
                 {
-                    this.SetHandlerResult(report.HandleResult, 2, "save to mongo sucessfully");
+                    this.SetHandlerResult(report.HandleResult, 200, "save to mongo sucessfully");
                 }
             }
             catch (Exception ex)
             {
-
+                throw ex;
             }
         }
         public void Query()
@@ -179,7 +179,7 @@ namespace XYS.Report.Lis.IO
         #endregion
 
         #region 异步方法
-        public async Task InsertReportAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
+        public async Task InsertReportAsync(ReportReportElement report, Func<ReportReportElement, Task> callback = null)
         {
             if (report.HandleResult.ResultCode != -1)
             {
@@ -201,10 +201,10 @@ namespace XYS.Report.Lis.IO
             }
             if (callback != null)
             {
-                callback(report);
+                await callback(report);
             }
         }
-        public async Task InsertReportCurrentlyAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
+        public async Task InsertReportCurrentlyAsync(ReportReportElement report, Func<ReportReportElement, Task> callback = null)
         {
             if (report.HandleResult.ResultCode != -1)
             {
@@ -224,24 +224,26 @@ namespace XYS.Report.Lis.IO
                             await ReportCollection.InsertOneAsync(report);
                             this.SetHandlerResult(report.HandleResult, 200, " insert into mongo sucessfully");
                         }
-                        // 成功修改
+                        // 修改后插入
                         else if (res.MatchedCount > 0 && res.MatchedCount == res.ModifiedCount)
                         {
                             //
                             await ReportCollection.InsertOneAsync(report);
                             this.SetHandlerResult(report.HandleResult, 201, " update old report(s) and insert new report into mongo sucessfully");
                         }
-                        //失败修改
+                        //修改未完全成功
                         else
                         {
                             this.SetHandlerResult(report.HandleResult, 202, "not all the old report(s) has been updated,so can not insert the new report");
                         }
                     }
+                    //修改失败
                     else
                     {
                         this.SetHandlerResult(report.HandleResult, 203, "when update old report(s) occure some unkown things,so can not insert the new report");
                     }
                 }
+                //异常
                 catch (Exception ex)
                 {
                     StringBuilder sb = new StringBuilder();
@@ -253,7 +255,7 @@ namespace XYS.Report.Lis.IO
                 }
                 if (callback != null)
                 {
-                    callback(report);
+                    await callback(report);
                 }
             }
         }
@@ -307,7 +309,6 @@ namespace XYS.Report.Lis.IO
         #endregion
 
         #region 辅助方法
-
         protected void SetHandlerResult(HandleResult result, int code, string message)
         {
             result.ResultCode = code;

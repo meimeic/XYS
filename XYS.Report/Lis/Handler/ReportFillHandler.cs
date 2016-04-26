@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Text;
+using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 
 using XYS.Util;
@@ -10,7 +10,6 @@ using XYS.Common;
 using XYS.Report.Lis.Util;
 using XYS.Report.Lis.Model;
 using XYS.Report.Lis.IO.SQLServer;
-
 namespace XYS.Report.Lis.Handler
 {
     public class ReportFillHandler : ReportHandlerSkeleton
@@ -92,7 +91,6 @@ namespace XYS.Report.Lis.Handler
                 }
             }
         }
-
         private void FillAndMerge(ReportReportElement report)
         {
             string sql = null;
@@ -250,7 +248,6 @@ namespace XYS.Report.Lis.Handler
         {
             return Section2FillTypeMap[RK.SectionNo] as List<Type>;
         }
-        
         //protected static List<Type> GetAvailableFillElements(LisReportPK RK)
         //{
         //    int sectionNo = -1;
@@ -271,16 +268,6 @@ namespace XYS.Report.Lis.Handler
         //        return Section2FillTypeMap[sectionNo] as List<Type>;
         //    }
         //}
-        protected void SetHandlerResult(HandleResult result, int code, string message)
-        {
-            result.ResultCode = code;
-            result.Message = message;
-        }
-        protected void SetHandlerResult(HandleResult result, int code, Type type, string message)
-        {
-            SetHandlerResult(result, code, message);
-            result.HandleType = type;
-        }
         #endregion
     }
 }

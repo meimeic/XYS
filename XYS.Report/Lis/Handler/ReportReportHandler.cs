@@ -35,6 +35,7 @@ namespace XYS.Report.Lis.Handler
             report.ReportItemCollection.Sort();
 
             //
+            report.ReportID = report.LisPK.ID;
             report.Final = 1;
 
             //返回值

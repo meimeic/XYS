@@ -4,13 +4,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using XYS.Util;
 using XYS.Report.Lis.IO;
 using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Handler;
 namespace XYS.Report.Lis
 {
     public delegate Task ExraOperateReport(ReportReportElement report);
-
     public abstract class Reporter
     {
         #region 私有字段
@@ -50,21 +50,72 @@ namespace XYS.Report.Lis
             {
                 this.MongoService.InsertReport(report);
             }
+            this.Log(report);
             if (callback != null)
             {
                 callback(report);
             }
         }
+        public void OperateReport(List<ReportReportElement> reportList, Action<ReportReportElement> callback = null)
+        {
+            DateTime startTime = DateTime.Now;
+            foreach (ReportReportElement report in reportList)
+            {
+                this.HandleService.HandleReport(report);
+            }
+            DateTime endTime = DateTime.Now;
+            Console.WriteLine("处理运行时间为:" + endTime.Subtract(startTime).TotalMilliseconds + " ms");
+
+            startTime = DateTime.Now;
+            //foreach (ReportReportElement report in reportList)
+            //{
+            //    if (report.HandleResult.ResultCode > 0)
+            //    {
+            //        this.MongoService.InsertReport(report);
+            //    }
+            //}
+            this.MongoService.InsertReportMany(reportList);
+            endTime = DateTime.Now;
+            Console.WriteLine("保存运行时间为:" + endTime.Subtract(startTime).TotalMilliseconds + " ms");
+            foreach (ReportReportElement report in reportList)
+            {
+                this.Log(report);
+                if (callback != null)
+                {
+                    callback(report);
+                }
+            }
+        }
         #endregion
 
         #region 异步实现
-        public async Task OperateReportAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
+        public async Task OperateReportAsync(List<ReportReportElement> reportList, Action<ReportReportElement> callback = null)
         {
-            await this.HandleService.HandleReportAsync(report);
-            await this.MongoService.InsertReportCurrentlyAsync(report);
-            if (callback != null)
+            Task task = null;
+            List<Task> taskList = new List<Task>(1000);
+            DateTime startTime = DateTime.Now;
+            foreach (ReportReportElement report in reportList)
             {
-                callback(report);
+                task = this.HandleService.HandleReportAsync(report, HandleReportComplete);
+                taskList.Add(task);
+            }
+            await Task.WhenAll(taskList);
+            DateTime endTime = DateTime.Now;
+            Console.WriteLine("处理运行时间为:" + endTime.Subtract(startTime).TotalMilliseconds + " ms");
+
+            startTime = DateTime.Now;
+            this.MongoService.InsertReportMany(reportList);
+            endTime = DateTime.Now;
+            Console.WriteLine("保存运行时间为:" + endTime.Subtract(startTime).TotalMilliseconds + " ms");
+
+            //await this.MongoService.InsertReportCurrentlyAsync(report);
+            foreach (ReportReportElement report in reportList)
+            {
+                await this.Log(report);
+                if (callback != null)
+                {
+                    callback(report);
+                }
             }
         }
         #endregion
@@ -79,6 +130,7 @@ namespace XYS.Report.Lis
         }
         protected void HandleReportComplete(ReportReportElement report)
         {
+            Console.WriteLine("handle report complete");
         }
         protected void SaveReportComplete(ReportReportElement report)
         {

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Xml;
+using System.Xml.Serialization;
 using System.Web;
 using System.Web.Services;
 
@@ -22,14 +24,9 @@ namespace XYS.Report.WS
         }
 
         [WebMethod]
-        public string UpdateLabApplyInfo(string param)
+        public void UpdateLabApplyInfo(string param)
         {
-            return "status:OK";
-        }
-        [WebMethod]
-        public string UpdateExamApplyInfo(string param)
-        {
-            return "status:OK";
+
         }
     }
 }

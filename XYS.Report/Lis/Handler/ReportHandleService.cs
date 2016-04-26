@@ -19,7 +19,6 @@ namespace XYS.Report.Lis.Handler
         }
         #endregion
 
-
         #region 同步方法
         public void HandleReport(ReportReportElement report)
         {
@@ -28,22 +27,22 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 异步方法
-        public async Task HandleReportAsync(ReportReportElement report, Func<ReportReportElement, Task> callback = null)
+        public async Task HandleReportAsync(ReportReportElement report, Action<ReportReportElement> callback = null)
         {
             if (report.HandleResult.ResultCode >= 0)
             {
-                await HandleReportTask(report);
-            }
-            if (callback != null)
-            {
-                await callback(report);
+                await HandleReportTask(report, callback);
             }
         }
-        protected Task HandleReportTask(ReportReportElement report)
+        protected Task HandleReportTask(ReportReportElement report, Action<ReportReportElement> callback = null)
         {
             return Task.Run(() =>
             {
                 this.m_headHandler.ReportOption(report);
+                if (callback != null)
+                {
+                    callback(report);
+                }
             });
         }
         #endregion
@@ -73,7 +72,7 @@ namespace XYS.Report.Lis.Handler
             IReportHandler currentHandler = null;
             //检验项处理器
             currentHandler = new ReportItemHandler();
-            AddHandler(currentHandler,ref tailHandler);
+            AddHandler(currentHandler, ref tailHandler);
             //图片项处理器
             currentHandler = new ReportGraphHandler();
             AddHandler(currentHandler, ref tailHandler);
@@ -90,7 +89,7 @@ namespace XYS.Report.Lis.Handler
             this.m_tailHandler.Next = handler;
             this.m_tailHandler = handler;
         }
-        protected void AddHandler(IReportHandler current,ref IReportHandler tail)
+        protected void AddHandler(IReportHandler current, ref IReportHandler tail)
         {
             tail.Next = current;
             tail = current;
