@@ -1,8 +1,8 @@
 ﻿namespace XYS.Report
 {
-    public interface IReportHandler
+    public interface IReportHandle
     {
-        IReportHandler Next { get; set; }
+        IReportHandle Next { get; set; }
         void ReportOption(IReportElement report);
     }
 }

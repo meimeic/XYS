@@ -87,7 +87,7 @@ namespace XYS.Report.WS
             {
                 this.m_applyList.Add(applyInfo);
             }
-            this.OnApplyReceived(new ApplyInfoEventArgs(applyInfo));
+            this.OnApplyReceived(applyInfo);
         }
         private void RemoveApply(LabApplyInfo applyInfo)
         {

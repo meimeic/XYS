@@ -55,17 +55,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IReportElement.cs" />
-    <Compile Include="IReportHandler.cs" />
+    <Compile Include="IReportHandle.cs" />
     <Compile Include="IReportKey.cs" />
     <Compile Include="HandleResult.cs" />
     <Compile Include="Lis\DefaultReporter.cs" />
-    <Compile Include="Lis\Handler\ReportCustomHandler.cs" />
-    <Compile Include="Lis\Handler\ReportFillHandler.cs" />
-    <Compile Include="Lis\Handler\ReportGraphHandler.cs" />
+    <Compile Include="Lis\Handler\ReportCustomHandle.cs" />
+    <Compile Include="Lis\Handler\ReportFillHandle.cs" />
+    <Compile Include="Lis\Handler\ReportGraphHandle.cs" />
     <Compile Include="Lis\Handler\ReportHandleService.cs" />
-    <Compile Include="Lis\Handler\ReportHandlerSkeleton.cs" />
-    <Compile Include="Lis\Handler\ReportHeadHandler.cs" />
-    <Compile Include="Lis\Handler\ReportItemHandler.cs" />
+    <Compile Include="Lis\Handler\ReportHandleSkeleton.cs" />
+    <Compile Include="Lis\Handler\ReportHeadHandle.cs" />
+    <Compile Include="Lis\Handler\ReportItemHandle.cs" />
     <Compile Include="Lis\IFillElement.cs" />
     <Compile Include="Lis\IO\Mongo\AbstractReportProjection.cs" />
     <Compile Include="Lis\IO\Mongo\ReportInfoProjection.cs" />
@@ -76,7 +76,7 @@
     <Compile Include="Lis\IO\Utility\DbHelperSQL.cs" />
     <Compile Include="Lis\IO\SQLServer\LisReportCommonDAL.cs" />
     <Compile Include="Lis\IO\SQLServer\LisReportPKDAL.cs" />
-    <Compile Include="Lis\Handler\ReportReportHandler.cs" />
+    <Compile Include="Lis\Handler\ReportReportHandle.cs" />
     <Compile Include="Lis\IReport.cs" />
     <Compile Include="Lis\LisReportPK.cs" />
     <Compile Include="Lis\Model\AbstractFillElement.cs" />

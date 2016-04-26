@@ -12,7 +12,7 @@ using XYS.Util;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
-    public class ReportGraphHandler : ReportHandlerSkeleton
+    public class ReportGraphHandle : ReportHandleSkeleton
     {
         #region 私有字段
         private static readonly Hashtable NormalImageUri;
@@ -21,12 +21,12 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 构造函数
-        static ReportGraphHandler()
+        static ReportGraphHandle()
         {
             NormalImageUri = new Hashtable(20);
-            ReportGraphHandler.InitNormalImageUriTable();
+            ReportGraphHandle.InitNormalImageUriTable();
         }
-        public ReportGraphHandler()
+        public ReportGraphHandle()
             : base()
         {
         }

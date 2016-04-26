@@ -15,7 +15,18 @@ namespace XYS.Report.WS
 
         public void HandleApply(LabApplyInfo applyInfo)
         {
-
+            List<Apply> applyCollection = applyInfo.ApplyCollection;
+            if (applyCollection != null && applyCollection.Count > 0)
+            {
+                foreach (Apply app in applyCollection)
+                {
+                    //处理审核的报告单
+                    if (app.ApplyStatus == 7)
+                    {
+ 
+                    }
+                }
+            }
         }
     }
 }

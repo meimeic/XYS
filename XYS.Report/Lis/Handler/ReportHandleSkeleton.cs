@@ -5,20 +5,20 @@ using XYS.Report;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
-    public abstract class ReportHandlerSkeleton : IReportHandler
+    public abstract class ReportHandleSkeleton : IReportHandle
     {
         #region 私有字段
-        private IReportHandler m_nextHandler;
+        private IReportHandle m_nextHandler;
         #endregion
 
         #region 构造函数
-        protected ReportHandlerSkeleton()
+        protected ReportHandleSkeleton()
         {
         }
         #endregion
 
         #region 实现IReportHandler接口
-        public IReportHandler Next
+        public IReportHandle Next
         {
             get { return this.m_nextHandler; }
             set { this.m_nextHandler = value; }

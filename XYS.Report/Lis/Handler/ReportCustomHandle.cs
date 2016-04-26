@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
-    public class ReportCustomHandler : ReportHandlerSkeleton
+    public class ReportCustomHandle : ReportHandleSkeleton
     {
         #region 构造函数
-        public ReportCustomHandler()
+        public ReportCustomHandle()
             : base()
         {
         }
