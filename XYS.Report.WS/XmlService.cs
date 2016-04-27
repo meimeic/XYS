@@ -1,7 +1,12 @@
 ﻿using System;
 using System.IO;
+using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Xml.Serialization;
+
+using XYS.Report.Lis;
+using XYS.Report.Lis.Model;
+using XYS.Report.Lis.IO.SQLServer;
 namespace XYS.Report.WS
 {
     public class ApplyInfoEventArgs : EventArgs
@@ -17,23 +22,43 @@ namespace XYS.Report.WS
             set { this.m_applyInfo = value; }
         }
     }
+    /// <summary>
+    /// 委托定义
+    /// </summary>
+    /// <param name="applyInfo"></param>
     public delegate void ApplyReceivedHandler(LabApplyInfo applyInfo);
+    
+    /// <summary>
+    /// 单例模式
+    /// </summary>
     public class XmlService
     {
-        #region 只读字段
-        private readonly XmlSerializer m_serializer;
-        private readonly ConcurrentBag<LabApplyInfo> m_applyInfoBag;
+        #region 静态字段
+        private static readonly XmlService ServiceInstance; 
         #endregion
 
-        #region 私有事件
+        #region 只读字段
+        private readonly XmlSerializer m_serializer;
+        private readonly LisReportPKDAL m_pkDAL;
+        private readonly ConcurrentBag<LabApplyInfo> m_applyInfoBag;
+        private readonly ConcurrentBag<ReportReportElement> m_reportBag;
+        #endregion
+
+        #region 事件
         private event ApplyReceivedHandler m_applyReceivedEvent;
         #endregion
 
-        #region
-        public XmlService()
+        #region 构造函数
+        static XmlService()
         {
+            ServiceInstance = new XmlService();
+        }
+        private XmlService()
+        {
+            this.m_pkDAL = new LisReportPKDAL();
             this.m_serializer = new XmlSerializer(typeof(LabApplyInfo));
             this.m_applyInfoBag = new ConcurrentBag<LabApplyInfo>();
+            this.m_reportBag = new ConcurrentBag<ReportReportElement>();
         }
         #endregion
 
@@ -53,6 +78,17 @@ namespace XYS.Report.WS
         public ConcurrentBag<LabApplyInfo> ApplyInfoBag
         {
             get { return this.m_applyInfoBag; }
+        }
+        public LisReportPKDAL PKDAL
+        {
+            get { return this.m_pkDAL; }
+        }
+        #endregion
+
+        #region 静态方法
+        public static XmlService GetService()
+        {
+            return ServiceInstance;
         }
         #endregion
 
@@ -104,6 +140,19 @@ namespace XYS.Report.WS
                 handler(applyInfo);
             }
         }
+        #endregion
+
+        #region
+        #region
+        protected void InitReportPK(Require req, List<LisReportPK> PKList)
+        {
+            this.PKDAL.InitReportKey(req, PKList);
+        }
+        protected void InitReportPK(string where, List<LisReportPK> PKList)
+        {
+            this.PKDAL.InitReportKey(where, PKList);
+        }
+        #endregion
         #endregion
 
     }

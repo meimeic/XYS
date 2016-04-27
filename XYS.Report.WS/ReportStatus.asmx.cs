@@ -4,6 +4,7 @@ using System.Xml.Serialization;
 using System.Web;
 using System.Web.Services;
 
+using XYS.Util;
 namespace XYS.Report.WS
 {
     /// <summary>
@@ -16,10 +17,20 @@ namespace XYS.Report.WS
     // [System.Web.Script.Services.ScriptService]
     public class ReportStatus : WebService
     {
-
+        private object lockObject = new object();
+        protected void WriteLog(string message)
+        {
+            lock (lockObject)
+            {
+                var file = System.IO.File.AppendText("D:\\log.txt");
+                file.WriteLine(message);
+                file.Close();
+            }
+        }
         [WebMethod]
         public string Hello()
         {
+            WriteLog(string.Format("主线程({0})开始", SystemInfo.CurrentThreadId));
             return "Hello World";
         }
 

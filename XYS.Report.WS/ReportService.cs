@@ -1,36 +1,45 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 using XYS.Report.Lis;
 using XYS.Report.Lis.Model;
 using XYS.Report.Lis.IO.SQLServer;
 namespace XYS.Report.WS
 {
-    public delegate void ApplyHandleComplete(LabApplyInfo applyInfo);
     public class ReportService
     {
+        #region
+        private static readonly ReportService ServiceInstance;
+        #endregion
+
         #region 私有字段
         private readonly Reporter m_reporter;
+        private readonly XmlSerializer m_serializer;
         private readonly LisReportPKDAL m_pkDAL;
         private readonly ConcurrentBag<ReportReportElement> m_reportBag;
-        private event ApplyHandleComplete m_handleCompleteEvent;
         #endregion
 
         #region 构造函数
-        public ReportService()
+        static ReportService()
+        {
+            ServiceInstance = new ReportService();
+        }
+        private ReportService()
         {
             this.m_pkDAL = new LisReportPKDAL();
             this.m_reporter = new DefaultReporter();
+            this.m_serializer = new XmlSerializer(typeof(LabApplyInfo));
             this.m_reportBag = new ConcurrentBag<ReportReportElement>();
         }
         #endregion
 
-        #region 事件属性
-        public event ApplyHandleComplete HandleCompleteEvent
+        #region 静态属性
+        public static ReportService ReporterService
         {
-            add { this.m_handleCompleteEvent += value; }
-            remove { this.m_handleCompleteEvent -= value; }
+            get { return ServiceInstance; }
         }
         #endregion
 
@@ -39,18 +48,40 @@ namespace XYS.Report.WS
         {
             get { return this.m_reporter; }
         }
-        public ConcurrentBag<ReportReportElement> ReportBag
+        public XmlSerializer Serializer
         {
-            get { return this.m_reportBag; }
+            get { return this.m_serializer; }
         }
         public LisReportPKDAL PKDAL
         {
             get { return this.m_pkDAL; }
         }
+        public ConcurrentBag<ReportReportElement> ReportBag
+        {
+            get { return this.m_reportBag; }
+        }
         #endregion
 
-        #region
-        public void HandleApplyInfo(LabApplyInfo applyInfo)
+        #region 生产者方法
+        public void Deserialize(string applyInfo)
+        {
+            if (applyInfo != null)
+            {
+                StringReader reader = new StringReader(applyInfo);
+                try
+                {
+                    LabApplyInfo info = (LabApplyInfo)this.Serializer.Deserialize(reader);
+                    this.HandleApplyInfo(info);
+                }
+                catch (InvalidOperationException ex)
+                {
+                }
+            }
+            else
+            {
+            }
+        }
+        protected void HandleApplyInfo(LabApplyInfo applyInfo)
         {
             List<Apply> applyCollection = applyInfo.ApplyCollection;
             if (applyCollection != null && applyCollection.Count > 0)
@@ -61,7 +92,7 @@ namespace XYS.Report.WS
                     //获取审核的报告单主键
                     if (app.ApplyStatus == 7)
                     {
-                        InitPK(app.ApplyNo, PKList);
+                        this.InitReportPK(app.ApplyNo, PKList);
                     }
                 }
                 //处理
@@ -76,32 +107,23 @@ namespace XYS.Report.WS
                     }
                 }
             }
-            this.OnHandleComplete(applyInfo);
         }
-        private void InitPK(string appNo,List<LisReportPK> PKList)
+        private void InitReportPK(string appNo, List<LisReportPK> PKList)
         {
             string where = "where serialno='" + appNo.Trim() + "'";
-            this.InitReportPK(where, PKList);
+            this.D_InitReportPK(where, PKList);
         }
         #endregion
 
-        #region 触发事件
-        protected void OnHandleComplete(LabApplyInfo applyInfo)
-        {
-            ApplyHandleComplete handler = this.m_handleCompleteEvent;
-            if (handler != null)
-            {
-                handler(applyInfo);
-            }
-        }
+        #region 消费者方法
         #endregion
-       
-        #region 
-        protected void InitReportPK(Require req, List<LisReportPK> PKList)
+
+        #region 数据持久层处理
+        private void D_InitReportPK(Require req, List<LisReportPK> PKList)
         {
             this.PKDAL.InitReportKey(req, PKList);
         }
-        protected void InitReportPK(string where, List<LisReportPK> PKList)
+        private void D_InitReportPK(string where, List<LisReportPK> PKList)
         {
             this.PKDAL.InitReportKey(where, PKList);
         }
