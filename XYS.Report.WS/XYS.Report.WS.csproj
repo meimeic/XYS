@@ -58,6 +58,10 @@
   <ItemGroup>
     <Content Include="ReportStatus.asmx" />
     <Content Include="Web.config" />
+    <EmbeddedResource Include="XYS.Report.Lis.xml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="LabApplyInfo.cs" />

@@ -71,6 +71,7 @@
     <Compile Include="Lis\IO\Mongo\ReportInfoProjection.cs" />
     <Compile Include="Lis\IO\Mongo\ReportStatusProjection.cs" />
     <Compile Include="Lis\IO\ReportFillService.cs" />
+    <Compile Include="Lis\IO\ReportKeyService.cs" />
     <Compile Include="Lis\IO\ReportMongoService.cs" />
     <Compile Include="Lis\IO\Utility\DbHelperOleDb.cs" />
     <Compile Include="Lis\IO\Utility\DbHelperSQL.cs" />

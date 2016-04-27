@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Xml.Serialization;
 namespace XYS.Report.WS
 {
@@ -20,23 +20,20 @@ namespace XYS.Report.WS
     public delegate void ApplyReceivedHandler(LabApplyInfo applyInfo);
     public class XmlService
     {
-        #region
-        private readonly ReportService m_report;
+        #region 只读字段
         private readonly XmlSerializer m_serializer;
+        private readonly ConcurrentBag<LabApplyInfo> m_applyInfoBag;
         #endregion
 
-        #region
-        private readonly List<LabApplyInfo> m_applyList;
-        //private event EventHandler<ApplyInfoEventArgs> m_applyReceivedEvent;
+        #region 私有事件
         private event ApplyReceivedHandler m_applyReceivedEvent;
         #endregion
 
         #region
         public XmlService()
         {
-            this.m_report = new ReportService();
-            this.m_applyList = new List<LabApplyInfo>(1000);
             this.m_serializer = new XmlSerializer(typeof(LabApplyInfo));
+            this.m_applyInfoBag = new ConcurrentBag<LabApplyInfo>();
         }
         #endregion
 
@@ -49,13 +46,13 @@ namespace XYS.Report.WS
         #endregion
 
         #region 实例属性
-        public ReportService ReportService
-        {
-            get { return this.m_report; }
-        }
         public XmlSerializer Serializer
         {
             get { return this.m_serializer; }
+        }
+        public ConcurrentBag<LabApplyInfo> ApplyInfoBag
+        {
+            get { return this.m_applyInfoBag; }
         }
         #endregion
 
@@ -68,7 +65,7 @@ namespace XYS.Report.WS
                 try
                 {
                     LabApplyInfo info = (LabApplyInfo)this.Serializer.Deserialize(reader);
-                    this.AddApply(info);
+                    this.ApplyInfoBag.Add(info);
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -81,21 +78,24 @@ namespace XYS.Report.WS
         #endregion
 
         #region
-        private void AddApply(LabApplyInfo applyInfo)
+        public void Start()
         {
-            lock (this.m_applyList)
+            LabApplyInfo info = null;
+            while (!this.ApplyInfoBag.IsEmpty)
             {
-                this.m_applyList.Add(applyInfo);
+                if (this.ApplyInfoBag.TryTake(out info))
+                {
+                    this.OnApplyReceived(info);
+                }
+                else
+                {
+                    //
+                }
             }
-            this.OnApplyReceived(applyInfo);
         }
-        private void RemoveApply(LabApplyInfo applyInfo)
-        {
-            lock (this.m_applyList)
-            {
-                this.m_applyList.Remove(applyInfo);
-            }
-        }
+        #endregion
+
+        #region 触发事件
         protected void OnApplyReceived(LabApplyInfo applyInfo)
         {
             ApplyReceivedHandler handler = this.m_applyReceivedEvent;
@@ -105,5 +105,6 @@ namespace XYS.Report.WS
             }
         }
         #endregion
+
     }
 }

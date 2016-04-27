@@ -13,7 +13,10 @@ using MongoDB.Driver;
 using MongoDB.Bson.Serialization;
 namespace XYS.Report.Lis.IO
 {
-
+    public delegate void InsertErrorHandler(ReportReportElement report);
+    public delegate void InsertCompleteHandler(ReportReportElement report);
+    public delegate void UpdateAndInsertErrorHandler(ReportReportElement report);
+    public delegate void UpdateAndInsertCompleteHandler(ReportReportElement report);
     public class ReportMongoService
     {
         #region 常量字段
@@ -25,8 +28,12 @@ namespace XYS.Report.Lis.IO
         private static readonly string MongoConnectionStr = "mongodb://10.1.11.10:27017";
         #endregion
 
-        #region 实例字段
 
+        #region 实例字段
+        private event InsertErrorHandler m_insertErrorEvent;
+        private event InsertCompleteHandler m_insertCompleteEvent;
+        private event UpdateAndInsertErrorHandler m_updateAndInsertErrorEvent;
+        private event UpdateAndInsertCompleteHandler m_updateAndInsertCompleteEvent;
         #endregion
 
         #region 构造函数
@@ -40,6 +47,29 @@ namespace XYS.Report.Lis.IO
         }
         public ReportMongoService()
         {
+        }
+        #endregion
+
+        #region 事件属性
+        public event InsertErrorHandler InsertErrorEvent
+        {
+            add { this.m_insertErrorEvent += value; }
+            remove { this.m_insertErrorEvent -= value; }
+        }
+        public event InsertCompleteHandler InsertCompleteEvent
+        {
+            add { this.m_insertCompleteEvent += value; }
+            remove { this.m_insertCompleteEvent -= value; }
+        }
+        public event UpdateAndInsertErrorHandler UpdateAndInsertErrorEvent
+        {
+            add { this.m_updateAndInsertErrorEvent += value; }
+            remove { this.m_updateAndInsertErrorEvent -= value; }
+        }
+        public event UpdateAndInsertCompleteHandler UpdateAndInsertCompleteEvent
+        {
+            add { this.m_updateAndInsertCompleteEvent += value; }
+            remove { this.m_updateAndInsertCompleteEvent -= value; }
         }
         #endregion
 
@@ -318,6 +348,41 @@ namespace XYS.Report.Lis.IO
         {
             SetHandlerResult(result, code, message);
             result.HandleType = type;
+        }
+        #endregion
+
+        #region 触发事件
+        private void OnInsertError(ReportReportElement report)
+        {
+            InsertErrorHandler handler = this.m_insertErrorEvent;
+            if (handler != null)
+            {
+                handler(report);
+            }
+        }
+        private void OnInsertComplete(ReportReportElement report)
+        {
+            InsertCompleteHandler handler = this.m_insertCompleteEvent;
+            if (handler != null)
+            {
+                handler(report);
+            }
+        }
+        private void OnUpdateAndInsertError(ReportReportElement report)
+        {
+            UpdateAndInsertErrorHandler handler = this.m_updateAndInsertErrorEvent;
+            if (handler != null)
+            {
+                handler(report);
+            }
+        }
+        private void OnUpdateAndInsertComplete(ReportReportElement report)
+        {
+            UpdateAndInsertCompleteHandler handler = this.m_updateAndInsertCompleteEvent;
+            if (handler != null)
+            {
+                handler(report);
+            }
         }
         #endregion
     }
