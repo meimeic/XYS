@@ -17,27 +17,17 @@ namespace XYS.Report.WS
     // [System.Web.Script.Services.ScriptService]
     public class ReportStatus : WebService
     {
-        private object lockObject = new object();
-        protected void WriteLog(string message)
-        {
-            lock (lockObject)
-            {
-                var file = System.IO.File.AppendText("D:\\log.txt");
-                file.WriteLine(message);
-                file.Close();
-            }
-        }
         [WebMethod]
         public string Hello()
         {
-            WriteLog(string.Format("主线程({0})开始", SystemInfo.CurrentThreadId));
             return "Hello World";
         }
 
         [WebMethod]
         public void UpdateLabApplyInfo(string param)
         {
-
+            ReportService serivce = ReportService.ReporterService;
+            serivce.Deserialize(param);
         }
     }
 }

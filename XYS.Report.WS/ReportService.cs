@@ -1,9 +1,11 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
+using XYS.Util;
 using XYS.Report.Lis;
 using XYS.Report.Lis.Model;
 using XYS.Report.Lis.IO.SQLServer;
@@ -11,28 +13,42 @@ namespace XYS.Report.WS
 {
     public class ReportService
     {
-        #region
+        #region 静态只读字段
+        private static readonly int WorkerCount;
+        private static readonly int QueueCapacity;
         private static readonly ReportService ServiceInstance;
         #endregion
 
-        #region 私有字段
+        #region 实例只读字段
         private readonly Reporter m_reporter;
         private readonly XmlSerializer m_serializer;
         private readonly LisReportPKDAL m_pkDAL;
-        private readonly ConcurrentBag<ReportReportElement> m_reportBag;
+        private readonly BlockingCollection<ReportReportElement> m_reportQueue;
+        #endregion
+
+        #region 实例字段
+        private object logLock;
+        private List<Thread> m_workerPool;
         #endregion
 
         #region 构造函数
         static ReportService()
         {
+            WorkerCount = 10;
+            QueueCapacity = 1000;
             ServiceInstance = new ReportService();
         }
         private ReportService()
         {
+            this.logLock = new object();
             this.m_pkDAL = new LisReportPKDAL();
+            this.m_workerPool = new List<Thread>(WorkerCount);
             this.m_reporter = new DefaultReporter();
             this.m_serializer = new XmlSerializer(typeof(LabApplyInfo));
-            this.m_reportBag = new ConcurrentBag<ReportReportElement>();
+            this.m_reportQueue = new BlockingCollection<ReportReportElement>(QueueCapacity);
+
+            //
+            this.InitWorkPool();
         }
         #endregion
 
@@ -44,21 +60,21 @@ namespace XYS.Report.WS
         #endregion
 
         #region 实例属性
-        public Reporter Reporter
+        protected Reporter Reporter
         {
             get { return this.m_reporter; }
         }
-        public XmlSerializer Serializer
+        protected XmlSerializer Serializer
         {
             get { return this.m_serializer; }
         }
-        public LisReportPKDAL PKDAL
+        protected LisReportPKDAL PKDAL
         {
             get { return this.m_pkDAL; }
         }
-        public ConcurrentBag<ReportReportElement> ReportBag
+        protected BlockingCollection<ReportReportElement> ReportQueue
         {
-            get { return this.m_reportBag; }
+            get { return this.m_reportQueue; }
         }
         #endregion
 
@@ -71,6 +87,7 @@ namespace XYS.Report.WS
                 try
                 {
                     LabApplyInfo info = (LabApplyInfo)this.Serializer.Deserialize(reader);
+                    WriteLog(string.Format("处理xml报文的线程ID:{0}", SystemInfo.CurrentThreadId));
                     this.HandleApplyInfo(info);
                 }
                 catch (InvalidOperationException ex)
@@ -95,7 +112,7 @@ namespace XYS.Report.WS
                         this.InitReportPK(app.ApplyNo, PKList);
                     }
                 }
-                //处理
+                //加入队列
                 if (PKList.Count > 0)
                 {
                     //
@@ -103,7 +120,8 @@ namespace XYS.Report.WS
                     foreach (LisReportPK pk in PKList)
                     {
                         report = new ReportReportElement();
-                        this.ReportBag.Add(report);
+                        report.LisPK = pk;
+                        this.ReportQueue.Add(report);
                     }
                 }
             }
@@ -116,6 +134,32 @@ namespace XYS.Report.WS
         #endregion
 
         #region 消费者方法
+        public void HandleReport()
+        {
+            foreach (ReportReportElement report in this.ReportQueue.GetConsumingEnumerable())
+            {
+                this.Reporter.OperateReport(report);
+                WriteLog(string.Format("处理report的线程ID:{0},处理结果:{1}", SystemInfo.CurrentThreadId, report.HandleResult.Message));
+            }
+        }
+        #endregion
+
+        #region 停止
+
+        #endregion
+
+        #region
+        private void InitWorkPool()
+        {
+            Thread th = null;
+            for (int i = 0; i < WorkerCount; i++)
+            {
+                th = new Thread(HandleReport);
+                this.m_workerPool.Add(th);
+                th.Start();
+            }
+            WriteLog(string.Format("创建report处理线程的线程ID为:{0}", SystemInfo.CurrentThreadId));
+        }
         #endregion
 
         #region 数据持久层处理
@@ -126,6 +170,18 @@ namespace XYS.Report.WS
         private void D_InitReportPK(string where, List<LisReportPK> PKList)
         {
             this.PKDAL.InitReportKey(where, PKList);
+        }
+        #endregion
+
+        #region
+        protected void WriteLog(string message)
+        {
+            lock (this.logLock)
+            {
+                var file = System.IO.File.AppendText("D:\\log.txt");
+                file.WriteLine(message);
+                file.Close();
+            }
         }
         #endregion
     }

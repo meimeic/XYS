@@ -169,15 +169,15 @@ namespace XYS.Report.Lis
             this.m_handler = new ReportHandleService();
             this.m_mongo = new ReportMongoService();
 
-            //注册处理事件
-            this.m_handler.HandleErrorEvent += this.HandleError;
-            this.m_handler.HandleCompletedEvent += this.HandleComplete;
+            ////注册处理事件
+            //this.m_handler.HandleErrorEvent += this.HandleError;
+            //this.m_handler.HandleCompletedEvent += this.HandleComplete;
 
-            //注册保存事件
-            this.m_mongo.InsertErrorEvent += this.SaveError;
-            this.m_mongo.InsertCompleteEvent += this.SaveComplete;
-            this.m_mongo.UpdateAndInsertErrorEvent += this.UpdateAndSaveError;
-            this.m_mongo.UpdateAndInsertCompleteEvent += this.UpdateAndSaveComplete;
+            ////注册保存事件
+            //this.m_mongo.InsertErrorEvent += this.SaveError;
+            //this.m_mongo.InsertCompleteEvent += this.SaveComplete;
+            //this.m_mongo.UpdateAndInsertErrorEvent += this.UpdateAndSaveError;
+            //this.m_mongo.UpdateAndInsertCompleteEvent += this.UpdateAndSaveComplete;
         }
         #endregion
     }

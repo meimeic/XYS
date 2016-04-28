@@ -11,6 +11,11 @@ namespace XYS.Report.Lis.Handler
         private IReportHandle m_nextHandler;
         #endregion
 
+        #region 私有事件
+        private event HandleErrorHandler m_handleErrorEvent;
+        private event HandleCompletedHandler m_handleCompletedEvent;
+        #endregion
+
         #region 构造函数
         protected ReportHandleSkeleton()
         {
@@ -18,6 +23,17 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现IReportHandler接口
+        public event HandleErrorHandler HandleErrorEvent
+        {
+            add { this.m_handleErrorEvent += value; }
+            remove { this.m_handleErrorEvent -= value; }
+        }
+        public event HandleCompletedHandler HandleCompletedEvent
+        {
+            add { this.m_handleCompletedEvent += value; }
+            remove { this.m_handleCompletedEvent -= value; }
+        }
+
         public IReportHandle Next
         {
             get { return this.m_nextHandler; }
@@ -32,6 +48,7 @@ namespace XYS.Report.Lis.Handler
                 //错误就退出
                 if (rep.HandleResult.ResultCode < 0)
                 {
+                    this.OnErrorOccured(report);
                     return;
                 }
                 //
@@ -41,12 +58,14 @@ namespace XYS.Report.Lis.Handler
                 }
                 else
                 {
-                    this.SetHandlerResult(rep.HandleResult, 10, "handle report successfully complete!");
+                    this.OnHandleCompleted(report);
+                    return;
                 }
             }
             else
             {
                 this.SetHandlerResult(report.HandleResult, -11, this.GetType(), "this object is not a lis report!");
+                this.OnErrorOccured(report);
             }
         }
         #endregion
@@ -81,6 +100,25 @@ namespace XYS.Report.Lis.Handler
         {
             SetHandlerResult(result, code, message);
             result.HandleType = type;
+        }
+        #endregion
+
+        #region 触发事件
+        protected void OnErrorOccured(IReportElement report)
+        {
+            HandleErrorHandler handler = this.m_handleErrorEvent;
+            if (handler != null)
+            {
+                handler(report);
+            }
+        }
+        protected void OnHandleCompleted(IReportElement report)
+        {
+            HandleCompletedHandler handler = this.m_handleCompletedEvent;
+            if (handler != null)
+            {
+                handler(report);
+            }
         }
         #endregion
     }
