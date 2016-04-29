@@ -4,6 +4,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using log4net;
+
 using XYS.Util;
 using XYS.Report.Lis.IO;
 using XYS.Report.Lis.Model;
@@ -12,6 +14,10 @@ namespace XYS.Report.Lis
 {
     public abstract class Reporter
     {
+        #region
+        static readonly ILog LOG = LogManager.GetLogger(typeof(Reporter));
+        #endregion
+
         #region 私有字段
         private ReportHandleService m_handler;
         private ReportMongoService m_mongo;
@@ -23,7 +29,7 @@ namespace XYS.Report.Lis
             this.InitializeReporter();
         }
         #endregion
-    
+
         #region 实例属性
         public ReportHandleService HandleService
         {
@@ -39,6 +45,7 @@ namespace XYS.Report.Lis
         public void OperateReport(ReportReportElement report)
         {
             this.HandleService.HandleReport(report);
+            LOG.Info("处理报告完成");
         }
         public void OperateReport(List<ReportReportElement> reportList)
         {
@@ -108,7 +115,7 @@ namespace XYS.Report.Lis
             });
         }
         #endregion
-        
+
         #region 处理代码
         protected void HandleError(ReportReportElement report)
         {
@@ -125,7 +132,7 @@ namespace XYS.Report.Lis
         }
         protected void SaveComplete(ReportReportElement report)
         {
- 
+
         }
         protected void UpdateAndSaveError(ReportReportElement report)
         {

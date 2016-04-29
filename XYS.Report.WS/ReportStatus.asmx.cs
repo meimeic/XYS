@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Xml;
-using System.Xml.Serialization;
 using System.Web;
 using System.Web.Services;
 
-using XYS.Util;
 namespace XYS.Report.WS
 {
     /// <summary>
@@ -26,7 +23,7 @@ namespace XYS.Report.WS
         [WebMethod]
         public void UpdateLabApplyInfo(string param)
         {
-            ReportService serivce = ReportService.ReporterService;
+            ReportService serivce = Global.ReportService;
             serivce.Deserialize(param);
         }
     }

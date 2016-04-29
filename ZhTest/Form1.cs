@@ -18,7 +18,6 @@ namespace ZhTest
 {
     public partial class Form1 : Form
     {
-        static IReport Report = ReportManager.GetReport(typeof(Form1));
         public Form1()
         {
             InitializeComponent();

@@ -53,7 +53,7 @@ namespace XYS.Report.WS
         #endregion
 
         #region 静态属性
-        public static ReportService ReporterService
+        public static ReportService SingtonService
         {
             get { return ServiceInstance; }
         }
@@ -148,7 +148,7 @@ namespace XYS.Report.WS
 
         #endregion
 
-        #region
+        #region 初始化处理线程池
         private void InitWorkPool()
         {
             Thread th = null;
