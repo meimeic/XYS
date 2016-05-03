@@ -5,9 +5,9 @@ namespace XYS.Report.WS
 {
     public class Global :HttpApplication
     {
-        public static ReportService ReportService
+        public static LisService ReportService
         {
-            get { return ReportService.SingtonService; }
+            get { return LisService.ReportService; }
         }
 
 

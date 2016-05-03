@@ -23,7 +23,7 @@ namespace XYS.Report.WS
         [WebMethod]
         public void UpdateLabApplyInfo(string param)
         {
-            ReportService serivce = Global.ReportService;
+            LisService serivce = Global.ReportService;
             serivce.Deserialize(param);
         }
     }

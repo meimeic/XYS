@@ -8,21 +8,21 @@ using System.Xml.Serialization;
 using XYS.Util;
 using XYS.Report.Lis;
 using XYS.Report.Lis.Model;
-using XYS.Report.Lis.IO.SQLServer;
+using XYS.Report.Lis.Persistent;
 namespace XYS.Report.WS
 {
-    public class ReportService
+    public class LisService
     {
         #region 静态只读字段
         private static readonly int WorkerCount;
         private static readonly int QueueCapacity;
-        private static readonly ReportService ServiceInstance;
+        private static readonly LisService ServiceInstance;
         #endregion
 
         #region 实例只读字段
         private readonly Reporter m_reporter;
         private readonly XmlSerializer m_serializer;
-        private readonly LisReportPKDAL m_pkDAL;
+        private readonly ReportPKDAL m_pkDAL;
         private readonly BlockingCollection<ReportReportElement> m_reportQueue;
         #endregion
 
@@ -32,16 +32,16 @@ namespace XYS.Report.WS
         #endregion
 
         #region 构造函数
-        static ReportService()
+        static LisService()
         {
             WorkerCount = 10;
             QueueCapacity = 1000;
-            ServiceInstance = new ReportService();
+            ServiceInstance = new LisService();
         }
-        private ReportService()
+        private LisService()
         {
             this.logLock = new object();
-            this.m_pkDAL = new LisReportPKDAL();
+            this.m_pkDAL = new ReportPKDAL();
             this.m_workerPool = new List<Thread>(WorkerCount);
             this.m_reporter = new DefaultReporter();
             this.m_serializer = new XmlSerializer(typeof(LabApplyInfo));
@@ -53,7 +53,7 @@ namespace XYS.Report.WS
         #endregion
 
         #region 静态属性
-        public static ReportService SingtonService
+        public static LisService ReportService
         {
             get { return ServiceInstance; }
         }
@@ -68,7 +68,7 @@ namespace XYS.Report.WS
         {
             get { return this.m_serializer; }
         }
-        protected LisReportPKDAL PKDAL
+        protected ReportPKDAL PKDAL
         {
             get { return this.m_pkDAL; }
         }
@@ -103,7 +103,7 @@ namespace XYS.Report.WS
             List<Apply> applyCollection = applyInfo.ApplyCollection;
             if (applyCollection != null && applyCollection.Count > 0)
             {
-                List<LisReportPK> PKList = new List<LisReportPK>(applyCollection.Count);
+                List<ReportPK> PKList = new List<ReportPK>(applyCollection.Count);
                 foreach (Apply app in applyCollection)
                 {
                     //获取审核的报告单主键
@@ -117,16 +117,16 @@ namespace XYS.Report.WS
                 {
                     //
                     ReportReportElement report = null;
-                    foreach (LisReportPK pk in PKList)
+                    foreach (ReportPK pk in PKList)
                     {
                         report = new ReportReportElement();
-                        report.LisPK = pk;
+                        report.ReportPK = pk;
                         this.ReportQueue.Add(report);
                     }
                 }
             }
         }
-        private void InitReportPK(string appNo, List<LisReportPK> PKList)
+        private void InitReportPK(string appNo, List<ReportPK> PKList)
         {
             string where = "where serialno='" + appNo.Trim() + "'";
             this.D_InitReportPK(where, PKList);
@@ -163,11 +163,11 @@ namespace XYS.Report.WS
         #endregion
 
         #region 数据持久层处理
-        private void D_InitReportPK(Require req, List<LisReportPK> PKList)
+        private void D_InitReportPK(Require req, List<ReportPK> PKList)
         {
             this.PKDAL.InitReportKey(req, PKList);
         }
-        private void D_InitReportPK(string where, List<LisReportPK> PKList)
+        private void D_InitReportPK(string where, List<ReportPK> PKList)
         {
             this.PKDAL.InitReportKey(where, PKList);
         }

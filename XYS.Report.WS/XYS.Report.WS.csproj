@@ -76,17 +76,16 @@
     </Compile>
     <Compile Include="LabApplyInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReportService.cs" />
+    <Compile Include="LisService.cs" />
     <Compile Include="ReportStatus.asmx.cs">
       <DependentUpon>ReportStatus.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="XmlService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\XYS.Report\XYS.Report.csproj">
-      <Project>{6e28b938-9e77-48ff-8142-db607d0f055d}</Project>
-      <Name>XYS.Report</Name>
+    <ProjectReference Include="..\XYS.Report.Lis\XYS.Report.Lis.csproj">
+      <Project>{64d4e4d7-7c5c-4f4a-888f-e440b07315e0}</Project>
+      <Name>XYS.Report.Lis</Name>
     </ProjectReference>
     <ProjectReference Include="..\XYS\XYS.csproj">
       <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>

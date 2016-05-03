@@ -41,9 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Common\IReporter.cs" />
+    <Compile Include="Persistent\ReportCommonDAL.cs" />
+    <Compile Include="Persistent\Utility\DbHelperOleDb.cs" />
+    <Compile Include="Persistent\Utility\DbHelperSQL.cs" />
+    <Compile Include="Report\HandleResult.cs" />
+    <Compile Include="Report\IFillElement.cs" />
+    <Compile Include="Report\IReportHandle.cs" />
+    <Compile Include="Report\IReportKey.cs" />
     <Compile Include="Common\ReportException.cs" />
     <Compile Include="Common\XYSException.cs" />
+    <Compile Include="Report\IReportElement.cs" />
+    <Compile Include="Report\ISubElement.cs" />
+    <Compile Include="Report\Require.cs" />
     <Compile Include="Util\CustomCollection.cs" />
     <Compile Include="Common\ExportAttribute.cs" />
     <Compile Include="Common\FRExportAttribute.cs" />
@@ -56,7 +65,6 @@
     <Compile Include="Common\ColumnAttribute.cs" />
     <Compile Include="Model\IExportElement.cs" />
     <Compile Include="Model\IPatientElement.cs" />
-    <Compile Include="Model\IReportElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ConsoleInfo.cs" />
     <Compile Include="Util\PropertiesDictionary.cs" />
