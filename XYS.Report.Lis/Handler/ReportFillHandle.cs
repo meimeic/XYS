@@ -46,6 +46,7 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类抽象方法
         protected override void OperateReport(ReportReportElement report)
         {
+            LOG.Info("开始---->填充报告");
             if (report.ReportPK.SectionNo == 45)
             {
                 this.FillAndMerge(report);
@@ -54,6 +55,7 @@ namespace XYS.Report.Lis.Handler
             {
                 this.Fill(report);
             }
+            LOG.Info("结束---->填充报告");
         }
         private void Fill(ReportReportElement report)
         {
@@ -196,13 +198,16 @@ namespace XYS.Report.Lis.Handler
         private void FillReportElement(IFillElement report, ReportPK PK, HandleResult result)
         {
             string sql = GenderSql(report, PK);
+            LOG.Info("生成报告主元素的SQL语句:" + sql);
             try
             {
+                LOG.Info("报告主元素数据填充");
                 this.ReportDAL.Fill(report, sql);
                 this.SetHandlerResult(result, 20, "fill report successfully and continue!");
             }
             catch (Exception ex)
             {
+                LOG.Error("报告主元素填充失败！",ex);
                 StringBuilder sb = new StringBuilder();
                 sb.Append("fill ReportReportElement failed! error message:");
                 sb.Append(ex.Message);
@@ -214,13 +219,16 @@ namespace XYS.Report.Lis.Handler
         private void FillSubElements(List<IFillElement> subElementList, ReportPK PK, Type type, HandleResult result)
         {
             string sql = GenderSql(type, PK);
+            LOG.Info("生成报告子元素" + type.Name + "的SQL语句:" + sql);
             try
             {
+                LOG.Info("报告子元素"+type.Name+"集合填充");
                 this.ReportDAL.FillList(subElementList, type, sql);
                 this.SetHandlerResult(result, 30, "fill subelements successfully and continue!");
             }
             catch (Exception ex)
             {
+                LOG.Error("报告子元素" + type.Name + "集合填充失败！",ex);
                 StringBuilder sb = new StringBuilder();
                 sb.Append("fill SubReportElements failed! error message:");
                 sb.Append(ex.Message);

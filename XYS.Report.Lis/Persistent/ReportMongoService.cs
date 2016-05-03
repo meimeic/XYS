@@ -96,8 +96,8 @@ namespace XYS.Report.Lis.Persistent
             if (report.HandleResult.ResultCode != -1)
             {
                 FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ReportID, report.ReportID)
-                                                                                      & FilterBuiler.Eq(r => r.Final, 1);
-                UpdateDefinition<ReportReportElement> updater = UpdateBuiler.Set(r => r.Final, -1);
+                                                                                      & FilterBuiler.Eq(r => r.ActiveFlag, 1);
+                UpdateDefinition<ReportReportElement> updater = UpdateBuiler.Set(r => r.ActiveFlag, -1);
 
                 try
                 {
@@ -181,7 +181,7 @@ namespace XYS.Report.Lis.Persistent
                                                                                                                                           .Include(r => r.SectionNo)
                                                                                                                                           .Include(r => r.SampleNo)
                                                                                                                                           .Include(r => r.ID);
-                var rprojection = projectionBuiler.Expression(r => new { SerialNo = r.SerialNo, SectionNo = r.SectionNo, SampleNo = r.SampleNo, Final = r.Final });
+                var rprojection = projectionBuiler.Expression(r => new { SerialNo = r.SerialNo, SectionNo = r.SectionNo, SampleNo = r.SampleNo, Final = r.ActiveFlag });
 
                 //var projectionBuiler = Builders<ReportReportElement>.Projection;
                 //var projection = projectionBuiler.Include(r => r.SerialNo)
@@ -238,9 +238,9 @@ namespace XYS.Report.Lis.Persistent
             if (report.HandleResult.ResultCode != -1)
             {
                 FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ReportID, report.ReportID)
-                                                                                         & FilterBuiler.Eq(r => r.Final, 1);
+                                                                                         & FilterBuiler.Eq(r => r.ActiveFlag, 1);
 
-                UpdateDefinition<ReportReportElement> updater = UpdateBuiler.Set(r => r.Final, -1);
+                UpdateDefinition<ReportReportElement> updater = UpdateBuiler.Set(r => r.ActiveFlag, -1);
                 try
                 {
                     IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
@@ -293,9 +293,9 @@ namespace XYS.Report.Lis.Persistent
             IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
 
             FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ReportID, "20160104-11-1-1600024")
-                                                                                      & FilterBuiler.Eq(r => r.Final, 1);
+                                                                                      & FilterBuiler.Eq(r => r.ActiveFlag, 1);
 
-            UpdateDefinition<ReportReportElement> finalUpdate = UpdateBuiler.Set(r => r.Final, -1);
+            UpdateDefinition<ReportReportElement> finalUpdate = UpdateBuiler.Set(r => r.ActiveFlag, -1);
 
             //ProjectionDefinition<ReportReportElement> projection = ProjectionBuiler.Include(r => r.ReportID)
             //                                                                                                                          .Include(r => r.Final)
@@ -303,11 +303,11 @@ namespace XYS.Report.Lis.Persistent
 
             //var projection = ProjectionBuiler.Expression(r => new { SerialNo = r.SerialNo, SectionNo = r.SectionNo, SampleNo = r.SampleNo, Final = r.Final });
 
-            ProjectionDefinition<ReportReportElement, ReportStatusProjection> projection = ProjectionBuiler.Expression(r => new ReportStatusProjection() { ID = r.ID, ReportID = r.ReportID, Final = r.Final });
+            ProjectionDefinition<ReportReportElement, ReportStatusProjection> projection = ProjectionBuiler.Expression(r => new ReportStatusProjection() { ID = r.ID, ReportID = r.ReportID, Final = r.ActiveFlag });
 
             FindOneAndUpdateOptions<ReportReportElement, ReportStatusProjection> options = new FindOneAndUpdateOptions<ReportReportElement, ReportStatusProjection>()
             {
-                Projection = ProjectionBuiler.Expression(r => new ReportStatusProjection() { ID = r.ID, ReportID = r.ReportID, Final = r.Final })
+                Projection = ProjectionBuiler.Expression(r => new ReportStatusProjection() { ID = r.ID, ReportID = r.ReportID, Final = r.ActiveFlag })
             };
 
             Expression<Func<ReportReportElement, bool>> expFilter = rep => rep.ReportID.Equals("20160104-11-1-1600024");

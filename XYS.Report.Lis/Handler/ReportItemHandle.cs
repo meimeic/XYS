@@ -18,6 +18,7 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类抽象方法
         protected override void OperateReport(ReportReportElement report)
         {
+            LOG.Info("开始---->处理ReportItem元素");
             //报告级操作
             ReportItemElement rie = null;
             List<IFillElement> itemList = report.GetReportItem(typeof(ReportItemElement));
@@ -41,6 +42,7 @@ namespace XYS.Report.Lis.Handler
                 }
             }
             this.SetHandlerResult(report.HandleResult, 40, "handle reportitem successfully and continue!");
+            LOG.Info("结束--->处理ReportItem元素");
         }
         #endregion
 

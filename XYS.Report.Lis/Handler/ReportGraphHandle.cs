@@ -35,21 +35,26 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类抽象方法
         protected override void OperateReport(ReportReportElement report)
         {
+            LOG.Info("开始---->处理ReportGraph元素");
             List<IFillElement> graphList = report.GetReportItem(typeof(ReportGraphElement));
             if (IsExist(graphList))
             {
+                LOG.Info("开始---->上传图片集合");
                 UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), report.ReportImageMap, report.HandleResult);
+                LOG.Error("结束---->上传图片集合");
                 if (report.HandleResult.ResultCode < 0)
                 {
                     return;
                 }
                 if (report.SectionNo == 11)
                 {
+                    LOG.Info("尝试添加标准图片");
                     AddNormalImageBySuperItem(report.SuperItemList, report.ReportImageMap);
                 }
                 return;
             }
             this.SetHandlerResult(report.HandleResult, 51, "there is no ReportGraphElement to handle and continue!");
+            LOG.Info("结束---->处理ReportGraph元素");
         }
         #endregion
 
@@ -59,11 +64,13 @@ namespace XYS.Report.Lis.Handler
             WebClient wc = new WebClient();
             //多张图片上传
             string boundary = GenderBoundary();
+            LOG.Info("生成上传数据");
             //获取上传数据字节数组
             byte[] postData = GenderPostData(graphList, boundary);
             InitWebClient(wc, boundary, folder);
             try
             {
+                LOG.Info("开始上传,上传url为" + wc.BaseAddress + "/upload");
                 byte[] resposeBytes = wc.UploadData("/upload", "POST", postData);
                 string resposeStr = Encoding.UTF8.GetString(resposeBytes);
                 List<WebImage> resList = JsonConvert.DeserializeObject<List<WebImage>>(resposeStr);
@@ -83,6 +90,7 @@ namespace XYS.Report.Lis.Handler
                     else
                     {
                         this.SetHandlerResult(result, -52, this.GetType(), "the image server have some unkown error,upload image(s) failed!");
+                        LOG.Error("图片服务器返回数据格式错误，上传图片集合失败！");
                         return;
                     }
                 }
@@ -90,6 +98,7 @@ namespace XYS.Report.Lis.Handler
             }
             catch (Exception ex)
             {
+                LOG.Error("上传图片集合出错！",ex);
                 StringBuilder sb = new StringBuilder();
                 sb.Append("upload report image failed! error message:");
                 sb.Append(ex.Message);

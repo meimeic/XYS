@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using log4net;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
     public class ReportHandleService
     {
+        #region 静态变量
+        protected static ILog LOG = LogManager.GetLogger("LisReportHandle");
+        #endregion
+        
         #region 私有字段
         private ILisReportHandle m_headHandle;
         private ILisReportHandle m_tailHandle;
@@ -19,9 +24,17 @@ namespace XYS.Report.Lis.Handler
         }
         #endregion
 
+        #region 属性
+        public ILisReportHandle HeadHandle
+        {
+ 
+        }
+        #endregion
+
         #region 同步
         public void HandleReport(ReportReportElement report)
         {
+            LOG.Info("报告处理服务进行处理");
             this.m_headHandle.ReportOption(report);
         }
         #endregion

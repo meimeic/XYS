@@ -44,17 +44,17 @@ namespace XYS.Report.Lis
             get { return this.m_receiveDate; }
             set { this.m_receiveDate = value; }
         }
+        public string ID
+        {
+            get { return this.m_receiveDate.ToString("yyyyMMdd") + "-" + this.m_sectionNo + "-" + this.m_testTypeNo + "-" + this.m_sampleNo; }
+        }
         //public KeyColumn[] KeySet
         //{
         //    get { return this.m_KeySet; }
         //}
         #endregion
 
-        #region 属性
-        public string ID
-        {
-            get { return this.m_receiveDate.ToString("yyyyMMdd") + "-" + this.m_sectionNo + "-" + this.m_testTypeNo + "-" + this.m_sampleNo; }
-        }
+        #region 实现IReportKey接口属性
         public bool Configured
         {
             get { return this.m_config; }

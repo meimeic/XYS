@@ -16,6 +16,7 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类抽象方法
         protected override void OperateReport(ReportReportElement report)
         {
+            LOG.Info("开始---->处理ReportCustom元素");
             ReportCustomElement rce = null;
             List<IFillElement> customList = report.GetReportItem(typeof(ReportCustomElement));
             if (IsExist(customList))
@@ -30,6 +31,7 @@ namespace XYS.Report.Lis.Handler
                 }
             }
             this.SetHandlerResult(report.HandleResult, 60, "there is no ReportCustomElement to handle and continue!");
+            LOG.Info("结束---->处理ReportCustom元素");
         }
         #endregion
 

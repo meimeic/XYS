@@ -15,7 +15,7 @@ namespace XYS.Report.Lis
     public abstract class Reporter
     {
         #region 常量字段
-        static readonly ILog LOG = LogManager.GetLogger(typeof(Reporter));
+        static readonly ILog LOG = LogManager.GetLogger("LisReport");
         #endregion
 
         #region 私有字段
@@ -44,8 +44,13 @@ namespace XYS.Report.Lis
         #region 同步
         public void OperateReport(ReportReportElement report)
         {
+            if (report.ReportPK == null || !report.ReportPK.Configured)
+            {
+                LOG.Error("错误，当前报告不存在主键！");
+            }
+            LOG.Info("开始---->处理报告 主键为:" + report.ReportPK.ID);
             this.HandleService.HandleReport(report);
-            LOG.Info("处理报告完成");
+            LOG.Info("结束---->处理报告 主键为:" + report.ReportPK.ID);
         }
         public void OperateReport(List<ReportReportElement> reportList)
         {

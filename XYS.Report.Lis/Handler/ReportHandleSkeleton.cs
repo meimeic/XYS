@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using log4net;
+
 using XYS.Report;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
     public abstract class ReportHandleSkeleton : ILisReportHandle
     {
+        #region 静态字段
+        protected static ILog LOG = LogManager.GetLogger("LisReportHandle");
+        #endregion
+
         #region 私有字段
-        private IReportHandle m_nextHandler;
+        private IReportHandle m_nextHandle;
         #endregion
 
         #region 私有事件
@@ -36,8 +42,8 @@ namespace XYS.Report.Lis.Handler
 
         public IReportHandle Next
         {
-            get { return this.m_nextHandler; }
-            set { this.m_nextHandler = value; }
+            get { return this.m_nextHandle; }
+            set { this.m_nextHandle = value; }
         }
         public virtual void ReportOption(IReportElement report)
         {
@@ -49,22 +55,26 @@ namespace XYS.Report.Lis.Handler
                 if (rep.HandleResult.ResultCode < 0)
                 {
                     this.OnErrorOccured(report);
+                    LOG.Error("处理报告遇到错误，后续处理已终止！");
                     return;
                 }
                 //
                 if (this.Next != null)
                 {
+                    LOG.Info("当前处理成功，继续处理。");
                     this.Next.ReportOption(report);
                 }
                 else
                 {
                     this.OnHandleCompleted(report);
+                    LOG.Info("处理报告完成。");
                     return;
                 }
             }
             else
             {
                 this.SetHandlerResult(report.HandleResult, -11, this.GetType(), "this object is not a lis report!");
+                LOG.Error("当前要处理的内容不是lis报告！");
                 this.OnErrorOccured(report);
             }
         }

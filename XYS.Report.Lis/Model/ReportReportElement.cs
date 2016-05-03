@@ -17,7 +17,7 @@ namespace XYS.Report.Lis.Model
         private Guid m_id;
         private ReportPK m_reportPK;
         private string m_reportID;
-        private int m_final;
+        private int m_activeFlag;
         private HandleResult m_handleResult;
 
         private int m_sectionNo;
@@ -171,10 +171,10 @@ namespace XYS.Report.Lis.Model
             set { this.m_reportID = value; }
         }
         [BsonElement(Order = 34)]
-        public int Final
+        public int ActiveFlag
         {
-            get { return m_final; }
-            set { m_final = value; }
+            get { return m_activeFlag; }
+            set { m_activeFlag = value; }
         }
 
         [Column]
