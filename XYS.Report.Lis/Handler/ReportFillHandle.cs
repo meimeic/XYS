@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 using XYS.Util;
 using XYS.Common;
-using XYS.Persistent;
 using XYS.Report.Lis.Util;
 using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Persistent;
@@ -20,7 +19,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 只读字段
-        private readonly ReportCommonDAL m_reportDAL;
+        private readonly ReportDAL m_reportDAL;
         #endregion
 
         #region 构造函数
@@ -32,12 +31,12 @@ namespace XYS.Report.Lis.Handler
         public ReportFillHandle()
             : base()
         {
-            this.m_reportDAL = new ReportCommonDAL();
+            this.m_reportDAL = new ReportDAL();
         }
         #endregion
 
         #region 实例属性
-        protected ReportCommonDAL ReportDAL
+        protected ReportDAL ReportDAL
         {
             get { return this.m_reportDAL; }
         }
@@ -135,8 +134,8 @@ namespace XYS.Report.Lis.Handler
         private void FillAndMerge(ReportReportElement report)
         {
             string sql = null;
+            ReportDAL lisDAL = new ReportDAL();
             ReportPKDAL keyDAL = new ReportPKDAL();
-            ReportCommonDAL lisDAL = new ReportCommonDAL();
             List<ReportPK> PKList = new List<ReportPK>(5);
 
             keyDAL.InitReportKey(report.ReportPK, PKList);

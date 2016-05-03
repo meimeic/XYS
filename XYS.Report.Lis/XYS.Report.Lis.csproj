@@ -47,6 +47,7 @@
       <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
@@ -63,6 +64,7 @@
     <Compile Include="Handler\ReportItemHandle.cs" />
     <Compile Include="Handler\ReportReportHandle.cs" />
     <Compile Include="ILisReportHandle.cs" />
+    <Compile Include="Persistent\ReportDAL.cs" />
     <Compile Include="Reporter.cs" />
     <Compile Include="ReportPK.cs" />
     <Compile Include="Model\ReportCustomElement.cs" />

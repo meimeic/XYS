@@ -3,23 +3,26 @@ using System.Text;
 using System.Data;
 using System.Reflection;
 using System.Collections;
+using System.Configuration;
+using System.Data.SqlClient;
 using System.Collections.Generic;
 
 using XYS.Report;
-using XYS.Persistent.Utility;
 namespace XYS.Report.Lis.Persistent
 {
     public class ReportPKDAL
     {
+        private readonly string m_connectionString;
         public ReportPKDAL()
         {
+            this.m_connectionString = ConfigurationManager.ConnectionStrings["LisMSSQL"].ConnectionString;
         }
 
         public void InitReportKey(Require require, ReportPK PK)
         {
             string sql = GetSQLString(require);
             DataTable dt = GetDataTable(sql);
-            if (dt.Rows.Count > 0)
+            if (dt!=null&&dt.Rows.Count > 0)
             {
                 SetReportKey(dt.Rows[0], PK);
                 PK.Configured = true;
@@ -30,7 +33,7 @@ namespace XYS.Report.Lis.Persistent
             ReportPK temp;
             string sql = GetSQLString(require);
             DataTable dt = GetDataTable(sql);
-            if (dt.Rows.Count > 0)
+            if (dt != null && dt.Rows.Count > 0)
             {
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -46,7 +49,7 @@ namespace XYS.Report.Lis.Persistent
             ReportPK temp = null;
             string sql = GetSQLString(where);
             DataTable dt = GetDataTable(sql);
-            if (dt.Rows.Count > 0)
+            if (dt != null && dt.Rows.Count > 0)
             {
                 foreach (DataRow dr in dt.Rows)
                 {
@@ -57,7 +60,6 @@ namespace XYS.Report.Lis.Persistent
                 }
             }
         }
-
         //特殊代码处理逻辑
         public void InitReportKey(ReportPK PK, List<ReportPK> PKList)
         {
@@ -74,7 +76,7 @@ namespace XYS.Report.Lis.Persistent
             sb.Append("'");
             string sql = sb.ToString();
             DataTable dt = GetDataTable(sql);
-            if (dt.Rows.Count > 0)
+            if (dt != null && dt.Rows.Count > 0)
             {
                 sb.Clear();
                 sb.Append("receivedate='");
@@ -201,8 +203,30 @@ namespace XYS.Report.Lis.Persistent
         }
         protected DataTable GetDataTable(string sql)
         {
-            DataTable dt = DbHelperSQL.Query(sql).Tables["dt"];
+            DataTable dt = null;
+            if (!string.IsNullOrEmpty(sql))
+            {
+                dt = this.Query(sql).Tables["dt"];
+            }
             return dt;
+        }
+        private DataSet Query(string SQLString)
+        {
+            using (SqlConnection con = new SqlConnection(this.m_connectionString))
+            {
+                DataSet ds = new DataSet();
+                try
+                {
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(SQLString, con);
+                    da.Fill(ds, "dt");
+                }
+                catch (SqlException e)
+                {
+                    throw new Exception(e.Message);
+                }
+                return ds;
+            }
         }
         private bool IsExist(Dictionary<string, object> dic)
         {

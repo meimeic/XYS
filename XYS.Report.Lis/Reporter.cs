@@ -19,8 +19,8 @@ namespace XYS.Report.Lis
         #endregion
 
         #region 私有字段
-        private ReportHandleService m_handler;
-        private ReportMongoService m_mongo;
+        private ReportHandleService m_handleService;
+        private ReportMongoService m_mongoService;
         #endregion
 
         #region 构造函数
@@ -33,11 +33,11 @@ namespace XYS.Report.Lis
         #region 实例属性
         public ReportHandleService HandleService
         {
-            get { return this.m_handler; }
+            get { return this.m_handleService; }
         }
         public ReportMongoService MongoService
         {
-            get { return this.m_mongo; }
+            get { return this.m_mongoService; }
         }
         #endregion
 
@@ -124,27 +124,26 @@ namespace XYS.Report.Lis
         #region 处理代码
         protected void HandleError(ReportReportElement report)
         {
-            Console.WriteLine(report.HandleResult.Message);
+            //
         }
-        protected void HandleComplete(ReportReportElement report)
+        protected void HandleSuccess(ReportReportElement report)
         {
-            Console.WriteLine("handle report complete,begin save report to mongo");
+            LOG.Info("handle report complete,begin save report to mongo");
             this.MongoService.InsertReport(report);
         }
 
         protected void SaveError(ReportReportElement report)
         {
         }
-        protected void SaveComplete(ReportReportElement report)
+        protected void SaveSuccess(ReportReportElement report)
         {
 
         }
         protected void UpdateAndSaveError(ReportReportElement report)
         {
         }
-        protected void UpdateAndSaveComplete(ReportReportElement report)
+        protected void UpdateAndSaveSuccess(ReportReportElement report)
         {
-
         }
         #endregion
 
@@ -178,12 +177,12 @@ namespace XYS.Report.Lis
         #region 初始化
         private void InitializeReporter()
         {
-            this.m_handler = new ReportHandleService();
-            this.m_mongo = new ReportMongoService();
+            this.m_handleService = new ReportHandleService();
+            this.m_mongoService = new ReportMongoService();
 
             ////注册处理事件
-            //this.m_handler.HandleErrorEvent += this.HandleError;
-            //this.m_handler.HandleCompletedEvent += this.HandleComplete;
+            this.HandleService.HandleErrorEvent += this.HandleError;
+            this.HandleService.HandleSuccessEvent += this.HandleSuccess;
 
             ////注册保存事件
             //this.m_mongo.InsertErrorEvent += this.SaveError;

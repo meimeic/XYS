@@ -5,13 +5,12 @@ using System.Collections.Generic;
 
 using XYS.Report;
 using XYS.Common;
-using XYS.Persistent.Utility;
 namespace XYS.Persistent
 {
-    public class ReportCommonDAL
+    public abstract class ReportCommonDAL
     {
         #region
-        public ReportCommonDAL()
+        protected ReportCommonDAL()
         {
         }
         #endregion
@@ -22,7 +21,7 @@ namespace XYS.Persistent
             DataTable dt = GetDataTable(sql);
             if (dt != null && dt.Rows.Count > 0)
             {
-                FillData(element, element.GetType(), dt.Rows[0], dt.Columns);
+                FillData(element, dt.Rows[0], dt.Columns);
             }
         }
         public void FillList(List<IFillElement> elementList, Type elementType, string sql)
@@ -36,8 +35,7 @@ namespace XYS.Persistent
                     try
                     {
                         element = (IFillElement)elementType.Assembly.CreateInstance(elementType.FullName);
-                        FillData(element, dr, dt.Columns);
-                        //AfterFill(element);
+                        FillData(element, elementType, dr, dt.Columns);
                         elementList.Add(element);
                     }
                     catch (Exception ex)
@@ -47,6 +45,10 @@ namespace XYS.Persistent
                 }
             }
         }
+        #endregion
+
+        #region 抽象方法
+        protected abstract DataTable GetDataTable(string sql);
         #endregion
 
         #region
@@ -66,6 +68,26 @@ namespace XYS.Persistent
                 {
                     FillProperty(element, prop, dr[dc]);
                 }
+            }
+        }
+        protected bool FillProperty(IFillElement element, PropertyInfo p, object v)
+        {
+            try
+            {
+                if (v != DBNull.Value)
+                {
+                    object value = Convert.ChangeType(v, p.PropertyType);
+                    p.SetValue(element, value, null);
+                }
+                else
+                {
+                    p.SetValue(element, DefaultForType(p.PropertyType), null);
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
             }
         }
         protected bool FillProperty(IFillElement element, PropertyInfo p, DataRow dr)
@@ -91,38 +113,9 @@ namespace XYS.Persistent
                 return false;
             }
         }
-        protected bool FillProperty(IFillElement element, PropertyInfo p, object v)
-        {
-            try
-            {
-                if (v != DBNull.Value)
-                {
-                    object value = Convert.ChangeType(v, p.PropertyType);
-                    p.SetValue(element, value, null);
-                }
-                else
-                {
-                    p.SetValue(element, DefaultForType(p.PropertyType), null);
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
         protected object DefaultForType(Type targetType)
         {
             return targetType.IsValueType ? Activator.CreateInstance(targetType) : null;
-        }
-        protected DataTable GetDataTable(string sql)
-        {
-            DataTable dt = null;
-            if (!string.IsNullOrEmpty(sql))
-            {
-                dt = DbHelperSQL.Query(sql).Tables["dt"];
-            }
-            return dt;
         }
         #endregion
 

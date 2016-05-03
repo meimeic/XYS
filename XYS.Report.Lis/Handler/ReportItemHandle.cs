@@ -27,15 +27,15 @@ namespace XYS.Report.Lis.Handler
                 foreach (IFillElement item in itemList)
                 {
                     rie = item as ReportItemElement;
-                    //检验项处理
-                    if (!OperateItem(rie))
-                    {
-                        continue;
-                    }
                     //设置检验大项集合
                     if (!report.SuperItemList.Contains(rie.ParItemNo))
                     {
                         report.SuperItemList.Add(rie.ParItemNo);
+                    }
+                    //检验项处理
+                    if (!OperateItem(rie))
+                    {
+                        continue;
                     }
                     //将合法检验项添加到输出集合中
                     report.ReportItemCollection.Add(rie);

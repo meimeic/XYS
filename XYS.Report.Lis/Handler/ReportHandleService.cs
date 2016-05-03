@@ -5,6 +5,8 @@ using log4net;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
+    public delegate void HandleErrorHandler(ReportReportElement report);
+    public delegate void HandleSuccessHandler(ReportReportElement report);
     public class ReportHandleService
     {
         #region 静态变量
@@ -16,6 +18,11 @@ namespace XYS.Report.Lis.Handler
         private ILisReportHandle m_tailHandle;
         #endregion
 
+        #region 私有事件
+        private event HandleErrorHandler m_handleErrorEvent;
+        private event HandleSuccessHandler m_handleSuccessEvent;
+        #endregion
+
         #region 构造函数
         public ReportHandleService()
         {
@@ -24,10 +31,23 @@ namespace XYS.Report.Lis.Handler
         }
         #endregion
 
-        #region 属性
+        #region 事件属性
+        public event HandleErrorHandler HandleErrorEvent
+        {
+            add { this.m_handleErrorEvent += value; }
+            remove { this.m_handleErrorEvent -= value; }
+        }
+        public event HandleSuccessHandler HandleSuccessEvent
+        {
+            add { this.m_handleSuccessEvent += value; }
+            remove { this.m_handleSuccessEvent -= value; }
+        }
+        #endregion
+
+        #region 实例属性
         public ILisReportHandle HeadHandle
         {
- 
+            get { return this.m_headHandle; }
         }
         #endregion
 
@@ -35,7 +55,11 @@ namespace XYS.Report.Lis.Handler
         public void HandleReport(ReportReportElement report)
         {
             LOG.Info("报告处理服务进行处理");
-            this.m_headHandle.ReportOption(report);
+            if (report.ReportPK != null && report.ReportPK.Configured)
+            {
+                this.HeadHandle.ReportOption(report);
+            }
+            this.OnCompleted(report);
         }
         #endregion
 
@@ -105,6 +129,36 @@ namespace XYS.Report.Lis.Handler
         {
             tail.Next = current;
             tail = current;
+        }
+        #endregion
+
+        #region 触发事件
+        protected void OnCompleted(ReportReportElement report)
+        {
+            if (report.HandleResult.ResultCode > 0)
+            {
+                this.OnSuccess(report);
+            }
+            else
+            {
+                this.OnError(report);
+            }
+        }
+        protected void OnError(ReportReportElement report)
+        {
+            HandleErrorHandler handler = this.m_handleErrorEvent;
+            if (handler != null)
+            {
+                handler(report);
+            }
+        }
+        protected void OnSuccess(ReportReportElement report)
+        {
+            HandleSuccessHandler handler = this.m_handleSuccessEvent;
+            if (handler != null)
+            {
+                handler(report);
+            }
         }
         #endregion
     }
