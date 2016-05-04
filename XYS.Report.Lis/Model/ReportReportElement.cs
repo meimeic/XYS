@@ -30,6 +30,7 @@ namespace XYS.Report.Lis.Model
         private string m_remark;
 
         private List<int> m_superItemList;
+        private ReportInfoElement m_reportInfo;
         private Dictionary<string, string> m_reportImageMap;
         private List<ReportItemElement> m_reportItemCollection;
         private List<ReportCustomElement> m_reportCustomCollection;
@@ -43,6 +44,7 @@ namespace XYS.Report.Lis.Model
             this.m_remarkFlag = 0;
             this.m_superItemList = new List<int>(3);
             this.m_handleResult = new HandleResult();
+            this.m_reportInfo = new ReportInfoElement();
             this.m_reportImageMap = new Dictionary<string, string>(4);
             this.m_reportItemCollection = new List<ReportItemElement>(20);
             this.m_reportCustomCollection = new List<ReportCustomElement>(2);
@@ -71,14 +73,7 @@ namespace XYS.Report.Lis.Model
             set { this.m_id = value; }
         }
 
-        [BsonIgnore]
-        public ReportPK ReportPK
-        {
-            get { return this.m_reportPK; }
-            set { this.m_reportPK = value; }
-        }
-
-        [BsonElement(Order = 13)]
+        [BsonElement(Order = 1)]
         public string ReportID
         {
             get
@@ -98,35 +93,27 @@ namespace XYS.Report.Lis.Model
             }
             set { this.m_reportID = value; }
         }
-        [BsonElement(Order = 34)]
+        [BsonElement(Order = 2)]
         public int ActiveFlag
         {
             get { return m_activeFlag; }
             set { m_activeFlag = value; }
         }
 
-        [BsonElement(Order = 33)]
+        [BsonIgnore]
+        public ReportPK ReportPK
+        {
+            get { return this.m_reportPK; }
+            set { this.m_reportPK = value; }
+        }
+
+        [BsonElement(Order = 3)]
         public string ReportTitle
         {
             get { return this.m_reportTitle; }
             set { this.m_reportTitle = value; }
         }
-
-        //备注标识 0表示没有备注 1 表示备注已设置  2 表示备注未设置
-        [BsonIgnore]
-        public int RemarkFlag
-        {
-            get { return this.m_remarkFlag; }
-            set { this.m_remarkFlag = value; }
-        }
-        [BsonElement(Order = 32)]
-        public string Remark
-        {
-            get { return this.m_remark; }
-            set { this.m_remark = value; }
-        }
-
-        [BsonElement(Order = 25)]
+        [BsonElement(Order = 4)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CreateDateTime
         {
@@ -141,30 +128,52 @@ namespace XYS.Report.Lis.Model
             set { this.m_createDateTime = value; }
         }
 
-        [BsonElement(Order = 36)]
+        //备注标识 0表示没有备注 1 表示备注已设置  2 表示备注未设置
+        [BsonIgnore]
+        public int RemarkFlag
+        {
+            get { return this.m_remarkFlag; }
+            set { this.m_remarkFlag = value; }
+        }
+        [BsonElement(Order = 5)]
+        public string Remark
+        {
+            get { return this.m_remark; }
+            set { this.m_remark = value; }
+        }
+
+        [BsonElement(Order = 6)]
         public List<int> SuperItemList
         {
             get { return this.m_superItemList; }
             set { this.m_superItemList = value; }
         }
-        [BsonElement(Order = 35)]
-        [BsonDictionaryOptions(DictionaryRepresentation.Document)]
-        public Dictionary<string, string> ReportImageMap
+         
+        [BsonElement(Order = 7)]
+        public ReportInfoElement ReportInfo
         {
-            get { return this.m_reportImageMap; }
-            set { this.m_reportImageMap = value; }
+            get { return this.m_reportInfo; }
+            set { this.m_reportInfo = value; }
         }
-        [BsonElement(Order = 37)]
+
+        [BsonElement(Order = 8)]
         public List<ReportItemElement> ReportItemCollection
         {
             get { return this.m_reportItemCollection; }
             set { this.m_reportItemCollection = value; }
         }
-        [BsonElement(Order = 38)]
+        [BsonElement(Order = 9)]
         public List<ReportCustomElement> ReportCustomCollection
         {
             get { return this.m_reportCustomCollection; }
             set { this.m_reportCustomCollection = value; }
+        }
+        [BsonElement(Order = 10)]
+        [BsonDictionaryOptions(DictionaryRepresentation.Document)]
+        public Dictionary<string, string> ReportImageMap
+        {
+            get { return this.m_reportImageMap; }
+            set { this.m_reportImageMap = value; }
         }
         #endregion
 

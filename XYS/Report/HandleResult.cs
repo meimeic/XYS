@@ -3,7 +3,7 @@ namespace XYS.Report
 {
     /// <summary>
     /// 执行状态 -1:失败，0:继续，1:成功
-    /// 执行失败时 type记录失败模块,message 记录失败原因，reportkey 记录失败的主键
+    /// 执行失败时 type记录失败模块,message 记录失败原因
     /// </summary>
     public class HandleResult
     {

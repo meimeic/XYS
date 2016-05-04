@@ -43,7 +43,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override void OperateReport(ReportReportElement report)
+        public override void ReportHandle(ReportReportElement report)
         {
             LOG.Info("填充报告处理");
             if (report.ReportPK.SectionNo == 45)
@@ -59,7 +59,7 @@ namespace XYS.Report.Lis.Handler
         {
             ReportPK PK = report.ReportPK;
             //填充报告元素
-            FillReportElement(report, PK, report.HandleResult);
+            FillReportElement(report.ReportInfo, PK, report.HandleResult);
             if (report.HandleResult.ResultCode < 0)
             {
                 return;
@@ -80,56 +80,6 @@ namespace XYS.Report.Lis.Handler
                 }
             }
         }
-
-        //private void Fill(ReportReportElement report)
-        //{
-        //    string sql = null;
-        //    LisReportCommonDAL lisDAL = new LisReportCommonDAL();
-        //    //生成sql 字符串
-        //    sql = GenderSql(report, report.LisPK);
-        //    //尝试填充数据
-        //    try
-        //    {
-        //        lisDAL.Fill(report, sql);
-        //        this.SetHandlerResult(report.HandleResult, 20, "fill ReportReportElement successfully and continue!");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        StringBuilder sb = new StringBuilder();
-        //        sb.Append("fill ReportReportElement failed! error message:");
-        //        sb.Append(ex.Message);
-        //        sb.Append(SystemInfo.NewLine);
-        //        sb.Append(ex.ToString());
-        //        this.SetHandlerResult(report.HandleResult, -21, this.GetType(), sb.ToString());
-        //        return;
-        //    }
-        //    //填充子项
-        //    List<Type> availableElementList = GetAvailableFillElements(report.LisPK);
-        //    if (availableElementList != null && availableElementList.Count > 0)
-        //    {
-        //        List<AbstractFillElement> tempList = null;
-        //        foreach (Type type in availableElementList)
-        //        {
-        //            tempList = report.GetReportItem(type);
-        //            sql = GenderSql(type, report.LisPK);
-        //            try
-        //            {
-        //                lisDAL.FillList(tempList, type, sql);
-        //                this.SetHandlerResult(report.HandleResult, 30, "fill SubReportElements successfully and continue!");
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                StringBuilder sb = new StringBuilder();
-        //                sb.Append("fill SubReportElements failed! error message:");
-        //                sb.Append(ex.Message);
-        //                sb.Append(SystemInfo.NewLine);
-        //                sb.Append(ex.ToString());
-        //                this.SetHandlerResult(report.HandleResult, -31, this.GetType(), sb.ToString());
-        //                return;
-        //            }
-        //        }
-        //    }
-        //}
         private void FillAndMerge(ReportReportElement report)
         {
             string sql = null;

@@ -9,7 +9,7 @@ namespace XYS.Report.Lis.Model
 {
     public class ReportInfoElement : IPatientElement, IFillElement
     {
-        #region
+        #region 私有字段
         //患者信息
         private string m_patientName;
         private string m_genderName;
