@@ -35,26 +35,24 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类抽象方法
         protected override void OperateReport(ReportReportElement report)
         {
-            LOG.Info("开始---->处理ReportGraph元素");
+            LOG.Info("报告图片项处理");
             List<IFillElement> graphList = report.GetReportItem(typeof(ReportGraphElement));
             if (IsExist(graphList))
             {
-                LOG.Info("开始---->上传图片集合");
+                LOG.Info("上传图片集合");
                 UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), report.ReportImageMap, report.HandleResult);
-                LOG.Error("结束---->上传图片集合");
                 if (report.HandleResult.ResultCode < 0)
                 {
                     return;
                 }
                 if (report.SectionNo == 11)
                 {
-                    LOG.Info("尝试添加标准图片");
+                    LOG.Info("尝试添加标准图片处理");
                     AddNormalImageBySuperItem(report.SuperItemList, report.ReportImageMap);
                 }
                 return;
             }
             this.SetHandlerResult(report.HandleResult, 51, "there is no ReportGraphElement to handle and continue!");
-            LOG.Info("结束---->处理ReportGraph元素");
         }
         #endregion
 
@@ -64,7 +62,7 @@ namespace XYS.Report.Lis.Handler
             WebClient wc = new WebClient();
             //多张图片上传
             string boundary = GenderBoundary();
-            LOG.Info("生成上传数据");
+            LOG.Info("生成上传图片数据");
             //获取上传数据字节数组
             byte[] postData = GenderPostData(graphList, boundary);
             InitWebClient(wc, boundary, folder);

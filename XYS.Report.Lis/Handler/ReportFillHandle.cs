@@ -45,7 +45,7 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类抽象方法
         protected override void OperateReport(ReportReportElement report)
         {
-            LOG.Info("开始---->填充报告");
+            LOG.Info("填充报告处理");
             if (report.ReportPK.SectionNo == 45)
             {
                 this.FillAndMerge(report);
@@ -54,7 +54,6 @@ namespace XYS.Report.Lis.Handler
             {
                 this.Fill(report);
             }
-            LOG.Info("结束---->填充报告");
         }
         private void Fill(ReportReportElement report)
         {

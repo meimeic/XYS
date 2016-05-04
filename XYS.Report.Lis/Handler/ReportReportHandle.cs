@@ -16,11 +16,11 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类方法
         protected override void OperateReport(ReportReportElement report)
         {
-            LOG.Info("开始---->处理报告主元素");
+            LOG.Info("报告基本处理");
             //formmemo 处理
             if (report.SectionNo == 10)
             {
-                LOG.Info("处理备注信息");
+                LOG.Info("备注信息处理");
                 if (report.FormMemo != null)
                 {
                     report.FormMemo = report.FormMemo.Replace(";", SystemInfo.NewLine);
@@ -30,12 +30,12 @@ namespace XYS.Report.Lis.Handler
             //cid 处理
             if (report.CID != null)
             {
-                LOG.Info("处理身份证号信息");
+                LOG.Info("身份证信息处理");
                 report.CID = report.CID.Trim();
             }
 
             //reportitem排序
-            LOG.Info("ReportItem元素排序");
+            LOG.Info("报告项排序");
             report.ReportItemCollection.Sort();
 
             //
@@ -45,7 +45,6 @@ namespace XYS.Report.Lis.Handler
 
             //返回值
             this.SetHandlerResult(report.HandleResult, 70, "handle ReportReportElement successfully and continue!");
-            LOG.Info("结束---->处理报告主元素");
         }
         #endregion
 

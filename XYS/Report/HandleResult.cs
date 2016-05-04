@@ -47,5 +47,14 @@ namespace XYS.Report
             set { this.m_message = value; }
         }
         #endregion
+
+        #region
+        public void Clear()
+        {
+            this.m_resultCode = 0;
+            this.m_handleType = null;
+            this.m_message = "the result is undefined!";
+        }
+        #endregion
     }
 }

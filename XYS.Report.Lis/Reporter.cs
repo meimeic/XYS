@@ -42,15 +42,21 @@ namespace XYS.Report.Lis
         #endregion
 
         #region 同步
+        public void InitReport(ReportReportElement report)
+        {
+            this.HandleService.HandleReport(report);
+        }
+        public void InitReport(List<ReportReportElement> reportList)
+        {
+            foreach (ReportReportElement report in reportList)
+            {
+
+            }
+        }
         public void OperateReport(ReportReportElement report)
         {
-            if (report.ReportPK == null || !report.ReportPK.Configured)
-            {
-                LOG.Error("错误，当前报告不存在主键！");
-            }
-            LOG.Info("开始---->处理报告 主键为:" + report.ReportPK.ID);
+            LOG.Info("开始处理报告 主键为:" + report.ReportPK.ID);
             this.HandleService.HandleReport(report);
-            LOG.Info("结束---->处理报告 主键为:" + report.ReportPK.ID);
         }
         public void OperateReport(List<ReportReportElement> reportList)
         {
@@ -125,19 +131,24 @@ namespace XYS.Report.Lis
         protected void HandleError(ReportReportElement report)
         {
             //
+            LOG.Error("处理报告失败，进入错误处理流程。");
+            //
+
         }
         protected void HandleSuccess(ReportReportElement report)
         {
-            LOG.Info("handle report complete,begin save report to mongo");
+            LOG.Info("处理报告成功,进入保存报告流程");
             this.MongoService.InsertReport(report);
         }
 
         protected void SaveError(ReportReportElement report)
         {
+            LOG.Error("保存报告失败，进入错误处理流程");
+            LOG.Error(report.HandleResult.Message);
         }
         protected void SaveSuccess(ReportReportElement report)
         {
-
+            LOG.Info("保存报告成功");
         }
         protected void UpdateAndSaveError(ReportReportElement report)
         {
@@ -185,10 +196,10 @@ namespace XYS.Report.Lis
             this.HandleService.HandleSuccessEvent += this.HandleSuccess;
 
             ////注册保存事件
-            //this.m_mongo.InsertErrorEvent += this.SaveError;
-            //this.m_mongo.InsertCompleteEvent += this.SaveComplete;
-            //this.m_mongo.UpdateAndInsertErrorEvent += this.UpdateAndSaveError;
-            //this.m_mongo.UpdateAndInsertCompleteEvent += this.UpdateAndSaveComplete;
+            this.MongoService.InsertErrorEvent += this.SaveError;
+            this.MongoService.InsertSuccessEvent += this.SaveSuccess;
+            this.MongoService.UpdateAndInsertErrorEvent += this.UpdateAndSaveError;
+            this.MongoService.UpdateAndInsertSuccessEvent += this.UpdateAndSaveSuccess;
         }
         #endregion
     }

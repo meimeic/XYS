@@ -81,6 +81,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\XYS.Report.Lis\XYS.Report.Lis.csproj">
+      <Project>{64d4e4d7-7c5c-4f4a-888f-e440b07315e0}</Project>
+      <Name>XYS.Report.Lis</Name>
+    </ProjectReference>
     <ProjectReference Include="..\XYS\XYS.csproj">
       <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
       <Name>XYS</Name>

@@ -12,7 +12,7 @@ namespace XYS.Report.Lis.Handler
         #region 静态变量
         protected static ILog LOG = LogManager.GetLogger("LisReportHandle");
         #endregion
-        
+
         #region 私有字段
         private ILisReportHandle m_headHandle;
         private ILisReportHandle m_tailHandle;
@@ -51,35 +51,20 @@ namespace XYS.Report.Lis.Handler
         }
         #endregion
 
-        #region 同步
+        #region 处理
         public void HandleReport(ReportReportElement report)
         {
-            LOG.Info("报告处理服务进行处理");
+            LOG.Info("进入报告处理流程");
             if (report.ReportPK != null && report.ReportPK.Configured)
             {
                 this.HeadHandle.ReportOption(report);
             }
-            this.OnCompleted(report);
-        }
-        #endregion
-
-        #region 异步
-        public async Task HandleReportAsync(ReportReportElement report)
-        {
-            if (report.HandleResult.ResultCode >= 0)
+            else
             {
-                await HandleReportTask(report);
+                this.SetHandlerResult(report.HandleResult, -11, this.GetType(), "错误，当前报告不存在主键！");
             }
-        }
-        #endregion
-
-        #region 多线程
-        public Task HandleReportTask(ReportReportElement report)
-        {
-            return Task.Run(() =>
-            {
-                this.m_headHandle.ReportOption(report);
-            });
+            LOG.Info("退出报告处理流程");
+            this.OnCompleted(report);
         }
         #endregion
 
@@ -100,35 +85,20 @@ namespace XYS.Report.Lis.Handler
             currentHandler = new ReportReportHandle();
             AddHandler(currentHandler);
         }
-        protected void InitHandlerChain(ILisReportHandle head)
-        {
-            //lock (this.m_addHandlerLock)
-            //{
-            ILisReportHandle tailHandler = head;
-            ILisReportHandle currentHandler = null;
-            //检验项处理器
-            currentHandler = new ReportItemHandle();
-            AddHandler(currentHandler, ref tailHandler);
-            //图片项处理器
-            currentHandler = new ReportGraphHandle();
-            AddHandler(currentHandler, ref tailHandler);
-            //自定义项处理器
-            currentHandler = new ReportCustomHandle();
-            AddHandler(currentHandler, ref tailHandler);
-            //报告处理器
-            currentHandler = new ReportReportHandle();
-            AddHandler(currentHandler, ref tailHandler);
-            //}
-        }
         protected void AddHandler(ILisReportHandle handler)
         {
             this.m_tailHandle.Next = handler;
             this.m_tailHandle = handler;
         }
-        protected void AddHandler(ILisReportHandle current, ref ILisReportHandle tail)
+        protected void SetHandlerResult(HandleResult result, int code, string message)
         {
-            tail.Next = current;
-            tail = current;
+            result.ResultCode = code;
+            result.Message = message;
+        }
+        protected void SetHandlerResult(HandleResult result, int code, Type type, string message)
+        {
+            SetHandlerResult(result, code, message);
+            result.HandleType = type;
         }
         #endregion
 
