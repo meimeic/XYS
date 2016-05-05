@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 
 using XYS.Report.Lis.Model;
+using XYS.Report.Lis.Handler;
+using XYS.Report.Lis.Persistent;
 namespace XYS.Report.Lis
 {
     public class ReportService
@@ -11,8 +13,9 @@ namespace XYS.Report.Lis
         #endregion
 
         #region
-        private readonly Reporter m_reporter;
-        private readonly ReportPKService m_PKService;
+        private  ReportPKService m_PKService;
+        private  ReportHandleService m_handleService;
+        private ReportMongoService m_mongoService;
         #endregion
 
         #region
@@ -22,8 +25,7 @@ namespace XYS.Report.Lis
         }
         private ReportService()
         {
-            this.m_reporter = new DefaultReporter();
-            this.m_PKService = new ReportPKService();
+            this.Init();
         }
         #endregion
 
@@ -35,13 +37,17 @@ namespace XYS.Report.Lis
         #endregion
 
         #region
-        protected Reporter Reporter
-        {
-            get { return this.m_reporter; }
-        }
         protected ReportPKService PKService
         {
             get { return this.m_PKService; }
+        }
+        protected ReportHandleService HandleService
+        {
+            get { return this.m_handleService; }
+        }
+        protected ReportMongoService MongoService
+        {
+            get { return this.m_mongoService; }
         }
         #endregion
 
@@ -59,15 +65,34 @@ namespace XYS.Report.Lis
         #region 报告处理
         public void InitReport(ReportReportElement report)
         {
-
+            this.HandleService.HandleReport(report);
         }
         public void SaveReport(ReportReportElement report)
         {
-
+            this.MongoService.InsertReport(report);
+        }
+        public void SaveReportCurrently(ReportReportElement report)
+        {
+            this.MongoService.InsertReportCurrently(report);
         }
         public void InitThenSave(ReportReportElement report)
         {
+            this.InitReport(report);
+            this.SaveReport(report);
+        }
+        public void InitThenSaveCurrently(ReportReportElement report)
+        {
+            this.InitReport(report);
+            this.SaveReportCurrently(report);
+        }
+        #endregion
 
+        #region
+        private void Init()
+        {
+            this.m_PKService = new ReportPKService();
+            this.m_handleService = new ReportHandleService();
+            this.m_mongoService = new ReportMongoService();
         }
         #endregion
 

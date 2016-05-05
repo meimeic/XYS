@@ -54,6 +54,7 @@ namespace XYS.Report.Lis.Handler
             {
                 this.Fill(report);
             }
+            this.OnFill(report);
         }
         private void Fill(ReportReportElement report)
         {
@@ -96,22 +97,17 @@ namespace XYS.Report.Lis.Handler
             {
                 if (!formConfig)
                 {
-                    sql = GenderSql(report, key);
+                    sql = GenderSql(report.ReportInfo, key);
                     try
                     {
-                        lisDAL.Fill(report, sql);
+                        lisDAL.Fill(report.ReportInfo, sql);
                         formConfig = true;
                         report.ReportPK = key;
-                        this.SetHandlerResult(report.HandleResult, 20, "fill ReportReportElement successfully and continue!");
+                        this.SetHandlerResult(report.HandleResult, 20);
                     }
                     catch (Exception ex)
                     {
-                        StringBuilder sb = new StringBuilder();
-                        sb.Append("fill ReportReportElement failed! error message:");
-                        sb.Append(ex.Message);
-                        sb.Append(SystemInfo.NewLine);
-                        sb.Append(ex.ToString());
-                        this.SetHandlerResult(report.HandleResult, -21, this.GetType(), sb.ToString());
+                        this.SetHandlerResult(report.HandleResult, -21, this.GetType(), ex);
                         return;
                     }
                 }
@@ -123,16 +119,11 @@ namespace XYS.Report.Lis.Handler
                 try
                 {
                     lisDAL.FillList(tempList, type, sql);
-                    this.SetHandlerResult(report.HandleResult, 30, "fill SubReportElements successfully and continue!");
+                    this.SetHandlerResult(report.HandleResult, 30);
                 }
                 catch (Exception ex)
                 {
-                    StringBuilder sb = new StringBuilder();
-                    sb.Append("fill SubReportElements failed! error message:");
-                    sb.Append(ex.Message);
-                    sb.Append(SystemInfo.NewLine);
-                    sb.Append(ex.ToString());
-                    this.SetHandlerResult(report.HandleResult, -31, this.GetType(), sb.ToString());
+                    this.SetHandlerResult(report.HandleResult, -31, this.GetType(), ex);
                     return;
                 }
 
@@ -151,17 +142,11 @@ namespace XYS.Report.Lis.Handler
             {
                 LOG.Info("报告主元素数据填充");
                 this.ReportDAL.Fill(report, sql);
-                this.SetHandlerResult(result, 20, "fill report successfully and continue!");
             }
             catch (Exception ex)
             {
-                LOG.Error("报告主元素填充失败！",ex);
-                StringBuilder sb = new StringBuilder();
-                sb.Append("fill ReportReportElement failed! error message:");
-                sb.Append(ex.Message);
-                sb.Append(SystemInfo.NewLine);
-                sb.Append(ex.ToString());
-                this.SetHandlerResult(result, -21, this.GetType(), sb.ToString());
+                LOG.Error("报告主元素填充失败！", ex);
+                this.SetHandlerResult(result, -10, this.GetType(), ex);
             }
         }
         private void FillSubElements(List<IFillElement> subElementList, ReportPK PK, Type type, HandleResult result)
@@ -170,19 +155,13 @@ namespace XYS.Report.Lis.Handler
             LOG.Info("生成报告子元素" + type.Name + "的SQL语句:" + sql);
             try
             {
-                LOG.Info("报告子元素"+type.Name+"集合填充");
+                LOG.Info("报告子元素" + type.Name + "集合填充");
                 this.ReportDAL.FillList(subElementList, type, sql);
-                this.SetHandlerResult(result, 30, "fill subelements successfully and continue!");
             }
             catch (Exception ex)
             {
-                LOG.Error("报告子元素" + type.Name + "集合填充失败！",ex);
-                StringBuilder sb = new StringBuilder();
-                sb.Append("fill SubReportElements failed! error message:");
-                sb.Append(ex.Message);
-                sb.Append(SystemInfo.NewLine);
-                sb.Append(ex.ToString());
-                this.SetHandlerResult(result, -31, this.GetType(), sb.ToString());
+                LOG.Error("报告子元素" + type.Name + "集合填充失败！", ex);
+                this.SetHandlerResult(result, -11, this.GetType(), ex);
             }
         }
         #endregion
@@ -302,6 +281,20 @@ namespace XYS.Report.Lis.Handler
         //        return Section2FillTypeMap[sectionNo] as List<Type>;
         //    }
         //}
+        #endregion
+
+        #region 触发事件
+        protected void OnFill(ReportReportElement report)
+        {
+            if (report.HandleResult.ResultCode < 0)
+            {
+                this.OnhandleReportError(report);
+            }
+            else
+            {
+                this.OnHandleReportSuccess(report);
+            }
+        }
         #endregion
     }
 }

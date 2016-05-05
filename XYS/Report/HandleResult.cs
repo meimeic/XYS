@@ -10,23 +10,18 @@ namespace XYS.Report
         #region 私有字段
         private int m_resultCode;
         private Type m_handleType;
-        private string m_message;
+        private Exception m_exception;
         #endregion
 
         #region 构造函数
         public HandleResult()
-            : this(0, "the result is undefined!")
         {
         }
-        public HandleResult(int code, string message)
-            : this(code, null, message)
-        {
-        }
-        public HandleResult(int code, Type type, string message)
+        public HandleResult(int code, Type type = null, Exception ex = null)
         {
             this.m_resultCode = code;
             this.m_handleType = type;
-            this.m_message = message;
+            this.m_exception = ex;
         }
         #endregion
 
@@ -41,19 +36,19 @@ namespace XYS.Report
             get { return this.m_handleType; }
             set { this.m_handleType = value; }
         }
-        public string Message
+        public Exception Exception
         {
-            get { return this.m_message; }
-            set { this.m_message = value; }
+            get { return this.m_exception; }
+            set { this.m_exception = value; }
         }
         #endregion
 
-        #region
+        #region 
         public void Clear()
         {
             this.m_resultCode = 0;
             this.m_handleType = null;
-            this.m_message = "the result is undefined!";
+            this.m_exception = null;
         }
         #endregion
     }

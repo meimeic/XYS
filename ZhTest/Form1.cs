@@ -60,7 +60,14 @@ namespace ZhTest
 
         private void button3_Click(object sender, EventArgs e)
         {
-
+            ReportService service = ReportService.LisService;
+            string where = "where serialno='1602224249'";
+            List<ReportPK> PKList = new List<ReportPK>();
+            service.InitReportPK(where,PKList);
+             ReportReportElement report = new ReportReportElement();
+            report.ReportPK=PKList[0];
+            //service.InitThenSave(report);
+            service.InitThenSaveCurrently(report);
         }
 
         private void button4_Click(object sender, EventArgs e)

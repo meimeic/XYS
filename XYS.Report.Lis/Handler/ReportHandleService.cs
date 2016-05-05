@@ -14,8 +14,12 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 私有字段
-        private ILisReportHandle m_headHandle;
-        private ILisReportHandle m_tailHandle;
+        private ReportFillHandle m_fillHandle;
+        private ReportInfoHandle m_infoHandle;
+        private ReportItemHandle m_itemHandle;
+        private ReportCustomHandle m_customHandle;
+        private ReportGraphHandle m_graphHandle;
+        private ReportReportHandle m_reportHandle;
         #endregion
 
         #region 私有事件
@@ -26,8 +30,7 @@ namespace XYS.Report.Lis.Handler
         #region 构造函数
         public ReportHandleService()
         {
-            this.m_headHandle = this.m_tailHandle = new ReportFillHandle();
-            this.InitHandlerChain();
+            this.Init();
         }
         #endregion
 
@@ -45,9 +48,29 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实例属性
-        public ILisReportHandle HeadHandle
+        protected ReportFillHandle FillHandle
         {
-            get { return this.m_headHandle; }
+            get { return this.m_fillHandle; }
+        }
+        protected ReportInfoHandle InfoHandle
+        {
+            get { return this.m_infoHandle; }
+        }
+        protected ReportItemHandle ItemHandle
+        {
+            get { return this.m_itemHandle; }
+        }
+        protected ReportCustomHandle CustomHandle
+        {
+            get { return this.m_customHandle; }
+        }
+        protected ReportGraphHandle GraphHandle
+        {
+            get { return this.m_graphHandle; }
+        }
+        protected ReportReportHandle ReportHandle
+        {
+            get { return this.m_reportHandle; }
         }
         #endregion
 
@@ -57,63 +80,71 @@ namespace XYS.Report.Lis.Handler
             LOG.Info("进入报告处理流程");
             if (report.ReportPK != null && report.ReportPK.Configured)
             {
-                this.HeadHandle.ReportOption(report);
+                this.SetHandlerResult(report.HandleResult, 1);
+                this.FillHandle.ReportHandle(report);
             }
             else
             {
-                this.SetHandlerResult(report.HandleResult, -11, this.GetType(), "错误，当前报告不存在主键！");
+                this.SetHandlerResult(report.HandleResult, -1, this.GetType(), new ArgumentNullException("错误，当前报告不存在主键！"));
+                this.OnError(report);
             }
             LOG.Info("退出报告处理流程");
-            this.OnCompleted(report);
         }
         #endregion
 
         #region 辅助方法
-        private void InitHandlerChain()
+        protected void FillSuccess(ReportReportElement report)
         {
-            ILisReportHandle currentHandler = null;
-            //检验项处理器
-            currentHandler = new ReportItemHandle();
-            AddHandler(currentHandler);
-            //图片项处理器
-            currentHandler = new ReportGraphHandle();
-            AddHandler(currentHandler);
-            //自定义项处理器
-            currentHandler = new ReportCustomHandle();
-            AddHandler(currentHandler);
-            //报告处理器
-            currentHandler = new ReportReportHandle();
-            AddHandler(currentHandler);
+            //内部处理
+            LOG.Info("报告填充成功");
+            this.GraphHandle.ReportHandle(report);
         }
-        protected void AddHandler(ILisReportHandle handler)
+        protected void FillError(ReportReportElement report)
         {
-            this.m_tailHandle.Next = handler;
-            this.m_tailHandle = handler;
+            //内部处理
+
+            //转播事件
+            this.OnError(report);
         }
-        protected void SetHandlerResult(HandleResult result, int code, string message)
+        protected void GraphError(ReportReportElement report)
+        {
+            //内部处理
+
+            //转播事件
+            this.OnError(report);
+        }
+        protected void GraphSuccess(ReportReportElement report)
+        {
+            Task infoTask = Task.Run(() => { this.InfoHandle.ReportHandle(report); });
+            Task itemTask = Task.Run(() => { this.ItemHandle.ReportHandle(report); });
+            Task customTask = Task.Run(() => { this.CustomHandle.ReportHandle(report); });
+            try
+            {
+                Task.WaitAll(infoTask, itemTask, customTask);
+                this.ReportHandle.ReportHandle(report);
+            }
+            catch (Exception ex)
+            {
+                this.SetHandlerResult(report.HandleResult, -1, this.GetType(), ex);
+                this.OnError(report);
+            }
+        }
+        protected void ReportSuccess(ReportReportElement report)
+        {
+            //内部处理
+            
+            //触发处理成功事件
+            this.OnSuccess(report);
+        }
+        protected void SetHandlerResult(HandleResult result, int code, Type type = null, Exception ex = null)
         {
             result.ResultCode = code;
-            result.Message = message;
-        }
-        protected void SetHandlerResult(HandleResult result, int code, Type type, string message)
-        {
-            SetHandlerResult(result, code, message);
             result.HandleType = type;
+            result.Exception = ex;
         }
         #endregion
 
         #region 触发事件
-        protected void OnCompleted(ReportReportElement report)
-        {
-            if (report.HandleResult.ResultCode > 0)
-            {
-                this.OnSuccess(report);
-            }
-            else
-            {
-                this.OnError(report);
-            }
-        }
         protected void OnError(ReportReportElement report)
         {
             HandleErrorHandler handler = this.m_handleErrorEvent;
@@ -129,6 +160,26 @@ namespace XYS.Report.Lis.Handler
             {
                 handler(report);
             }
+        }
+        #endregion
+
+        #region 私有方法
+        private void Init()
+        {
+            this.m_infoHandle = new ReportInfoHandle();
+            this.m_itemHandle = new ReportItemHandle();
+            this.m_customHandle = new ReportCustomHandle();
+
+            this.m_fillHandle = new ReportFillHandle();
+            this.FillHandle.HandleReportErrorEvent += this.FillError;
+            this.FillHandle.HandleReportSuccessEvent += this.FillSuccess;
+
+            this.m_graphHandle = new ReportGraphHandle();
+            this.GraphHandle.HandleReportErrorEvent += this.GraphError;
+            this.GraphHandle.HandleReportSuccessEvent += this.GraphSuccess;
+
+            this.m_reportHandle = new ReportReportHandle();
+            this.ReportHandle.HandleReportSuccessEvent += this.ReportSuccess;
         }
         #endregion
     }

@@ -11,29 +11,29 @@ namespace XYS.Report.Lis.Persistent
 {
     public delegate void InsertErrorHandler(ReportReportElement report);
     public delegate void InsertSuccessHandler(ReportReportElement report);
-    public delegate void UpdateAndInsertErrorHandler(ReportReportElement report);
-    public delegate void UpdateAndInsertSuccessHandler(ReportReportElement report);
+    public delegate void UpdateErrorHandler(ReportReportElement report);
+    public delegate void UpdateSuccessHandler(ReportReportElement report);
     public class ReportMongoService
     {
         #region 常量字段
-        static ILog LOG=LogManager.GetLogger("LisReportMongo");
+        static ILog LOG = LogManager.GetLogger("LisReportMongo");
         #endregion
 
         #region
         private LisMongo m_mongo;
         #endregion
 
-        #region 实例字段
+        #region 事件字段
         private event InsertErrorHandler m_insertErrorEvent;
         private event InsertSuccessHandler m_insertSuccessEvent;
-        private event UpdateAndInsertErrorHandler m_updateAndInsertErrorEvent;
-        private event UpdateAndInsertSuccessHandler m_updateAndInsertSuccessEvent;
+        private event UpdateErrorHandler m_updateErrorEvent;
+        private event UpdateSuccessHandler m_updateSuccessEvent;
         #endregion
 
         #region 构造函数
         public ReportMongoService()
         {
-            this.m_mongo = new LisMongo();
+            this.Init();
         }
         #endregion
 
@@ -48,20 +48,20 @@ namespace XYS.Report.Lis.Persistent
             add { this.m_insertSuccessEvent += value; }
             remove { this.m_insertSuccessEvent -= value; }
         }
-        public event UpdateAndInsertErrorHandler UpdateAndInsertErrorEvent
+        public event UpdateErrorHandler UpdateErrorEvent
         {
-            add { this.m_updateAndInsertErrorEvent += value; }
-            remove { this.m_updateAndInsertErrorEvent -= value; }
+            add { this.m_updateErrorEvent += value; }
+            remove { this.m_updateErrorEvent -= value; }
         }
-        public event UpdateAndInsertSuccessHandler UpdateAndInsertSuccessEvent
+        public event UpdateSuccessHandler UpdateSuccessEvent
         {
-            add { this.m_updateAndInsertSuccessEvent += value; }
-            remove { this.m_updateAndInsertSuccessEvent -= value; }
+            add { this.m_updateSuccessEvent += value; }
+            remove { this.m_updateSuccessEvent -= value; }
         }
         #endregion
 
         #region 实例属性
-        public LisMongo Mongo
+        protected LisMongo Mongo
         {
             get { return this.m_mongo; }
         }
@@ -73,12 +73,12 @@ namespace XYS.Report.Lis.Persistent
             LOG.Info("进入保存报告流程");
             this.Mongo.InsertReport(report);
             LOG.Info("退出保存报告流程");
-            this.OnInsert(report);
         }
         public void InsertReportCurrently(ReportReportElement report)
         {
-            this.Mongo.InsertReportCurrently(report);
-            this.OnInsertCurrently(report);
+            LOG.Info("进入更新并保存报告流程");
+            this.Mongo.UpdateAndInsertReport(report);
+            LOG.Info("退出更新并保存报告流程");
         }
         public void InsertReportMany(IEnumerable<ReportReportElement> reportList)
         {
@@ -87,51 +87,46 @@ namespace XYS.Report.Lis.Persistent
         #endregion
 
         #region 辅助方法
-        protected void SetHandlerResult(HandleResult result, int code, string message)
+        protected void SetHandlerResult(HandleResult result, int code, Type type = null, Exception ex = null)
         {
             result.ResultCode = code;
-            result.Message = message;
-        }
-        protected void SetHandlerResult(HandleResult result, int code, Type type, string message)
-        {
-            SetHandlerResult(result, code, message);
             result.HandleType = type;
+            result.Exception = ex;
+        }
+        #endregion
+
+        #region
+        protected void InsertError(ReportReportElement report)
+        {
+            //内部处理
+            LOG.Error("写入Mongo失败",report.HandleResult.Exception);
+            //转播事件
+            this.OnInsertError(report);
+        }
+        protected void InsertSuccess(ReportReportElement report)
+        {
+            //内部处理
+            LOG.Info("写入Mongo成功");
+            //转播事件
+            this.OnInsertSuccess(report);
+        }
+        protected void UpdateError(ReportReportElement report)
+        {
+            //内部处理
+            LOG.Error("更新Mongo失败,更新报告ID:" + report.ReportID, report.HandleResult.Exception);
+            //转播事件
+            this.OnUpdateError(report);
+        }
+        protected void UpdateSuccess(ReportReportElement report)
+        {
+            //内部处理
+            LOG.Error("更新Mongo成功,报告ID:" + report.ReportID);
+            //转播事件
+            this.OnUpdateSuccess(report);
         }
         #endregion
 
         #region 触发事件
-        private void OnInsert(ReportReportElement report)
-        {
-            switch (report.HandleResult.ResultCode)
-            {
-                case 200:
-                    OnInsertSuccess(report);
-                    break;
-                case -200:
-                    OnInsertError(report);
-                    break;
-                default:
-                    OnInsertSuccess(report);
-                    break;
-            }
-        }
-        private void OnInsertCurrently(ReportReportElement report)
-        {
-            switch (report.HandleResult.ResultCode)
-            {
-                case 200:
-                    OnInsertSuccess(report);
-                    break;
-                case 201:
-                    OnUpdateAndInsertSuccess(report);
-                    break;
-                case -201:
-                    OnUpdateAndInsertError(report);
-                    break;
-                case -202:
-                    break;
-            }
-        }
         private void OnInsertError(ReportReportElement report)
         {
             InsertErrorHandler handler = this.m_insertErrorEvent;
@@ -148,21 +143,32 @@ namespace XYS.Report.Lis.Persistent
                 handler(report);
             }
         }
-        private void OnUpdateAndInsertError(ReportReportElement report)
+        private void OnUpdateError(ReportReportElement report)
         {
-            UpdateAndInsertErrorHandler handler = this.m_updateAndInsertErrorEvent;
+            UpdateErrorHandler handler = this.m_updateErrorEvent;
             if (handler != null)
             {
                 handler(report);
             }
         }
-        private void OnUpdateAndInsertSuccess(ReportReportElement report)
+        private void OnUpdateSuccess(ReportReportElement report)
         {
-            UpdateAndInsertSuccessHandler handler = this.m_updateAndInsertSuccessEvent;
+            UpdateSuccessHandler handler = this.m_updateSuccessEvent;
             if (handler != null)
             {
                 handler(report);
             }
+        }
+        #endregion
+
+        #region
+        private void Init()
+        {
+            this.m_mongo = new LisMongo();
+            this.Mongo.InsertErrorEvent += this.InsertError;
+            this.Mongo.InsertSuccessEvent += this.InsertSuccess;
+            this.Mongo.UpdateErrorEvent += this.UpdateError;
+            this.Mongo.UpdateSuccessEvent += this.UpdateSuccess;
         }
         #endregion
     }

@@ -131,9 +131,9 @@ namespace XYS.Report.Lis
         protected void HandleError(ReportReportElement report)
         {
             //
-            LOG.Error("处理报告失败，进入错误处理流程。");
-            //
+            LOG.Error("处理报告失败，进入错误处理流程。", report.HandleResult.Exception);
 
+            //处理流程
         }
         protected void HandleSuccess(ReportReportElement report)
         {
@@ -143,8 +143,7 @@ namespace XYS.Report.Lis
 
         protected void SaveError(ReportReportElement report)
         {
-            LOG.Error("保存报告失败，进入错误处理流程");
-            LOG.Error(report.HandleResult.Message);
+            LOG.Error("保存报告失败，进入错误处理流程", report.HandleResult.Exception);
         }
         protected void SaveSuccess(ReportReportElement report)
         {
@@ -163,25 +162,13 @@ namespace XYS.Report.Lis
         {
             return Task.Run(() =>
             {
-                StringBuilder sb = new StringBuilder();
-                sb.Append("ReportID:");
-                sb.Append(report.ReportID);
-                sb.Append("    ReportStatus:");
-                sb.Append(report.HandleResult.ResultCode);
-                sb.Append("    Message:");
-                sb.Append(report.HandleResult.Message);
-                Console.WriteLine(sb.ToString());
             });
         }
-        protected void SetHandlerResult(HandleResult result, int code, string message)
+        protected void SetHandlerResult(HandleResult result, int code, Type type = null, Exception ex = null)
         {
             result.ResultCode = code;
-            result.Message = message;
-        }
-        protected void SetHandlerResult(HandleResult result, int code, Type type, string message)
-        {
-            SetHandlerResult(result, code, message);
             result.HandleType = type;
+            result.Exception = ex;
         }
         #endregion
 
@@ -198,8 +185,8 @@ namespace XYS.Report.Lis
             ////注册保存事件
             this.MongoService.InsertErrorEvent += this.SaveError;
             this.MongoService.InsertSuccessEvent += this.SaveSuccess;
-            this.MongoService.UpdateAndInsertErrorEvent += this.UpdateAndSaveError;
-            this.MongoService.UpdateAndInsertSuccessEvent += this.UpdateAndSaveSuccess;
+            this.MongoService.UpdateErrorEvent += this.UpdateAndSaveError;
+            this.MongoService.UpdateSuccessEvent += this.UpdateAndSaveSuccess;
         }
         #endregion
     }

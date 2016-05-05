@@ -60,7 +60,7 @@
     <Compile Include="Handler\ReportGraphHandle.cs" />
     <Compile Include="Handler\ReportHandleService.cs" />
     <Compile Include="Handler\ReportHandleSkeleton.cs" />
-    <Compile Include="Handler\ReportHeadHandle.cs" />
+    <Compile Include="Handler\ReportInfoHandle.cs" />
     <Compile Include="Handler\ReportItemHandle.cs" />
     <Compile Include="Handler\ReportReportHandle.cs" />
     <Compile Include="ILisReportHandle.cs" />

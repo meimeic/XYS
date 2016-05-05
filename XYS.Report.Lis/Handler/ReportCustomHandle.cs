@@ -10,11 +10,12 @@ namespace XYS.Report.Lis.Handler
         public ReportCustomHandle()
             : base()
         {
+
         }
         #endregion
 
         #region 实现父类抽象方法
-        protected override void OperateReport(ReportReportElement report)
+        public override void ReportHandle(ReportReportElement report)
         {
             LOG.Info("报告自定义项处理");
             ReportCustomElement rce = null;
@@ -30,7 +31,6 @@ namespace XYS.Report.Lis.Handler
                     }
                 }
             }
-            this.SetHandlerResult(report.HandleResult, 60, "there is no ReportCustomElement to handle and continue!");
         }
         #endregion
 

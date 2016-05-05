@@ -33,26 +33,27 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override void OperateReport(ReportReportElement report)
+        public override void ReportHandle(ReportReportElement report)
         {
             LOG.Info("报告图片项处理");
             List<IFillElement> graphList = report.GetReportItem(typeof(ReportGraphElement));
             if (IsExist(graphList))
             {
                 LOG.Info("上传图片集合");
-                UploadImages(graphList, report.ReceiveDateTime.ToString("yyyyMMdd"), report.ReportImageMap, report.HandleResult);
+                string folderName = report.ReportInfo.ReceiveDateTime.ToString("yyyyMMdd");
+                UploadImages(graphList, folderName, report.ReportImageMap, report.HandleResult);
                 if (report.HandleResult.ResultCode < 0)
                 {
+                    this.OnhandleReportError(report);
                     return;
                 }
-                if (report.SectionNo == 11)
+                if (report.ReportInfo.SectionNo == 11)
                 {
                     LOG.Info("尝试添加标准图片处理");
                     AddNormalImageBySuperItem(report.SuperItemList, report.ReportImageMap);
                 }
-                return;
             }
-            this.SetHandlerResult(report.HandleResult, 51, "there is no ReportGraphElement to handle and continue!");
+            this.OnHandleReportSuccess(report);
         }
         #endregion
 
@@ -87,22 +88,17 @@ namespace XYS.Report.Lis.Handler
                     }
                     else
                     {
-                        this.SetHandlerResult(result, -52, this.GetType(), "the image server have some unkown error,upload image(s) failed!");
                         LOG.Error("图片服务器返回数据格式错误，上传图片集合失败！");
+                        this.SetHandlerResult(result, -50, this.GetType(), new Exception("the image server have some unkown error,upload image(s) failed!"));
                         return;
                     }
                 }
-                this.SetHandlerResult(result, 50, "upload report image successfully and continue!");
             }
             catch (Exception ex)
             {
-                LOG.Error("上传图片集合出错！",ex);
-                StringBuilder sb = new StringBuilder();
-                sb.Append("upload report image failed! error message:");
-                sb.Append(ex.Message);
-                sb.Append(SystemInfo.NewLine);
-                sb.Append(ex.ToString());
-                this.SetHandlerResult(result, -51, this.GetType(), sb.ToString());
+                LOG.Error("上传图片集合出错！", ex);
+                this.SetHandlerResult(result, -51, this.GetType(), ex);
+                return;
             }
             //单张图片上传
             //byte[] postData = null;

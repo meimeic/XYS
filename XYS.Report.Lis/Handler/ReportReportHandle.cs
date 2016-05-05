@@ -14,25 +14,9 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类方法
-        protected override void OperateReport(ReportReportElement report)
+        public override void ReportHandle(ReportReportElement report)
         {
             LOG.Info("报告基本处理");
-            //formmemo 处理
-            if (report.SectionNo == 10)
-            {
-                LOG.Info("备注信息处理");
-                if (report.FormMemo != null)
-                {
-                    report.FormMemo = report.FormMemo.Replace(";", SystemInfo.NewLine);
-                }
-            }
-
-            //cid 处理
-            if (report.CID != null)
-            {
-                LOG.Info("身份证信息处理");
-                report.CID = report.CID.Trim();
-            }
 
             //reportitem排序
             LOG.Info("报告项排序");
@@ -43,8 +27,7 @@ namespace XYS.Report.Lis.Handler
             report.ReportID = report.ReportPK.ID;
             report.ActiveFlag = 1;
 
-            //返回值
-            this.SetHandlerResult(report.HandleResult, 70, "handle ReportReportElement successfully and continue!");
+            this.OnHandleReportSuccess(report);
         }
         #endregion
 
@@ -56,6 +39,9 @@ namespace XYS.Report.Lis.Handler
             //    rre.Remark = "带*为天津市临床检测中心认定的相互认可检验项目";
             //}
         }
+        #endregion
+
+        #region 触发事件
         #endregion
     }
 }

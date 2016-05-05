@@ -6,8 +6,9 @@ using XYS.Util;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
+   
     public class ReportItemHandle : ReportHandleSkeleton
-    {
+    {   
         #region 构造函数
         public ReportItemHandle()
             : base()
@@ -16,7 +17,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override void OperateReport(ReportReportElement report)
+        public override void ReportHandle(ReportReportElement report)
         {
             LOG.Info("报告常规项处理");
             //报告级操作
@@ -41,7 +42,6 @@ namespace XYS.Report.Lis.Handler
                     report.ReportItemCollection.Add(rie);
                 }
             }
-            this.SetHandlerResult(report.HandleResult, 40, "handle reportitem successfully and continue!");
         }
         #endregion
 
