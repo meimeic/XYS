@@ -10,7 +10,6 @@ namespace XYS.Report.Lis.Handler
         public ReportCustomHandle()
             : base()
         {
-
         }
         #endregion
 

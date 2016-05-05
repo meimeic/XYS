@@ -5,12 +5,10 @@ using log4net;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
-    public delegate void HandleErrorHandler(ReportReportElement report);
-    public delegate void HandleSuccessHandler(ReportReportElement report);
     public class ReportHandleService
     {
         #region 静态变量
-        protected static ILog LOG = LogManager.GetLogger("LisReportHandle");
+        private static ILog LOG = LogManager.GetLogger("LisReportHandle");
         #endregion
 
         #region 私有字段
@@ -24,7 +22,7 @@ namespace XYS.Report.Lis.Handler
 
         #region 私有事件
         private event HandleErrorHandler m_handleErrorEvent;
-        private event HandleSuccessHandler m_handleSuccessEvent;
+        private event HandleSuccessHandler m_handleCompleteEvent;
         #endregion
 
         #region 构造函数
@@ -35,15 +33,15 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 事件属性
-        public event HandleErrorHandler HandleErrorEvent
+        internal event HandleErrorHandler HandleErrorEvent
         {
             add { this.m_handleErrorEvent += value; }
             remove { this.m_handleErrorEvent -= value; }
         }
-        public event HandleSuccessHandler HandleSuccessEvent
+        internal event HandleSuccessHandler HandleCompleteEvent
         {
-            add { this.m_handleSuccessEvent += value; }
-            remove { this.m_handleSuccessEvent -= value; }
+            add { this.m_handleCompleteEvent += value; }
+            remove { this.m_handleCompleteEvent -= value; }
         }
         #endregion
 
@@ -74,7 +72,7 @@ namespace XYS.Report.Lis.Handler
         }
         #endregion
 
-        #region 处理
+        #region 公共方法
         public void HandleReport(ReportReportElement report)
         {
             LOG.Info("进入报告处理流程");
@@ -85,7 +83,8 @@ namespace XYS.Report.Lis.Handler
             }
             else
             {
-                this.SetHandlerResult(report.HandleResult, -1, this.GetType(), new ArgumentNullException("错误，当前报告不存在主键！"));
+                this.SetHandlerResult(report.HandleResult, -1, "当前报告不存在主键异常", this.GetType(), new ArgumentNullException("错误，当前报告不存在主键！"));
+                LogError(report);
                 this.OnError(report);
             }
             LOG.Info("退出报告处理流程");
@@ -93,52 +92,56 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 辅助方法
-        protected void FillSuccess(ReportReportElement report)
-        {
-            //内部处理
-            LOG.Info("报告填充成功");
-            this.GraphHandle.ReportHandle(report);
-        }
         protected void FillError(ReportReportElement report)
         {
             //内部处理
-
+            LogError(report);
             //转播事件
             this.OnError(report);
+        }
+        protected void FillSuccess(ReportReportElement report)
+        {
+            //内部处理
+            LOG.Info("报告填充处理成功");
+            this.GraphHandle.ReportHandle(report);
         }
         protected void GraphError(ReportReportElement report)
         {
             //内部处理
-
+            LogError(report);
             //转播事件
             this.OnError(report);
         }
         protected void GraphSuccess(ReportReportElement report)
         {
+            LOG.Info("报告图片项处理成功,开始reportinfo、reportitem、reportcustom的并发处理");
             Task infoTask = Task.Run(() => { this.InfoHandle.ReportHandle(report); });
             Task itemTask = Task.Run(() => { this.ItemHandle.ReportHandle(report); });
             Task customTask = Task.Run(() => { this.CustomHandle.ReportHandle(report); });
             try
             {
                 Task.WaitAll(infoTask, itemTask, customTask);
+                LOG.Info("reportinfo、reportitem、reportcustom的并发处理全部成功");
                 this.ReportHandle.ReportHandle(report);
             }
             catch (Exception ex)
             {
-                this.SetHandlerResult(report.HandleResult, -1, this.GetType(), ex);
+                this.SetHandlerResult(report.HandleResult, -1, "reportinfo、reportitem、reportcustom的并发处理异常", this.GetType(), ex);
+                LogError(report);
                 this.OnError(report);
             }
         }
         protected void ReportSuccess(ReportReportElement report)
         {
             //内部处理
-            
+            LOG.Info("报告整体处理成功");
             //触发处理成功事件
-            this.OnSuccess(report);
+            this.OnComplete(report);
         }
-        protected void SetHandlerResult(HandleResult result, int code, Type type = null, Exception ex = null)
+        protected void SetHandlerResult(HandleResult result, int code, string message = null, Type type = null, Exception ex = null)
         {
             result.ResultCode = code;
+            result.Message = message;
             result.HandleType = type;
             result.Exception = ex;
         }
@@ -153,9 +156,9 @@ namespace XYS.Report.Lis.Handler
                 handler(report);
             }
         }
-        protected void OnSuccess(ReportReportElement report)
+        protected void OnComplete(ReportReportElement report)
         {
-            HandleSuccessHandler handler = this.m_handleSuccessEvent;
+            HandleSuccessHandler handler = this.m_handleCompleteEvent;
             if (handler != null)
             {
                 handler(report);
@@ -171,15 +174,18 @@ namespace XYS.Report.Lis.Handler
             this.m_customHandle = new ReportCustomHandle();
 
             this.m_fillHandle = new ReportFillHandle();
-            this.FillHandle.HandleReportErrorEvent += this.FillError;
-            this.FillHandle.HandleReportSuccessEvent += this.FillSuccess;
+            this.FillHandle.HandleErrorEvent += this.FillError;
+            this.FillHandle.HandleSuccessEvent += this.FillSuccess;
 
             this.m_graphHandle = new ReportGraphHandle();
-            this.GraphHandle.HandleReportErrorEvent += this.GraphError;
-            this.GraphHandle.HandleReportSuccessEvent += this.GraphSuccess;
+            this.GraphHandle.HandleErrorEvent += this.GraphError;
+            this.GraphHandle.HandleSuccessEvent += this.GraphSuccess;
 
-            this.m_reportHandle = new ReportReportHandle();
-            this.ReportHandle.HandleReportSuccessEvent += this.ReportSuccess;
+            this.ReportHandle.HandleSuccessEvent += this.ReportSuccess;
+        }
+        private void LogError(ReportReportElement report)
+        {
+            LOG.Error(report.HandleResult.Message, report.HandleResult.Exception);
         }
         #endregion
     }

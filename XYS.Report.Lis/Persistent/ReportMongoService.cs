@@ -9,17 +9,17 @@ using XYS.Report.Lis.Model;
 using XYS.Report.Lis.Persistent.Mongo;
 namespace XYS.Report.Lis.Persistent
 {
-    public delegate void InsertErrorHandler(ReportReportElement report);
-    public delegate void InsertSuccessHandler(ReportReportElement report);
-    public delegate void UpdateErrorHandler(ReportReportElement report);
-    public delegate void UpdateSuccessHandler(ReportReportElement report);
+    delegate void InsertErrorHandler(ReportReportElement report);
+    delegate void InsertSuccessHandler(ReportReportElement report);
+    delegate void UpdateErrorHandler(ReportReportElement report);
+    delegate void UpdateSuccessHandler(ReportReportElement report);
     public class ReportMongoService
     {
         #region 常量字段
-        static ILog LOG = LogManager.GetLogger("LisReportMongo");
+        private static ILog LOG = LogManager.GetLogger("LisReportMongo");
         #endregion
 
-        #region
+        #region 私有字段
         private LisMongo m_mongo;
         #endregion
 
@@ -38,22 +38,22 @@ namespace XYS.Report.Lis.Persistent
         #endregion
 
         #region 事件属性
-        public event InsertErrorHandler InsertErrorEvent
+        internal event InsertErrorHandler InsertErrorEvent
         {
             add { this.m_insertErrorEvent += value; }
             remove { this.m_insertErrorEvent -= value; }
         }
-        public event InsertSuccessHandler InsertSuccessEvent
+        internal event InsertSuccessHandler InsertSuccessEvent
         {
             add { this.m_insertSuccessEvent += value; }
             remove { this.m_insertSuccessEvent -= value; }
         }
-        public event UpdateErrorHandler UpdateErrorEvent
+        internal event UpdateErrorHandler UpdateErrorEvent
         {
             add { this.m_updateErrorEvent += value; }
             remove { this.m_updateErrorEvent -= value; }
         }
-        public event UpdateSuccessHandler UpdateSuccessEvent
+        internal event UpdateSuccessHandler UpdateSuccessEvent
         {
             add { this.m_updateSuccessEvent += value; }
             remove { this.m_updateSuccessEvent -= value; }
@@ -86,20 +86,11 @@ namespace XYS.Report.Lis.Persistent
         }
         #endregion
 
-        #region 辅助方法
-        protected void SetHandlerResult(HandleResult result, int code, Type type = null, Exception ex = null)
-        {
-            result.ResultCode = code;
-            result.HandleType = type;
-            result.Exception = ex;
-        }
-        #endregion
-
-        #region
+        #region 内部处理方法
         protected void InsertError(ReportReportElement report)
         {
             //内部处理
-            LOG.Error("写入Mongo失败",report.HandleResult.Exception);
+            this.LogError(report);
             //转播事件
             this.OnInsertError(report);
         }
@@ -113,7 +104,7 @@ namespace XYS.Report.Lis.Persistent
         protected void UpdateError(ReportReportElement report)
         {
             //内部处理
-            LOG.Error("更新Mongo失败,更新报告ID:" + report.ReportID, report.HandleResult.Exception);
+            this.LogError(report);
             //转播事件
             this.OnUpdateError(report);
         }
@@ -123,6 +114,15 @@ namespace XYS.Report.Lis.Persistent
             LOG.Error("更新Mongo成功,报告ID:" + report.ReportID);
             //转播事件
             this.OnUpdateSuccess(report);
+        }
+        #endregion
+
+        #region 辅助方法
+        protected void SetHandlerResult(HandleResult result, int code, Type type = null, Exception ex = null)
+        {
+            result.ResultCode = code;
+            result.HandleType = type;
+            result.Exception = ex;
         }
         #endregion
 
@@ -161,7 +161,7 @@ namespace XYS.Report.Lis.Persistent
         }
         #endregion
 
-        #region
+        #region 私有方法
         private void Init()
         {
             this.m_mongo = new LisMongo();
@@ -169,6 +169,10 @@ namespace XYS.Report.Lis.Persistent
             this.Mongo.InsertSuccessEvent += this.InsertSuccess;
             this.Mongo.UpdateErrorEvent += this.UpdateError;
             this.Mongo.UpdateSuccessEvent += this.UpdateSuccess;
+        }
+        private void LogError(ReportReportElement report)
+        {
+            LOG.Error(report.HandleResult.Message + ",报告ID:" + report.ReportID, report.HandleResult.Exception);
         }
         #endregion
     }

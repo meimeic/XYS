@@ -31,7 +31,7 @@ namespace XYS.Report.Lis.Model
 
         private List<int> m_superItemList;
         private ReportInfoElement m_reportInfo;
-        private Dictionary<string, string> m_reportImageMap;
+        private SortedDictionary<string, string> m_reportImageMap;
         private List<ReportItemElement> m_reportItemCollection;
         private List<ReportCustomElement> m_reportCustomCollection;
 
@@ -45,7 +45,7 @@ namespace XYS.Report.Lis.Model
             this.m_superItemList = new List<int>(3);
             this.m_handleResult = new HandleResult();
             this.m_reportInfo = new ReportInfoElement();
-            this.m_reportImageMap = new Dictionary<string, string>(4);
+            this.m_reportImageMap = new SortedDictionary<string, string>();
             this.m_reportItemCollection = new List<ReportItemElement>(20);
             this.m_reportCustomCollection = new List<ReportCustomElement>(2);
             this.m_reportItemTable = SystemInfo.CreateCaseInsensitiveHashtable(3);
@@ -170,7 +170,7 @@ namespace XYS.Report.Lis.Model
         }
         [BsonElement(Order = 10)]
         [BsonDictionaryOptions(DictionaryRepresentation.Document)]
-        public Dictionary<string, string> ReportImageMap
+        public SortedDictionary<string, string> ReportImageMap
         {
             get { return this.m_reportImageMap; }
             set { this.m_reportImageMap = value; }

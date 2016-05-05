@@ -107,7 +107,7 @@ namespace XYS.Report.Lis.Handler
                     }
                     catch (Exception ex)
                     {
-                        this.SetHandlerResult(report.HandleResult, -21, this.GetType(), ex);
+                        this.SetHandlerResult(report.HandleResult, -21,"", this.GetType(), ex);
                         return;
                     }
                 }
@@ -123,7 +123,7 @@ namespace XYS.Report.Lis.Handler
                 }
                 catch (Exception ex)
                 {
-                    this.SetHandlerResult(report.HandleResult, -31, this.GetType(), ex);
+                    this.SetHandlerResult(report.HandleResult, -31,"", this.GetType(), ex);
                     return;
                 }
 
@@ -145,8 +145,7 @@ namespace XYS.Report.Lis.Handler
             }
             catch (Exception ex)
             {
-                LOG.Error("报告主元素填充失败！", ex);
-                this.SetHandlerResult(result, -10, this.GetType(), ex);
+                this.SetHandlerResult(result, -10, "报告主元素填充异常", this.GetType(), ex);
             }
         }
         private void FillSubElements(List<IFillElement> subElementList, ReportPK PK, Type type, HandleResult result)
@@ -160,8 +159,7 @@ namespace XYS.Report.Lis.Handler
             }
             catch (Exception ex)
             {
-                LOG.Error("报告子元素" + type.Name + "集合填充失败！", ex);
-                this.SetHandlerResult(result, -11, this.GetType(), ex);
+                this.SetHandlerResult(result, -11, "报告子元素" + type.Name + "集合填充异常", this.GetType(), ex);
             }
         }
         #endregion
@@ -284,15 +282,15 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 触发事件
-        protected void OnFill(ReportReportElement report)
+        private void OnFill(ReportReportElement report)
         {
             if (report.HandleResult.ResultCode < 0)
             {
-                this.OnhandleReportError(report);
+                this.OnHandleError(report);
             }
             else
             {
-                this.OnHandleReportSuccess(report);
+                this.OnHandleSuccess(report);
             }
         }
         #endregion

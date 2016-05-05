@@ -180,7 +180,7 @@ namespace XYS.Report.Lis
 
             ////注册处理事件
             this.HandleService.HandleErrorEvent += this.HandleError;
-            this.HandleService.HandleSuccessEvent += this.HandleSuccess;
+            this.HandleService.HandleCompleteEvent += this.HandleSuccess;
 
             ////注册保存事件
             this.MongoService.InsertErrorEvent += this.SaveError;

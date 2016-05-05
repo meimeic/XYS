@@ -67,7 +67,7 @@ namespace ZhTest
              ReportReportElement report = new ReportReportElement();
             report.ReportPK=PKList[0];
             //service.InitThenSave(report);
-            service.InitThenSaveCurrently(report);
+            service.InitThenUpdateAndSave(report);
         }
 
         private void button4_Click(object sender, EventArgs e)

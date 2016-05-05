@@ -9,6 +9,7 @@ namespace XYS.Report
     {
         #region 私有字段
         private int m_resultCode;
+        private string m_message;
         private Type m_handleType;
         private Exception m_exception;
         #endregion
@@ -31,6 +32,11 @@ namespace XYS.Report
             get { return this.m_resultCode; }
             set { this.m_resultCode = value; }
         }
+        public string Message
+        {
+            get { return this.m_message; }
+            set { this.m_message = value; }
+        }
         public Type HandleType
         {
             get { return this.m_handleType; }
@@ -47,6 +53,7 @@ namespace XYS.Report
         public void Clear()
         {
             this.m_resultCode = 0;
+            this.m_message = null;
             this.m_handleType = null;
             this.m_exception = null;
         }

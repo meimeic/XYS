@@ -7,7 +7,6 @@ using System.Collections.Generic;
 using log4net;
 using XYS.Util;
 using XYS.Report.Lis.Model;
-using XYS.Report.Lis.Persistent.Mongo;
 
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -49,22 +48,22 @@ namespace XYS.Report.Lis.Persistent.Mongo
         #endregion
 
         #region 事件属性
-        public event InsertErrorHandler InsertErrorEvent
+        internal event InsertErrorHandler InsertErrorEvent
         {
             add { this.m_insertErrorEvent += value; }
             remove { this.m_insertErrorEvent -= value; }
         }
-        public event InsertSuccessHandler InsertSuccessEvent
+        internal event InsertSuccessHandler InsertSuccessEvent
         {
             add { this.m_insertSuccessEvent += value; }
             remove { this.m_insertSuccessEvent -= value; }
         }
-        public event UpdateErrorHandler UpdateErrorEvent
+        internal event UpdateErrorHandler UpdateErrorEvent
         {
             add { this.m_updateErrorEvent += value; }
             remove { this.m_updateErrorEvent -= value; }
         }
-        public event UpdateSuccessHandler UpdateSuccessEvent
+        internal event UpdateSuccessHandler UpdateSuccessEvent
         {
             add { this.m_updateSuccessEvent += value; }
             remove { this.m_updateSuccessEvent -= value; }
@@ -82,31 +81,14 @@ namespace XYS.Report.Lis.Persistent.Mongo
             }
             catch (Exception ex)
             {
-                this.SetHandlerResult(report.HandleResult, -110, this.GetType(), ex);
+                this.SetHandlerResult(report.HandleResult, -110, "保存报告内容到Mongo异常", this.GetType(), ex);
                 this.OnInsertError(report);
-            }
-        }
-        public void InsertReportMany(IEnumerable<ReportReportElement> reportList)
-        {
-            try
-            {
-                IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
-                ReportCollection.InsertMany(reportList);
-                foreach (ReportReportElement report in reportList)
-                {
-                    this.SetHandlerResult(report.HandleResult, 200);
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
             }
         }
         public void UpdateAndInsertReport(ReportReportElement report)
         {
             FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ReportID, report.ReportID)
                                                                                      & FilterBuiler.Eq(r => r.ActiveFlag, report.ActiveFlag);
-
             UpdateDefinition<ReportReportElement> updater = UpdateBuiler.Set(r => r.ActiveFlag, -1);
             try
             {
@@ -125,26 +107,42 @@ namespace XYS.Report.Lis.Persistent.Mongo
                     }
                     else
                     {
-                        this.SetHandlerResult(report.HandleResult, -121, this.GetType(), new Exception("并非所有匹配记录完成修改"));
+                        this.SetHandlerResult(report.HandleResult, -121, "并非所有匹配记录完成修改异常", this.GetType(), new Exception("并非所有匹配记录完成修改,无法进行插入操作"));
                         this.OnUpdateError(report);
                     }
                 }
                 else
                 {
-                    this.SetHandlerResult(report.HandleResult, -122, this.GetType(), new Exception("修改结果无法确认"));
+                    this.SetHandlerResult(report.HandleResult, -122, "修改结果无法确认异常", this.GetType(), new Exception("修改结果无法确认，无法进行插入操作"));
                     this.OnUpdateError(report);
                 }
             }
             catch (Exception ex)
             {
-                this.SetHandlerResult(report.HandleResult, -120, this.GetType(), ex);
+                this.SetHandlerResult(report.HandleResult, -120, "修改Mongo记录异常", this.GetType(), ex);
                 this.OnUpdateError(report);
+            }
+        }
+        
+        public void InsertReportMany(IEnumerable<ReportReportElement> reportList)
+        {
+            try
+            {
+                IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
+                ReportCollection.InsertMany(reportList);
+                foreach (ReportReportElement report in reportList)
+                {
+                    this.SetHandlerResult(report.HandleResult, 200);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
         public void UpdateReportActive(Guid guid)
         {
         }
-        
         public void Query()
         {
             FilterDefinition<ReportReportElement> filter = FilterBuiler.Eq(r => r.ReportInfo.PatientID, "")
@@ -328,16 +326,17 @@ namespace XYS.Report.Lis.Persistent.Mongo
         //#endregion
 
         #region 辅助方法
-        protected void SetHandlerResult(HandleResult result, int code, Type type = null, Exception ex = null)
+        protected void SetHandlerResult(HandleResult result, int code, string message = null, Type type = null, Exception ex = null)
         {
             result.ResultCode = code;
+            result.Message = message;
             result.HandleType = type;
             result.Exception = ex;
         }
         #endregion
 
         #region 触发事件
-        private void OnInsertError(ReportReportElement report)
+        protected void OnInsertError(ReportReportElement report)
         {
             InsertErrorHandler handler = this.m_insertErrorEvent;
             if (handler != null)
@@ -345,7 +344,7 @@ namespace XYS.Report.Lis.Persistent.Mongo
                 handler(report);
             }
         }
-        private void OnInsertSuccess(ReportReportElement report)
+        protected void OnInsertSuccess(ReportReportElement report)
         {
             InsertSuccessHandler handler = this.m_insertSuccessEvent;
             if (handler != null)
@@ -353,7 +352,7 @@ namespace XYS.Report.Lis.Persistent.Mongo
                 handler(report);
             }
         }
-        private void OnUpdateError(ReportReportElement report)
+        protected void OnUpdateError(ReportReportElement report)
         {
             UpdateErrorHandler handler = this.m_updateErrorEvent;
             if (handler != null)
@@ -361,7 +360,7 @@ namespace XYS.Report.Lis.Persistent.Mongo
                 handler(report);
             }
         }
-        private void OnUpdateSuccess(ReportReportElement report)
+        protected void OnUpdateSuccess(ReportReportElement report)
         {
             UpdateSuccessHandler handler = this.m_updateSuccessEvent;
             if (handler != null)
