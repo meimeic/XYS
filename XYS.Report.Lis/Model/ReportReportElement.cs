@@ -18,7 +18,7 @@ namespace XYS.Report.Lis.Model
 
         private int m_activeFlag;
         private string m_reportID;
-     
+        
         private ReportPK m_reportPK;
         private HandleResult m_handleResult;
         

@@ -43,19 +43,22 @@ namespace ZhTest
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string where = "where SectionNo in(2,27,28,62) and  ReceiveDate>'2016-01-01' and ReceiveDate<'2016-01-03' ";
-            ReportPKDAL PKDAL = new ReportPKDAL();
+            ReportService service = ReportService.LisService;
+            string where = "where SectionNo in(2,27,28,62) and  ReceiveDate>'2016-01-01' and ReceiveDate<'2016-02-01' ";
+            //string where = "where serialno='1602224471'";
             List<ReportPK> PKList = new List<ReportPK>();
-            PKDAL.InitReportKey(where, PKList);
-            Reporter reporter = new DefaultReporter();
-            ReportReportElement report = new ReportReportElement();
+            service.InitReportPK(where, PKList);
+            //
+            ReportReportElement report = null;
+            DateTime startTime = DateTime.Now;
             foreach (ReportPK pk in PKList)
             {
-                // report = new ReportReportElement();
+                report = new ReportReportElement();
                 report.ReportPK = pk;
-                reporter.OperateReport(report);
-                report.Clear();
+                service.InitReport(report);
             }
+            DateTime endTime = DateTime.Now;
+            Console.WriteLine("处理运行时间为:" + endTime.Subtract(startTime).TotalMilliseconds + " ms");
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -67,7 +70,7 @@ namespace ZhTest
              ReportReportElement report = new ReportReportElement();
             report.ReportPK=PKList[0];
             //service.InitThenSave(report);
-            service.InitThenUpdateAndSave(report);
+            service.InitAndSave(report);
         }
 
         private void button4_Click(object sender, EventArgs e)

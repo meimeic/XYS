@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 using log4net;
 using XYS.Report.Lis.Model;
@@ -16,14 +19,22 @@ namespace XYS.Report.Lis
     public class ReportService
     {
         #region 静态字段
+        private static int SaveWorkerCount;
+        private static int HandleWorkerCount;
         private static readonly ILog LOG;
+        private static readonly int QueueCapacity;
         private static readonly ReportService ServiceInstance;
         #endregion
 
         #region 私有字段
+        private Thread[] m_handleWorkerPool;
+        private Thread[] m_saveWorkerPool;
         private ReportPKService m_PKService;
         private ReportHandleService m_handleService;
         private ReportMongoService m_mongoService;
+
+        private readonly BlockingCollection<ReportReportElement> InitRequestQueue;
+        private readonly BlockingCollection<ReportReportElement> SaveRequestQueue;
         #endregion
 
         #region 事件字段
@@ -38,11 +49,17 @@ namespace XYS.Report.Lis
         #region 构造函数
         static ReportService()
         {
+            QueueCapacity = 10000;
+            SaveWorkerCount = 10;
+            HandleWorkerCount = 10;
             ServiceInstance = new ReportService();
             LOG = LogManager.GetLogger("LisReport");
         }
         private ReportService()
         {
+            this.InitRequestQueue = new BlockingCollection<ReportReportElement>(QueueCapacity);
+            this.SaveRequestQueue = new BlockingCollection<ReportReportElement>(QueueCapacity);
+
             this.Init();
         }
         #endregion
@@ -54,7 +71,7 @@ namespace XYS.Report.Lis
         }
         #endregion
 
-        #region
+        #region 事件属性
         public event InitErrorHandler InitErrorEvent
         {
             add { this.m_initErrorEvent += value; }
@@ -102,7 +119,7 @@ namespace XYS.Report.Lis
         }
         #endregion
 
-        #region 报告主键值获取
+        #region 主键值获取
         public void InitReportPK(Require req, List<ReportPK> PKList)
         {
             this.PKService.InitReportPK(req, PKList);
@@ -113,33 +130,26 @@ namespace XYS.Report.Lis
         }
         #endregion
 
-        #region 报告处理
+        #region 生产者方法
         public void InitReport(ReportReportElement report)
         {
-            this.HandleService.HandleReport(report);
+            LOG.Info("将处理报告请求加入到处理请求队列");
+            this.InitRequestQueue.Add(report);
         }
         public void SaveReport(ReportReportElement report)
         {
-            this.MongoService.InsertReport(report);
+            LOG.Info("将保存报告请求加入到保存请求队列");
+            this.SaveRequestQueue.Add(report);
         }
-        public void UpdateAndSaveReport(ReportReportElement report)
+        #endregion
+
+        #region 方法
+        public void InitAndSave(ReportReportElement report)
         {
-            this.MongoService.InsertReportCurrently(report);
-        }
-        public void InitThenSave(ReportReportElement report)
-        {
-            this.InitReport(report);
+            this.HandleService.HandleReport(report);
             if (report.HandleResult.ResultCode > 0)
             {
-                this.SaveReport(report);
-            }
-        }
-        public void InitThenUpdateAndSave(ReportReportElement report)
-        {
-            this.InitReport(report);
-            if (report.HandleResult.ResultCode > 0)
-            {
-                this.UpdateAndSaveReport(report);
+                this.MongoService.InsertReport(report, SaveOptions.UpdateAndSave);
             }
         }
         #endregion
@@ -148,45 +158,54 @@ namespace XYS.Report.Lis
         protected void InitError(ReportReportElement report)
         {
             //内部处理
+            LOG.Info("进入报告处理错误模块");
 
             //事件转播
             this.OnInitError(report);
+            LOG.Info("退出报告处理错误模块");
         }
         protected void InitSuccess(ReportReportElement report)
         {
             //内部处理
+            LOG.Info("进入处理报告成功模块");
             this.SetHandlerResult(report.HandleResult, 100);
-
+            this.SaveReport(report);
             //事件转播
             this.OnInitSuccess(report);
+            LOG.Info("退出处理报告成功模块");
         }
         protected void NewError(ReportReportElement report)
         {
             //内部处理
-
+            LOG.Info("进入报告保存错误模块");
             //事件转播
             this.OnNewError(report);
+            LOG.Info("退出报告保存错误模块");
         }
         protected void NewSuccess(ReportReportElement report)
         {
             //内部处理
+            LOG.Info("进入报告保存成功模块");
 
             //事件转播
             this.OnNewSuccess(report);
+            LOG.Info("退出报告保存成功模块");
         }
         protected void ChangeError(ReportReportElement report)
         {
             //内部处理
-
+            LOG.Info("进入历史报告修改错误模块");
             //事件转播
             this.OnChangeError(report);
+            LOG.Info("退出历史报告修改错误模块");
         }
         protected void ChangeSuccess(ReportReportElement report)
         {
             //内部处理
-
+            LOG.Info("进入历史报告成功模块");
             //事件转播
             this.OnChangeSuccess(report);
+            LOG.Info("退出历史报告成功模块");
         }
         protected void SetHandlerResult(HandleResult result, int code, string message = null, Type type = null, Exception ex = null)
         {
@@ -261,8 +280,48 @@ namespace XYS.Report.Lis
             this.MongoService.InsertSuccessEvent += this.NewSuccess;
             this.MongoService.UpdateErrorEvent += this.ChangeError;
             this.MongoService.UpdateSuccessEvent += this.ChangeSuccess;
+
+            //初始化线程池
+            this.InitWorkerPool();
+        }
+        private void InitWorkerPool()
+        {
+            Thread th = null;
+            this.m_handleWorkerPool = new Thread[HandleWorkerCount];
+            for (int i = 0; i < HandleWorkerCount; i++)
+            {
+                th = new Thread(InitRequestConsumer);
+                this.m_handleWorkerPool[i] = th;
+                th.Start();
+            }
+
+            this.m_saveWorkerPool = new Thread[SaveWorkerCount];
+            for (int i = 0; i < SaveWorkerCount; i++)
+            {
+                th = new Thread(SaveRequestConsumer);
+                this.m_saveWorkerPool[i] = th;
+                th.Start();
+            }
         }
         #endregion
 
+        #region 消费者方法
+        protected void InitRequestConsumer()
+        {
+            foreach (ReportReportElement report in this.InitRequestQueue.GetConsumingEnumerable())
+            {
+                LOG.Info("报告处理线程开始处理报告,报告ID为:"+report.ReportPK.ID);
+                this.HandleService.HandleReport(report);
+            }
+        }
+        protected void SaveRequestConsumer()
+        {
+            foreach (ReportReportElement report in this.SaveRequestQueue.GetConsumingEnumerable())
+            {
+                LOG.Info("报告保存线程开始保存报告,报告ID为:" + report.ReportID);
+                this.MongoService.InsertReport(report, SaveOptions.UpdateAndSave);
+            }
+        }
+        #endregion
     }
 }

@@ -35,7 +35,7 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类抽象方法
         public override void ReportHandle(ReportReportElement report)
         {
-            LOG.Info("报告图片项处理");
+            LOG.Info("报告图片项处理开始");
             List<IFillElement> graphList = report.GetReportItem(typeof(ReportGraphElement));
             if (IsExist(graphList))
             {

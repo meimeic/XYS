@@ -16,7 +16,7 @@ namespace XYS.Report.Lis.Handler
         #region 实现父类方法
         public override void ReportHandle(ReportReportElement report)
         {
-            LOG.Info("开始报告整体处理");
+            LOG.Info("报告整体处理开始");
 
             //reportitem排序
             LOG.Info("报告项排序");

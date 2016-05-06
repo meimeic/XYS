@@ -13,6 +13,11 @@ namespace XYS.Report.Lis.Persistent
     delegate void InsertSuccessHandler(ReportReportElement report);
     delegate void UpdateErrorHandler(ReportReportElement report);
     delegate void UpdateSuccessHandler(ReportReportElement report);
+    public enum SaveOptions
+    {
+        DirectlySave = 1,
+        UpdateAndSave
+    }
     public class ReportMongoService
     {
         #region 常量字段
@@ -68,21 +73,29 @@ namespace XYS.Report.Lis.Persistent
         #endregion
 
         #region 同步方法
-        public void InsertReport(ReportReportElement report)
+        public void InsertReport(ReportReportElement report, SaveOptions options)
         {
-            LOG.Info("进入保存报告流程");
-            this.Mongo.InsertReport(report);
-            LOG.Info("退出保存报告流程");
-        }
-        public void InsertReportCurrently(ReportReportElement report)
-        {
-            LOG.Info("进入更新并保存报告流程");
-            this.Mongo.UpdateAndInsertReport(report);
-            LOG.Info("退出更新并保存报告流程");
+            switch (options)
+            {
+                case SaveOptions.DirectlySave:
+                    LOG.Info("进入保存报告流程");
+                    this.Mongo.InsertReport(report);
+                    LOG.Info("退出保存报告流程");
+                    break;
+                case SaveOptions.UpdateAndSave:
+                    LOG.Info("进入更新并保存报告流程");
+                    this.Mongo.UpdateAndInsertReport(report);
+                    LOG.Info("退出更新并保存报告流程");
+                    break;
+                default:
+                    LOG.Info("进入更新并保存报告流程");
+                    this.Mongo.UpdateAndInsertReport(report);
+                    LOG.Info("退出更新并保存报告流程");
+                    break;
+            }
         }
         public void InsertReportMany(IEnumerable<ReportReportElement> reportList)
         {
-
         }
         #endregion
 

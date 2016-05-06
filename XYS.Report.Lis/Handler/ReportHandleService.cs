@@ -102,7 +102,7 @@ namespace XYS.Report.Lis.Handler
         protected void FillSuccess(ReportReportElement report)
         {
             //内部处理
-            LOG.Info("报告填充处理成功");
+            LOG.Info("填充报告处理成功");
             this.GraphHandle.ReportHandle(report);
         }
         protected void GraphError(ReportReportElement report)
@@ -181,6 +181,7 @@ namespace XYS.Report.Lis.Handler
             this.GraphHandle.HandleErrorEvent += this.GraphError;
             this.GraphHandle.HandleSuccessEvent += this.GraphSuccess;
 
+            this.m_reportHandle = new ReportReportHandle();
             this.ReportHandle.HandleSuccessEvent += this.ReportSuccess;
         }
         private void LogError(ReportReportElement report)
