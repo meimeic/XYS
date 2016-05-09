@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
+using XYS.Util;
 using XYS.Report;
 using XYS.Report.Lis;
 using XYS.Report.Lis.Model;
@@ -135,7 +136,8 @@ namespace ZhTest
 
         private void button6_Click(object sender, EventArgs e)
         {
-
+            string path = Path.Combine(SystemInfo.ApplicationBaseDirectory,"lis\\11\\","test\\lis");
+            Console.WriteLine(path);
         }
         private Task TestTask()
         {

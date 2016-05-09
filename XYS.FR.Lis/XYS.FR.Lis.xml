@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<lisFR>
+  <lisGroups>
+    <lisGroup name="临检XE2000" value="2" modelNo="100" orderNo="19000"/>
+  </lisGroups>
+  <lisItems>
+    <lisItem name="肝功(医保)" value="90004316" modelNo="200" orderNo="19500"/>
+  </lisItems>
+  <printModels relativePath="">
+    <printModel name="" value="100" path="" />
+  </printModels>
+</lisFR>

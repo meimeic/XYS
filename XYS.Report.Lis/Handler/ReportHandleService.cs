@@ -114,6 +114,7 @@ namespace XYS.Report.Lis.Handler
         }
         protected void GraphSuccess(ReportReportElement report)
         {
+            //内部处理
             LOG.Info("报告图片项处理成功,开始reportinfo、reportitem、reportcustom的并发处理");
             Task infoTask = Task.Run(() => { this.InfoHandle.ReportHandle(report); });
             Task itemTask = Task.Run(() => { this.ItemHandle.ReportHandle(report); });
@@ -128,6 +129,7 @@ namespace XYS.Report.Lis.Handler
             {
                 this.SetHandlerResult(report.HandleResult, -1, "reportinfo、reportitem、reportcustom的并发处理异常", this.GetType(), ex);
                 LogError(report);
+                //触发事件
                 this.OnError(report);
             }
         }
@@ -135,7 +137,7 @@ namespace XYS.Report.Lis.Handler
         {
             //内部处理
             LOG.Info("报告整体处理成功");
-            //触发处理成功事件
+            //转播事件
             this.OnComplete(report);
         }
         protected void SetHandlerResult(HandleResult result, int code, string message = null, Type type = null, Exception ex = null)

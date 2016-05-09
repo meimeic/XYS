@@ -84,8 +84,6 @@
     <Compile Include="Util\ConfigManager.cs" />
     <Compile Include="Util\FillElement.cs" />
     <Compile Include="Util\FillElementMap.cs" />
-    <Compile Include="Util\LisParItem.cs" />
-    <Compile Include="Util\LisParItemMap.cs" />
     <Compile Include="Util\LisSection.cs" />
     <Compile Include="Util\LisSectionMap.cs" />
     <Compile Include="Util\XmlConfigurator.cs" />
