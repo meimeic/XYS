@@ -23,6 +23,7 @@ namespace XYS.Report.Lis.Persistent.Mongo
         static UpdateDefinitionBuilder<ReportReportElement> UpdateBuiler;
         static ProjectionDefinitionBuilder<ReportReportElement> ProjectionBuiler;
         private static readonly string MongoConnectionStr = "mongodb://10.1.11.10:27017";
+        private static readonly string MongoDataBaseStr = "lis";
         #endregion
 
         #region 事件字段
@@ -37,7 +38,7 @@ namespace XYS.Report.Lis.Persistent.Mongo
         {
             LOG = LogManager.GetLogger("LisReportMongo");
             MClient = new MongoClient(MongoConnectionStr);
-            LisMDB = MClient.GetDatabase("lis");
+            LisMDB = MClient.GetDatabase("report-node-test");
             FilterBuiler = Builders<ReportReportElement>.Filter;
             UpdateBuiler = Builders<ReportReportElement>.Update;
             ProjectionBuiler = Builders<ReportReportElement>.Projection;
@@ -75,7 +76,7 @@ namespace XYS.Report.Lis.Persistent.Mongo
         {
             try
             {
-                IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("report");
+                IMongoCollection<ReportReportElement> ReportCollection = LisMDB.GetCollection<ReportReportElement>("reports");
                 ReportCollection.InsertOne(report);
                 this.OnInsertSuccess(report);
             }

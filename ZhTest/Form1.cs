@@ -45,8 +45,8 @@ namespace ZhTest
         private void button2_Click(object sender, EventArgs e)
         {
             ReportService service = ReportService.LisService;
-            string where = "where SectionNo in(2,27,28,62) and  ReceiveDate>'2016-01-01' and ReceiveDate<'2016-02-01' ";
-            //string where = "where serialno='1602224471'";
+            //string where = "where SectionNo in(2,27,28,62) and  ReceiveDate>'2016-01-01' and ReceiveDate<'2016-02-01' ";
+            string where = "where serialno='1602224471'";
             List<ReportPK> PKList = new List<ReportPK>();
             service.InitReportPK(where, PKList);
             //

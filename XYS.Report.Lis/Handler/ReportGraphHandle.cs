@@ -40,8 +40,11 @@ namespace XYS.Report.Lis.Handler
             if (IsExist(graphList))
             {
                 LOG.Info("上传图片集合");
+                report.ReportImageMap = new Dictionary<string, string>(15);
                 string folderName = report.ReportInfo.ReceiveDateTime.ToString("yyyyMMdd");
+
                 UploadImages(graphList, folderName, report.ReportImageMap, report.HandleResult);
+
                 if (report.HandleResult.ResultCode < 0)
                 {
                     this.OnHandleError(report);
@@ -58,7 +61,7 @@ namespace XYS.Report.Lis.Handler
         #endregion
 
         #region 图片上传
-        protected void UploadImages(List<IFillElement> graphList, string folder, SortedDictionary<string, string> imageMap, HandleResult result)
+        protected void UploadImages(List<IFillElement> graphList, string folder, Dictionary<string, string> imageMap, HandleResult result)
         {
             WebClient wc = new WebClient();
             //多张图片上传
@@ -288,7 +291,7 @@ namespace XYS.Report.Lis.Handler
                 NormalImageUri.Add(50006577, "/image/lis/report/normal/SANTI8.jpg");
             }
         }
-        private void AddNormalImageBySuperItem(List<int> superItem, SortedDictionary<string, string> imageMap)
+        private void AddNormalImageBySuperItem(List<int> superItem, Dictionary<string, string> imageMap)
         {
             foreach (int no in superItem)
             {

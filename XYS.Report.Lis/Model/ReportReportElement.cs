@@ -31,10 +31,9 @@ namespace XYS.Report.Lis.Model
 
         private List<int> m_superItemList;
         private ReportInfoElement m_reportInfo;
-        private SortedDictionary<string, string> m_reportImageMap;
+        private ReportCustomElement m_reportCustom;
+        private Dictionary<string, string> m_reportImageMap;
         private List<ReportItemElement> m_reportItemCollection;
-        private List<ReportCustomElement> m_reportCustomCollection;
-
         private readonly Hashtable m_reportItemTable;
         #endregion
 
@@ -45,9 +44,7 @@ namespace XYS.Report.Lis.Model
             this.m_superItemList = new List<int>(3);
             this.m_handleResult = new HandleResult();
             this.m_reportInfo = new ReportInfoElement();
-            this.m_reportImageMap = new SortedDictionary<string, string>();
             this.m_reportItemCollection = new List<ReportItemElement>(20);
-            this.m_reportCustomCollection = new List<ReportCustomElement>(2);
             this.m_reportItemTable = SystemInfo.CreateCaseInsensitiveHashtable(3);
         }
         #endregion
@@ -163,14 +160,14 @@ namespace XYS.Report.Lis.Model
             set { this.m_reportItemCollection = value; }
         }
         [BsonElement(Order = 9)]
-        public List<ReportCustomElement> ReportCustomCollection
+        public ReportCustomElement ReportCustom
         {
-            get { return this.m_reportCustomCollection; }
-            set { this.m_reportCustomCollection = value; }
+            get { return this.m_reportCustom; }
+            set { this.m_reportCustom = value; }
         }
         [BsonElement(Order = 10)]
         [BsonDictionaryOptions(DictionaryRepresentation.Document)]
-        public SortedDictionary<string, string> ReportImageMap
+        public Dictionary<string, string> ReportImageMap
         {
             get { return this.m_reportImageMap; }
             set { this.m_reportImageMap = value; }
@@ -184,10 +181,10 @@ namespace XYS.Report.Lis.Model
         public void Clear()
         {
             this.HandleResult.Clear();
-            this.ReportImageMap.Clear();
+            this.ReportCustom = null;
+            this.ReportImageMap = null;
             this.m_reportItemTable.Clear();
             this.ReportItemCollection.Clear();
-            this.ReportCustomCollection.Clear();
             //非填充项清空
 
             this.ID = default(Guid);

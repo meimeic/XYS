@@ -6,17 +6,16 @@ namespace XYS.Report.Lis.Model
     public class ReportCustomElement : IFillElement
     {
         #region 私有字段
-        private string m_name;
-        private string m_column0;
-        private string m_column1;
-        private string m_column2;
-        private string m_column3;
-        private string m_column4;
-        private string m_column5;
-        private string m_column6;
-        private string m_column7;
-        private string m_column8;
-        private string m_column9;
+        private string m_c0;
+        private string m_c1;
+        private string m_c2;
+        private string m_c3;
+        private string m_c4;
+        private string m_c5;
+        private string m_c6;
+        private string m_c7;
+        private string m_c8;
+        private string m_c9;
         #endregion
 
         #region 公共构造函数
@@ -26,81 +25,74 @@ namespace XYS.Report.Lis.Model
         #endregion
 
         #region 公共属性
-        [BsonElement(Order = 1)]
-        public string Name
-        {
-            get { return this.m_name; }
-            set { this.m_name = value; }
-        }
-        
         [BsonElement(Order = 2)]
-        public string Column0
+        public string C0
         {
-            get { return this.m_column0; }
-            set { this.m_column0 = value; }
+            get { return this.m_c0; }
+            set { this.m_c0 = value; }
         }
-        
+
         [BsonElement(Order = 3)]
-        public string Column1
+        public string C1
         {
-            get { return this.m_column1; }
-            set { this.m_column1 = value; }
+            get { return this.m_c1; }
+            set { this.m_c1 = value; }
         }
-        
+
         [BsonElement(Order = 4)]
-        public string Column2
+        public string C2
         {
-            get { return this.m_column2; }
-            set { this.m_column2 = value; }
+            get { return this.m_c2; }
+            set { this.m_c2 = value; }
         }
-        
+
         [BsonElement(Order = 5)]
-        public string Column3
+        public string C3
         {
-            get { return this.m_column3; }
-            set { this.m_column3 = value; }
+            get { return this.m_c3; }
+            set { this.m_c3 = value; }
         }
-        
+
         [BsonElement(Order = 6)]
-        public string Column4
+        public string C4
         {
-            get { return this.m_column4; }
-            set { this.m_column4 = value; }
+            get { return this.m_c4; }
+            set { this.m_c4 = value; }
         }
-        
+
         [BsonElement(Order = 7)]
-        public string Column5
+        public string C5
         {
-            get { return this.m_column5; }
-            set { this.m_column5 = value; }
+            get { return this.m_c5; }
+            set { this.m_c5 = value; }
         }
-        
+
         [BsonElement(Order = 8)]
-        public string Column6
+        public string C6
         {
-            get { return this.m_column6; }
-            set { this.m_column6 = value; }
+            get { return this.m_c6; }
+            set { this.m_c6 = value; }
         }
-        
+
         [BsonElement(Order = 9)]
-        public string Column7
+        public string C7
         {
-            get { return this.m_column7; }
-            set { this.m_column7 = value; }
+            get { return this.m_c7; }
+            set { this.m_c7 = value; }
         }
-        
+
         [BsonElement(Order = 10)]
-        public string Column8
+        public string C8
         {
-            get { return this.m_column8; }
-            set { this.m_column8 = value; }
+            get { return this.m_c8; }
+            set { this.m_c8 = value; }
         }
-        
+
         [BsonElement(Order = 11)]
-        public string Column9
+        public string C9
         {
-            get { return this.m_column9; }
-            set { this.m_column9 = value; }
+            get { return this.m_c9; }
+            set { this.m_c9 = value; }
         }
         #endregion
     }

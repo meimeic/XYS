@@ -224,7 +224,7 @@ namespace XYS.Report.Lis.Model
         [Column]
         [BsonElement(Order = 24)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-        public DateTime SecondeCheckDateTime
+        public DateTime SecondCheckDateTime
         {
             get { return m_secondCheckDateTime; }
             set { m_secondCheckDateTime = value; }
