@@ -40,11 +40,9 @@ namespace XYS.Report.Lis.Handler
             if (IsExist(graphList))
             {
                 LOG.Info("上传图片集合");
-                report.ReportImageMap = new Dictionary<string, string>(15);
+                report.ReportImageMap = new Dictionary<string, string>(16);
                 string folderName = report.ReportInfo.ReceiveDateTime.ToString("yyyyMMdd");
-
                 UploadImages(graphList, folderName, report.ReportImageMap, report.HandleResult);
-
                 if (report.HandleResult.ResultCode < 0)
                 {
                     this.OnHandleError(report);

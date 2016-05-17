@@ -7,6 +7,7 @@ using XYS.Model;
 using XYS.Report;
 using XYS.Common;
 
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Options;
 using MongoDB.Bson.Serialization.Attributes;
 namespace XYS.Report.Lis.Model
@@ -14,8 +15,7 @@ namespace XYS.Report.Lis.Model
     public class ReportReportElement : IReportElement
     {
         #region 私有实例字段
-        private Guid m_id;
-
+        private ObjectId m_id;
         private int m_activeFlag;
         private string m_reportID;
         
@@ -64,7 +64,7 @@ namespace XYS.Report.Lis.Model
 
         #region 实例属性
         [BsonId]
-        public Guid ID
+        public ObjectId ID
         {
             get { return this.m_id; }
             set { this.m_id = value; }
@@ -110,6 +110,7 @@ namespace XYS.Report.Lis.Model
             get { return this.m_reportTitle; }
             set { this.m_reportTitle = value; }
         }
+
         [BsonElement(Order = 4)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CreateDateTime
@@ -152,18 +153,17 @@ namespace XYS.Report.Lis.Model
             get { return this.m_reportInfo; }
             set { this.m_reportInfo = value; }
         }
-
-        [BsonElement(Order = 8)]
-        public List<ReportItemElement> ReportItemCollection
-        {
-            get { return this.m_reportItemCollection; }
-            set { this.m_reportItemCollection = value; }
-        }
         [BsonElement(Order = 9)]
         public ReportCustomElement ReportCustom
         {
             get { return this.m_reportCustom; }
             set { this.m_reportCustom = value; }
+        }
+        [BsonElement(Order = 8)]
+        public List<ReportItemElement> ReportItemCollection
+        {
+            get { return this.m_reportItemCollection; }
+            set { this.m_reportItemCollection = value; }
         }
         [BsonElement(Order = 10)]
         [BsonDictionaryOptions(DictionaryRepresentation.Document)]
@@ -187,7 +187,6 @@ namespace XYS.Report.Lis.Model
             this.ReportItemCollection.Clear();
             //非填充项清空
 
-            this.ID = default(Guid);
             //
             this.ReportPK = null;
             this.ReportTitle = "";
