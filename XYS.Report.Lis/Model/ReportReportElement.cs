@@ -70,7 +70,7 @@ namespace XYS.Report.Lis.Model
             set { this.m_id = value; }
         }
 
-        [BsonElement(Order = 1)]
+        [BsonElement("reportID", Order = 1)]
         public string ReportID
         {
             get
@@ -90,7 +90,7 @@ namespace XYS.Report.Lis.Model
             }
             set { this.m_reportID = value; }
         }
-        [BsonElement(Order = 2)]
+        [BsonElement("activeFlag", Order = 2)]
         public int ActiveFlag
         {
             get { return m_activeFlag; }
@@ -104,14 +104,14 @@ namespace XYS.Report.Lis.Model
             set { this.m_reportPK = value; }
         }
 
-        [BsonElement(Order = 3)]
+        [BsonElement("reportTitle", Order = 3)]
         public string ReportTitle
         {
             get { return this.m_reportTitle; }
             set { this.m_reportTitle = value; }
         }
 
-        [BsonElement(Order = 4)]
+        [BsonElement("createDateTime", Order = 4)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
         public DateTime CreateDateTime
         {
@@ -133,21 +133,21 @@ namespace XYS.Report.Lis.Model
             get { return this.m_remarkFlag; }
             set { this.m_remarkFlag = value; }
         }
-        [BsonElement(Order = 5)]
+        [BsonElement("remark", Order = 5)]
         public string Remark
         {
             get { return this.m_remark; }
             set { this.m_remark = value; }
         }
 
-        [BsonElement(Order = 6)]
+        [BsonElement("superItemList", Order = 6)]
         public List<int> SuperItemList
         {
             get { return this.m_superItemList; }
             set { this.m_superItemList = value; }
         }
          
-        [BsonElement(Order = 7)]
+        [BsonElement("info",Order = 7)]
         public ReportInfoElement ReportInfo
         {
             get { return this.m_reportInfo; }
@@ -159,13 +159,13 @@ namespace XYS.Report.Lis.Model
             get { return this.m_reportCustom; }
             set { this.m_reportCustom = value; }
         }
-        [BsonElement(Order = 8)]
+        [BsonElement("itemCollection",Order = 8)]
         public List<ReportItemElement> ReportItemCollection
         {
             get { return this.m_reportItemCollection; }
             set { this.m_reportItemCollection = value; }
         }
-        [BsonElement(Order = 10)]
+        [BsonElement("imageMap",Order = 10)]
         [BsonDictionaryOptions(DictionaryRepresentation.Document)]
         public Dictionary<string, string> ReportImageMap
         {

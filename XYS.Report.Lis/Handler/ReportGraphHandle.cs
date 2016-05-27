@@ -16,7 +16,7 @@ namespace XYS.Report.Lis.Handler
     {
         #region 私有字段
         private static readonly Hashtable NormalImageUri;
-        private static readonly string ImageServer = "http://static.xys.com";
+        private static readonly string ImageServer = "http://static.xys.com/img";
         private static readonly string UploadUri = "http://10.1.11.10:8090";
         #endregion
 
