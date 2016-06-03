@@ -4,7 +4,7 @@ using XYS.Report;
 using XYS.Common;
 namespace XYS.Report.Lis.Model
 {
-    public class ReportGraphElement : IFillElement, IComparable<ReportGraphElement>
+    public class ReportGraphElement : IFillElement
     {
         #region 私有字段
         private string m_graphName;
@@ -17,14 +17,14 @@ namespace XYS.Report.Lis.Model
         #endregion
 
         #region 公共属性
-        [Column(true)]
+        [Column()]
         public string GraphName
         {
             get { return this.m_graphName; }
             set { this.m_graphName = value; }
         }
 
-        [Column(true)]
+        [Column()]
         public byte[] GraphImage
         {
             get { return this.m_graphImage; }
@@ -32,18 +32,5 @@ namespace XYS.Report.Lis.Model
         }
         #endregion
 
-       #region 实现比较方法
-        public int CompareTo(ReportGraphElement element)
-        {
-            if (element == null)
-            {
-                return 1;
-            }
-            else
-            {
-                return this.GraphName.CompareTo(element.GraphName);
-            }
-        }
-       #endregion
     }
 }

@@ -10,14 +10,14 @@ namespace XYS.Report.Lis.Model
     {
         #region 私有字段
         private int m_itemNo;
-        private int m_parItemNo;
-        private string m_itemCName;
-        private string m_itemEName;
-        private string m_itemResult;
-        private string m_resultStatus;
-        private string m_itemUnit;
+        private int m_superNo;
+        private string m_cName;
+        private string m_eName;
+        private string m_result;
+        private string m_status;
+        private string m_unit;
         private string m_refRange;
-        private int m_dispOrder;
+        private int m_order;
         private int m_secretGrade;
         #endregion
 
@@ -29,7 +29,7 @@ namespace XYS.Report.Lis.Model
 
         #region 公共属性
         [Column]
-        [BsonElement(Order = 1)]
+        [BsonElement("itemNo",Order = 1)]
         public int ItemNo
         {
             get { return this.m_itemNo; }
@@ -37,55 +37,55 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
-        [BsonElement(Order = 2)]
-        public int ParItemNo
+        [BsonElement("superNo",Order = 2)]
+        public int SuperNo
         {
-            get { return this.m_parItemNo; }
-            set { this.m_parItemNo = value; }
+            get { return this.m_superNo; }
+            set { this.m_superNo = value; }
         }
 
         [Column]
-        [BsonElement(Order = 3)]
-        public string ItemCName
+        [BsonElement("cname",Order = 3)]
+        public string CName
         {
-            get { return this.m_itemCName; }
-            set { this.m_itemCName = value; }
+            get { return this.m_cName; }
+            set { this.m_cName = value; }
         }
 
         [Column]
-        [BsonElement(Order = 4)]
-        public string ItemEName
+        [BsonElement("ename",Order = 4)]
+        public string EName
         {
-            get { return this.m_itemEName; }
-            set { this.m_itemEName = value; }
+            get { return this.m_eName; }
+            set { this.m_eName = value; }
         }
 
         [Column]
-        [BsonElement(Order = 5)]
-        public string ItemResult
+        [BsonElement("result", Order = 5)]
+        public string Result
         {
-            get { return this.m_itemResult; }
-            set { this.m_itemResult = value; }
+            get { return this.m_result; }
+            set { this.m_result = value; }
         }
 
         [Column]
-        [BsonElement(Order = 6)]
-        public string ResultStatus
+        [BsonElement("status",Order = 6)]
+        public string Status
         {
-            get { return this.m_resultStatus; }
-            set { this.m_resultStatus = value; }
+            get { return this.m_status; }
+            set { this.m_status = value; }
         }
 
         [Column]
-        [BsonElement(Order = 7)]
-        public string ItemUnit
+        [BsonElement("unit",Order = 7)]
+        public string Unit
         {
-            get { return this.m_itemUnit; }
-            set { this.m_itemUnit = value; }
+            get { return this.m_unit; }
+            set { this.m_unit = value; }
         }
 
         [Column]
-        [BsonElement(Order = 8)]
+        [BsonElement("refRange",Order = 8)]
         public string RefRange
         {
             get { return this.m_refRange; }
@@ -93,11 +93,11 @@ namespace XYS.Report.Lis.Model
         }
 
         [Column]
-        [BsonElement(Order = 9)]
+        [BsonElement("order",Order = 9)]
         public int DispOrder
         {
-            get { return this.m_dispOrder; }
-            set { this.m_dispOrder = value; }
+            get { return this.m_order; }
+            set { this.m_order = value; }
         }
 
         [Column]

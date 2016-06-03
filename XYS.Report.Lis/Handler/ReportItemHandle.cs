@@ -6,9 +6,8 @@ using XYS.Util;
 using XYS.Report.Lis.Model;
 namespace XYS.Report.Lis.Handler
 {
-   
     public class ReportItemHandle : ReportHandleSkeleton
-    {   
+    {
         #region 构造函数
         public ReportItemHandle()
             : base()
@@ -28,11 +27,11 @@ namespace XYS.Report.Lis.Handler
                 foreach (IFillElement item in itemList)
                 {
                     rie = item as ReportItemElement;
-                    //设置检验大项集合
-                    if (!report.SuperItemList.Contains(rie.ParItemNo))
-                    {
-                        report.SuperItemList.Add(rie.ParItemNo);
-                    }
+                    ////设置检验大项集合
+                    //if (!report.SuperItemList.Contains(rie.ParItemNo))
+                    //{
+                    //    report.SuperItemList.Add(rie.ParItemNo);
+                    //}
                     //检验项处理
                     if (!OperateItem(rie))
                     {

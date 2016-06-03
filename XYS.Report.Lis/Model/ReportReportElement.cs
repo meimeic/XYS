@@ -24,12 +24,13 @@ namespace XYS.Report.Lis.Model
         
         //报告名
         private string m_reportTitle;
-        private DateTime m_createDateTime;
+        private DateTime m_createTime;
         //附加备注
         private int m_remarkFlag;
         private string m_remark;
 
-        private List<int> m_superItemList;
+        private int m_reportNo;
+        //private List<int> m_superItemList;
         private ReportInfoElement m_reportInfo;
         private ReportCustomElement m_reportCustom;
         private Dictionary<string, string> m_reportImageMap;
@@ -41,7 +42,7 @@ namespace XYS.Report.Lis.Model
         public ReportReportElement()
         {
             this.m_remarkFlag = 0;
-            this.m_superItemList = new List<int>(3);
+            // this.m_superItemList = new List<int>(3);
             this.m_handleResult = new HandleResult();
             this.m_reportInfo = new ReportInfoElement();
             this.m_reportItemCollection = new List<ReportItemElement>(20);
@@ -111,19 +112,19 @@ namespace XYS.Report.Lis.Model
             set { this.m_reportTitle = value; }
         }
 
-        [BsonElement("createDateTime", Order = 4)]
+        [BsonElement("createTime", Order = 4)]
         [BsonDateTimeOptions(Kind = DateTimeKind.Local)]
-        public DateTime CreateDateTime
+        public DateTime CreateTime
         {
             get
             {
-                if (this.m_createDateTime == default(DateTime))
+                if (this.m_createTime == default(DateTime))
                 {
-                    this.m_createDateTime = DateTime.Now;
+                    this.m_createTime = DateTime.Now;
                 }
-                return this.m_createDateTime;
+                return this.m_createTime;
             }
-            set { this.m_createDateTime = value; }
+            set { this.m_createTime = value; }
         }
 
         //备注标识 0表示没有备注 1 表示备注已设置  2 表示备注未设置
@@ -140,11 +141,18 @@ namespace XYS.Report.Lis.Model
             set { this.m_remark = value; }
         }
 
-        [BsonElement("superItemList", Order = 6)]
-        public List<int> SuperItemList
+        //[BsonElement("superItemList", Order = 6)]
+        //public List<int> SuperItemList
+        //{
+        //    get { return this.m_superItemList; }
+        //    set { this.m_superItemList = value; }
+        //}
+
+        [BsonElement("reportNo", Order = 6)]
+        public int ReportNo
         {
-            get { return this.m_superItemList; }
-            set { this.m_superItemList = value; }
+            get { return this.m_reportNo; }
+            set { this.m_reportNo = value; }
         }
          
         [BsonElement("info",Order = 7)]

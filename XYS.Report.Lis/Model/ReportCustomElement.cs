@@ -25,71 +25,71 @@ namespace XYS.Report.Lis.Model
         #endregion
 
         #region 公共属性
-        [BsonElement(Order = 2)]
-        public string C0
+        [BsonElement(Order = 1)]
+        public string c0
         {
             get { return this.m_c0; }
             set { this.m_c0 = value; }
         }
 
-        [BsonElement(Order = 3)]
-        public string C1
+        [BsonElement(Order = 2)]
+        public string c1
         {
             get { return this.m_c1; }
             set { this.m_c1 = value; }
         }
 
-        [BsonElement(Order = 4)]
-        public string C2
+        [BsonElement(Order = 3)]
+        public string c2
         {
             get { return this.m_c2; }
             set { this.m_c2 = value; }
         }
 
-        [BsonElement(Order = 5)]
-        public string C3
+        [BsonElement(Order = 4)]
+        public string c3
         {
             get { return this.m_c3; }
             set { this.m_c3 = value; }
         }
 
-        [BsonElement(Order = 6)]
-        public string C4
+        [BsonElement(Order = 5)]
+        public string c4
         {
             get { return this.m_c4; }
             set { this.m_c4 = value; }
         }
 
-        [BsonElement(Order = 7)]
-        public string C5
+        [BsonElement(Order = 6)]
+        public string c5
         {
             get { return this.m_c5; }
             set { this.m_c5 = value; }
         }
 
-        [BsonElement(Order = 8)]
-        public string C6
+        [BsonElement(Order = 7)]
+        public string c6
         {
             get { return this.m_c6; }
             set { this.m_c6 = value; }
         }
 
-        [BsonElement(Order = 9)]
-        public string C7
+        [BsonElement(Order = 8)]
+        public string c7
         {
             get { return this.m_c7; }
             set { this.m_c7 = value; }
         }
 
-        [BsonElement(Order = 10)]
-        public string C8
+        [BsonElement(Order = 9)]
+        public string c8
         {
             get { return this.m_c8; }
             set { this.m_c8 = value; }
         }
 
-        [BsonElement(Order = 11)]
-        public string C9
+        [BsonElement(Order = 10)]
+        public string c9
         {
             get { return this.m_c9; }
             set { this.m_c9 = value; }

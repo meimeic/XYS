@@ -156,7 +156,7 @@ namespace XYS.Report.Lis.Persistent.Mongo
                     foreach (ReportReportElement rre in cursor.Current)
                     {
                         // do something with the documents
-                        Console.WriteLine(rre.SuperItemList.Count);
+                        Console.WriteLine(rre);
                     }
                 }
             }

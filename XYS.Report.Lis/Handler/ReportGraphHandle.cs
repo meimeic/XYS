@@ -41,7 +41,7 @@ namespace XYS.Report.Lis.Handler
             {
                 LOG.Info("上传图片集合");
                 report.ReportImageMap = new Dictionary<string, string>(16);
-                string folderName = report.ReportInfo.ReceiveDateTime.ToString("yyyyMMdd");
+                string folderName = report.ReportInfo.ReceiveTime.ToString("yyyyMMdd");
                 UploadImages(graphList, folderName, report.ReportImageMap, report.HandleResult);
                 if (report.HandleResult.ResultCode < 0)
                 {
@@ -51,7 +51,7 @@ namespace XYS.Report.Lis.Handler
                 if (report.ReportInfo.SectionNo == 11)
                 {
                     LOG.Info("尝试添加标准图片处理");
-                    AddNormalImageBySuperItem(report.SuperItemList, report.ReportImageMap);
+                    AddNormalImageBySuperItem(report.ReportItemCollection[0].SuperNo, report.ReportImageMap);
                 }
             }
             this.OnHandleSuccess(report);
@@ -289,16 +289,12 @@ namespace XYS.Report.Lis.Handler
                 NormalImageUri.Add(50006577, "/image/lis/report/normal/SANTI8.jpg");
             }
         }
-        private void AddNormalImageBySuperItem(List<int> superItem, Dictionary<string, string> imageMap)
+        private void AddNormalImageBySuperItem(int no, Dictionary<string, string> imageMap)
         {
-            foreach (int no in superItem)
+            string path = NormalImageUri[no] as string;
+            if (!string.IsNullOrEmpty(path))
             {
-                string path = NormalImageUri[no] as string;
-                if (path != null)
-                {
-                    imageMap["normal"] = ImageServer + path;
-                    return;
-                }
+                imageMap["normal"] = ImageServer + path;
             }
         }
         #endregion

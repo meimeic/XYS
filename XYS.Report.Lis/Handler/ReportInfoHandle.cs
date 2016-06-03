@@ -16,9 +16,9 @@ namespace XYS.Report.Lis.Handler
             if (report.ReportInfo.SectionNo == 11)
             {
                 LOG.Info("备注信息处理");
-                if (report.ReportInfo.FormMemo != null)
+                if (report.ReportInfo.Memo != null)
                 {
-                    report.ReportInfo.FormMemo = report.ReportInfo.FormMemo.Replace(";", SystemInfo.NewLine);
+                    report.ReportInfo.Memo = report.ReportInfo.Memo.Replace(";", SystemInfo.NewLine);
                 }
             }
             //cid 处理
