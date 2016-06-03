@@ -10,7 +10,7 @@ namespace XYS.Report.Lis.Util
         private readonly Type m_type;
         #endregion
 
-        #region
+        #region 构造方法
         public FillElement(Type type)
             : this(null, type)
         { }
@@ -34,7 +34,7 @@ namespace XYS.Report.Lis.Util
         }
         #endregion
 
-        #region
+        #region 实例属性
         public string Name
         {
             get

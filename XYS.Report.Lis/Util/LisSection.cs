@@ -23,7 +23,7 @@ namespace XYS.Report.Lis.Util
         }
         #endregion
 
-        #region 属性
+        #region 实例属性
         public int SectionNo
         {
             get { return this.m_sectionNo; }
@@ -39,7 +39,7 @@ namespace XYS.Report.Lis.Util
         }
         #endregion
 
-        #region 方法
+        #region 实例方法
         public void AddFillElement(string elementName)
         {
             if (!string.IsNullOrEmpty(elementName))

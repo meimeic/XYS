@@ -154,7 +154,6 @@ namespace XYS.Report.Lis.Model
             get { return this.m_reportNo; }
             set { this.m_reportNo = value; }
         }
-         
         [BsonElement("info",Order = 7)]
         public ReportInfoElement ReportInfo
         {

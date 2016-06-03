@@ -13,7 +13,8 @@ namespace XYS.Report.Lis.Model
 
         #region 公共构造函数
         public ReportGraphElement()
-        { }
+        {
+        }
         #endregion
 
         #region 公共属性
@@ -31,6 +32,5 @@ namespace XYS.Report.Lis.Model
             set { this.m_graphImage = value; }
         }
         #endregion
-
     }
 }

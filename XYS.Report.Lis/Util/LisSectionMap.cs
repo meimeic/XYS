@@ -19,7 +19,7 @@ namespace XYS.Report.Lis.Util
         }
         #endregion
 
-        #region 属性
+        #region 实例属性
         public LisSection this[int no]
         {
             get
@@ -43,7 +43,7 @@ namespace XYS.Report.Lis.Util
         }
         #endregion
 
-        #region 方法
+        #region 实例方法
         public void Add(int sectionNo)
         {
             LisSection ls = new LisSection(sectionNo);
