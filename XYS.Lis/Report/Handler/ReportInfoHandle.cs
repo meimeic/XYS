@@ -39,9 +39,9 @@ namespace XYS.Lis.Report.Handler
 
         protected override bool HandleElement(List<IFillElement> elements, ReportPK RK)
         {
-            bool result = false;
             if (IsExist(elements))
             {
+                bool result = false;
                 for (int i = elements.Count - 1; i >= 0; i--)
                 {
                     result = HandleElement(elements[i], RK);
@@ -50,8 +50,9 @@ namespace XYS.Lis.Report.Handler
                         elements.RemoveAt(i);
                     }
                 }
+                return true;
             }
-            return result;
+            return false;
         }
-    ]
+    }
 }

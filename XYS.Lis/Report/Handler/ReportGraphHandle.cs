@@ -279,5 +279,15 @@ namespace XYS.Lis.Report.Handler
             public string Message { get; set; }
         }
         #endregion
+
+        protected override bool HandleElement(IFillElement element, ReportPK RK)
+        {
+
+        }
+
+        protected override bool HandleElement(List<IFillElement> elements, ReportPK RK)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

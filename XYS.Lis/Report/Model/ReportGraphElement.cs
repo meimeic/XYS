@@ -32,5 +32,17 @@ namespace XYS.Lis.Report.Model
             set { this.m_graphImage = value; }
         }
         #endregion
+
+        public string ReportID
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
 }

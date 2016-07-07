@@ -17,28 +17,34 @@ namespace XYS.Lis.Report.Handler
         #endregion
 
         #region 实现父类抽象方法
-        protected override void InnerHandle(ReportReportElement report)
+        protected override bool HandleElement(IFillElement element, ReportPK RK)
         {
-            LOG.Info("报告常规项处理");
-            //报告级操作
-            ReportItemElement rie = null;
-            List<IFillElement> itemList = report.GetReportItem(typeof(ReportItemElement));
-            if (IsExist(itemList))
+            bool result = false;
+            ReportItemElement item = element as ReportItemElement;
+            if (item != null)
             {
-                foreach (IFillElement item in itemList)
-                {
-                    rie = item as ReportItemElement;
-                    //检验项处理
-                    if (!OperateItem(rie))
-                    {
-                        continue;
-                    }
-                    rie.ReportID = report.ReportID;
-                    //将合法检验项添加到输出集合中
-                    report.ReportItemCollection.Add(rie);
-                }
+                item.ReportID = RK.ID;
+                result = OperateItem(item);
             }
-            this.SetHandlerResult(report.HandleResult, 30, "处理ReportItem集合成功", typeof(ReportItemHandle));
+            return result;
+        }
+
+        protected override bool HandleElement(List<IFillElement> elements, ReportPK RK)
+        {
+            if (IsExist(elements))
+            {
+                bool result = false;
+                for (int i = elements.Count - 1; i >= 0; i--)
+                {
+                    result = HandleElement(elements[i], RK);
+                    if (!result)
+                    {
+                        elements.RemoveAt(i);
+                    }
+                }
+                return true;
+            }
+            return false;
         }
         #endregion
 
@@ -79,26 +85,5 @@ namespace XYS.Lis.Report.Handler
             }
         }
         #endregion
-
-        protected override bool HandleElement(IFillElement element, ReportPK RK)
-        {
-            bool result = false;
-            ReportItemElement item = element as ReportItemElement;
-            if (item != null)
-            {
-                item.ReportID = RK.ID;
-                result = OperateItem(item);
-            }
-            return result;
-        }
-
-        protected override bool HandleElement(List<IFillElement> elements, ReportPK RK)
-        {
-            bool result = false;
-            if (IsExist(elements))
-            {
- 
-            }
-        }
     }
 }
