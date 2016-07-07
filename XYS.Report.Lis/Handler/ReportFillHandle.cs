@@ -259,26 +259,6 @@ namespace XYS.Report.Lis.Handler
         {
             return Section2FillTypeMap[RK.SectionNo] as List<Type>;
         }
-        //protected static List<Type> GetAvailableFillElements(LisReportPK RK)
-        //{
-        //    int sectionNo = -1;
-        //    foreach (KeyColumn key in RK.KeySet)
-        //    {
-        //        if (key.Name.Equals("sectionno"))
-        //        {
-        //            sectionNo = (int)key.Value;
-        //            break;
-        //        }
-        //    }
-        //    if (sectionNo == -1)
-        //    {
-        //        return null;
-        //    }
-        //    else
-        //    {
-        //        return Section2FillTypeMap[sectionNo] as List<Type>;
-        //    }
-        //}
         #endregion
 
         #region 触发事件

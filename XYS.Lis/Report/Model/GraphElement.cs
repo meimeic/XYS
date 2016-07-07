@@ -4,7 +4,7 @@ using XYS.Report;
 using XYS.Common;
 namespace XYS.Lis.Report.Model
 {
-    public class ReportGraphElement : IFillElement
+    public class GraphElement : IFillElement
     {
         #region 私有字段
         private string m_graphName;
@@ -12,7 +12,7 @@ namespace XYS.Lis.Report.Model
         #endregion
 
         #region 公共构造函数
-        public ReportGraphElement()
+        public GraphElement()
         {
         }
         #endregion

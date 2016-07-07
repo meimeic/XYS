@@ -1,93 +1,48 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using log4net;
-using XYS.Report.Lis.Model;
-namespace XYS.Lis
+
+using XYS.Util;
+using XYS.Report;
+using XYS.Lis.Report.Model;
+using XYS.Lis.Report.Persistent;
+namespace XYS.Lis.Report
 {
-    public class ReportHandleService
+    public class ReportService
     {
         #region 静态变量
+        private static ReportPKDAL PKDAL;
         private static ILog LOG = LogManager.GetLogger("LisReportHandle");
         #endregion
 
-        #region 私有字段
-        private ReportFillHandle m_fillHandle;
-        private ReportInfoHandle m_infoHandle;
-        private ReportItemHandle m_itemHandle;
-        private ReportCustomHandle m_customHandle;
-        private ReportGraphHandle m_graphHandle;
-        private ReportReportHandle m_reportHandle;
-        #endregion
+        #region
+        static ReportService()
+        {
+            //初始化handleTable
 
-        #region 私有事件
-        private event HandleErrorHandler m_handleErrorEvent;
-        private event HandleSuccessHandler m_handleCompleteEvent;
+            PKDAL = new ReportPKDAL();
+        }
         #endregion
 
         #region 构造函数
-        public ReportHandleService()
+        public ReportService()
         {
             this.Init();
         }
         #endregion
 
-        #region 事件属性
-        internal event HandleErrorHandler HandleErrorEvent
-        {
-            add { this.m_handleErrorEvent += value; }
-            remove { this.m_handleErrorEvent -= value; }
-        }
-        internal event HandleSuccessHandler HandleCompleteEvent
-        {
-            add { this.m_handleCompleteEvent += value; }
-            remove { this.m_handleCompleteEvent -= value; }
-        }
-        #endregion
-
-        #region 实例属性
-        protected ReportFillHandle FillHandle
-        {
-            get { return this.m_fillHandle; }
-        }
-        protected ReportInfoHandle InfoHandle
-        {
-            get { return this.m_infoHandle; }
-        }
-        protected ReportItemHandle ItemHandle
-        {
-            get { return this.m_itemHandle; }
-        }
-        protected ReportCustomHandle CustomHandle
-        {
-            get { return this.m_customHandle; }
-        }
-        protected ReportGraphHandle GraphHandle
-        {
-            get { return this.m_graphHandle; }
-        }
-        protected ReportReportHandle ReportHandle
-        {
-            get { return this.m_reportHandle; }
-        }
-        #endregion
 
         #region 公共方法
-        public void HandleReport(ReportReportElement report)
+        public void InitReportPK(Require req, List<ReportPK> PKList)
         {
-            LOG.Info("进入报告处理流程");
-            if (report.ReportPK != null && report.ReportPK.Configured)
-            {
-                this.SetHandlerResult(report.HandleResult, 1);
-                this.FillHandle.ReportHandle(report);
-            }
-            else
-            {
-                this.SetHandlerResult(report.HandleResult, -1, "当前报告不存在主键异常", this.GetType(), new ArgumentNullException("错误，当前报告不存在主键！"));
-                LogError(report);
-                this.OnError(report);
-            }
-            LOG.Info("退出报告处理流程");
+            PKDAL.InitReportKey(req, PKList);
+        }
+        public void InitReportPK(string where, List<ReportPK> PKList)
+        {
+            PKDAL.InitReportKey(where, PKList);
         }
         #endregion
 
@@ -189,6 +144,20 @@ namespace XYS.Lis
         private void LogError(ReportReportElement report)
         {
             LOG.Error(report.HandleResult.Message, report.HandleResult.Exception);
+        }
+        #endregion
+
+        #region
+        protected void HandleReport(ReportElement report)
+        {
+            if (report.ReportPK == null)
+            {
+                //错误
+            }
+            else
+            {
+ 
+            }
         }
         #endregion
     }

@@ -7,10 +7,10 @@ using XYS.Report;
 using XYS.Lis.Report.Model;
 namespace XYS.Lis.Report.Handler
 {
-    public class ReportItemHandle : ReportHandleSkeleton
+    public class ItemHandle : HandleSkeleton
     {
         #region 构造函数
-        public ReportItemHandle()
+        public ItemHandle()
             : base()
         {
         }
@@ -20,7 +20,7 @@ namespace XYS.Lis.Report.Handler
         protected override bool HandleElement(IFillElement element, ReportPK RK)
         {
             bool result = false;
-            ReportItemElement item = element as ReportItemElement;
+            ItemElement item = element as ItemElement;
             if (item != null)
             {
                 item.ReportID = RK.ID;
@@ -49,7 +49,7 @@ namespace XYS.Lis.Report.Handler
         #endregion
 
         #region 检验项处理逻辑
-        protected bool OperateItem(ReportItemElement rie)
+        protected bool OperateItem(ItemElement rie)
         {
             if (rie == null)
             {
@@ -71,7 +71,7 @@ namespace XYS.Lis.Report.Handler
             return true;
         }
         //检验项是否合法
-        private bool IsLegal(ReportItemElement rie)
+        private bool IsLegal(ItemElement rie)
         {
             int secretGrade = rie.SecretGrade;
             //根据保密等级判断检验项是否合法

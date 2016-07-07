@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<lisConfig>
+  <lis-param>
+    <FillElements>
+      <FillElement name="ItemElement" type="XYS.Lis.Report.Model.ReportItemElement" explain=""/>
+      <FillElement name="GraphElement" type="XYS.Lis.Report.Model.ReportGraphElement" explain=""/>
+      <FillElement name="CustomElement" type="XYS.Lis.Report.Model.ReportCustomElement" explain=""/>
+    </FillElements>
+    <reportSections>
+      <reportSection name="临检XE2000" value="2" fillElements="ReportItemElement" fillTag="" />
+      <reportSection name="临检XE5000" value="27" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="临检夜班" value="62" fillElements="ReportItemElement" fillTag="" />
+      <reportSection name="临检UF1000I" value="28" fillElements="ReportItemElement,ReportGraphElement" fillTag="" />
+      <reportSection name="生化AU2700" value="17" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="生化血气" value="23" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="生化AU480" value="29" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="生化荧光免疫" value="34" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫IMMAGE" value="5" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫TECAN150" value="19" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫DXI800" value="20" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫SUNRISE" value="21" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫BN11" value="25" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫手工" value="30" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫i2000" value="33" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫spife4000" value="35" fillElements="ReportItemElement,ReportGraphElement" fillTag=""/>
+      <reportSection name="免疫Immulite1000" value="63" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="免疫细胞培养" value="14" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="出凝血" value="4" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="血小板" value="24" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="溶血" value="18" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="分子遗传" value="11" fillElements="ReportItemElement,ReportGraphElement" fillTag=""/>
+      <reportSection name="流式细胞" value="10" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="细胞化学" value="3" fillElements="ReportItemElement" fillTag=""/>
+      <reportSection name="分子生物" value="45" fillElements="ReportItemElement,ReportGraphElement" fillTag=""/>
+    </reportSections>
+  </lis-param>
+  <log4net>
+    <logger name="LisReport">
+      <appender-ref ref="LisReportAppender" />
+    </logger>
+    <logger name="LisReportHandle">
+      <appender-ref ref="LisReportHandleAppender" />
+    </logger>
+    <logger name="LisReportMongo">
+      <appender-ref ref="LisReportMongoAppender" />
+    </logger>
+    <!--定义输出到文件中-->
+    <appender name="LisReportAppender" type="log4net.Appender.RollingFileAppender">
+      <!--定义文件存放位置-->
+      <param name="File" value="D:\\log\\report\\lis\\"/>
+      <param name="AppendToFile" value="true"/>
+      <param name="maxSizeRollBackups" value="10"/>
+      <param name="maximumFileSize" value="10MB"/>
+      <param name="staticLogFileName" value="false"/>
+      <param name="DatePattern" value="yyyy-MM-dd&quot;.log&quot;"/>
+      <param name="RollingStyle" value="Composite" />
+      <param name="staticLogFileName" value="false"/>
+      <layout type="log4net.Layout.PatternLayout">
+        <!--
+        <param name="Header" value="[Header]\r\n"/>
+        <param name="Footer" value="[Footer]\r\n"/>
+        -->
+        <!--每条日志末尾的文字说明-->
+        <!--输出格式-->
+        <!--样例：2008-03-26 13:42:32,111 [10] INFO  Log4NetDemo.MainClass [(null)] - info-->
+        <param name="conversionPattern" value="%date [%thread] %-5level %-20c [%M]  - %message%n"/>
+      </layout>
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <param name="LevelMin" value="INFO" />
+        <param name="LevelMax" value="ERROR" />
+      </filter>
+    </appender>
+    <appender name="LisReportHandleAppender" type="log4net.Appender.RollingFileAppender">
+      <!--定义文件存放位置-->
+      <param name="File" value="D:\\log\\report\\lis\\handle\\"/>
+      <param name="AppendToFile" value="true"/>
+      <param name="maxSizeRollBackups" value="10"/>
+      <param name="maximumFileSize" value="10MB"/>
+      <param name="staticLogFileName" value="false"/>
+      <param name="DatePattern" value="yyyy-MM-dd&quot;.log&quot;"/>
+      <param name="RollingStyle" value="Composite" />
+      <param name="staticLogFileName" value="false"/>
+      <layout type="log4net.Layout.PatternLayout">
+        <!--
+        <param name="Header" value="[Header]\r\n"/>
+        <param name="Footer" value="[Footer]\r\n"/>
+        -->
+        <!--每条日志末尾的文字说明-->
+        <!--输出格式-->
+        <!--样例：2008-03-26 13:42:32,111 [10] INFO  Log4NetDemo.MainClass [(null)] - info-->
+        <param name="conversionPattern" value="%date [%thread] %-5level %-20c [%M]  - %message%n"/>
+      </layout>
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <param name="LevelMin" value="INFO" />
+        <param name="LevelMax" value="ERROR" />
+      </filter>
+    </appender>
+    <appender name="LisReportMongoAppender" type="log4net.Appender.RollingFileAppender">
+      <!--定义文件存放位置-->
+      <param name="File" value="D:\\log\\report\\lis\\mongo\\"/>
+      <param name="AppendToFile" value="true"/>
+      <param name="maxSizeRollBackups" value="10"/>
+      <param name="maximumFileSize" value="10MB"/>
+      <param name="staticLogFileName" value="false"/>
+      <param name="DatePattern" value="yyyy-MM-dd&quot;.log&quot;"/>
+      <param name="RollingStyle" value="Composite" />
+      <param name="staticLogFileName" value="false"/>
+      <layout type="log4net.Layout.PatternLayout">
+        <!--
+        <param name="Header" value="[Header]\r\n"/>
+        <param name="Footer" value="[Footer]\r\n"/>
+        -->
+        <!--每条日志末尾的文字说明-->
+        <!--输出格式-->
+        <!--样例：2008-03-26 13:42:32,111 [10] INFO  Log4NetDemo.MainClass [(null)] - info-->
+        <param name="conversionPattern" value="%date [%thread] %-5level %-20c [%M]  - %message%n"/>
+      </layout>
+      <filter type="log4net.Filter.LevelRangeFilter">
+        <param name="LevelMin" value="INFO" />
+        <param name="LevelMax" value="ERROR" />
+      </filter>
+    </appender>
+  </log4net>
+</lisConfig>

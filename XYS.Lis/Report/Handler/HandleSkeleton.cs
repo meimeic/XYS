@@ -7,11 +7,11 @@ using log4net;
 
 using XYS.Report;
 using XYS.Common;
-using XYS.Lis.Report.Model;
+using XYS.Lis.Report;
 using XYS.Lis.Report.Persistent;
 namespace XYS.Lis.Report.Handler
 {
-    public abstract class ReportHandleSkeleton
+    public abstract class HandleSkeleton : IHandle
     {
         #region 静态字段
         protected static ILog LOG = LogManager.GetLogger("LisReportHandle");
@@ -22,7 +22,7 @@ namespace XYS.Lis.Report.Handler
         #endregion
 
         #region 构造函数
-        protected ReportHandleSkeleton()
+        protected HandleSkeleton()
         {
             this.m_reportDAL = new ReportDAL();
         }
@@ -35,7 +35,7 @@ namespace XYS.Lis.Report.Handler
         }
         #endregion
 
-        #region
+        #region 公共方法处理报告元素
         public bool InitElement(IFillElement element, ReportPK RK)
         {
             bool result = false;
@@ -44,7 +44,7 @@ namespace XYS.Lis.Report.Handler
                 result = FillElement(element, RK);
                 if (result)
                 {
-                    result = HandleElement(element);
+                    result = HandleElement(element, RK);
                 }
             }
             return result;
@@ -58,15 +58,15 @@ namespace XYS.Lis.Report.Handler
                 result = FillElement(elements, RK, type);
                 if (result)
                 {
-                    result = HandleElement(elements);
+                    result = HandleElement(elements, RK);
                 }
             }
             return result;
         }
         #endregion
 
-        #region
-        protected abstract bool HandleElement(IFillElement element,ReportPK RK);
+        #region 受保护的方法 内部处理
+        protected abstract bool HandleElement(IFillElement element, ReportPK RK);
         protected abstract bool HandleElement(List<IFillElement> elements, ReportPK RK);
         #endregion
 

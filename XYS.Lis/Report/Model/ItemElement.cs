@@ -5,7 +5,7 @@ using XYS.Common;
 
 namespace XYS.Lis.Report.Model
 {
-    public class ReportItemElement : IFillElement, IComparable<ReportItemElement>
+    public class ItemElement : IFillElement, IComparable<ItemElement>
     {
         #region 私有字段
         private string m_reportID;
@@ -22,7 +22,7 @@ namespace XYS.Lis.Report.Model
         #endregion
 
         #region 公共构造方法
-        public ReportItemElement()
+        public ItemElement()
         {
         }
         #endregion
@@ -106,7 +106,7 @@ namespace XYS.Lis.Report.Model
         #endregion
 
         #region 实现比较方法
-        public int CompareTo(ReportItemElement element)
+        public int CompareTo(ItemElement element)
         {
             if (element == null)
             {

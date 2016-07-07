@@ -7,16 +7,16 @@ using XYS.Report;
 using XYS.Lis.Report.Model;
 namespace XYS.Lis.Report.Handler
 {
-    public class ReportInfoHandle : ReportHandleSkeleton
+    public class InfoHandle : HandleSkeleton
     {
-        public ReportInfoHandle()
+        public InfoHandle()
             : base()
         {
         }
         protected override bool HandleElement(IFillElement element, ReportPK RK)
         {
             bool result = false;
-            ReportInfoElement info = element as ReportInfoElement;
+            InfoElement info = element as InfoElement;
             if (info != null)
             {
                 info.ReportID = RK.ID;

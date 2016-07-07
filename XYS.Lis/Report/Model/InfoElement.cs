@@ -6,7 +6,7 @@ using XYS.Common;
 
 namespace XYS.Lis.Report.Model
 {
-    public class ReportInfoElement : IPatientElement, IFillElement
+    public class InfoElement : IPatientElement, IFillElement
     {
         #region 私有字段
         //
@@ -53,7 +53,7 @@ namespace XYS.Lis.Report.Model
         #endregion
 
         #region 公共构造函数
-        public ReportInfoElement()
+        public InfoElement()
         { }
         #endregion
 
