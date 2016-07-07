@@ -3,7 +3,7 @@ namespace XYS.Report
 {
     public interface IReportElement
     {
-        IReportKey PK { get; }
+        IReportKey RK { get; }
         HandleResult HandleResult { get; }
     }
 }

@@ -174,6 +174,7 @@ namespace XYS.Report.Lis
             this.OnInitSuccess(report);
             LOG.Info("退出处理报告成功模块");
         }
+        
         protected void NewError(ReportReportElement report)
         {
             //内部处理
@@ -191,6 +192,7 @@ namespace XYS.Report.Lis
             this.OnNewSuccess(report);
             LOG.Info("退出报告保存成功模块");
         }
+        
         protected void ChangeError(ReportReportElement report)
         {
             //内部处理

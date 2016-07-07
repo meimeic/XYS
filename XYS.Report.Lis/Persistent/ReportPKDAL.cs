@@ -22,7 +22,7 @@ namespace XYS.Report.Lis.Persistent
         {
             string sql = GetSQLString(require);
             DataTable dt = GetDataTable(sql);
-            if (dt!=null&&dt.Rows.Count > 0)
+            if (dt != null && dt.Rows.Count > 0)
             {
                 SetReportKey(dt.Rows[0], PK);
                 PK.Configured = true;

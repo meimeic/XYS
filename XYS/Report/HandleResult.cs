@@ -49,7 +49,7 @@ namespace XYS.Report
         }
         #endregion
 
-        #region 
+        #region
         public void Clear()
         {
             this.m_resultCode = 0;

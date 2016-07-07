@@ -5,16 +5,6 @@ namespace XYS.Report
 {
     public class Require
     {
-        private readonly static int TOP = 10000;
-        private readonly static int m_defaultInterval = 30;
-
-        private int m_max;// 最大记录数
-        private int m_interval;  //时间间隔
-
-        private bool m_dateLimit; //是否启用时间限制
-        private DateTime m_startDateTime; //起始日期
-        private DateTime m_endDateTime; // 终止日期
-
         //private string m_orderByField;
         private Dictionary<string, object> m_likeDictionary;
         private Dictionary<string, object> m_equalDictionary;

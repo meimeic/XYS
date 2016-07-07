@@ -54,11 +54,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DefaultReporter.cs" />
     <Compile Include="Handler\ReportCustomHandle.cs" />
     <Compile Include="Handler\ReportFillHandle.cs" />
     <Compile Include="Handler\ReportGraphHandle.cs" />
-    <Compile Include="Handler\ReportHandleService.cs" />
+    <Compile Include="ReportHandleService.cs" />
     <Compile Include="Handler\ReportHandleSkeleton.cs" />
     <Compile Include="Handler\ReportInfoHandle.cs" />
     <Compile Include="Handler\ReportItemHandle.cs" />
@@ -67,7 +66,6 @@
     <Compile Include="Model\ReportInfoElement.cs" />
     <Compile Include="Persistent\Mongo\LisMongo.cs" />
     <Compile Include="Persistent\ReportDAL.cs" />
-    <Compile Include="Reporter.cs" />
     <Compile Include="ReportPK.cs" />
     <Compile Include="Model\ReportCustomElement.cs" />
     <Compile Include="Model\ReportGraphElement.cs" />

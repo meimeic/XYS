@@ -10,7 +10,6 @@ namespace XYS.Report.WS
             get { return LisService.ReportService; }
         }
 
-
         protected void Application_Start(object sender, EventArgs e)
         {
 

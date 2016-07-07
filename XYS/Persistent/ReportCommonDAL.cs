@@ -51,7 +51,7 @@ namespace XYS.Persistent
         protected abstract DataTable GetDataTable(string sql);
         #endregion
 
-        #region
+        #region 受保护的方法
         //填充对象属性
         protected void FillData(IFillElement element, DataRow dr, DataColumnCollection columns)
         {

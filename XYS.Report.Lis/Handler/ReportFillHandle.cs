@@ -107,7 +107,7 @@ namespace XYS.Report.Lis.Handler
                     }
                     catch (Exception ex)
                     {
-                        this.SetHandlerResult(report.HandleResult, -21,"", this.GetType(), ex);
+                        this.SetHandlerResult(report.HandleResult, -21, "", this.GetType(), ex);
                         return;
                     }
                 }
@@ -123,7 +123,7 @@ namespace XYS.Report.Lis.Handler
                 }
                 catch (Exception ex)
                 {
-                    this.SetHandlerResult(report.HandleResult, -31,"", this.GetType(), ex);
+                    this.SetHandlerResult(report.HandleResult, -31, "", this.GetType(), ex);
                     return;
                 }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
@@ -25,13 +26,13 @@ namespace XYS.Report.WS
 
         [XmlArray("applys")]
         [XmlArrayItem("apply")]
-        public List<Apply> ApplyCollection { get; set; }
+        public List<ApplyItem> ApplyCollection { get; set; }
     }
 
     [XmlRoot("apply")]
-    public class Apply
+    public class ApplyItem
     {
-        public Apply()
+        public ApplyItem()
         { }
         [XmlElement("apply_no")]
         public string ApplyNo { get; set; }

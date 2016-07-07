@@ -18,10 +18,10 @@ namespace XYS.Report.Lis.Model
         private ObjectId m_id;
         private int m_activeFlag;
         private string m_reportID;
-        
+
         private ReportPK m_reportPK;
         private HandleResult m_handleResult;
-        
+
         //报告名
         private string m_reportTitle;
         private DateTime m_createTime;
@@ -52,7 +52,7 @@ namespace XYS.Report.Lis.Model
 
         #region 实现IReportElement接口
         [BsonIgnore]
-        public IReportKey PK
+        public IReportKey RK
         {
             get { return this.m_reportPK; }
         }
@@ -154,25 +154,25 @@ namespace XYS.Report.Lis.Model
             get { return this.m_reportNo; }
             set { this.m_reportNo = value; }
         }
-        [BsonElement("info",Order = 7)]
+        [BsonElement("info", Order = 7)]
         public ReportInfoElement ReportInfo
         {
             get { return this.m_reportInfo; }
             set { this.m_reportInfo = value; }
         }
-        [BsonElement(Order = 9)]
+        [BsonElement("custom", Order = 9)]
         public ReportCustomElement ReportCustom
         {
             get { return this.m_reportCustom; }
             set { this.m_reportCustom = value; }
         }
-        [BsonElement("itemCollection",Order = 8)]
+        [BsonElement("items", Order = 8)]
         public List<ReportItemElement> ReportItemCollection
         {
             get { return this.m_reportItemCollection; }
             set { this.m_reportItemCollection = value; }
         }
-        [BsonElement("imageMap",Order = 10)]
+        [BsonElement("images", Order = 10)]
         [BsonDictionaryOptions(DictionaryRepresentation.Document)]
         public Dictionary<string, string> ReportImageMap
         {

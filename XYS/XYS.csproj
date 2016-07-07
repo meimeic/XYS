@@ -46,11 +46,11 @@
     <Compile Include="Persistent\Utility\DbHelperSQL.cs" />
     <Compile Include="Report\HandleResult.cs" />
     <Compile Include="Report\IFillElement.cs" />
+    <Compile Include="Report\IReportHandle.cs" />
     <Compile Include="Report\IReportKey.cs" />
     <Compile Include="Common\ReportException.cs" />
     <Compile Include="Common\XYSException.cs" />
     <Compile Include="Report\IReportElement.cs" />
-    <Compile Include="Report\ISubElement.cs" />
     <Compile Include="Report\Require.cs" />
     <Compile Include="Util\CustomCollection.cs" />
     <Compile Include="Common\ExportAttribute.cs" />
@@ -58,7 +58,6 @@
     <Compile Include="Common\IConvert.cs" />
     <Compile Include="Common\IOptionHandler.cs" />
     <Compile Include="Common\KeyColumn.cs" />
-    <Compile Include="Common\ReportPK.cs" />
     <Compile Include="Common\SearchRequire.cs" />
     <Compile Include="Common\TableAttribute.cs" />
     <Compile Include="Common\ColumnAttribute.cs" />
