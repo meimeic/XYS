@@ -38,7 +38,6 @@ namespace XYS.Report.WS
             this.m_workerPool = new List<Thread>(WorkerCount);
             this.m_serializer = new XmlSerializer(typeof(LabApplyInfo));
             this.m_ApplyQueue = new BlockingCollection<string>(QueueCapacity);
-
             //
             this.InitWorkPool();
         }
@@ -95,7 +94,6 @@ namespace XYS.Report.WS
                     //获取审核的报告单主键
                     if (item.ApplyStatus == 7)
                     {
-                        //
                         WriteLog("申请单号为" + item.ApplyNo + "的报告加入存储队列");
                         this.ApplyQueue.Add(item.ApplyNo);
                     }
@@ -114,7 +112,6 @@ namespace XYS.Report.WS
         #endregion
 
         #region 停止
-
         #endregion
 
         #region 初始化处理线程池

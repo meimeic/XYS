@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 
 namespace XYS.Report
@@ -6,65 +7,31 @@ namespace XYS.Report
     public class Require
     {
         //private string m_orderByField;
+        private Dictionary<string, object> m_ltDictionary;
+        private Dictionary<string, object> m_gtDictionary;
         private Dictionary<string, object> m_likeDictionary;
         private Dictionary<string, object> m_equalDictionary;
         private Dictionary<string, object> m_notEqualDictionary;
 
         #region
         public Require()
-            : this(TOP)
-        { }
-        public Require(int max)
-            : this(max, m_defaultInterval)
         {
-        }
-        public Require(int max, int interval)
-        {
-            this.m_max = max;
-            this.m_dateLimit = false;
-            this.m_interval = interval;
-            this.m_startDateTime = System.DateTime.Now.AddDays(0 - this.m_interval);
-            this.m_endDateTime = System.DateTime.Now;
+            this.m_ltDictionary = new Dictionary<string, object>(2);
+            this.m_gtDictionary = new Dictionary<string, object>(2);
             this.m_equalDictionary = new Dictionary<string, object>(4);
             this.m_notEqualDictionary = new Dictionary<string, object>(2);
             this.m_likeDictionary = new Dictionary<string, object>(1);
         }
         #endregion
 
-        public int MaxRecord
+        #region
+        public Dictionary<string, object> LTFields
         {
-            get { return this.m_max; }
-            set
-            {
-                if (value > TOP)
-                {
-                    this.m_max = TOP;
-                }
-                else
-                {
-                    this.m_max = value;
-                }
-            }
+            get { return this.m_ltDictionary; }
         }
-        public int Interval
+        public Dictionary<string, object> GTFields
         {
-            get { return this.m_interval; }
-            set { this.m_interval = value; }
-        }
-        public bool DateLimit
-        {
-            get { return this.m_dateLimit; }
-            set { this.m_dateLimit = value; }
-        }
-        public DateTime StartDateTime
-        {
-            get { return this.m_startDateTime; }
-            set { this.m_startDateTime = value; }
-        }
-        public DateTime EndDateTime
-        {
-            get { return this.m_endDateTime; }
-            set { this.m_endDateTime = value; }
+            get { return this.m_gtDictionary; }
         }
         public Dictionary<string, object> EqualFields
         {
@@ -78,5 +45,77 @@ namespace XYS.Report
         {
             get { return this.m_likeDictionary; }
         }
+        #endregion
+
+        #region
+        private bool IsExist(Dictionary<string, object> dic)
+        {
+            if (dic != null && dic.Count > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            if (this.IsExist(this.m_equalDictionary))
+            {
+                sb.Append(this.GetWhere(this.m_equalDictionary, "="));
+            }
+            if (this.IsExist(this.m_notEqualDictionary))
+            {
+                sb.Append(this.GetWhere(this.m_notEqualDictionary, "!="));
+            }
+            if (this.IsExist(this.m_ltDictionary))
+            {
+                sb.Append(this.GetWhere(this.m_ltDictionary, ">"));
+            }
+            if (this.IsExist(this.m_gtDictionary))
+            {
+                sb.Append(this.GetWhere(this.m_gtDictionary, "<"));
+            }
+            if (sb.Length > 5)
+            {
+                sb.Remove(sb.Length - 5, 5);
+            }
+            return sb.ToString();
+        }
+        private string GetWhere(Dictionary<string, object> dic, string fg)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (KeyValuePair<string, object> item in dic)
+            {
+                //int
+                if (item.Value.GetType().FullName == "System.Int32")
+                {
+                    sb.Append(item.Key);
+                    sb.Append(fg);
+                    sb.Append(item.Value);
+                }
+                //datetime
+                else if (item.Value.GetType().FullName == "System.DateTime")
+                {
+                    DateTime dt = (DateTime)item.Value;
+                    sb.Append(item.Key);
+                    sb.Append(fg);
+                    sb.Append("'");
+                    sb.Append(dt.Date.ToString("yyyy-MM-dd"));
+                    sb.Append("'");
+                }
+                //其他类型
+                else
+                {
+                    sb.Append(item.Key);
+                    sb.Append(fg);
+                    sb.Append("'");
+                    sb.Append(item.Value.ToString());
+                    sb.Append("'");
+                }
+                sb.Append(" and ");
+            }
+            return sb.ToString();
+        }
+        #endregion
     }
 }

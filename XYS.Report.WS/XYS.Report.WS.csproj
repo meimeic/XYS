@@ -76,6 +76,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="LabApplyInfo.cs" />
+    <Compile Include="PrintClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LisService.cs" />
     <Compile Include="ReportStatus.asmx.cs">

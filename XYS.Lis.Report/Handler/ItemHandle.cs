@@ -1,0 +1,89 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+
+using XYS.Util;
+using XYS.Report;
+using XYS.Lis.Report.Model;
+namespace XYS.Lis.Report.Handler
+{
+    public class ItemHandle : HandleSkeleton
+    {
+        #region 构造函数
+        public ItemHandle()
+            : base()
+        {
+        }
+        #endregion
+
+        #region 实现父类抽象方法
+        protected override bool HandleElement(IFillElement element, ReportPK RK)
+        {
+            bool result = false;
+            ItemElement item = element as ItemElement;
+            if (item != null)
+            {
+                item.ReportID = RK.ID;
+                result = OperateItem(item);
+            }
+            return result;
+        }
+
+        protected override bool HandleElement(List<IFillElement> elements, ReportPK RK)
+        {
+            if (IsExist(elements))
+            {
+                bool result = false;
+                for (int i = elements.Count - 1; i >= 0; i--)
+                {
+                    result = HandleElement(elements[i], RK);
+                    if (!result)
+                    {
+                        elements.RemoveAt(i);
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+        #endregion
+
+        #region 检验项处理逻辑
+        protected bool OperateItem(ItemElement rie)
+        {
+            if (rie == null)
+            {
+                return false;
+            }
+            //判断检验项是否合法
+            if (IsLegal(rie))
+            {
+                return false;
+            }
+            //合法，检验项处理操作
+            if (rie.ItemNo == 50004360 || rie.ItemNo == 50004370)
+            {
+                if (rie.RefRange != null)
+                {
+                    rie.RefRange = rie.RefRange.Replace(";", SystemInfo.NewLine);
+                }
+            }
+            return true;
+        }
+        //检验项是否合法
+        private bool IsLegal(ItemElement rie)
+        {
+            int secretGrade = rie.SecretGrade;
+            //根据保密等级判断检验项是否合法
+            if (secretGrade > 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
+    }
+}
