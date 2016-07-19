@@ -7,7 +7,7 @@ namespace XYS.Report.WS
     {
         public static LisService ReportService
         {
-            get { return LisService.ReportService; }
+            get { return LisService.RService; }
         }
 
         protected void Application_Start(object sender, EventArgs e)

@@ -21,7 +21,6 @@ namespace XYS.Report.WS
 
         #region 实例字段
         private object logLock;
-        private List<Thread> m_workerPool;
         #endregion
 
         #region 构造函数

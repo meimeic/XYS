@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 有关程序集的常规信息通过下列特性集
 // 控制。更改这些特性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("XYS.Lis.MongoService")]
+[assembly: AssemblyTitle("XYS.Mongo.Service")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("XYS.Lis.MongoService")]
+[assembly: AssemblyProduct("XYS.Mongo.Service")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 如果此项目向 COM 公开，则下列 GUID 用于 typelib 的 ID
-[assembly: Guid("dc2b1e9b-1fa8-4473-aaae-ead63361388e")]
+[assembly: Guid("ea77985d-201e-424d-b360-204c15c0a21a")]
 
 // 程序集的版本信息由下列四个值组成:
 //

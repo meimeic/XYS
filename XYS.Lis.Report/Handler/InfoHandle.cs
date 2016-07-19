@@ -31,7 +31,6 @@ namespace XYS.Lis.Report.Handler
                 {
                     info.CID = info.CID.Trim();
                 }
-
                 result = true;
             }
             return result;
