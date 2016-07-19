@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZhTest", "ZhTest\ZhTest.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Report.WS", "XYS.Report.WS\XYS.Report.WS.csproj", "{AB1D2774-0AED-4EC8-BACD-6EE4F3091FC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.FR.Lis", "XYS.FR.Lis\XYS.FR.Lis.csproj", "{5B310A8F-BE88-4C90-8A2A-4C78032A1116}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.His.WebAPI", "XYS.His.WebAPI\XYS.His.WebAPI.csproj", "{B65087A0-9920-497C-9B98-66ABC44C7374}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Lis.MongoService", "XYS.Lis.MongoService\XYS.Lis.MongoService.csproj", "{F57574BA-4347-4FB6-AC05-9F19F73F9183}"
@@ -20,8 +18,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Lis.Report", "XYS.Lis.Report\XYS.Lis.Report.csproj", "{3C572359-5098-452E-B7FA-BB068CC9F0D9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LisTest", "LisTest\LisTest.csproj", "{08C45C48-DFC2-4C6A-A48D-F857CEC93BFD}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.FR.Service", "XYS.FR.Service\XYS.FR.Service.csproj", "{F1A57A97-3553-4267-9820-779D3CBDB807}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,10 +41,6 @@ Global
 		{AB1D2774-0AED-4EC8-BACD-6EE4F3091FC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB1D2774-0AED-4EC8-BACD-6EE4F3091FC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB1D2774-0AED-4EC8-BACD-6EE4F3091FC1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5B310A8F-BE88-4C90-8A2A-4C78032A1116}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5B310A8F-BE88-4C90-8A2A-4C78032A1116}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5B310A8F-BE88-4C90-8A2A-4C78032A1116}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5B310A8F-BE88-4C90-8A2A-4C78032A1116}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B65087A0-9920-497C-9B98-66ABC44C7374}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B65087A0-9920-497C-9B98-66ABC44C7374}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B65087A0-9920-497C-9B98-66ABC44C7374}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -65,10 +57,6 @@ Global
 		{08C45C48-DFC2-4C6A-A48D-F857CEC93BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08C45C48-DFC2-4C6A-A48D-F857CEC93BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08C45C48-DFC2-4C6A-A48D-F857CEC93BFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1A57A97-3553-4267-9820-779D3CBDB807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1A57A97-3553-4267-9820-779D3CBDB807}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1A57A97-3553-4267-9820-779D3CBDB807}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1A57A97-3553-4267-9820-779D3CBDB807}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
