@@ -7,6 +7,7 @@ namespace XYS.Lis.Report.Model
     public class GraphElement : IFillElement
     {
         #region 私有字段
+        private string m_reportID;
         private string m_graphName;
         private byte[] m_graphImage;
         #endregion
@@ -18,6 +19,12 @@ namespace XYS.Lis.Report.Model
         #endregion
 
         #region 公共属性
+        [Column()]
+        public string ReportID
+        {
+            get { return this.m_reportID; }
+            set { this.m_reportID = value; }
+        }
         [Column()]
         public string GraphName
         {
@@ -32,17 +39,5 @@ namespace XYS.Lis.Report.Model
             set { this.m_graphImage = value; }
         }
         #endregion
-
-        public string ReportID
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
     }
 }

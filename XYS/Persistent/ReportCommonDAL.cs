@@ -9,7 +9,7 @@ namespace XYS.Persistent
 {
     public abstract class ReportCommonDAL
     {
-        #region
+        #region 受保护构造函数
         protected ReportCommonDAL()
         {
         }

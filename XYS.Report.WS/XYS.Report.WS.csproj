@@ -76,13 +76,23 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="LabApplyInfo.cs" />
-    <Compile Include="PrintClient.cs" />
+    <Compile Include="LisFRClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LisService.cs" />
     <Compile Include="ReportStatus.asmx.cs">
       <DependentUpon>ReportStatus.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XYS.Lis.Report\XYS.Lis.Report.csproj">
+      <Project>{3c572359-5098-452e-b7fa-bb068cc9f0d9}</Project>
+      <Name>XYS.Lis.Report</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\XYS\XYS.csproj">
+      <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
+      <Name>XYS</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

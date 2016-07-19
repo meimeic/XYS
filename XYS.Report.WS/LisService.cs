@@ -5,19 +5,18 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
+using XYS.Lis.Report;
 namespace XYS.Report.WS
 {
     public class LisService
     {
         #region 静态只读字段
-        private static readonly int WorkerCount;
-        private static readonly int QueueCapacity;
         private static readonly LisService ServiceInstance;
         #endregion
 
         #region 实例只读字段
         private readonly XmlSerializer m_serializer;
-        private readonly BlockingCollection<string> m_ApplyQueue;
+        private readonly ReportService LabService;
         #endregion
 
         #region 实例字段
@@ -28,23 +27,18 @@ namespace XYS.Report.WS
         #region 构造函数
         static LisService()
         {
-            WorkerCount = 4;
-            QueueCapacity = 1000;
             ServiceInstance = new LisService();
         }
         private LisService()
         {
             this.logLock = new object();
-            this.m_workerPool = new List<Thread>(WorkerCount);
             this.m_serializer = new XmlSerializer(typeof(LabApplyInfo));
-            this.m_ApplyQueue = new BlockingCollection<string>(QueueCapacity);
-            //
-            this.InitWorkPool();
+            this.LabService = ReportService.LabService;
         }
         #endregion
 
         #region 静态属性
-        public static LisService ReportService
+        public static LisService RService
         {
             get { return ServiceInstance; }
         }
@@ -54,10 +48,6 @@ namespace XYS.Report.WS
         protected XmlSerializer Serializer
         {
             get { return this.m_serializer; }
-        }
-        protected BlockingCollection<string> ApplyQueue
-        {
-            get { return this.m_ApplyQueue; }
         }
         #endregion
 
@@ -95,35 +85,14 @@ namespace XYS.Report.WS
                     if (item.ApplyStatus == 7)
                     {
                         WriteLog("申请单号为" + item.ApplyNo + "的报告加入存储队列");
-                        this.ApplyQueue.Add(item.ApplyNo);
+
                     }
                 }
             }
         }
-        #endregion
-
-        #region 消费者方法
-        public void HandleReport()
+        private void HandleReport(string SerialNo)
         {
-            foreach (string appNo in this.ApplyQueue.GetConsumingEnumerable())
-            {
-            }
-        }
-        #endregion
 
-        #region 停止
-        #endregion
-
-        #region 初始化处理线程池
-        private void InitWorkPool()
-        {
-            Thread th = null;
-            for (int i = 0; i < WorkerCount; i++)
-            {
-                th = new Thread(HandleReport);
-                this.m_workerPool.Add(th);
-                th.Start();
-            }
         }
         #endregion
 

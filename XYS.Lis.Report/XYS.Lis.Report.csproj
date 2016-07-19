@@ -57,6 +57,7 @@
     <Compile Include="Model\InfoElement.cs" />
     <Compile Include="Model\ItemElement.cs" />
     <Compile Include="Model\LabReport.cs" />
+    <Compile Include="Model\CustomElement.cs" />
     <Compile Include="Persistent\ReportDAL.cs" />
     <Compile Include="Persistent\ReportPKDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

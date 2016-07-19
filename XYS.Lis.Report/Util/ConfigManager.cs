@@ -24,7 +24,7 @@ namespace XYS.Lis.Report.Util
         }
         #endregion
 
-        #region
+        #region 
         public static void AddSection(LisSection section)
         {
             SECTION_MAP.Add(section);
@@ -35,7 +35,7 @@ namespace XYS.Lis.Report.Util
         }
         #endregion
 
-        #region
+        #region 初始化
         public static void InitSection2FillElementTable(Hashtable table)
         {
             table.Clear();
@@ -79,6 +79,7 @@ namespace XYS.Lis.Report.Util
                 {
                     try
                     {
+                        //handle = (IHandle)fill.HandleType.Assembly.CreateInstance(fill.HandleType.FullName);
                         handle = (IHandle)Activator.CreateInstance(fill.HandleType);
                         if (handle != null)
                         {
@@ -94,7 +95,7 @@ namespace XYS.Lis.Report.Util
         }
         #endregion
 
-        #region
+        #region 读取配置
         private static void InternalConfigure()
         {
             FileInfo fi = null;

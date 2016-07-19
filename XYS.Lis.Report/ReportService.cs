@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Threading.Tasks;
+using System.Threading;
 
 using log4net;
 
@@ -20,11 +20,12 @@ namespace XYS.Lis.Report
         #region 静态变量
         private static ILog LOG;
         private static int WorkerCount;
-        private static readonly Hashtable Type2HandleMap;
-        private static readonly Hashtable Section2FillTypeMap;
         private static readonly ReportService ServiceInstance;
 
+        private Thread[] m_workerPool;
         private readonly ReportPKDAL PKDAL;
+        private readonly Hashtable Type2HandleMap;
+        private readonly Hashtable Section2FillTypeMap;
         private readonly BlockingCollection<LabReport> InitRequestQueue;
         #endregion
 
@@ -36,16 +37,17 @@ namespace XYS.Lis.Report
         #region 构造函数
         static ReportService()
         {
-            WorkerCount = 10;
-            Type2HandleMap = new Hashtable(5);
-            Section2FillTypeMap = new Hashtable(20);
+            WorkerCount = 2;
             ServiceInstance = new ReportService();
             LOG = LogManager.GetLogger("LisReportHandle");
         }
         private ReportService()
         {
             this.PKDAL = new ReportPKDAL();
+            this.Type2HandleMap = new Hashtable(5);
+            this.Section2FillTypeMap = new Hashtable(20);
             this.InitRequestQueue = new BlockingCollection<LabReport>(1000);
+
             this.Init();
         }
         #endregion
@@ -82,7 +84,7 @@ namespace XYS.Lis.Report
         #endregion
 
         #region 生产者方法
-        public void InitReport(LabReport report)
+        public void HandleReport(LabReport report)
         {
             LOG.Info("将处理报告请求加入到处理请求队列");
             this.InitRequestQueue.Add(report);
@@ -110,14 +112,14 @@ namespace XYS.Lis.Report
             return Type2HandleMap[type] as IHandle;
         }
 
-        private static void InitFillTable()
+        private  void InitFillTable()
         {
             lock (Section2FillTypeMap)
             {
                 ConfigManager.InitSection2FillElementTable(Section2FillTypeMap);
             }
         }
-        private static void InitHandleTable()
+        private  void InitHandleTable()
         {
             lock (Type2HandleMap)
             {
@@ -148,6 +150,21 @@ namespace XYS.Lis.Report
         #region 私有方法
         private void Init()
         {
+            this.InitFillTable();
+            this.InitHandleTable();
+
+            this.InitWorkerPool();
+        }
+        private void InitWorkerPool()
+        {
+            Thread th = null;
+            this.m_workerPool = new Thread[WorkerCount];
+            for (int i = 0; i < WorkerCount; i++)
+            {
+                th = new Thread(InitRequestConsumer);
+                this.m_workerPool[i] = th;
+                th.Start();
+            }
         }
         private void InnerHandle(LabReport report)
         {

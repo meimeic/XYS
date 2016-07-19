@@ -36,13 +36,13 @@
     </reportSections>
   </lis-param>
   <log4net>
-    <logger name="LisReport">
-      <appender-ref ref="LisReportAppender" />
-    </logger>
     <logger name="LisReportHandle">
       <appender-ref ref="LisReportHandleAppender" />
     </logger>
-
+    <logger name="LisReportPersistent">
+      <appender-ref ref="LisReportPersistentAppender" />
+    </logger>
+    
     <!--定义输出到文件中-->
     <appender name="LisReportHandleAppender" type="log4net.Appender.RollingFileAppender">
       <!--定义文件存放位置-->
@@ -69,9 +69,9 @@
         <param name="LevelMax" value="ERROR" />
       </filter>
     </appender>
-    <appender name="LisReportAppender" type="log4net.Appender.RollingFileAppender">
+    <appender name="LisReportPersistentAppender" type="log4net.Appender.RollingFileAppender">
       <!--定义文件存放位置-->
-      <param name="File" value="D:\\log\\report\\lis\\"/>
+      <param name="File" value="D:\\log\\report\\lis\\persistent\\"/>
       <param name="AppendToFile" value="true"/>
       <param name="maxSizeRollBackups" value="10"/>
       <param name="maximumFileSize" value="10MB"/>

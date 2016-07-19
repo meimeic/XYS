@@ -7,12 +7,12 @@
     <ProductVersion>
     </ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{F57574BA-4347-4FB6-AC05-9F19F73F9183}</ProjectGuid>
+    <ProjectGuid>{F1A57A97-3553-4267-9820-779D3CBDB807}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>XYS.Lis.MongoService</RootNamespace>
-    <AssemblyName>XYS.Lis.MongoService</AssemblyName>
+    <RootNamespace>XYS.FR.Service</RootNamespace>
+    <AssemblyName>XYS.FR.Service</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
@@ -39,13 +39,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Web.Debug.config">
@@ -56,25 +65,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="LisReport.asmx" />
+    <Content Include="LisFRService.asmx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LisReport.asmx.cs">
-      <DependentUpon>LisReport.asmx</DependentUpon>
+    <Compile Include="LisFRService.asmx.cs">
+      <DependentUpon>LisFRService.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Model\ReportCustomElement.cs" />
-    <Compile Include="Model\ReportGraphElement.cs" />
-    <Compile Include="Model\ReportInfoElement.cs" />
-    <Compile Include="Model\ReportItemElement.cs" />
-    <Compile Include="Model\ReportReportElement.cs" />
-    <Compile Include="Persistent\AbstractReportProjection.cs" />
-    <Compile Include="Persistent\LisMongo.cs" />
-    <Compile Include="Persistent\ReportInfoProjection.cs" />
-    <Compile Include="Persistent\ReportStatusProjection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ReportMongoService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="PrintModel\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -89,9 +91,9 @@
         <WebProjectProperties>
           <UseIIS>True</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>14780</DevelopmentServerPort>
+          <DevelopmentServerPort>4054</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:14780/</IISUrl>
+          <IISUrl>http://localhost:4054/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
