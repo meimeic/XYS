@@ -1,23 +1,23 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 
 using XYS.Util;
 using XYS.Report;
 using XYS.Lis.Report.Model;
+using XYS.Lis.Report.Persistent;
 namespace XYS.Lis.Report.Handler
 {
     public class ItemHandle : HandleSkeleton
     {
         #region 构造函数
-        public ItemHandle()
-            : base()
+        public ItemHandle(LabReportDAL dal)
+            : base(dal)
         {
         }
         #endregion
 
         #region 实现父类抽象方法
-        protected override bool HandleElement(IFillElement element, ReportPK RK)
+        protected override bool InnerHandle(IFillElement element, IReportKey RK)
         {
             bool result = false;
             ItemElement item = element as ItemElement;
@@ -28,8 +28,7 @@ namespace XYS.Lis.Report.Handler
             }
             return result;
         }
-
-        protected override bool HandleElement(List<IFillElement> elements, ReportPK RK)
+        protected override bool InnerHandle(List<IFillElement> elements, IReportKey RK)
         {
             if (IsExist(elements))
             {
@@ -42,9 +41,8 @@ namespace XYS.Lis.Report.Handler
                         elements.RemoveAt(i);
                     }
                 }
-                return true;
             }
-            return false;
+            return true;
         }
         #endregion
 

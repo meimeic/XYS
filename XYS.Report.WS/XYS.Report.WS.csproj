@@ -48,6 +48,8 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
@@ -55,10 +57,17 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <EmbeddedResource Include="XYS.Report.Lis.xml">
+    <EmbeddedResource Include="XYS.Lis.Report.xml">
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
+    <None Include="Service References\FRService\LisPDF.wsdl" />
+    <Content Include="Service References\FRService\XYS.Report.WS.FRService.HelloWorldResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\FRService\XYS.Report.WS.FRService.PrintPDFResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -69,6 +78,13 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="ReportStatus.asmx" />
+    <None Include="Service References\FRService\LisPDF.disco" />
+    <None Include="Service References\FRService\configuration91.svcinfo" />
+    <None Include="Service References\FRService\configuration.svcinfo" />
+    <None Include="Service References\FRService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -83,6 +99,11 @@
       <DependentUpon>ReportStatus.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Service References\FRService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XYS.Lis.Report\XYS.Lis.Report.csproj">
@@ -93,6 +114,12 @@
       <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
       <Name>XYS</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\FRService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

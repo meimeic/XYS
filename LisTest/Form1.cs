@@ -15,26 +15,26 @@ namespace LisTest
 {
     public partial class Form1 : Form
     {
-        private readonly ReportService service;
+        private readonly LabService service;
         public Form1()
         {
             InitializeComponent();
-            this.service = ReportService.LabService;
+            this.service = LabService.LService;
             this.service.HandleCompleteEvent += this.log;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            List<ReportPK> pkList = new List<ReportPK>(10);
+            List<LabPK> pkList = new List<LabPK>(10);
             service.InitReportPK("where serialno='1602224471'", pkList);
-            foreach (ReportPK pk in pkList)
+            foreach (LabPK pk in pkList)
             {
-                LabReport report = new LabReport();
+                ReportElement report = new ReportElement();
                 report.ReportPK = pk;
                 service.HandleReport(report);
             }
         }
-        private void log(LabReport report)
+        private void log(ReportElement report)
         {
             List<IFillElement> infoList = report.ItemTable["InfoElement"] as List<IFillElement>;
             if (infoList != null)

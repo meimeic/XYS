@@ -5,6 +5,5 @@ namespace XYS.Report.WS
 {
     public class LisFRClient
     {
-
     }
 }

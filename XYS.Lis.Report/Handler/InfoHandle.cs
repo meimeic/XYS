@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XYS.Lis;
 using XYS.Util;
 using XYS.Report;
 using XYS.Lis.Report.Model;
+using XYS.Lis.Report.Persistent;
 namespace XYS.Lis.Report.Handler
 {
     public class InfoHandle : HandleSkeleton
     {
-        public InfoHandle()
-            : base()
+        public InfoHandle(LabReportDAL dal)
+            : base(dal)
         {
         }
-        protected override bool HandleElement(IFillElement element, ReportPK RK)
+
+        protected override bool InnerHandle(IFillElement element, IReportKey RK)
         {
             bool result = false;
             InfoElement info = element as InfoElement;
@@ -35,8 +36,7 @@ namespace XYS.Lis.Report.Handler
             }
             return result;
         }
-
-        protected override bool HandleElement(List<IFillElement> elements, ReportPK RK)
+        protected override bool InnerHandle(List<IFillElement> elements, IReportKey RK)
         {
             if (IsExist(elements))
             {
@@ -49,9 +49,8 @@ namespace XYS.Lis.Report.Handler
                         elements.RemoveAt(i);
                     }
                 }
-                return true;
             }
-            return false;
+            return true;
         }
     }
 }

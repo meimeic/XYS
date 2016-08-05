@@ -19,7 +19,6 @@ namespace XYS.Lis.Report.Model
         #endregion
 
         #region 公共属性
-        [Column()]
         public string ReportID
         {
             get { return this.m_reportID; }
@@ -31,7 +30,6 @@ namespace XYS.Lis.Report.Model
             get { return this.m_graphName; }
             set { this.m_graphName = value; }
         }
-
         [Column()]
         public byte[] GraphImage
         {

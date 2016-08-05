@@ -15,8 +15,8 @@ namespace XYS.Report.WS
         #endregion
 
         #region 实例只读字段
-        private readonly XmlSerializer m_serializer;
-        private readonly ReportService LabService;
+        private readonly XmlSerializer Serializer;
+        private readonly LabService LabService;
         #endregion
 
         #region 实例字段
@@ -31,8 +31,8 @@ namespace XYS.Report.WS
         private LisService()
         {
             this.logLock = new object();
-            this.m_serializer = new XmlSerializer(typeof(LabApplyInfo));
-            this.LabService = ReportService.LabService;
+            this.Serializer = new XmlSerializer(typeof(LabApplyInfo));
+            this.LabService = LabService.LService;
         }
         #endregion
 
@@ -40,13 +40,6 @@ namespace XYS.Report.WS
         public static LisService RService
         {
             get { return ServiceInstance; }
-        }
-        #endregion
-
-        #region 实例属性
-        protected XmlSerializer Serializer
-        {
-            get { return this.m_serializer; }
         }
         #endregion
 
@@ -84,14 +77,15 @@ namespace XYS.Report.WS
                     if (item.ApplyStatus == 7)
                     {
                         WriteLog("申请单号为" + item.ApplyNo + "的报告加入存储队列");
-
+                        this.HandleReport(item.ApplyNo);
                     }
                 }
             }
         }
         private void HandleReport(string SerialNo)
         {
-
+            string where = "serialno='" + SerialNo + "'";
+            this.LabService.InitReport(where);
         }
         #endregion
 
