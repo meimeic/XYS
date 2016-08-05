@@ -46,6 +46,7 @@
     <Compile Include="Persistent\Utility\DbHelperSQL.cs" />
     <Compile Include="Report\HandleResult.cs" />
     <Compile Include="Report\HandleSkeleton.cs" />
+    <Compile Include="Report\IExportElement.cs" />
     <Compile Include="Report\IFillElement.cs" />
     <Compile Include="Report\IHandle.cs" />
     <Compile Include="Report\IReportKey.cs" />

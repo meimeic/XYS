@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace XYS.FR.Service.Config
 {
-    public class LisItemSection : ConfigurationElement
+    public class LabModelSection : ConfigurationElement
     {
         [ConfigurationProperty("name", IsRequired = true)]
         public string Name
@@ -34,23 +34,13 @@ namespace XYS.FR.Service.Config
             }
             private set { }
         }
-
-        [ConfigurationProperty("modelNo", IsRequired = false)]
-        public int? ModelNo
+        
+        [ConfigurationProperty("modelPath", IsRequired = true)]
+        public string ModelPath
         {
             get
             {
-                return (int?)this["modelNo"];
-            }
-            private set { }
-        }
-
-        [ConfigurationProperty("orderNo", IsRequired = false)]
-        public int? OrderNo
-        {
-            get
-            {
-                return (int?)this["orderNo"];
+                return this["modelPath"] as string;
             }
             private set { }
         }

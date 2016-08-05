@@ -3,7 +3,7 @@ using System.Configuration;
 
 namespace XYS.FR.Service.Config
 {
-    public class LisGroupSection : ConfigurationElement
+    public class LabGroupSection : ConfigurationElement
     {
         [ConfigurationProperty("name", IsRequired = true)]
         public string Name

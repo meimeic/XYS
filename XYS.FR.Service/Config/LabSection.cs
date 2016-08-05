@@ -3,34 +3,34 @@ using System.Configuration;
 
 namespace XYS.FR.Service.Config
 {
-    public class LisSection : ConfigurationSection
+    public class LabSection : ConfigurationSection
     {
         [ConfigurationProperty("groups", IsDefaultCollection = true)]
-        public LisGroupCollection GroupCollection
+        public LabGroupCollection GroupCollection
         {
             get
             {
-                return (LisGroupCollection)base["groups"];
+                return (LabGroupCollection)base["groups"];
             }
             private set { }
         }
 
         [ConfigurationProperty("items", IsDefaultCollection = true)]
-        public LisItemCollection ItemCollection
+        public LabItemCollection ItemCollection
         {
             get
             {
-                return (LisItemCollection)base["items"];
+                return (LabItemCollection)base["items"];
             }
             private set { }
         }
 
         [ConfigurationProperty("models", IsDefaultCollection = true)]
-        public LisModelCollection ItemCollection
+        public LabModelCollection ModelCollection
         {
             get
             {
-                return (LisModelCollection)base["models"];
+                return (LabModelCollection)base["models"];
             }
             private set { }
         }

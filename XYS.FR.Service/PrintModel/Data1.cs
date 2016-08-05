@@ -1,10 +1,10 @@
 ﻿using System;
 
+using XYS.Report;
 using XYS.Common;
 namespace XYS.FR.Service.PrintModel
 {
-    [Export]
-    public class Data1
+    public class Data1:IExportElement
     {
         private string m_c1;
         private string m_c2;

@@ -59,14 +59,14 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\LisConfigManager.cs" />
-    <Compile Include="Config\LisModelCollection.cs" />
-    <Compile Include="Config\LisModelSection.cs" />
-    <Compile Include="Config\LisSection.cs" />
-    <Compile Include="Config\LisGroupCollection.cs" />
-    <Compile Include="Config\LisGroupSection.cs" />
-    <Compile Include="Config\LisItemCollection.cs" />
-    <Compile Include="Config\LisItemSection.cs" />
+    <Compile Include="Config\LabConfigManager.cs" />
+    <Compile Include="Config\LabModelCollection.cs" />
+    <Compile Include="Config\LabModelSection.cs" />
+    <Compile Include="Config\LabSection.cs" />
+    <Compile Include="Config\LabGroupCollection.cs" />
+    <Compile Include="Config\LabGroupSection.cs" />
+    <Compile Include="Config\LabItemCollection.cs" />
+    <Compile Include="Config\LabItemSection.cs" />
     <Compile Include="Lab\PDFService.cs" />
     <Compile Include="LisPDF.asmx.cs">
       <DependentUpon>LisPDF.asmx</DependentUpon>
@@ -82,6 +82,7 @@
     <Compile Include="PrintModel\Image.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\DataStruct.cs" />
+    <Compile Include="Util\ExportPDF.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

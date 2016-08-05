@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Collections.Generic;
 
 using XYS.Util;
+using XYS.Report;
 using XYS.Common;
 namespace XYS.FR.Service.Util
 {
@@ -13,6 +14,7 @@ namespace XYS.FR.Service.Util
     {
         #region 字段常量
         private static readonly Type declaringType = typeof(DataStruct);
+        private static readonly string FileName = "reporttables.frd";
 
         private static readonly string ROOT_TAG = "Dictionary";
         private static readonly string TABLE_TAG = "TableDataSource";
@@ -27,72 +29,90 @@ namespace XYS.FR.Service.Util
         private static readonly string DEFAULT_ENABLE_ATTR = "true";
         #endregion
 
-        #region 公共静态方法
-        //根据xml文件生成dataset
-        public static DataSet ConvertFRDFile2DataSet(string frdFile)
+        #region 静态常量
+        private static readonly DataSet FRSet;
+        private static readonly List<Type> TypeList;
+        #endregion
+
+        #region 静态构造函数
+        static DataStruct()
         {
-            DataSet ds = new DataSet();
-            XmlDocument doc = new XmlDocument();
-            doc.Load(frdFile);
-            XmlNode root = doc.SelectSingleNode("Dictionary");
-            //设置table
-            XmlNodeList XmlTables = root.SelectNodes("TableDataSource");
-            DataTable dt;
-            for (int i = 0; i < XmlTables.Count; i++)
-            {
-                XmlNode node = XmlTables[i];
-                dt = ConvertXml2DataTable(node);
-                ds.Tables.Add(dt);
-            }
-            //设置 ralation
-            XmlNodeList XmlRelations = root.SelectNodes("Relation");
-            foreach (XmlNode node in XmlRelations)
-            {
-                ConvertXml2TableRelation(node, ds);
-            }
-            return ds;
+            FRSet = new DataSet();
+            TypeList = new List<Type>(10);
         }
         #endregion
 
-        #region 私有静态方法
-        //设置数据表
-        private static DataTable ConvertXml2DataTable(XmlNode node)
+        #region 公共静态属性
+        public static List<Type> TList
         {
-            string TableName = node.Attributes["Name"].Value;
-            DataTable dt = new DataTable();
-            dt.TableName = TableName;
-            XmlNodeList XmlColumns = node.ChildNodes;
-            string ColumnName;
-            string ColumnType;
-            foreach (XmlNode n in XmlColumns)
-            {
-                ColumnName = n.Attributes["Name"].Value;
-                ColumnType = n.Attributes["DataType"].Value;
-                dt.Columns.Add(ColumnName, Type.GetType(ColumnType));
-            }
-            return dt;
+            get { return TypeList; }
         }
-        //设置数据表关系
-        private static void ConvertXml2TableRelation(XmlNode node, DataSet ds)
+        #endregion
+
+        #region 公共静态方法
+        public static void InitStruct()
         {
-            string relationName = node.Attributes["Name"].Value;
-            string parentTableName = node.Attributes["ParentDataSource"].Value;
-            string childTableName = node.Attributes["ChildDataSource"].Value;
-            string[] parentColumnsName = node.Attributes["ParentColumns"].Value.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-            string[] childColumnsName = node.Attributes["ChildColumns"].Value.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-            ds.Relations.Add(relationName, GetRelationColumns(ds.Tables[parentTableName], parentColumnsName), GetRelationColumns(ds.Tables[childTableName], childColumnsName));
-        }
-        //获取关系列
-        private static DataColumn[] GetRelationColumns(DataTable dt, string[] relationColumnsName)
-        {
-            DataColumn[] relationColumns = new DataColumn[relationColumnsName.Length];
-            int relationColumnIndex = 0;
-            foreach (string columnName in relationColumnsName)
+            string applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
+            string fileFullName = Path.Combine(applicationBaseDirectory, "dataset", FileName);
+            if (!File.Exists(fileFullName))
             {
-                relationColumns[relationColumnIndex] = dt.Columns[columnName];
-                relationColumnIndex++;
+                InitXmlStruct(fileFullName);
             }
-            return relationColumns;
+        }
+        public static DataSet GetSet()
+        {
+            return FRSet.Clone();
+        }
+        #endregion
+
+        #region 创建导出的dataset以及xml模板结构
+        protected static void InitXmlStruct(string fileFullName)
+        {
+            ConsoleInfo.Debug(declaringType, "Start--make the data struct xml file " + fileFullName + " by exportelemnts");
+            XmlDocument doc = new XmlDocument();
+            XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "utf-8", null);
+            doc.AppendChild(dec);
+            XmlNode root = doc.CreateNode(XmlNodeType.Element, ROOT_TAG, null);
+            foreach (Type type in TypeList)
+            {
+                if (IsExport(type))
+                {
+                    ConvertObj2Xml(doc, root, type);
+                }
+            }
+            doc.AppendChild(root);
+            if (SystemInfo.IsFileExist(fileFullName))
+            {
+                if (!SystemInfo.DeleteFile(fileFullName))
+                {
+                    throw new Exception("can not delete the file " + fileFullName);
+                }
+            }
+            try
+            {
+                doc.Save(fileFullName);
+                ConsoleInfo.Debug(declaringType, "End--make the data struct xml file " + fileFullName + " by exportelemnts");
+            }
+            catch (Exception ex)
+            {
+                ConsoleInfo.Error(declaringType, "DataStruct:" + ex.Message);
+                throw ex;
+            }
+        }
+        protected static void InitRamStruct()
+        {
+            DataTable dt = null;
+            ConsoleInfo.Debug(declaringType, "Start--make the RAM dataset " + " by exportelemnts");
+            foreach (Type type in TypeList)
+            {
+                if (IsExport(type))
+                {
+                    dt = new DataTable();
+                    ConvertObj2Table(dt, type);
+                    FRSet.Tables.Add(dt);
+                }
+            }
+            ConsoleInfo.Debug(declaringType, "end--make the RAM dataset " + " by exportelemnts");
         }
         #endregion
 
@@ -178,58 +198,6 @@ namespace XYS.FR.Service.Util
         }
         #endregion
 
-        #region 创建导出的dataset以及xml模板结构
-        public static void InitXmlDataStruct(List<Type> typeList, string fileName)
-        {
-            string fileFullName = SystemInfo.GetFileFullName(GetDataStructFilePath(), fileName);
-            ConsoleInfo.Debug(declaringType, "Start--make the data struct xml file " + fileFullName + " by exportelemnts");
-            XmlDocument doc = new XmlDocument();
-            XmlDeclaration dec = doc.CreateXmlDeclaration("1.0", "utf-8", null);
-            doc.AppendChild(dec);
-            XmlNode root = doc.CreateNode(XmlNodeType.Element, ROOT_TAG, null);
-            foreach (Type type in typeList)
-            {
-                if (IsExport(type))
-                {
-                    ConvertObj2Xml(doc, root, type);
-                }
-            }
-            doc.AppendChild(root);
-            if (SystemInfo.IsFileExist(fileFullName))
-            {
-                if (!SystemInfo.DeleteFile(fileFullName))
-                {
-                    throw new Exception("can not delete the file " + fileFullName);
-                }
-            }
-            try
-            {
-                doc.Save(fileFullName);
-                ConsoleInfo.Debug(declaringType, "End--make the data struct xml file " + fileFullName + " by exportelemnts");
-            }
-            catch (Exception ex)
-            {
-                ConsoleInfo.Error(declaringType, "FRDataStruct:" + ex.Message);
-                throw ex;
-            }
-        }
-        public static void InitRawDataStruct(List<Type> typeList, DataSet ds)
-        {
-            DataTable dt = null;
-            ConsoleInfo.Debug(declaringType, "Start--make the RAM dataset " + " by exportelemnts");
-            foreach (Type type in typeList)
-            {
-                if (IsExport(type))
-                {
-                    dt = new DataTable();
-                    ConvertObj2Table(dt, type);
-                    ds.Tables.Add(dt);
-                }
-            }
-            ConsoleInfo.Debug(declaringType, "end--make the RAM dataset " + " by exportelemnts");
-        }
-        #endregion
-
         #region dataset相关操作
         private static void ConvertObj2Table(DataTable dt, Type elementType)
         {
@@ -256,11 +224,7 @@ namespace XYS.FR.Service.Util
         {
             if (type != null)
             {
-                object[] xAttrs = type.GetCustomAttributes(typeof(ExportAttribute), true);
-                if (xAttrs != null && xAttrs.Length > 0)
-                {
-                    return true;
-                }
+                return type.IsAssignableFrom(typeof(IExportElement));
             }
             return false;
         }
@@ -275,6 +239,48 @@ namespace XYS.FR.Service.Util
                 }
             }
             return false;
+        }
+        #endregion
+
+        #region 私有静态方法
+        //设置数据表
+        private static DataTable ConvertXml2DataTable(XmlNode node)
+        {
+            string TableName = node.Attributes["Name"].Value;
+            DataTable dt = new DataTable();
+            dt.TableName = TableName;
+            XmlNodeList XmlColumns = node.ChildNodes;
+            string ColumnName;
+            string ColumnType;
+            foreach (XmlNode n in XmlColumns)
+            {
+                ColumnName = n.Attributes["Name"].Value;
+                ColumnType = n.Attributes["DataType"].Value;
+                dt.Columns.Add(ColumnName, Type.GetType(ColumnType));
+            }
+            return dt;
+        }
+        //设置数据表关系
+        private static void ConvertXml2TableRelation(XmlNode node, DataSet ds)
+        {
+            string relationName = node.Attributes["Name"].Value;
+            string parentTableName = node.Attributes["ParentDataSource"].Value;
+            string childTableName = node.Attributes["ChildDataSource"].Value;
+            string[] parentColumnsName = node.Attributes["ParentColumns"].Value.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            string[] childColumnsName = node.Attributes["ChildColumns"].Value.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+            ds.Relations.Add(relationName, GetRelationColumns(ds.Tables[parentTableName], parentColumnsName), GetRelationColumns(ds.Tables[childTableName], childColumnsName));
+        }
+        //获取关系列
+        private static DataColumn[] GetRelationColumns(DataTable dt, string[] relationColumnsName)
+        {
+            DataColumn[] relationColumns = new DataColumn[relationColumnsName.Length];
+            int relationColumnIndex = 0;
+            foreach (string columnName in relationColumnsName)
+            {
+                relationColumns[relationColumnIndex] = dt.Columns[columnName];
+                relationColumnIndex++;
+            }
+            return relationColumns;
         }
         #endregion
     }
