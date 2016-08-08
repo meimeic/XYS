@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 using XYS.Util;
 using XYS.Report;
-namespace XYS.Lis.Report.Model
+using XYS.Model.Lab;
+namespace XYS.Lis.Report
 {
     internal class ReportElement
     {

@@ -35,12 +35,12 @@ namespace XYS.FR.Service.Config
             private set { }
         }
         
-        [ConfigurationProperty("modelPath", IsRequired = true)]
-        public string ModelPath
+        [ConfigurationProperty("modelName", IsRequired = true)]
+        public string ModelName
         {
             get
             {
-                return this["modelPath"] as string;
+                return this["modelName"] as string;
             }
             private set { }
         }

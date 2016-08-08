@@ -7,7 +7,8 @@ using log4net;
 
 using XYS.Util;
 using XYS.Report;
-using XYS.Lis.Report.Model;
+using XYS.Model.Lab;
+
 using XYS.Lis.Report.Handler;
 using XYS.Lis.Report.Persistent;
 namespace XYS.Lis.Report
@@ -159,7 +160,7 @@ namespace XYS.Lis.Report
         }
         private void InnerHandle(LabReport report)
         {
-            LabPK RK = report.ReportPK;
+            IReportKey RK = report.ReportPK;
             ReportElement RE = new ReportElement();
             bool result = this.InnerHandle(RE, RK);
             this.InnerConvert(report, RE);
@@ -172,7 +173,7 @@ namespace XYS.Lis.Report
                 this.OnError(report);
             }
         }
-        private bool InnerHandle(ReportElement report, LabPK RK)
+        private bool InnerHandle(ReportElement report, IReportKey RK)
         {
             bool result = false;
             //处理info

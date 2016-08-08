@@ -10,7 +10,8 @@ using Newtonsoft.Json.Linq;
 
 using XYS.Util;
 using XYS.Report;
-using XYS.Lis.Report.Model;
+using XYS.Model.Lab;
+
 using XYS.Lis.Report.Persistent;
 namespace XYS.Lis.Report.Handler
 {

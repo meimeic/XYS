@@ -53,11 +53,8 @@ namespace XYS.FR.Service.Util
         public static void InitStruct()
         {
             string applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
-            string fileFullName = Path.Combine(applicationBaseDirectory, "dataset", FileName);
-            if (!File.Exists(fileFullName))
-            {
-                InitXmlStruct(fileFullName);
-            }
+            string fileFullName = Path.Combine(applicationBaseDirectory, "Print", "DataSet", FileName);
+            InitXmlStruct(fileFullName);
         }
         public static DataSet GetSet()
         {

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using XYS.Lis.Report.Model;
-namespace XYS.Lis.Report
+using XYS.Model.Lab;
+namespace XYS.Report
 {
     public class LabReport
     {
         #region 私有字段
-        private LabPK m_reportPK;
+        private IReportKey m_reportPK;
         private InfoElement m_info;
         private List<ItemElement> m_itemList;
         private List<ImageElement> m_imageList;
@@ -23,7 +23,7 @@ namespace XYS.Lis.Report
         #endregion
 
         #region
-        public LabPK ReportPK
+        public IReportKey ReportPK
         {
             get { return this.m_reportPK; }
             set { this.m_reportPK = value; }

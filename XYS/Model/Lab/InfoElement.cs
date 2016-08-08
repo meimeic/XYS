@@ -4,7 +4,7 @@ using XYS.Model;
 using XYS.Report;
 using XYS.Common;
 
-namespace XYS.Lis.Report.Model
+namespace XYS.Model.Lab
 {
     public class InfoElement : IPatientElement, IFillElement
     {

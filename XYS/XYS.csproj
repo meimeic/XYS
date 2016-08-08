@@ -41,6 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Lab\GraphElement.cs" />
+    <Compile Include="Model\Lab\ImageElement.cs" />
+    <Compile Include="Model\Lab\InfoElement.cs" />
+    <Compile Include="Model\Lab\ItemElement.cs" />
     <Compile Include="Persistent\ReportDAL.cs" />
     <Compile Include="Persistent\Utility\DbHelperOleDb.cs" />
     <Compile Include="Persistent\Utility\DbHelperSQL.cs" />
@@ -52,6 +56,7 @@
     <Compile Include="Report\IReportKey.cs" />
     <Compile Include="Common\ReportException.cs" />
     <Compile Include="Common\XYSException.cs" />
+    <Compile Include="Report\LabReport.cs" />
     <Compile Include="Report\Require.cs" />
     <Compile Include="Util\CustomCollection.cs" />
     <Compile Include="Common\ExportAttribute.cs" />

@@ -2,10 +2,11 @@
 
 using XYS.Report;
 using XYS.Common;
-namespace XYS.FR.Service.PrintModel
+namespace XYS.FR.Service.Model
 {
-    public class Image:IExportElement
+    public class Custom : IExportElement
     {
+        private string m_c0;
         private string m_c1;
         private string m_c2;
         private string m_c3;
@@ -20,11 +21,17 @@ namespace XYS.FR.Service.PrintModel
         private string m_c12;
         private string m_c13;
         private string m_c14;
-        private string m_c15;
 
-        public Image()
-        { }
+        public Custom()
+        {
+        }
 
+        [Export]
+        public string C0
+        {
+            get { return this.m_c0; }
+            set { this.m_c0 = value; }
+        }
         [Export]
         public string C1
         {
@@ -108,12 +115,6 @@ namespace XYS.FR.Service.PrintModel
         {
             get { return this.m_c14; }
             set { this.m_c14 = value; }
-        }
-        [Export]
-        public string C15
-        {
-            get { return this.m_c15; }
-            set { this.m_c15 = value; }
         }
     }
 }

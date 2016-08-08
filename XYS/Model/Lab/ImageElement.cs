@@ -2,9 +2,9 @@
 using XYS.Report;
 using XYS.Common;
 
-namespace XYS.Lis.Report.Model
+namespace XYS.Model.Lab
 {
-    public class ImageElement : IFillElement
+    public class ImageElement : IFillElement, IComparable<ImageElement>
     {
         #region
         private string m_reportID;
@@ -34,5 +34,14 @@ namespace XYS.Lis.Report.Model
             set { this.m_url = value; }
         }
         #endregion
+
+        public int CompareTo(ImageElement other)
+        {
+            if (other == null)
+            {
+                return -1;
+            }
+            return String.CompareOrdinal(this.Name, other.Name);
+        }
     }
 }
