@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Web;
+using System.Web.Security;
+using System.Web.SessionState;
 
-namespace XYS.Report.WS
+using XYS.FR.Service.Lab;
+namespace XYS.FR.Service
 {
-    public class Global : HttpApplication
+    public class Global : System.Web.HttpApplication
     {
-        public static LisService ReportService
+        public static PDFService PDF
         {
-            get { return LisService.RService; }
+            get { return PDFService.PService; }
         }
-
         protected void Application_Start(object sender, EventArgs e)
         {
 

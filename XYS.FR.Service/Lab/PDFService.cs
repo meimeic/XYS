@@ -5,15 +5,14 @@ using System.Reflection;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Threading;
 
 using FastReport;
 using FastReport.Export.Pdf;
 
 using XYS.Util;
 using XYS.Report;
-
-using XYS.Lis.Report;
-using XYS.Lis.Report.Model;
+using XYS.Model.Lab;
 
 using XYS.FR.Service.Util;
 using XYS.FR.Service.Model;
@@ -22,30 +21,35 @@ namespace XYS.FR.Service.Lab
 {
     public class PDFService
     {
+        private static int WorkerCount;
         private static readonly DateTime MinTime;
-        private static readonly Hashtable Item2CustomMap;
         private static readonly PDFService ServiceInstance;
 
+        private Thread[] m_workerPool;
         private readonly PDFDAL DAL;
         private readonly ExportPDF Export;
-        private readonly BlockingCollection<LabReport> InitRequestQueue;
+        private readonly Hashtable Item2CustomMap;
+        private readonly BlockingCollection<LabReport> RequestQueue;
 
+        #region 构造函数
         static PDFService()
         {
+            WorkerCount = 2;
             MinTime = new DateTime(2011, 1, 1);
-            Item2CustomMap = new Hashtable(20);
             ServiceInstance = new PDFService();
-
-            InitItem2CustomMap();
         }
         private PDFService()
         {
             this.DAL = new PDFDAL();
             this.Export = new ExportPDF();
-            this.InitRequestQueue = new BlockingCollection<LabReport>(10000);
-        }
+            this.Item2CustomMap = new Hashtable(20);
+            this.RequestQueue = new BlockingCollection<LabReport>(10000);
 
-        #region
+            this.Init();
+        }
+        #endregion
+
+        #region 静态属性
         public static PDFService PService
         {
             get { return ServiceInstance; }
@@ -55,12 +59,18 @@ namespace XYS.FR.Service.Lab
         #region 生产者方法
         public void HandleReport(LabReport report)
         {
-            this.InitRequestQueue.Add(report);
+            this.RequestQueue.Add(report);
         }
         #endregion
 
-        #region
-
+        #region 消费者方法
+        protected void Consumer()
+        {
+            foreach (LabReport report in this.RequestQueue.GetConsumingEnumerable())
+            {
+                this.GenderPDF(report);
+            }
+        }
         protected void GenderPDF(LabReport report)
         {
             DataSet ds = DataStruct.GetSet();
@@ -122,7 +132,7 @@ namespace XYS.FR.Service.Lab
 
         private void FillItems(List<ItemElement> ls, List<int> superList, DataSet ds)
         {
-            Data4 data = null;
+            Data3 data = null;
             Custom custom = new Custom();
             List<IExportElement> ls1 = new List<IExportElement>(16);
             ls.Sort();
@@ -135,7 +145,7 @@ namespace XYS.FR.Service.Lab
                 }
                 if (!this.ConvertCustom(item, custom))
                 {
-                    data = new Data4();
+                    data = new Data3();
                     this.FillItem(item, data);
                     ls1.Add(data);
                 }
@@ -143,7 +153,7 @@ namespace XYS.FR.Service.Lab
             this.Export.ExportElement(custom, ds);
             this.Export.ExportElement(ls1, ds);
         }
-        private void FillItem(ItemElement item, Data4 data)
+        private void FillItem(ItemElement item, Data3 data)
         {
             data.C0 = item.CName;
             data.C1 = item.EName;
@@ -222,28 +232,44 @@ namespace XYS.FR.Service.Lab
         }
         #endregion
 
-        #region 私有静态方法
-        private static void InitItem2CustomMap()
+        #region 私有方法
+        private void Init()
         {
-            Item2CustomMap.Clear();
+            this.InitWorkerPool();
+            this.InitItem2CustomMap();
+        }
+        private void InitWorkerPool()
+        {
+            Thread th = null;
+            this.m_workerPool = new Thread[WorkerCount];
+            for (int i = 0; i < WorkerCount; i++)
+            {
+                th = new Thread(Consumer);
+                this.m_workerPool[i] = th;
+                th.Start();
+            }
+        }
+        private void InitItem2CustomMap()
+        {
+            this.Item2CustomMap.Clear();
 
-            Item2CustomMap.Add(90009288, "C0");
-            Item2CustomMap.Add(90009289, "C1");
-            Item2CustomMap.Add(90009290, "C2");
-            Item2CustomMap.Add(90009291, "C3");
-            Item2CustomMap.Add(90009292, "C4");
-            Item2CustomMap.Add(90009293, "C5");
-            Item2CustomMap.Add(90009294, "C6");
-            Item2CustomMap.Add(90009295, "C7");
-            Item2CustomMap.Add(90009296, "C8");
-            Item2CustomMap.Add(90009297, "C9");
-            Item2CustomMap.Add(90009300, "C10");
-            Item2CustomMap.Add(90009301, "C11");
+            this.Item2CustomMap.Add(90009288, "C0");
+            this.Item2CustomMap.Add(90009289, "C1");
+            this.Item2CustomMap.Add(90009290, "C2");
+            this.Item2CustomMap.Add(90009291, "C3");
+            this.Item2CustomMap.Add(90009292, "C4");
+            this.Item2CustomMap.Add(90009293, "C5");
+            this.Item2CustomMap.Add(90009294, "C6");
+            this.Item2CustomMap.Add(90009295, "C7");
+            this.Item2CustomMap.Add(90009296, "C8");
+            this.Item2CustomMap.Add(90009297, "C9");
+            this.Item2CustomMap.Add(90009300, "C10");
+            this.Item2CustomMap.Add(90009301, "C11");
 
-            Item2CustomMap.Add(90008528, "C0");
-            Item2CustomMap.Add(90008797, "C1");
-            Item2CustomMap.Add(90008798, "C2");
-            Item2CustomMap.Add(90008799, "C3");
+            this.Item2CustomMap.Add(90008528, "C0");
+            this.Item2CustomMap.Add(90008797, "C1");
+            this.Item2CustomMap.Add(90008798, "C2");
+            this.Item2CustomMap.Add(90008799, "C3");
         }
         #endregion
     }

@@ -8,6 +8,7 @@ namespace XYS.FR.Service.Config
 {
     public class LabConfigManager
     {
+        #region 私有静态变量
         private static readonly Hashtable ItemModelMap;
         private static readonly Hashtable GroupModelMap;
         private static readonly Hashtable PrintModelMap;
@@ -16,7 +17,9 @@ namespace XYS.FR.Service.Config
         private static readonly Hashtable GroupOrderMap;
 
         private static LabSection FRConfig = (LabSection)System.Configuration.ConfigurationManager.GetSection("lab");
+        #endregion
 
+        #region 构造函数
         static LabConfigManager()
         {
             PrintModelMap = new Hashtable(20);
@@ -30,7 +33,9 @@ namespace XYS.FR.Service.Config
             InitItem();
             InitModel();
         }
+        #endregion
 
+        #region 获取模板路径
         public static string GetModelPath(int modelNo)
         {
             string result = PrintModelMap[modelNo] as string;
@@ -40,7 +45,9 @@ namespace XYS.FR.Service.Config
             }
             return result;
         }
+        #endregion
 
+        #region 获取模板号
         public static int GetModelNo(int setionNo)
         {
             int result = 0;
@@ -67,7 +74,9 @@ namespace XYS.FR.Service.Config
             }
             return result;
         }
-        
+        #endregion
+
+        #region 获取排序号
         public static int GetOrderNo(int setionNo)
         {
             return 0;
@@ -76,7 +85,9 @@ namespace XYS.FR.Service.Config
         {
             return 0;
         }
+        #endregion
 
+        #region 私有静态方法
         private static void InitGroup()
         {
             LabGroupCollection groups = FRConfig.GroupCollection;
@@ -103,5 +114,6 @@ namespace XYS.FR.Service.Config
                 PrintModelMap[model.Value] = Path.Combine(SystemInfo.ApplicationBaseDirectory, "Print", "Model", model.ModelName);
             }
         }
+        #endregion
     }
 }

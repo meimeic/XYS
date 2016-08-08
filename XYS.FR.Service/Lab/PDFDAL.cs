@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Configuration;
-
 using System.Data;
 
-using XYS.Lis.Report.Model;
+using XYS.Model.Lab;
 namespace XYS.FR.Service.Lab
 {
     public class PDFDAL

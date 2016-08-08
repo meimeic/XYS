@@ -54,7 +54,7 @@ namespace XYS.Report.WS
                 {
                     LabApplyInfo info = (LabApplyInfo)this.Serializer.Deserialize(reader);
                     WriteLog("处理xml报文成功");
-                    this.HandleApplyInfo(info);
+                    this.GetApplyInfo(info);
                 }
                 catch (InvalidOperationException ex)
                 {
@@ -66,7 +66,7 @@ namespace XYS.Report.WS
                 WriteLog("报文为空");
             }
         }
-        protected void HandleApplyInfo(LabApplyInfo applyInfo)
+        protected void GetApplyInfo(LabApplyInfo applyInfo)
         {
             List<ApplyItem> applyCollection = applyInfo.ApplyCollection;
             if (applyCollection != null && applyCollection.Count > 0)
@@ -77,12 +77,12 @@ namespace XYS.Report.WS
                     if (item.ApplyStatus == 7)
                     {
                         WriteLog("申请单号为" + item.ApplyNo + "的报告加入存储队列");
-                        this.HandleReport(item.ApplyNo);
+                        this.GetReport(item.ApplyNo);
                     }
                 }
             }
         }
-        private void HandleReport(string SerialNo)
+        private void GetReport(string SerialNo)
         {
             string where = "serialno='" + SerialNo + "'";
             this.LabService.InitReport(where);

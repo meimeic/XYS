@@ -45,7 +45,7 @@ namespace XYS.Report
         }
         #endregion
 
-        #region 受保护的方法 内部处理
+        #region 受保护的方法内部处理
         protected abstract bool InnerHandle(IFillElement element, IReportKey RK);
         protected abstract bool InnerHandle(List<IFillElement> elements, IReportKey RK);
         #endregion

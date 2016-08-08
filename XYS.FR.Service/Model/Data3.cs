@@ -4,7 +4,7 @@ using XYS.Report;
 using XYS.Common;
 namespace XYS.FR.Service.Model
 {
-    public class Data3 : IExportElement
+    public class Data3:IExportElement
     {
         private string m_c0;
         private string m_c1;
@@ -21,25 +21,11 @@ namespace XYS.FR.Service.Model
         private string m_c12;
         private string m_c13;
         private string m_c14;
-        private string m_c15;
-        private string m_c16;
-        private string m_c17;
-        private string m_c18;
-        private string m_c19;
-        private string m_c20;
-        private string m_c21;
-        private string m_c22;
-        private string m_c23;
-        private string m_c24;
-        private string m_c25;
-        private string m_c26;
-        private string m_c27;
-        private string m_c28;
-        private string m_c29;
 
         public Data3()
         {
         }
+
         [Export]
         public string C0
         {
@@ -129,96 +115,6 @@ namespace XYS.FR.Service.Model
         {
             get { return this.m_c14; }
             set { this.m_c14 = value; }
-        }
-        [Export]
-        public string C15
-        {
-            get { return this.m_c15; }
-            set { this.m_c15 = value; }
-        }
-        [Export]
-        public string C16
-        {
-            get { return this.m_c16; }
-            set { this.m_c16 = value; }
-        }
-        [Export]
-        public string C17
-        {
-            get { return this.m_c17; }
-            set { this.m_c17 = value; }
-        }
-        [Export]
-        public string C18
-        {
-            get { return this.m_c18; }
-            set { this.m_c18 = value; }
-        }
-        [Export]
-        public string C19
-        {
-            get { return this.m_c19; }
-            set { this.m_c19 = value; }
-        }
-        [Export]
-        public string C20
-        {
-            get { return this.m_c20; }
-            set { this.m_c20 = value; }
-        }
-        [Export]
-        public string C21
-        {
-            get { return this.m_c21; }
-            set { this.m_c21 = value; }
-        }
-        [Export]
-        public string C22
-        {
-            get { return this.m_c22; }
-            set { this.m_c22 = value; }
-        }
-        [Export]
-        public string C23
-        {
-            get { return this.m_c23; }
-            set { this.m_c23 = value; }
-        }
-        [Export]
-        public string C24
-        {
-            get { return this.m_c24; }
-            set { this.m_c24 = value; }
-        }
-        [Export]
-        public string C25
-        {
-            get { return this.m_c25; }
-            set { this.m_c25 = value; }
-        }
-        [Export]
-        public string C26
-        {
-            get { return this.m_c26; }
-            set { this.m_c26 = value; }
-        }
-        [Export]
-        public string C27
-        {
-            get { return this.m_c27; }
-            set { this.m_c27 = value; }
-        }
-        [Export]
-        public string C28
-        {
-            get { return this.m_c28; }
-            set { this.m_c28 = value; }
-        }
-        [Export]
-        public string C29
-        {
-            get { return this.m_c29; }
-            set { this.m_c29 = value; }
         }
     }
 }

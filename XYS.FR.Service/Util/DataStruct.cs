@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using XYS.Util;
 using XYS.Report;
 using XYS.Common;
+
+using XYS.FR.Service.Model;
 namespace XYS.FR.Service.Util
 {
     public class DataStruct
@@ -39,6 +41,8 @@ namespace XYS.FR.Service.Util
         {
             FRSet = new DataSet();
             TypeList = new List<Type>(10);
+
+            Init();
         }
         #endregion
 
@@ -52,9 +56,10 @@ namespace XYS.FR.Service.Util
         #region 公共静态方法
         public static void InitStruct()
         {
-            string applicationBaseDirectory = SystemInfo.ApplicationBaseDirectory;
-            string fileFullName = Path.Combine(applicationBaseDirectory, "Print", "DataSet", FileName);
+            string fileFullName = Path.Combine(SystemInfo.ApplicationBaseDirectory, "Print", "DataSet", FileName);
             InitXmlStruct(fileFullName);
+
+            InitRamStruct();
         }
         public static DataSet GetSet()
         {
@@ -62,7 +67,7 @@ namespace XYS.FR.Service.Util
         }
         #endregion
 
-        #region 创建导出的dataset以及xml模板结构
+        #region 初始化模板结构
         protected static void InitXmlStruct(string fileFullName)
         {
             ConsoleInfo.Debug(declaringType, "Start--make the data struct xml file " + fileFullName + " by exportelemnts");
@@ -240,6 +245,18 @@ namespace XYS.FR.Service.Util
         #endregion
 
         #region 私有静态方法
+        private static void Init()
+        {
+            TypeList.Add(typeof(Custom));
+            TypeList.Add(typeof(Data1));
+            TypeList.Add(typeof(Data2));
+            TypeList.Add(typeof(Data3));
+            TypeList.Add(typeof(Image));
+            TypeList.Add(typeof(KVData));
+
+            InitStruct();
+        }
+
         //设置数据表
         private static DataTable ConvertXml2DataTable(XmlNode node)
         {

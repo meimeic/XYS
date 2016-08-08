@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Threading;
 
 using log4net;
@@ -29,7 +29,7 @@ namespace XYS.Lis.Report
         private Thread[] m_workerPool;
         private readonly LabPKDAL PKDAL;
         private readonly LabReportDAL ReportDAL;
-        private readonly BlockingCollection<LabReport> InitRequestQueue;
+        private readonly BlockingCollection<LabReport> RequestQueue;
         #endregion
 
         #region 私有事件
@@ -54,7 +54,7 @@ namespace XYS.Lis.Report
             this.ItemHandler = new ItemHandle(this.ReportDAL);
             this.ImageHandler = new ImageHandle(this.ReportDAL);
 
-            this.InitRequestQueue = new BlockingCollection<LabReport>(1000);
+            this.RequestQueue = new BlockingCollection<LabReport>(1000);
             this.Init();
         }
         #endregion
@@ -108,14 +108,14 @@ namespace XYS.Lis.Report
         private void HandleReport(LabReport report)
         {
             LOG.Info("将处理报告请求加入到处理请求队列");
-            this.InitRequestQueue.Add(report);
+            this.RequestQueue.Add(report);
         }
         #endregion
 
         #region 消费者方法
-        protected void InitRequestConsumer()
+        protected void Consumer()
         {
-            foreach (LabReport report in this.InitRequestQueue.GetConsumingEnumerable())
+            foreach (LabReport report in this.RequestQueue.GetConsumingEnumerable())
             {
                 LOG.Info("报告处理线程开始处理报告,报告ID为:" + report.ReportPK.ID);
                 this.InnerHandle(report);
@@ -153,7 +153,7 @@ namespace XYS.Lis.Report
             this.m_workerPool = new Thread[WorkerCount];
             for (int i = 0; i < WorkerCount; i++)
             {
-                th = new Thread(InitRequestConsumer);
+                th = new Thread(Consumer);
                 this.m_workerPool[i] = th;
                 th.Start();
             }

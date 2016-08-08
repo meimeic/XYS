@@ -14,6 +14,7 @@ namespace XYS.Report.WS
     // [System.Web.Script.Services.ScriptService]
     public class ReportStatus : WebService
     {
+
         [WebMethod]
         public string Hello()
         {

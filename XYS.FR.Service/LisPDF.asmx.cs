@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.Services;
 
-using XYS.Lis.Report;
+using XYS.Report;
+using XYS.FR.Service.Lab;
 namespace XYS.FR.Service
 {
     /// <summary>
@@ -23,9 +24,10 @@ namespace XYS.FR.Service
             return "Hello World";
         }
         [WebMethod]
-        public bool PrintPDF(LabReport report)
+        public void PrintPDF(LabReport report)
         {
-            return true;
+            PDFService service = Global.PDF;
+            service.HandleReport(report);
         }
     }
 }

@@ -9,9 +9,12 @@ namespace XYS.FR.Service.Util
 {
     public class ExportPDF
     {
+        #region 构造函数
         public ExportPDF()
         { }
+        #endregion
 
+        #region 公共方法
         public void ExportElement(List<IExportElement> elementList, DataSet ds)
         {
             if (elementList != null)
@@ -45,7 +48,9 @@ namespace XYS.FR.Service.Util
             }
             dt.Rows.Add(dr);
         }
+        #endregion
 
+        #region 私有方法
         private void FillDataColumn(PropertyInfo p, DataRow dr, IExportElement element)
         {
             dr[p.Name] = p.GetValue(element, null);
@@ -62,5 +67,6 @@ namespace XYS.FR.Service.Util
             }
             return false;
         }
+        #endregion
     }
 }
