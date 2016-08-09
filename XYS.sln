@@ -18,11 +18,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Lis.Report", "XYS.Lis.R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LisTest", "LisTest\LisTest.csproj", "{08C45C48-DFC2-4C6A-A48D-F857CEC93BFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.FR.Service", "XYS.FR.Service\XYS.FR.Service.csproj", "{F1A57A97-3553-4267-9820-779D3CBDB807}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Mongo.Service", "XYS.Mongo.Service\XYS.Mongo.Service.csproj", "{3CDFAF33-FCA8-43F4-9E0B-B6C9647464E5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Lis", "XYS.Lis\XYS.Lis.csproj", "{CFBFBC88-5B71-4923-8921-95C07B28A31C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.FR", "XYS.FR\XYS.FR.csproj", "{F1A57A97-3553-4267-9820-779D3CBDB807}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,10 +54,6 @@ Global
 		{08C45C48-DFC2-4C6A-A48D-F857CEC93BFD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08C45C48-DFC2-4C6A-A48D-F857CEC93BFD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08C45C48-DFC2-4C6A-A48D-F857CEC93BFD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F1A57A97-3553-4267-9820-779D3CBDB807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F1A57A97-3553-4267-9820-779D3CBDB807}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F1A57A97-3553-4267-9820-779D3CBDB807}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F1A57A97-3553-4267-9820-779D3CBDB807}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3CDFAF33-FCA8-43F4-9E0B-B6C9647464E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3CDFAF33-FCA8-43F4-9E0B-B6C9647464E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3CDFAF33-FCA8-43F4-9E0B-B6C9647464E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -66,6 +62,10 @@ Global
 		{CFBFBC88-5B71-4923-8921-95C07B28A31C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFBFBC88-5B71-4923-8921-95C07B28A31C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFBFBC88-5B71-4923-8921-95C07B28A31C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1A57A97-3553-4267-9820-779D3CBDB807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1A57A97-3553-4267-9820-779D3CBDB807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1A57A97-3553-4267-9820-779D3CBDB807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1A57A97-3553-4267-9820-779D3CBDB807}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

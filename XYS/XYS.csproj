@@ -57,12 +57,11 @@
     <Compile Include="Report\IReportKey.cs" />
     <Compile Include="Common\ReportException.cs" />
     <Compile Include="Common\XYSException.cs" />
-    <Compile Include="Report\LabReport.cs" />
+    <Compile Include="Model\LabReport.cs" />
     <Compile Include="Report\Require.cs" />
     <Compile Include="Util\CustomCollection.cs" />
     <Compile Include="Common\ExportAttribute.cs" />
     <Compile Include="Common\ColumnAttribute.cs" />
-    <Compile Include="Model\IExportElement.cs" />
     <Compile Include="Model\IPatientElement.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\ConsoleInfo.cs" />
