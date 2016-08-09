@@ -8,39 +8,34 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using XYS.Model;
 using XYS.Report;
+using XYS.Model.Lab;
+
 using XYS.Lis.Report;
-using XYS.Lis.Report.Model;
 namespace LisTest
 {
     public partial class Form1 : Form
     {
         private readonly LabService service;
+        private readonly FRService.LabPDFSoapClient client;
         public Form1()
         {
             InitializeComponent();
             this.service = LabService.LService;
-            this.service.HandleCompleteEvent += this.log;
+            this.service.HandleCompleteEvent += this.PrintPDF;
+            this.client = new FRService.LabPDFSoapClient("LabPDFSoap");
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            List<LabPK> pkList = new List<LabPK>(10);
-            service.InitReportPK("where serialno='1602224471'", pkList);
-            foreach (LabPK pk in pkList)
-            {
-                ReportElement report = new ReportElement();
-                report.ReportPK = pk;
-                service.HandleReport(report);
-            }
+            string where = "where serialno='1602237378'";
+            this.service.InitReport(where);
         }
-        private void log(ReportElement report)
+        private void PrintPDF(LabReport report)
         {
-            List<IFillElement> infoList = report.ItemTable["InfoElement"] as List<IFillElement>;
-            if (infoList != null)
-            {
-                this.textBox1.Text = infoList.Count.ToString();
-            }
+            byte[] bytes = Helper.SerializeObject(report);
+            this.client.PrintPDF(bytes);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

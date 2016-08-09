@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using XYS.Model.Lab;
 namespace XYS.Report
 {
+    [Serializable]
     public class LabReport
     {
         #region 私有字段
-        private IReportKey m_reportPK;
         private InfoElement m_info;
         private List<ItemElement> m_itemList;
         private List<ImageElement> m_imageList;
@@ -23,11 +23,6 @@ namespace XYS.Report
         #endregion
 
         #region
-        public IReportKey ReportPK
-        {
-            get { return this.m_reportPK; }
-            set { this.m_reportPK = value; }
-        }
         public InfoElement Info
         {
             get { return this.m_info; }

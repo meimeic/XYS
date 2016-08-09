@@ -15,7 +15,7 @@ namespace XYS.Lis.Report.Persistent
         private readonly string m_connectionString;
         public LabPKDAL()
         {
-            this.m_connectionString = ConfigurationManager.ConnectionStrings["LisReport"].ConnectionString;
+            this.m_connectionString = ConfigurationManager.ConnectionStrings["LabMSSQL"].ConnectionString;
         }
 
         public void InitKey(Require require, LabPK PK)
@@ -32,6 +32,7 @@ namespace XYS.Lis.Report.Persistent
         {
             LabPK temp;
             string sql = GetSQLString(require.ToString());
+
             DataTable dt = GetDataTable(sql);
             if (dt != null && dt.Rows.Count > 0)
             {

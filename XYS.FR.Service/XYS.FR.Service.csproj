@@ -63,7 +63,7 @@
     <Content Include="DLL\FastReport.dll" />
     <Content Include="DLL\FastReport.Editor.dll" />
     <Content Include="Global.asax" />
-    <Content Include="LisPDF.asmx" />
+    <Content Include="LabPDF.asmx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -78,12 +78,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Lab\PDFDAL.cs" />
-    <Compile Include="Lab\PDFService.cs" />
-    <Compile Include="LisPDF.asmx.cs">
-      <DependentUpon>LisPDF.asmx</DependentUpon>
+    <Compile Include="LabPDF.asmx.cs">
+      <DependentUpon>LabPDF.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Lab\PDFDAL.cs" />
+    <Compile Include="Lab\PDFService.cs" />
     <Compile Include="Model\Data1.cs" />
     <Compile Include="Model\Data2.cs" />
     <Compile Include="Model\Data3.cs" />

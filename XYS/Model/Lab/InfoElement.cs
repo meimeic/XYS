@@ -6,6 +6,7 @@ using XYS.Common;
 
 namespace XYS.Model.Lab
 {
+    [Serializable]
     public class InfoElement : IPatientElement, IFillElement
     {
         #region 私有字段

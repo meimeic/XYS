@@ -12,7 +12,7 @@ namespace XYS.Lis.Report.Persistent
         public LabReportDAL()
             : base()
         {
-            this.m_connectionString = ConfigurationManager.ConnectionStrings["LisReport"].ConnectionString;
+            this.m_connectionString = ConfigurationManager.ConnectionStrings["LabMSSQL"].ConnectionString;
         }
         protected override DataTable GetDataTable(string sql)
         {

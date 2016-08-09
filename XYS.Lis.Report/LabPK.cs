@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 using XYS.Report;
 namespace XYS.Lis.Report
@@ -55,7 +56,18 @@ namespace XYS.Lis.Report
         }
         public string KeyWhere()
         {
-            return "";
+            StringBuilder sb = new StringBuilder();
+            sb.Append(" where ");
+            sb.Append("receivedate='");
+            sb.Append(this.m_receiveDate.ToString("yyyy-MM-dd"));
+            sb.Append("' and sectionno=");
+            sb.Append(this.m_sectionNo);
+            sb.Append(" and testtypeno=");
+            sb.Append(this.m_testTypeNo);
+            sb.Append(" and sampleno='");
+            sb.Append(this.m_sampleNo);
+            sb.Append("'");
+            return sb.ToString();
         }
         #endregion
     }

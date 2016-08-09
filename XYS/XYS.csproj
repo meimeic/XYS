@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Helper.cs" />
     <Compile Include="Model\Lab\GraphElement.cs" />
     <Compile Include="Model\Lab\ImageElement.cs" />
     <Compile Include="Model\Lab\InfoElement.cs" />

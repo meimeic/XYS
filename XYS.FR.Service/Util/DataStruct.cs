@@ -54,12 +54,10 @@ namespace XYS.FR.Service.Util
         #endregion
 
         #region 公共静态方法
-        public static void InitStruct()
+        public static void InitXMLStruct()
         {
             string fileFullName = Path.Combine(SystemInfo.ApplicationBaseDirectory, "Print", "DataSet", FileName);
             InitXmlStruct(fileFullName);
-
-            InitRamStruct();
         }
         public static DataSet GetSet()
         {
@@ -226,7 +224,7 @@ namespace XYS.FR.Service.Util
         {
             if (type != null)
             {
-                return type.IsAssignableFrom(typeof(IExportElement));
+                return typeof(IExportElement).IsAssignableFrom(type);
             }
             return false;
         }
@@ -254,7 +252,7 @@ namespace XYS.FR.Service.Util
             TypeList.Add(typeof(Image));
             TypeList.Add(typeof(KVData));
 
-            InitStruct();
+            InitRamStruct();
         }
 
         //设置数据表

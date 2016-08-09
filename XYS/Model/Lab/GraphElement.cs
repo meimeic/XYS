@@ -4,6 +4,7 @@ using XYS.Report;
 using XYS.Common;
 namespace XYS.Model.Lab
 {
+    [Serializable]
     public class GraphElement : IFillElement
     {
         #region 私有字段

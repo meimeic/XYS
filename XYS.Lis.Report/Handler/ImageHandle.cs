@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Drawing;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -18,7 +19,8 @@ namespace XYS.Lis.Report.Handler
     public class ImageHandle : HandleSkeleton
     {
         #region 私有字段
-        private static readonly string ImageServer = "http://static.xys.com/img";
+        private static readonly string ImageLocal = "E:\\image\\report\\lab";
+        private static readonly string ImageServer = "http://img.xys.com/lab";
         private static readonly string UploadUri = "http://10.1.11.10:8090";
         #endregion
 
@@ -36,25 +38,80 @@ namespace XYS.Lis.Report.Handler
             elements.Add(element);
             return InnerHandle(elements, RK);
         }
-
         protected override bool InnerHandle(List<IFillElement> elements, IReportKey RK)
         {
-            LabPK key = RK as LabPK;
-            if (key != null)
+            if (IsExist(elements))
             {
-                return UploadImages(elements, key);
+                return UploadImages(elements, RK);
             }
-            return false;
+            return true;
+        }
+        #endregion
+
+
+        #region 图片本地保存
+        protected bool SaveLocalImages(List<IFillElement> elements, IReportKey RK)
+        {
+            ImageElement ie = null;
+            GraphElement ge = null;
+            string imgName = null;
+            string midPath = DateTime.Now.ToString("yyyyMMdd");
+            string imagePath = this.ImagePath(midPath);
+            List<ImageElement> images = new List<ImageElement>(10);
+            foreach (IFillElement element in elements)
+            {
+                ge = element as GraphElement;
+                if (ge != null)
+                {
+                    ie = new ImageElement();
+                    imgName = SaveImage(imagePath, ge.GraphImage);
+                    ie.Name = ge.GraphName;
+                    ie.ReportID = RK.ID;
+                    ie.Url = midPath + "/" + imgName;
+
+                    images.Add(ie);
+                }
+            }
+
+            elements.Clear();
+            foreach (ImageElement image in images)
+            {
+                elements.Add(image);
+            }
+            return true;
+        }
+        protected string SaveImage(string imagePath, byte[] bytes)
+        {
+            string imageName = this.ImageName();
+            using (MemoryStream ms = new MemoryStream(bytes))
+            {
+                Image image = Image.FromStream(ms);
+                image.Save(Path.Combine(imagePath, imageName), System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+            return imageName;
+        }
+        private string ImageName()
+        {
+            return GenderGUIDName() + ".jpg";
+        }
+        private string ImagePath(string midPath)
+        {
+            string path = Path.Combine(ImageLocal, midPath);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            return path;
         }
         #endregion
 
         #region 图片上传
-        protected bool UploadImages(List<IFillElement> elements, LabPK RK)
+        protected bool UploadImages(List<IFillElement> elements, IReportKey RK)
         {
             ImageElement rie = null;
             WebClient wc = new WebClient();
             string boundary = GenderBoundary();
-            string folder = RK.ReceiveDate.ToString("yyyyMMdd");
+            string folder = DateTime.Now.ToString("yyyyMMdd");
             //LOG.Info("生成上传图片数据");
             //获取上传数据
             byte[] postData = GenderPostData(elements, boundary);
@@ -98,7 +155,6 @@ namespace XYS.Lis.Report.Handler
                 return false;
             }
         }
-
         private string GenderGUIDName()
         {
             return SystemInfo.NewGuid().ToString();
@@ -209,7 +265,7 @@ namespace XYS.Lis.Report.Handler
         }
         #endregion
 
-        #region WebImage内部类
+        #region WebImage内部类 图片保存结果
         class WebImage
         {
             WebImage()

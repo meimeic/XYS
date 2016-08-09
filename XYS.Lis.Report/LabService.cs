@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading;
 
-using log4net;
-
 using XYS.Util;
 using XYS.Report;
 using XYS.Model.Lab;
@@ -18,7 +16,6 @@ namespace XYS.Lis.Report
     public class LabService
     {
         #region 静态变量
-        private static ILog LOG;
         private static int WorkerCount;
         private static readonly LabService ServiceInstance;
 
@@ -29,7 +26,7 @@ namespace XYS.Lis.Report
         private Thread[] m_workerPool;
         private readonly LabPKDAL PKDAL;
         private readonly LabReportDAL ReportDAL;
-        private readonly BlockingCollection<LabReport> RequestQueue;
+        private readonly BlockingCollection<ReportElement> RequestQueue;
         #endregion
 
         #region 私有事件
@@ -41,7 +38,7 @@ namespace XYS.Lis.Report
         static LabService()
         {
             WorkerCount = 2;
-            LOG = LogManager.GetLogger("LisReportHandle");
+            //LOG = LogManager.GetLogger("Lab");
 
             ServiceInstance = new LabService();
         }
@@ -54,7 +51,7 @@ namespace XYS.Lis.Report
             this.ItemHandler = new ItemHandle(this.ReportDAL);
             this.ImageHandler = new ImageHandle(this.ReportDAL);
 
-            this.RequestQueue = new BlockingCollection<LabReport>(1000);
+            this.RequestQueue = new BlockingCollection<ReportElement>(1000);
             this.Init();
         }
         #endregion
@@ -97,17 +94,17 @@ namespace XYS.Lis.Report
         #region 生产者方法
         private void HandleReport(List<LabPK> PKList)
         {
-            LabReport report = null;
+            ReportElement report = null;
             foreach (LabPK pk in PKList)
             {
-                report = new LabReport();
+                report = new ReportElement();
                 report.ReportPK = pk;
                 this.HandleReport(report);
             }
         }
-        private void HandleReport(LabReport report)
+        private void HandleReport(ReportElement report)
         {
-            LOG.Info("将处理报告请求加入到处理请求队列");
+            //LOG.Info("将处理报告请求加入到处理请求队列");
             this.RequestQueue.Add(report);
         }
         #endregion
@@ -115,9 +112,9 @@ namespace XYS.Lis.Report
         #region 消费者方法
         protected void Consumer()
         {
-            foreach (LabReport report in this.RequestQueue.GetConsumingEnumerable())
+            foreach (ReportElement report in this.RequestQueue.GetConsumingEnumerable())
             {
-                LOG.Info("报告处理线程开始处理报告,报告ID为:" + report.ReportPK.ID);
+                //LOG.Info("报告处理线程开始处理报告,报告ID为:" + report.ReportPK.ID);
                 this.InnerHandle(report);
             }
         }
@@ -158,10 +155,11 @@ namespace XYS.Lis.Report
                 th.Start();
             }
         }
-        private void InnerHandle(LabReport report)
+
+        private void InnerHandle(ReportElement RE)
         {
-            IReportKey RK = report.ReportPK;
-            ReportElement RE = new ReportElement();
+            IReportKey RK = RE.ReportPK;
+            LabReport report = new LabReport();
             bool result = this.InnerHandle(RE, RK);
             this.InnerConvert(report, RE);
             if (result)
@@ -178,11 +176,11 @@ namespace XYS.Lis.Report
             bool result = false;
             //处理info
             result = this.InfoHandler.HandleElement(report.Info, RK);
-            if (!result)
+            if (result)
             {
                 //处理item
                 result = this.ItemHandler.HandleElement(report.ItemList, RK, typeof(ItemElement));
-                if (!result)
+                if (result)
                 {
                     //处理image
                     result = this.ImageHandler.HandleElement(report.ImageList, RK, typeof(GraphElement));

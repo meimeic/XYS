@@ -4,9 +4,10 @@ using XYS.Common;
 
 namespace XYS.Model.Lab
 {
+    [Serializable]
     public class ImageElement : IFillElement, IComparable<ImageElement>
     {
-        #region
+        #region 私有字段
         private string m_reportID;
         private string m_name;
         private string m_url;

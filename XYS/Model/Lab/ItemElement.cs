@@ -5,6 +5,7 @@ using XYS.Common;
 
 namespace XYS.Model.Lab
 {
+    [Serializable]
     public class ItemElement : IFillElement, IComparable<ItemElement>
     {
         #region 私有字段

@@ -92,9 +92,8 @@ namespace XYS.FR.Service.Lab
             report.RegisterData(ds);
             report.Prepare();
             PDFExport export = new PDFExport();
-            report.Export(export, "E:\\xys\\test\\lis\\temp.pdf");
+            report.Export(export, "E:\\report\\lab\\temp.pdf");
             report.Dispose();
-
             return "";
         }
         #endregion
@@ -123,7 +122,7 @@ namespace XYS.FR.Service.Lab
             header.C16 = info.ReportContent;
 
             header.C17 = info.CollectTime>MinTime?info.CollectTime.ToString("yyyy-MM-dd HH:mm"):"";
-            header.C18 = info.ReceiveTime > MinTime ? info.ReceiveTime.ToString("yyyy-MM-dd HH:mm") : "";
+            header.C18 = info.InceptTime > MinTime ? info.InceptTime.ToString("yyyy-MM-dd HH:mm") : "";
             header.C19 = info.CheckTime > MinTime ? info.CheckTime.ToString("yyyy-MM-dd HH:mm") : "";
             header.C20 = info.TestTime > MinTime ? info.TestTime.ToString("yyyy-MM-dd") : "";
 
