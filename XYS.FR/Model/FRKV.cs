@@ -4,12 +4,12 @@ using XYS.Report;
 using XYS.Common;
 namespace XYS.FR.Model
 {
-    public class KVData : IExportElement
+    public class FRKV : IExportElement
     {
         private string m_key;
         private string m_value;
 
-        public KVData()
+        public FRKV()
         {
         }
 

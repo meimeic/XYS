@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using XYS.Util;
-namespace XYS.FR.Config
+namespace XYS.FR.Conf
 {
     public class LabConfigManager
     {

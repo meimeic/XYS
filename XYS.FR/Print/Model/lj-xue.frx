@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="03/01/2016 08:50:16" ReportInfo.Modified="08/09/2016 14:46:22" ReportInfo.CreatorVersion="2013.2.5.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="03/01/2016 08:50:16" ReportInfo.Modified="08/13/2016 16:55:43" ReportInfo.CreatorVersion="2015.3.4.0">
   <Dictionary>
     <TableDataSource Name="Custom" ReferenceName="Data.Custom" DataType="System.Int32" Enabled="true">
       <Column Name="C0" DataType="System.String" PropName="Column"/>
@@ -18,7 +18,7 @@
       <Column Name="C13" DataType="System.String" PropName="Column"/>
       <Column Name="C14" DataType="System.String" PropName="Column"/>
     </TableDataSource>
-    <TableDataSource Name="Data1" ReferenceName="Data.Data1" DataType="System.Int32" Enabled="true">
+    <TableDataSource Name="FRInfo" ReferenceName="Data.FRInfo" DataType="System.Int32" Enabled="true">
       <Column Name="C0" DataType="System.String" PropName="Column"/>
       <Column Name="C1" DataType="System.String" PropName="Column"/>
       <Column Name="C2" DataType="System.String" PropName="Column"/>
@@ -50,7 +50,7 @@
       <Column Name="C28" DataType="System.String" PropName="Column"/>
       <Column Name="C29" DataType="System.String" PropName="Column"/>
     </TableDataSource>
-    <TableDataSource Name="Data2" ReferenceName="Data.Data2" DataType="System.Int32" Enabled="true">
+    <TableDataSource Name="FRData" ReferenceName="Data.FRData" DataType="System.Int32" Enabled="true">
       <Column Name="C0" DataType="System.String" PropName="Column"/>
       <Column Name="C1" DataType="System.String" PropName="Column"/>
       <Column Name="C2" DataType="System.String" PropName="Column"/>
@@ -82,7 +82,7 @@
       <Column Name="C28" DataType="System.String" PropName="Column"/>
       <Column Name="C29" DataType="System.String" PropName="Column"/>
     </TableDataSource>
-    <TableDataSource Name="Data3" ReferenceName="Data.Data3" DataType="System.Int32" Enabled="true">
+    <TableDataSource Name="FRItem" ReferenceName="Data.FRItem" DataType="System.Int32" Enabled="true">
       <Column Name="C0" DataType="System.String" PropName="Column"/>
       <Column Name="C1" DataType="System.String" PropName="Column"/>
       <Column Name="C2" DataType="System.String" PropName="Column"/>
@@ -116,47 +116,47 @@
       <Column Name="C13" DataType="System.String" PropName="Column"/>
       <Column Name="C14" DataType="System.String" PropName="Column"/>
     </TableDataSource>
-    <TableDataSource Name="KVData" ReferenceName="Data.KVData" DataType="System.Int32" Enabled="true">
+    <TableDataSource Name="FRKV" ReferenceName="Data.FRKV" DataType="System.Int32" Enabled="true">
       <Column Name="Key" DataType="System.String" PropName="Column"/>
       <Column Name="Value" DataType="System.String" PropName="Column"/>
     </TableDataSource>
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="195" PaperHeight="271" LeftMargin="20" BottomMargin="5">
-    <DataBand Name="Data1" Top="22.9" Width="623.7" Height="94.5" DataSource="Data1">
+    <DataBand Name="Data1" Top="22.9" Width="623.7" Height="81.27" DataSource="FRInfo">
       <TextObject Name="Text3" Width="623.7" Height="18.9" Text="中国医学科学院血液病医院临床检验室报告单" HorzAlign="Center" Font="宋体, 12pt, style=Bold"/>
       <TextObject Name="Text4" Top="28.35" Width="68.04" Height="17.01" Text="申请序号：" Padding="0, 0, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text5" Left="52.92" Top="28.35" Width="105.84" Height="17.01" Text="[Data1.C0]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text5" Left="52.92" Top="28.35" Width="105.84" Height="17.01" Text="[FRInfo.C0]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
       <TextObject Name="Text6" Left="170.1" Top="28.35" Width="41.58" Height="17.01" Text="科室：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text7" Left="202.34" Top="28.35" Width="168.21" Height="17.01" Text="[Data1.C1]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt, style=Bold"/>
+      <TextObject Name="Text7" Left="202.34" Top="28.35" Width="168.21" Height="17.01" Text="[FRInfo.C1]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt, style=Bold"/>
       <TextObject Name="Text8" Left="366.66" Top="28.35" Width="41.58" Height="17.01" Text="床号：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text9" Left="396.9" Top="28.35" Width="49.14" Height="17.01" Text="[Data1.C2]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text9" Left="396.9" Top="28.35" Width="49.14" Height="17.01" Text="[FRInfo.C2]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
       <TextObject Name="Text10" Left="453.6" Top="28.35" Width="64.26" Height="17.01" Text="样本编号：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text11" Left="510.3" Top="28.35" Width="79.38" Height="17.01" Text="[Data1.C3]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text12" Top="54.81" Width="41.58" Height="17.01" Text="姓名：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text13" Left="30.35" Top="54.81" Width="83.16" Height="17.01" Text="[Data1.C4]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text14" Left="132.3" Top="54.81" Width="41.58" Height="17.01" Text="性别：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text15" Left="162.65" Top="54.81" Width="41.58" Height="17.01" Text="[Data1.C5]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text16" Left="217.35" Top="54.81" Width="41.58" Height="17.01" Text="年龄：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text17" Left="255.15" Top="54.81" Width="51.03" Height="17.01" Text="[Data1.C6]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text18" Left="321.3" Top="54.81" Width="56.7" Height="17.01" Text="病案号：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text19" Left="368.55" Top="54.81" Width="75.6" Height="17.01" Text="[Data1.C7]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text20" Left="453.6" Top="54.81" Width="64.26" Height="17.01" Text="样本类型：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text21" Left="512.3" Top="54.81" Width="79.38" Height="17.01" Text="[Data1.C8]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text22" Top="71.82" Width="41.58" Height="17.01" Text="类型：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text23" Left="30.35" Top="71.82" Width="58.59" Height="17.01" Text="[Data1.C9]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text24" Left="103.95" Top="71.82" Width="41.58" Height="17.01" Text="医生：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text25" Left="136.08" Top="71.82" Width="69.93" Height="17.01" Text="[Data1.C10]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text26" Left="217.35" Top="71.82" Width="66.15" Height="17.01" Text="临床诊断：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text28" Left="453.6" Top="71.82" Width="41.58" Height="17.01" Text="说明：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text29" Left="491.4" Top="71.82" Width="100.17" Height="17.01" Text="[Data1.C12]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text27" Left="274.05" Top="71.82" Width="181.44" Height="17.01" Text="[Data1.C11]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text11" Left="510.3" Top="28.35" Width="79.38" Height="17.01" Text="[FRInfo.C3]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text12" Top="45.36" Width="41.58" Height="17.01" Text="姓名：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text13" Left="30.35" Top="45.36" Width="83.16" Height="17.01" Text="[FRInfo.C4]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text14" Left="132.3" Top="45.36" Width="41.58" Height="17.01" Text="性别：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text15" Left="162.65" Top="45.36" Width="41.58" Height="17.01" Text="[FRInfo.C5]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text16" Left="217.35" Top="45.36" Width="41.58" Height="17.01" Text="年龄：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text17" Left="255.15" Top="45.36" Width="51.03" Height="17.01" Text="[FRInfo.C6]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text18" Left="321.3" Top="45.36" Width="56.7" Height="17.01" Text="病案号：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text19" Left="368.55" Top="45.36" Width="75.6" Height="17.01" Text="[FRInfo.C7]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text20" Left="453.6" Top="45.36" Width="64.26" Height="17.01" Text="样本类型：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text21" Left="512.3" Top="45.36" Width="79.38" Height="17.01" Text="[FRInfo.C8]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text22" Top="62.37" Width="41.58" Height="17.01" Text="类型：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text23" Left="30.35" Top="62.37" Width="58.59" Height="17.01" Text="[FRInfo.C9]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text24" Left="103.95" Top="62.37" Width="41.58" Height="17.01" Text="医生：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text25" Left="136.08" Top="62.37" Width="69.93" Height="17.01" Text="[FRInfo.C10]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text26" Left="217.35" Top="62.37" Width="66.15" Height="17.01" Text="临床诊断：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text28" Left="453.6" Top="62.37" Width="41.58" Height="17.01" Text="说明：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text29" Left="491.4" Top="62.37" Width="100.17" Height="17.01" Text="[FRInfo.C12]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text27" Left="274.05" Top="62.37" Width="181.44" Height="17.01" Text="[FRInfo.C11]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
       <DataHeaderBand Name="DataHeader1" Width="623.7" Height="18.9" KeepWithData="true" RepeatOnEveryPage="true">
-        <TextObject Name="Text1" Width="491.4" Height="17.01" Text="[Data1.C16]" Font="宋体, 8pt"/>
-        <TextObject Name="Text2" Left="538.65" Width="94.5" Height="17.01" CanBreak="false" Text="[Data1.C20]" WordWrap="false" Font="宋体, 8pt"/>
+        <TextObject Name="Text1" Width="472.5" Height="17.01" Text="[FRInfo.C16]" Font="宋体, 8pt"/>
+        <TextObject Name="Text2" Left="538.65" Width="94.5" Height="17.01" CanBreak="false" Text="[FRInfo.C20]" WordWrap="false" Font="宋体, 8pt"/>
       </DataHeaderBand>
-      <DataBand Name="Data3" Top="144.3" Width="623.7" Height="708.75">
+      <DataBand Name="Data3" Top="131.07" Width="623.7" Height="708.75">
         <SubreportObject Name="Subreport1" Width="623.7" Height="708.75" ReportPage="Page2" PrintOnParent="true"/>
-        <DataHeaderBand Name="DataHeader2" Top="121.4" Width="623.7" Height="18.9">
+        <DataHeaderBand Name="DataHeader2" Top="108.17" Width="623.7" Height="18.9">
           <TextObject Name="Text30" Width="54.81" Height="18.9" Text="序号" VertAlign="Center" Font="宋体, 9pt"/>
           <TextObject Name="Text31" Left="56.7" Width="213.57" Height="18.9" Text="项   目" VertAlign="Center" Font="宋体, 9pt"/>
           <TextObject Name="Text32" Left="283.5" Width="77.49" Height="18.9" Text="结果" VertAlign="Center" Font="宋体, 9pt"/>
@@ -165,7 +165,7 @@
           <TextObject Name="Text35" Left="510.3" Width="94.5" Height="18.9" Text="生物参考区间" VertAlign="Center" Font="宋体, 9pt"/>
         </DataHeaderBand>
       </DataBand>
-      <DataBand Name="Data4" Top="857.05" Width="623.7" Height="75.6" DataSource="Custom">
+      <DataBand Name="Data4" Top="843.82" Width="623.7" Height="75.6" DataSource="Custom">
         <TableObject Name="Table2" Left="75.6" Width="472.5" Height="75.6" Border.Lines="All">
           <TableColumn Name="Column6" Width="18.9"/>
           <TableColumn Name="Column7" Width="113.4"/>
@@ -175,46 +175,46 @@
           <TableRow Name="Row5">
             <TableCell Name="Cell22" Border.Lines="Right" Text="人&#13;&#10;工&#13;&#10;分&#13;&#10;类" VertAlign="Center" Font="宋体, 9pt" RowSpan="4"/>
             <TableCell Name="Cell23" Border.Lines="Right, Bottom" Text="原始粒          %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
-              <TextObject Name="Text63" Left="63.15" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column0]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+              <TextObject Name="Text63" Left="63.15" Top="3" Width="32.13" Height="15.12" Text="[Custom.C0]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
             </TableCell>
             <TableCell Name="Cell24" Border.Lines="Right, Bottom" Text="早幼粒          %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
-              <TextObject Name="Text64" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column1]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+              <TextObject Name="Text64" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[Custom.C1]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
             </TableCell>
             <TableCell Name="Cell25" Border.Lines="Right, Bottom" Text="中幼粒          %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
-              <TextObject Name="Text65" Left="66.15" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column2]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+              <TextObject Name="Text65" Left="66.15" Top="3" Width="32.13" Height="15.12" Text="[Custom.C2]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
             </TableCell>
             <TableCell Name="Cell26" Border.Lines="Bottom" Text="晚幼粒          %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
-              <TextObject Name="Text66" Left="66.15" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column3]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+              <TextObject Name="Text66" Left="66.15" Top="3" Width="32.13" Height="15.12" Text="[Custom.C3]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
             </TableCell>
           </TableRow>
           <TableRow Name="Row6">
             <TableCell Name="Cell27" Font="宋体, 9pt"/>
             <TableCell Name="Cell28" Border.Lines="Right, Bottom" Text="中性杆状        %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
-              <TextObject Name="Text67" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column4]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+              <TextObject Name="Text67" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[Custom.C4]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
             </TableCell>
             <TableCell Name="Cell29" Border.Lines="Right, Bottom" Text="中性分叶        %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
-              <TextObject Name="Text68" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column5]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+              <TextObject Name="Text68" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[Custom.C5]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
             </TableCell>
             <TableCell Name="Cell30" Border.Lines="Right, Bottom" Text="嗜酸粒          %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
-              <TextObject Name="Text69" Left="66.15" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column6]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+              <TextObject Name="Text69" Left="66.15" Top="3" Width="32.13" Height="15.12" Text="[Custom.C6]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
             </TableCell>
             <TableCell Name="Cell31" Border.Lines="Bottom" Text="嗜碱粒          %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
-              <TextObject Name="Text70" Left="66.15" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column10]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+              <TextObject Name="Text70" Left="66.15" Top="3" Width="32.13" Height="15.12" Text="[Custom.C7]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
             </TableCell>
           </TableRow>
           <TableRow Name="Row7">
             <TableCell Name="Cell32" Font="宋体, 9pt"/>
             <TableCell Name="Cell33" Border.Lines="Right, Bottom" Text="淋巴            %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
-              <TextObject Name="Text71" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column7]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+              <TextObject Name="Text71" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[Custom.C8]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
             </TableCell>
             <TableCell Name="Cell34" Border.Lines="Right, Bottom" Text="单核            %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
-              <TextObject Name="Text72" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column8]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+              <TextObject Name="Text72" Left="63.13" Top="3" Width="32.13" Height="15.12" Text="[Custom.C9]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
             </TableCell>
             <TableCell Name="Cell35" Border.Lines="Right, Bottom" Text="有核红     /100WBC" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
-              <TextObject Name="Text73" Left="37.8" Top="3" Width="32.13" Height="15.12" Text="[ReportCustom.Column9]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+              <TextObject Name="Text73" Left="37.8" Top="3" Width="32.13" Height="15.12" Text="[Custom.C10]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
             </TableCell>
             <TableCell Name="Cell36" Border.Lines="Bottom" Text="幼稚细胞        %" Padding="1, 2, 0, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt">
-              <TextObject Name="Text74" Left="66.15" Top="3" Width="30.24" Height="15.12" Text="[ReportCustom.Column11]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+              <TextObject Name="Text74" Left="66.15" Top="3" Width="30.24" Height="15.12" Text="[Custom.C11]" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
             </TableCell>
           </TableRow>
           <TableRow Name="Row8">
@@ -226,29 +226,27 @@
           </TableRow>
         </TableObject>
       </DataBand>
-      <DataFooterBand Name="DataFooter1" Top="936.65" Width="623.7" Height="75.6">
+      <DataFooterBand Name="DataFooter1" Top="923.42" Width="623.7" Height="75.6">
         <TextObject Name="Text42" Width="64.26" Height="18.9" Text="采集时间：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-        <TextObject Name="Text45" Left="66.15" Width="132.3" Height="18.9" Text="[Data1.C17]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text45" Left="66.15" Width="132.3" Height="18.9" Text="[FRInfo.C17]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
         <TextObject Name="Text52" Left="340.2" Top="9.45" Width="56.7" Height="18.9" Text="检验者：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
         <TextObject Name="Text53" Left="472.5" Top="9.45" Width="56.7" Height="18.9" Text="审核者：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-        <PictureObject Name="Picture1" Left="396.9" Top="1.89" Width="75.6" Height="37.8" DataColumn="ReportReport.TechnicianImage"/>
-        <PictureObject Name="Picture2" Left="529.2" Top="1.89" Width="75.6" Height="37.8" DataColumn="ReportReport.CheckerImage"/>
         <TextObject Name="Text43" Top="18.9" Width="64.26" Height="18.9" Text="签收时间：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-        <TextObject Name="Text46" Left="66.15" Top="18.9" Width="132.3" Height="18.9" Text="[Data1.C18]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text46" Left="66.15" Top="18.9" Width="132.3" Height="18.9" Text="[FRInfo.C18]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
         <TextObject Name="Text44" Top="37.8" Width="64.26" Height="18.9" Text="报告时间：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-        <TextObject Name="Text47" Left="66.15" Top="37.8" Width="132.3" Height="18.9" Text="[Data1.C19]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text47" Left="66.15" Top="37.8" Width="132.3" Height="18.9" Text="[FRInfo.C19]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
         <TextObject Name="Text51" Top="56.7" Width="444.15" Height="18.9" Text="注:此报告仅对该份被检标本有效，若有质疑请在接到报告2天内提出！" VertAlign="Center" Font="宋体, 9pt"/>
       </DataFooterBand>
     </DataBand>
   </ReportPage>
   <ReportPage Name="Page2">
-    <DataBand Name="Data5" Width="718.2" Height="18.9" DataSource="Data3">
+    <DataBand Name="Data5" Width="718.2" Height="18.9" DataSource="FRItem">
       <TextObject Name="Text36" Width="45.36" Height="18.9" Text="[Row#]" Padding="2, 4, 2, 0" VertAlign="Center" Font="宋体, 9pt"/>
-      <TextObject Name="Text37" Left="37.8" Width="232.47" Height="18.9" Text="[Data3.C0]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text38" Left="283.5" Width="49.14" Height="18.9" Text="[Data3.C2]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text39" Left="368.55" Width="56.7" Height="18.9" Text="[Data3.C3]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text40" Left="425.25" Width="83.16" Height="18.9" Text="[Data3.C4]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text41" Left="519.75" Width="122.85" Height="18.9" Text="[Data3.C5]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text37" Left="37.8" Width="232.47" Height="18.9" Text="[FRItem.C0]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text38" Left="283.5" Width="49.14" Height="18.9" Text="[FRItem.C2]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text39" Left="368.55" Width="56.7" Height="18.9" Text="[FRItem.C3]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text40" Left="425.25" Width="83.16" Height="18.9" Text="[FRItem.C4]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text41" Left="519.75" Width="122.85" Height="18.9" Text="[FRItem.C5]" Padding="2, 4, 2, 0" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
     </DataBand>
   </ReportPage>
 </Report>

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 
-namespace XYS.FR.Config
+namespace XYS.FR.Conf
 {
      [ConfigurationCollection(typeof(LabModelCollection), AddItemName = "model")]
     public class LabModelCollection : ConfigurationElementCollection

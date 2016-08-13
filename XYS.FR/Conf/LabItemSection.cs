@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Configuration;
 
-namespace XYS.FR.Config
+namespace XYS.FR.Conf
 {
     public class LabItemSection : ConfigurationElement
     {

@@ -62,38 +62,39 @@
     <Content Include="DLL\FastReport.Bars.dll" />
     <Content Include="DLL\FastReport.dll" />
     <Content Include="DLL\FastReport.Editor.dll" />
+    <Content Include="DLL\FastReport.Web.dll" />
     <Content Include="Global.asax" />
-    <Content Include="LabPDF.asmx" />
+    <Content Include="PDF.asmx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\LabConfigManager.cs" />
-    <Compile Include="Config\LabModelCollection.cs" />
-    <Compile Include="Config\LabModelSection.cs" />
-    <Compile Include="Config\LabSection.cs" />
-    <Compile Include="Config\LabGroupCollection.cs" />
-    <Compile Include="Config\LabGroupSection.cs" />
-    <Compile Include="Config\LabItemCollection.cs" />
-    <Compile Include="Config\LabItemSection.cs" />
+    <Compile Include="Conf\LabConfigManager.cs" />
+    <Compile Include="Conf\LabModelCollection.cs" />
+    <Compile Include="Conf\LabModelSection.cs" />
+    <Compile Include="Conf\LabSection.cs" />
+    <Compile Include="Conf\LabGroupCollection.cs" />
+    <Compile Include="Conf\LabGroupSection.cs" />
+    <Compile Include="Conf\LabItemCollection.cs" />
+    <Compile Include="Conf\LabItemSection.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="LabPDF.asmx.cs">
-      <DependentUpon>LabPDF.asmx</DependentUpon>
+    <Compile Include="Lab\LabDAL.cs" />
+    <Compile Include="Lab\LabService.cs" />
+    <Compile Include="Lab\PDFTest.cs" />
+    <Compile Include="Model\FRInfo.cs" />
+    <Compile Include="Model\FRData.cs" />
+    <Compile Include="Model\FRItem.cs" />
+    <Compile Include="Model\Custom.cs" />
+    <Compile Include="Model\FRKV.cs" />
+    <Compile Include="Model\Image.cs" />
+    <Compile Include="PDF.asmx.cs">
+      <DependentUpon>PDF.asmx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Lab\PDFDAL.cs" />
-    <Compile Include="Lab\PDFService.cs" />
-    <Compile Include="Lab\PDFTest.cs" />
-    <Compile Include="Model\Data1.cs" />
-    <Compile Include="Model\Data2.cs" />
-    <Compile Include="Model\Data3.cs" />
-    <Compile Include="Model\Custom.cs" />
-    <Compile Include="Model\KVData.cs" />
-    <Compile Include="Model\Image.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Util\DataStruct.cs" />
-    <Compile Include="Util\ExportPDF.cs" />
+    <Compile Include="Util\ExportData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Print\DataSet\" />

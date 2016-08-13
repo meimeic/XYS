@@ -12,8 +12,8 @@ namespace LisTest.FRService {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="http://fr.xys.org/", ConfigurationName="FRService.LabPDFSoap")]
-    public interface LabPDFSoap {
+    [System.ServiceModel.ServiceContractAttribute(Namespace="http://fr.xys.org/", ConfigurationName="FRService.PDFSoap")]
+    internal interface PDFSoap {
         
         // CODEGEN: 命名空间 http://fr.xys.org/ 的元素名称 HelloWorldResult 以后生成的消息协定未标记为 nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://fr.xys.org/HelloWorld", ReplyAction="*")]
@@ -23,18 +23,18 @@ namespace LisTest.FRService {
         System.Threading.Tasks.Task<LisTest.FRService.HelloWorldResponse> HelloWorldAsync(LisTest.FRService.HelloWorldRequest request);
         
         // CODEGEN: 命名空间 http://fr.xys.org/ 的元素名称 bytes 以后生成的消息协定未标记为 nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://fr.xys.org/PrintPDF", ReplyAction="*")]
-        LisTest.FRService.PrintPDFResponse PrintPDF(LisTest.FRService.PrintPDFRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://fr.xys.org/LabPDF", ReplyAction="*")]
+        LisTest.FRService.LabPDFResponse LabPDF(LisTest.FRService.LabPDFRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://fr.xys.org/PrintPDF", ReplyAction="*")]
-        System.Threading.Tasks.Task<LisTest.FRService.PrintPDFResponse> PrintPDFAsync(LisTest.FRService.PrintPDFRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://fr.xys.org/LabPDF", ReplyAction="*")]
+        System.Threading.Tasks.Task<LisTest.FRService.LabPDFResponse> LabPDFAsync(LisTest.FRService.LabPDFRequest request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class HelloWorldRequest {
+    internal partial class HelloWorldRequest {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="HelloWorld", Namespace="http://fr.xys.org/", Order=0)]
         public LisTest.FRService.HelloWorldRequestBody Body;
@@ -51,7 +51,7 @@ namespace LisTest.FRService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute()]
-    public partial class HelloWorldRequestBody {
+    internal partial class HelloWorldRequestBody {
         
         public HelloWorldRequestBody() {
         }
@@ -61,7 +61,7 @@ namespace LisTest.FRService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class HelloWorldResponse {
+    internal partial class HelloWorldResponse {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="HelloWorldResponse", Namespace="http://fr.xys.org/", Order=0)]
         public LisTest.FRService.HelloWorldResponseBody Body;
@@ -78,7 +78,7 @@ namespace LisTest.FRService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://fr.xys.org/")]
-    public partial class HelloWorldResponseBody {
+    internal partial class HelloWorldResponseBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public string HelloWorldResult;
@@ -95,15 +95,15 @@ namespace LisTest.FRService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class PrintPDFRequest {
+    internal partial class LabPDFRequest {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="PrintPDF", Namespace="http://fr.xys.org/", Order=0)]
-        public LisTest.FRService.PrintPDFRequestBody Body;
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="LabPDF", Namespace="http://fr.xys.org/", Order=0)]
+        public LisTest.FRService.LabPDFRequestBody Body;
         
-        public PrintPDFRequest() {
+        public LabPDFRequest() {
         }
         
-        public PrintPDFRequest(LisTest.FRService.PrintPDFRequestBody Body) {
+        public LabPDFRequest(LisTest.FRService.LabPDFRequestBody Body) {
             this.Body = Body;
         }
     }
@@ -112,15 +112,15 @@ namespace LisTest.FRService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://fr.xys.org/")]
-    public partial class PrintPDFRequestBody {
+    internal partial class LabPDFRequestBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public byte[] bytes;
         
-        public PrintPDFRequestBody() {
+        public LabPDFRequestBody() {
         }
         
-        public PrintPDFRequestBody(byte[] bytes) {
+        public LabPDFRequestBody(byte[] bytes) {
             this.bytes = bytes;
         }
     }
@@ -129,15 +129,15 @@ namespace LisTest.FRService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    public partial class PrintPDFResponse {
+    internal partial class LabPDFResponse {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="PrintPDFResponse", Namespace="http://fr.xys.org/", Order=0)]
-        public LisTest.FRService.PrintPDFResponseBody Body;
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="LabPDFResponse", Namespace="http://fr.xys.org/", Order=0)]
+        public LisTest.FRService.LabPDFResponseBody Body;
         
-        public PrintPDFResponse() {
+        public LabPDFResponse() {
         }
         
-        public PrintPDFResponse(LisTest.FRService.PrintPDFResponseBody Body) {
+        public LabPDFResponse(LisTest.FRService.LabPDFResponseBody Body) {
             this.Body = Body;
         }
     }
@@ -146,84 +146,84 @@ namespace LisTest.FRService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute()]
-    public partial class PrintPDFResponseBody {
+    internal partial class LabPDFResponseBody {
         
-        public PrintPDFResponseBody() {
+        public LabPDFResponseBody() {
         }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface LabPDFSoapChannel : LisTest.FRService.LabPDFSoap, System.ServiceModel.IClientChannel {
+    internal interface PDFSoapChannel : LisTest.FRService.PDFSoap, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class LabPDFSoapClient : System.ServiceModel.ClientBase<LisTest.FRService.LabPDFSoap>, LisTest.FRService.LabPDFSoap {
+    internal partial class PDFSoapClient : System.ServiceModel.ClientBase<LisTest.FRService.PDFSoap>, LisTest.FRService.PDFSoap {
         
-        public LabPDFSoapClient() {
+        public PDFSoapClient() {
         }
         
-        public LabPDFSoapClient(string endpointConfigurationName) : 
+        public PDFSoapClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
         
-        public LabPDFSoapClient(string endpointConfigurationName, string remoteAddress) : 
+        public PDFSoapClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public LabPDFSoapClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public PDFSoapClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public LabPDFSoapClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public PDFSoapClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        LisTest.FRService.HelloWorldResponse LisTest.FRService.LabPDFSoap.HelloWorld(LisTest.FRService.HelloWorldRequest request) {
+        LisTest.FRService.HelloWorldResponse LisTest.FRService.PDFSoap.HelloWorld(LisTest.FRService.HelloWorldRequest request) {
             return base.Channel.HelloWorld(request);
         }
         
         public string HelloWorld() {
             LisTest.FRService.HelloWorldRequest inValue = new LisTest.FRService.HelloWorldRequest();
             inValue.Body = new LisTest.FRService.HelloWorldRequestBody();
-            LisTest.FRService.HelloWorldResponse retVal = ((LisTest.FRService.LabPDFSoap)(this)).HelloWorld(inValue);
+            LisTest.FRService.HelloWorldResponse retVal = ((LisTest.FRService.PDFSoap)(this)).HelloWorld(inValue);
             return retVal.Body.HelloWorldResult;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<LisTest.FRService.HelloWorldResponse> LisTest.FRService.LabPDFSoap.HelloWorldAsync(LisTest.FRService.HelloWorldRequest request) {
+        System.Threading.Tasks.Task<LisTest.FRService.HelloWorldResponse> LisTest.FRService.PDFSoap.HelloWorldAsync(LisTest.FRService.HelloWorldRequest request) {
             return base.Channel.HelloWorldAsync(request);
         }
         
         public System.Threading.Tasks.Task<LisTest.FRService.HelloWorldResponse> HelloWorldAsync() {
             LisTest.FRService.HelloWorldRequest inValue = new LisTest.FRService.HelloWorldRequest();
             inValue.Body = new LisTest.FRService.HelloWorldRequestBody();
-            return ((LisTest.FRService.LabPDFSoap)(this)).HelloWorldAsync(inValue);
+            return ((LisTest.FRService.PDFSoap)(this)).HelloWorldAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        LisTest.FRService.PrintPDFResponse LisTest.FRService.LabPDFSoap.PrintPDF(LisTest.FRService.PrintPDFRequest request) {
-            return base.Channel.PrintPDF(request);
+        LisTest.FRService.LabPDFResponse LisTest.FRService.PDFSoap.LabPDF(LisTest.FRService.LabPDFRequest request) {
+            return base.Channel.LabPDF(request);
         }
         
-        public void PrintPDF(byte[] bytes) {
-            LisTest.FRService.PrintPDFRequest inValue = new LisTest.FRService.PrintPDFRequest();
-            inValue.Body = new LisTest.FRService.PrintPDFRequestBody();
+        public void LabPDF(byte[] bytes) {
+            LisTest.FRService.LabPDFRequest inValue = new LisTest.FRService.LabPDFRequest();
+            inValue.Body = new LisTest.FRService.LabPDFRequestBody();
             inValue.Body.bytes = bytes;
-            LisTest.FRService.PrintPDFResponse retVal = ((LisTest.FRService.LabPDFSoap)(this)).PrintPDF(inValue);
+            LisTest.FRService.LabPDFResponse retVal = ((LisTest.FRService.PDFSoap)(this)).LabPDF(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<LisTest.FRService.PrintPDFResponse> LisTest.FRService.LabPDFSoap.PrintPDFAsync(LisTest.FRService.PrintPDFRequest request) {
-            return base.Channel.PrintPDFAsync(request);
+        System.Threading.Tasks.Task<LisTest.FRService.LabPDFResponse> LisTest.FRService.PDFSoap.LabPDFAsync(LisTest.FRService.LabPDFRequest request) {
+            return base.Channel.LabPDFAsync(request);
         }
         
-        public System.Threading.Tasks.Task<LisTest.FRService.PrintPDFResponse> PrintPDFAsync(byte[] bytes) {
-            LisTest.FRService.PrintPDFRequest inValue = new LisTest.FRService.PrintPDFRequest();
-            inValue.Body = new LisTest.FRService.PrintPDFRequestBody();
+        public System.Threading.Tasks.Task<LisTest.FRService.LabPDFResponse> LabPDFAsync(byte[] bytes) {
+            LisTest.FRService.LabPDFRequest inValue = new LisTest.FRService.LabPDFRequest();
+            inValue.Body = new LisTest.FRService.LabPDFRequestBody();
             inValue.Body.bytes = bytes;
-            return ((LisTest.FRService.LabPDFSoap)(this)).PrintPDFAsync(inValue);
+            return ((LisTest.FRService.PDFSoap)(this)).LabPDFAsync(inValue);
         }
     }
 }

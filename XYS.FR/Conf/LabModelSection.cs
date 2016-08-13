@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Configuration;
 
-namespace XYS.FR.Config
+namespace XYS.FR.Conf
 {
-    public class LabGroupSection : ConfigurationElement
+    public class LabModelSection : ConfigurationElement
     {
         [ConfigurationProperty("name", IsRequired = true)]
         public string Name
@@ -34,23 +34,13 @@ namespace XYS.FR.Config
             }
             private set { }
         }
-
-        [ConfigurationProperty("modelNo", IsRequired = false)]
-        public int? ModelNo
+        
+        [ConfigurationProperty("modelName", IsRequired = true)]
+        public string ModelName
         {
             get
             {
-                return (int?)this["modelNo"];
-            }
-            private set { }
-        }
-
-        [ConfigurationProperty("orderNo", IsRequired = false)]
-        public int? OrderNo
-        {
-            get
-            {
-                return (int?)this["orderNo"];
+                return this["modelName"] as string;
             }
             private set { }
         }

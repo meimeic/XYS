@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="333fdf4d-fea0-4513-8d82-35a9ad7ac443" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="e290664c-2b5c-4f72-94a7-df95c607a789" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
     <EnableDataBinding>true</EnableDataBinding>
     <ExcludedTypes />
     <ImportXmlTypes>false</ImportXmlTypes>
-    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateInternalTypes>true</GenerateInternalTypes>
     <GenerateMessageContracts>false</GenerateMessageContracts>
     <NamespaceMappings />
     <CollectionMappings />
@@ -19,11 +19,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://10.1.10.187:8089/LabPDF.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://10.1.10.187:8089/PDF.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="LabPDF.disco" MetadataType="Disco" ID="922aa46b-456e-4ae6-950e-2ec059d4798f" SourceId="1" SourceUrl="http://10.1.10.187:8089/LabPDF.asmx?disco" />
-    <MetadataFile FileName="LabPDF.wsdl" MetadataType="Wsdl" ID="dfad6963-4ff6-42fc-8ded-ebbe73f88c58" SourceId="1" SourceUrl="http://10.1.10.187:8089/LabPDF.asmx?wsdl" />
+    <MetadataFile FileName="PDF.wsdl" MetadataType="Wsdl" ID="0bebe39c-0d60-4d55-94d0-d91c8a80de4b" SourceId="1" SourceUrl="http://10.1.10.187:8089/PDF.asmx?wsdl" />
+    <MetadataFile FileName="PDF.disco" MetadataType="Disco" ID="57a169e6-46a9-436e-9690-44febd7222aa" SourceId="1" SourceUrl="http://10.1.10.187:8089/PDF.asmx?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

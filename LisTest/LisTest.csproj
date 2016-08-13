@@ -82,13 +82,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Service References\FRService\LabPDF.wsdl" />
     <None Include="Service References\FRService\LisTest.FRService.HelloWorldResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\FRService\LisTest.FRService.PrintPDFResponse.datasource">
+    <None Include="Service References\FRService\LisTest.FRService.LabPDFResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\FRService\PDF.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -110,7 +110,7 @@
     <WCFMetadataStorage Include="Service References\FRService\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\FRService\LabPDF.disco" />
+    <None Include="Service References\FRService\PDF.disco" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\FRService\configuration91.svcinfo" />

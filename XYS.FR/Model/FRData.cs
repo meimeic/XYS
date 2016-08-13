@@ -4,7 +4,7 @@ using XYS.Report;
 using XYS.Common;
 namespace XYS.FR.Model
 {
-    public class Data2 : IExportElement
+    public class FRData : IExportElement
     {
         private string m_c0;
         private string m_c1;
@@ -37,7 +37,7 @@ namespace XYS.FR.Model
         private string m_c28;
         private string m_c29;
 
-        public Data2()
+        public FRData()
         {
         }
 

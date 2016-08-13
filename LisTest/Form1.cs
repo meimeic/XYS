@@ -18,13 +18,13 @@ namespace LisTest
     public partial class Form1 : Form
     {
         private readonly LabService service;
-        private readonly FRService.LabPDFSoapClient client;
+        private readonly FRService.PDFSoapClient client;
         public Form1()
         {
             InitializeComponent();
             this.service = LabService.LService;
             this.service.HandleCompleteEvent += this.PrintPDF;
-            this.client = new FRService.LabPDFSoapClient("LabPDFSoap");
+            this.client = new FRService.PDFSoapClient("PDFSoap");
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -35,7 +35,7 @@ namespace LisTest
         private void PrintPDF(LabReport report)
         {
             byte[] bytes = Helper.SerializeObject(report);
-            this.client.PrintPDF(bytes);
+            this.client.LabPDF(bytes);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

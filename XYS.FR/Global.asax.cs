@@ -8,9 +8,9 @@ namespace XYS.FR
 {
     public class Global : System.Web.HttpApplication
     {
-        public static PDFService PDF
+        public static LabService PDF
         {
-            get { return PDFService.PService; }
+            get { return LabService.PService; }
         }
         protected void Application_Start(object sender, EventArgs e)
         {

@@ -7,43 +7,58 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading;
 
-using FastReport;
-using FastReport.Export.Pdf;
-
 using XYS.Util;
+using XYS.Report;
 using XYS.Model;
 using XYS.Model.Lab;
-using XYS.Report;
-
 
 using XYS.FR.Util;
+using XYS.FR.Conf;
 using XYS.FR.Model;
-using XYS.FR.Config;
+
+using FastReport.Utils;
+using FastReport.Export.Pdf;
 namespace XYS.FR.Lab
 {
-    public class PDFService
+    public delegate void GenderErrorHandler(LabReport report);
+    public delegate void GenderSuccessHandler(LabReport report);
+    public class LabService
     {
+        #region 静态属性
+        private static string RootPath;
         private static int WorkerCount;
         private static readonly DateTime MinTime;
-        private static readonly PDFService ServiceInstance;
-
+        private static readonly LabService ServiceInstance;
+        #endregion
+        
+        #region 实例属性
         private Thread[] m_workerPool;
-        private readonly PDFDAL DAL;
-        private readonly ExportPDF Export;
+        private readonly LabDAL DAL;
+        private readonly ExportData Export;
         private readonly Hashtable Item2CustomMap;
         private readonly BlockingCollection<LabReport> RequestQueue;
+        #endregion
+
+        #region 私有事件
+        private event GenderErrorHandler m_genderErrorEvent;
+        private event GenderSuccessHandler m_genderSuccessEvent;
+        #endregion
 
         #region 构造函数
-        static PDFService()
+        static LabService()
         {
             WorkerCount = 2;
+            Config.WebMode = true;
+            RootPath = "E:\\report\\lab";
             MinTime = new DateTime(2011, 1, 1);
-            ServiceInstance = new PDFService();
+            Config.ReportSettings.ShowProgress = false;
+
+            ServiceInstance = new LabService();
         }
-        private PDFService()
+        private LabService()
         {
-            this.DAL = new PDFDAL();
-            this.Export = new ExportPDF();
+            this.DAL = new LabDAL();
+            this.Export = new ExportData();
             this.Item2CustomMap = new Hashtable(20);
             this.RequestQueue = new BlockingCollection<LabReport>(10000);
 
@@ -52,9 +67,22 @@ namespace XYS.FR.Lab
         #endregion
 
         #region 静态属性
-        public static PDFService PService
+        public static LabService PService
         {
             get { return ServiceInstance; }
+        }
+        #endregion
+
+        #region 事件属性
+        public event GenderErrorHandler GenderErrorEvent
+        {
+            add { this.m_genderErrorEvent += value; }
+            remove { this.m_genderErrorEvent -= value; }
+        }
+        public event GenderSuccessHandler GenderSuccessEvent
+        {
+            add { this.m_genderSuccessEvent += value; }
+            remove { this.m_genderSuccessEvent -= value; }
         }
         #endregion
 
@@ -78,32 +106,79 @@ namespace XYS.FR.Lab
             DataSet ds = DataStruct.GetSet();
             int sectionNo = report.Info.SectionNo;
             List<int> superList = new List<int>(16);
-
+            //数据填充
             this.FillInfo(report.Info, ds);
             this.FillItems(report.ItemList, superList, ds);
             this.FillImage(report.ImageList, ds);
-
+            //获取模板
             string model = GetModelPath(sectionNo, superList);
+            //生成pdf,获取pdf路径
             string filePath = this.GenderPDF(model, ds);
-
+            //获取排序号
+            int orderNo = GetOrderNo(sectionNo, superList);
+            //保存生成记录
+            this.DAL.SaveRecord(report.Info, orderNo, filePath);
+            //触发生成pdf成功事件
+            this.OnSuccess(report);
         }
-        private string GenderPDF(string model,DataSet ds)
+        private string GenderPDF(string model, DataSet ds)
         {
+            //
             FastReport.Report report = new FastReport.Report();
             report.Load(model);
             report.RegisterData(ds);
-            report.Prepare();
+            //report.Prepare(); 报告准备
+            report.PreparePhase1();
+            report.PreparePhase2();
+            //初始化PDF输出类
             PDFExport export = new PDFExport();
-            report.Export(export, "E:\\report\\lab\\temp.pdf");
+            this.InitExport(export);
+            //输出PDF
+            string fileFullName = GetFileFullName();
+            export.Export(report, fileFullName);
+            //释放资源
             report.Dispose();
-            return "";
+
+            return fileFullName;
+        }
+        private string GetFileFullName()
+        {
+            string fileName = SystemInfo.NewGuid().ToString() + ".pdf";
+            string filePath = Path.Combine(RootPath, DateTime.Now.ToString("yyyyMMdd"));
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
+            return Path.Combine(filePath, fileName);
+        }
+        private void InitExport(PDFExport export)
+        {
         }
         #endregion
 
-        #region 将数据填充到dataset
+        #region 触发事件
+        protected void OnError(LabReport report)
+        {
+            GenderErrorHandler handler = this.m_genderErrorEvent;
+            if (handler != null)
+            {
+                handler(report);
+            }
+        }
+        protected void OnSuccess(LabReport report)
+        {
+            GenderSuccessHandler handler = this.m_genderSuccessEvent;
+            if (handler != null)
+            {
+                handler(report);
+            }
+        }
+        #endregion
+
+        #region 将数据填充到DataSet
         private void FillInfo(InfoElement info,DataSet ds)
         {
-            Data1 header = new Data1();
+            FRInfo header = new FRInfo();
             header.C0 = info.SerialNo;
             header.C1 = info.DeptName;
             header.C2 = info.BedNo;
@@ -130,10 +205,9 @@ namespace XYS.FR.Lab
 
             this.Export.ExportElement(header,ds);
         }
-
         private void FillItems(List<ItemElement> ls, List<int> superList, DataSet ds)
         {
-            Data3 data = null;
+            FRItem data = null;
             Custom custom = new Custom();
             List<IExportElement> ls1 = new List<IExportElement>(16);
             ls.Sort();
@@ -146,7 +220,7 @@ namespace XYS.FR.Lab
                 }
                 if (!this.ConvertCustom(item, custom))
                 {
-                    data = new Data3();
+                    data = new FRItem();
                     this.FillItem(item, data);
                     ls1.Add(data);
                 }
@@ -154,7 +228,7 @@ namespace XYS.FR.Lab
             this.Export.ExportElement(custom, ds);
             this.Export.ExportElement(ls1, ds);
         }
-        private void FillItem(ItemElement item, Data3 data)
+        private void FillItem(ItemElement item, FRItem data)
         {
             data.C0 = item.CName;
             data.C1 = item.EName;
@@ -173,15 +247,13 @@ namespace XYS.FR.Lab
             }
             return false;
         }
-
         private void FillImage(List<ImageElement> images, DataSet ds)
         {
             int order = 0;
             string propertyName = null;
             Image image = new Image();
-
+            //图片排序
             images.Sort();
-
             foreach (ImageElement img in images)
             {
                 propertyName = GetImagePropName(order);
@@ -212,7 +284,7 @@ namespace XYS.FR.Lab
         }
         #endregion
 
-        #region 私有方法获取模板路径及报告序号
+        #region 获取模板路径及报告序号
         private string GetModelPath(int sectionNo, List<int> list)
         {
             int modelNo = LabConfigManager.GetModelNo(list);

@@ -43,7 +43,7 @@ namespace XYS.Lis.Report.Handler
                 bool result = false;
                 for (int i = elements.Count - 1; i >= 0; i--)
                 {
-                    result = HandleElement(elements[i], RK);
+                    result = this.InnerHandle(elements[i], RK);
                     if (!result)
                     {
                         elements.RemoveAt(i);

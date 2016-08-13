@@ -24,7 +24,7 @@ namespace XYS.Lis.Report.Handler
             if (item != null)
             {
                 item.ReportID = RK.ID;
-                result = OperateItem(item);
+                result = this.OperateItem(item);
             }
             return result;
         }
@@ -35,7 +35,7 @@ namespace XYS.Lis.Report.Handler
                 bool result = false;
                 for (int i = elements.Count - 1; i >= 0; i--)
                 {
-                    result = HandleElement(elements[i], RK);
+                    result = this.InnerHandle(elements[i], RK);
                     if (!result)
                     {
                         elements.RemoveAt(i);
@@ -47,14 +47,14 @@ namespace XYS.Lis.Report.Handler
         #endregion
 
         #region 检验项处理逻辑
-        protected bool OperateItem(ItemElement rie)
+        private bool OperateItem(ItemElement rie)
         {
             if (rie == null)
             {
                 return false;
             }
             //判断检验项是否合法
-            if (IsLegal(rie))
+            if (!IsLegal(rie))
             {
                 return false;
             }
@@ -75,11 +75,11 @@ namespace XYS.Lis.Report.Handler
             //根据保密等级判断检验项是否合法
             if (secretGrade > 0)
             {
-                return true;
+                return false;
             }
             else
             {
-                return false;
+                return true;
             }
         }
         #endregion

@@ -246,11 +246,11 @@ namespace XYS.FR.Util
         private static void Init()
         {
             TypeList.Add(typeof(Custom));
-            TypeList.Add(typeof(Data1));
-            TypeList.Add(typeof(Data2));
-            TypeList.Add(typeof(Data3));
+            TypeList.Add(typeof(FRInfo));
+            TypeList.Add(typeof(FRData));
+            TypeList.Add(typeof(FRItem));
             TypeList.Add(typeof(Image));
-            TypeList.Add(typeof(KVData));
+            TypeList.Add(typeof(FRKV));
 
             InitRamStruct();
         }

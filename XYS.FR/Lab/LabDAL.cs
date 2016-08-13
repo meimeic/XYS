@@ -5,11 +5,11 @@ using System.Data;
 using XYS.Model.Lab;
 namespace XYS.FR.Lab
 {
-    public class PDFDAL
+    public class LabDAL
     {
         private readonly string m_connectionString;
 
-        public PDFDAL()
+        public LabDAL()
         {
             this.m_connectionString = ConfigurationManager.ConnectionStrings["ReportMSSQL"].ConnectionString;
         }

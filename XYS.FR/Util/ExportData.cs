@@ -7,10 +7,10 @@ using XYS.Report;
 using XYS.Common;
 namespace XYS.FR.Util
 {
-    public class ExportPDF
+    public class ExportData
     {
         #region 构造函数
-        public ExportPDF()
+        public ExportData()
         { }
         #endregion
 
