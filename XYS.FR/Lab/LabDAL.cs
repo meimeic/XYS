@@ -14,7 +14,7 @@ namespace XYS.FR.Lab
             this.m_connectionString = ConfigurationManager.ConnectionStrings["ReportMSSQL"].ConnectionString;
         }
 
-        public void SaveRecord(InfoElement info,int order,string filePath)
+        public void SaveRecord(InfoElement info, int order, string filePath)
         {
         }
     }

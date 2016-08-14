@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReferencedAssemblies="System.dll&#13;&#10;System.Drawing.dll&#13;&#10;System.Windows.Forms.dll&#13;&#10;System.Data.dll&#13;&#10;System.Xml.dll&#13;&#10;mscorlib.dll" ReportInfo.Created="08/13/2015 15:10:27" ReportInfo.Modified="09/08/2015 17:14:06" ReportInfo.CreatorVersion="2013.2.5.0">
+<Report ScriptLanguage="CSharp" ReferencedAssemblies="System.dll&#13;&#10;System.Drawing.dll&#13;&#10;System.Windows.Forms.dll&#13;&#10;System.Data.dll&#13;&#10;System.Xml.dll&#13;&#10;mscorlib.dll" ReportInfo.Created="08/13/2015 15:10:27" ReportInfo.Modified="08/13/2016 21:32:14" ReportInfo.CreatorVersion="2015.3.4.0">
   <ScriptText>using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -212,24 +212,20 @@ namespace FastReport
           <Sort Expression="[ReportItem.DispNo]"/>
         </Sort>
       </DataBand>
-      <DataFooterBand Name="DataFooter1" Top="167.2" Width="623.7" Height="18.9" Border.Lines="Top, Bottom" PrintOnBottom="true" RepeatOnEveryPage="true">
+      <DataFooterBand Name="DataFooter1" Top="167.2" Width="623.7" Height="94.5" Border.Lines="Top, Bottom" PrintOnBottom="true" RepeatOnEveryPage="true">
         <TextObject Name="Text50" Width="47.25" Height="18.9" Text="备注:" VertAlign="Center" WordWrap="false" Font="宋体, 10pt, style=Bold"/>
         <TextObject Name="Text54" Left="47.25" Width="557.55" Height="18.9" Text="[ReportForm.FormMemo]" VertAlign="Center" Font="宋体, 10pt"/>
+        <TextObject Name="Text42" Top="18.9" Width="64.26" Height="18.9" Text="采集时间：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text43" Top="37.8" Width="64.26" Height="18.9" Text="签收时间：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text44" Top="56.7" Width="64.26" Height="18.9" Text="报告时间：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+        <TextObject Name="Text45" Left="56.7" Top="18.9" Width="132.3" Height="18.9" Text="[ReportForm.CollectDateTime]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        <TextObject Name="Text46" Left="56.7" Top="37.8" Width="132.3" Height="18.9" Text="[ReportForm.InceptDateTime]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        <TextObject Name="Text47" Left="56.7" Top="56.7" Width="132.3" Height="18.9" Text="[ReportForm.ReportDateTime]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        <TextObject Name="Text52" Left="340.2" Top="28.35" Width="56.7" Height="18.9" Text="检验者：" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        <TextObject Name="Text53" Left="472.5" Top="28.35" Width="56.7" Height="18.9" Text="审核者：" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+        <TextObject Name="Text51" Top="75.6" Width="444.15" Height="15.12" Text="注:此报告仅对该份被检标本有效，若有质疑请在接到报告2天内提出！" VertAlign="Center" Font="宋体, 9pt"/>
+        <TextObject Name="Text49" Left="529.2" Top="75.6" Width="94.5" Height="18.9" Text="第[Page#]页，共[TotalPages#]页" WordWrap="false" Font="宋体, 9pt"/>
       </DataFooterBand>
     </DataBand>
-    <PageFooterBand Name="PageFooter1" Top="190.1" Width="623.7" Height="75.6">
-      <TextObject Name="Text42" Width="64.26" Height="18.9" Text="采集时间：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text43" Top="18.9" Width="64.26" Height="18.9" Text="签收时间：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text44" Top="37.8" Width="64.26" Height="18.9" Text="报告时间：" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
-      <TextObject Name="Text45" Left="56.7" Width="132.3" Height="18.9" Text="[ReportForm.CollectDateTime]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
-      <TextObject Name="Text46" Left="56.7" Top="18.9" Width="132.3" Height="18.9" Text="[ReportForm.InceptDateTime]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
-      <TextObject Name="Text47" Left="56.7" Top="37.8" Width="132.3" Height="18.9" Text="[ReportForm.ReportDateTime]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
-      <TextObject Name="Text51" Top="56.7" Width="444.15" Height="15.12" Text="注:此报告仅对该份被检标本有效，若有质疑请在接到报告2天内提出！" VertAlign="Center" Font="宋体, 9pt"/>
-      <TextObject Name="Text52" Left="340.2" Top="9.45" Width="56.7" Height="18.9" Text="检验者：" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
-      <PictureObject Name="Picture1" Left="396.9" Top="1.89" Width="75.6" Height="37.8" DataColumn="ReportForm.TechnicianImage"/>
-      <TextObject Name="Text53" Left="472.5" Top="9.45" Width="56.7" Height="18.9" Text="审核者：" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
-      <PictureObject Name="Picture2" Left="529.2" Top="1.89" Width="75.6" Height="37.8" DataColumn="ReportForm.CheckerImage"/>
-      <TextObject Name="Text49" Left="529.2" Top="56.7" Width="94.5" Height="18.9" Text="第[Page#]页，共[TotalPages#]页" WordWrap="false" Font="宋体, 9pt"/>
-    </PageFooterBand>
   </ReportPage>
 </Report>
