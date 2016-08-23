@@ -15,7 +15,7 @@ namespace XYS.Persistent
         }
         #endregion
 
-        #region 方法
+        #region 公共方法
         public void Fill(IFillElement element, string sql)
         {
             DataTable dt = GetDataTable(sql);
@@ -120,6 +120,7 @@ namespace XYS.Persistent
         #endregion
 
         #region 私有方法
+        //查看属性是否为数据库列
         private bool IsColumn(PropertyInfo prop)
         {
             if (prop != null)

@@ -65,7 +65,9 @@
     <Content Include="DLL\FastReport.Web.dll" />
     <Content Include="Global.asax" />
     <Content Include="PDF.asmx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Conf\LabConfigManager.cs" />
@@ -98,7 +100,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Print\DataSet\" />
-    <Folder Include="Print\Model\" />
+    <Folder Include="Print\Lab\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XYS\XYS.csproj">

@@ -1,0 +1,220 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="08/13/2015 15:10:27" ReportInfo.Modified="08/23/2016 15:06:48" ReportInfo.CreatorVersion="2015.3.4.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+    
+
+    private void Table1_ManualBuild(object sender, EventArgs e)
+    {
+      DataSourceBase ManItemTable = Report.GetDataSource(&quot;ManReportItem&quot;);
+      
+      
+    }
+  }
+}
+</ScriptText>
+  <Dictionary>
+    <TableDataSource Name="Custom" ReferenceName="Data.Custom" DataType="System.Int32" Enabled="true">
+      <Column Name="C0" DataType="System.String" PropName="Column"/>
+      <Column Name="C1" DataType="System.String" PropName="Column"/>
+      <Column Name="C2" DataType="System.String" PropName="Column"/>
+      <Column Name="C3" DataType="System.String" PropName="Column"/>
+      <Column Name="C4" DataType="System.String" PropName="Column"/>
+      <Column Name="C5" DataType="System.String" PropName="Column"/>
+      <Column Name="C6" DataType="System.String" PropName="Column"/>
+      <Column Name="C7" DataType="System.String" PropName="Column"/>
+      <Column Name="C8" DataType="System.String" PropName="Column"/>
+      <Column Name="C9" DataType="System.String" PropName="Column"/>
+      <Column Name="C10" DataType="System.String" PropName="Column"/>
+      <Column Name="C11" DataType="System.String" PropName="Column"/>
+      <Column Name="C12" DataType="System.String" PropName="Column"/>
+      <Column Name="C13" DataType="System.String" PropName="Column"/>
+      <Column Name="C14" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="FRInfo" ReferenceName="Data.FRInfo" DataType="System.Int32" Enabled="true">
+      <Column Name="C0" DataType="System.String" PropName="Column"/>
+      <Column Name="C1" DataType="System.String" PropName="Column"/>
+      <Column Name="C2" DataType="System.String" PropName="Column"/>
+      <Column Name="C3" DataType="System.String" PropName="Column"/>
+      <Column Name="C4" DataType="System.String" PropName="Column"/>
+      <Column Name="C5" DataType="System.String" PropName="Column"/>
+      <Column Name="C6" DataType="System.String" PropName="Column"/>
+      <Column Name="C7" DataType="System.String" PropName="Column"/>
+      <Column Name="C8" DataType="System.String" PropName="Column"/>
+      <Column Name="C9" DataType="System.String" PropName="Column"/>
+      <Column Name="C10" DataType="System.String" PropName="Column"/>
+      <Column Name="C11" DataType="System.String" PropName="Column"/>
+      <Column Name="C12" DataType="System.String" PropName="Column"/>
+      <Column Name="C13" DataType="System.String" PropName="Column"/>
+      <Column Name="C14" DataType="System.String" PropName="Column"/>
+      <Column Name="C15" DataType="System.String" PropName="Column"/>
+      <Column Name="C16" DataType="System.String" PropName="Column"/>
+      <Column Name="C17" DataType="System.String" PropName="Column"/>
+      <Column Name="C18" DataType="System.String" PropName="Column"/>
+      <Column Name="C19" DataType="System.String" PropName="Column"/>
+      <Column Name="C20" DataType="System.String" PropName="Column"/>
+      <Column Name="C21" DataType="System.String" PropName="Column"/>
+      <Column Name="C22" DataType="System.String" PropName="Column"/>
+      <Column Name="C23" DataType="System.String" PropName="Column"/>
+      <Column Name="C24" DataType="System.String" PropName="Column"/>
+      <Column Name="C25" DataType="System.String" PropName="Column"/>
+      <Column Name="C26" DataType="System.String" PropName="Column"/>
+      <Column Name="C27" DataType="System.String" PropName="Column"/>
+      <Column Name="C28" DataType="System.String" PropName="Column"/>
+      <Column Name="C29" DataType="System.String" PropName="Column"/>
+      <Column Name="C30" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="C31" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="C32" DataType="System.Byte[]" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="FRData" ReferenceName="Data.FRData" DataType="System.Int32" Enabled="true">
+      <Column Name="C0" DataType="System.String" PropName="Column"/>
+      <Column Name="C1" DataType="System.String" PropName="Column"/>
+      <Column Name="C2" DataType="System.String" PropName="Column"/>
+      <Column Name="C3" DataType="System.String" PropName="Column"/>
+      <Column Name="C4" DataType="System.String" PropName="Column"/>
+      <Column Name="C5" DataType="System.String" PropName="Column"/>
+      <Column Name="C6" DataType="System.String" PropName="Column"/>
+      <Column Name="C7" DataType="System.String" PropName="Column"/>
+      <Column Name="C8" DataType="System.String" PropName="Column"/>
+      <Column Name="C9" DataType="System.String" PropName="Column"/>
+      <Column Name="C10" DataType="System.String" PropName="Column"/>
+      <Column Name="C11" DataType="System.String" PropName="Column"/>
+      <Column Name="C12" DataType="System.String" PropName="Column"/>
+      <Column Name="C13" DataType="System.String" PropName="Column"/>
+      <Column Name="C14" DataType="System.String" PropName="Column"/>
+      <Column Name="C15" DataType="System.String" PropName="Column"/>
+      <Column Name="C16" DataType="System.String" PropName="Column"/>
+      <Column Name="C17" DataType="System.String" PropName="Column"/>
+      <Column Name="C18" DataType="System.String" PropName="Column"/>
+      <Column Name="C19" DataType="System.String" PropName="Column"/>
+      <Column Name="C20" DataType="System.String" PropName="Column"/>
+      <Column Name="C21" DataType="System.String" PropName="Column"/>
+      <Column Name="C22" DataType="System.String" PropName="Column"/>
+      <Column Name="C23" DataType="System.String" PropName="Column"/>
+      <Column Name="C24" DataType="System.String" PropName="Column"/>
+      <Column Name="C25" DataType="System.String" PropName="Column"/>
+      <Column Name="C26" DataType="System.String" PropName="Column"/>
+      <Column Name="C27" DataType="System.String" PropName="Column"/>
+      <Column Name="C28" DataType="System.String" PropName="Column"/>
+      <Column Name="C29" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="FRItem" ReferenceName="Data.FRItem" DataType="System.Int32" Enabled="true">
+      <Column Name="C0" DataType="System.String" PropName="Column"/>
+      <Column Name="C1" DataType="System.String" PropName="Column"/>
+      <Column Name="C2" DataType="System.String" PropName="Column"/>
+      <Column Name="C3" DataType="System.String" PropName="Column"/>
+      <Column Name="C4" DataType="System.String" PropName="Column"/>
+      <Column Name="C5" DataType="System.String" PropName="Column"/>
+      <Column Name="C6" DataType="System.String" PropName="Column"/>
+      <Column Name="C7" DataType="System.String" PropName="Column"/>
+      <Column Name="C8" DataType="System.String" PropName="Column"/>
+      <Column Name="C9" DataType="System.String" PropName="Column"/>
+      <Column Name="C10" DataType="System.String" PropName="Column"/>
+      <Column Name="C11" DataType="System.String" PropName="Column"/>
+      <Column Name="C12" DataType="System.String" PropName="Column"/>
+      <Column Name="C13" DataType="System.String" PropName="Column"/>
+      <Column Name="C14" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="Image" ReferenceName="Data.Image" DataType="System.Int32" Enabled="true">
+      <Column Name="C0" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="C1" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="C2" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="C3" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="C4" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="C5" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="C6" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="C7" DataType="System.Byte[]" PropName="Column"/>
+      <Column Name="C8" DataType="System.String" PropName="Column"/>
+      <Column Name="C9" DataType="System.String" PropName="Column"/>
+      <Column Name="C10" DataType="System.String" PropName="Column"/>
+      <Column Name="C11" DataType="System.String" PropName="Column"/>
+      <Column Name="C12" DataType="System.String" PropName="Column"/>
+      <Column Name="C13" DataType="System.String" PropName="Column"/>
+      <Column Name="C14" DataType="System.String" PropName="Column"/>
+      <Column Name="C15" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="FRKV" ReferenceName="Data.FRKV" DataType="System.Int32" Enabled="true">
+      <Column Name="Key" DataType="System.String" PropName="Column"/>
+      <Column Name="Value" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="195" PaperHeight="271" RawPaperSize="166" LeftMargin="20" TopMargin="5" BottomMargin="5" FirstPageSource="15" OtherPagesSource="15">
+    <DataBand Name="Data4" Top="51.25" Width="623.7" Height="88.83" DataSource="FRInfo">
+      <TextObject Name="Text54" Top="18.9" Width="41.58" Height="18.9" Text="科室:" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text55" Left="39.69" Top="18.9" Width="149.31" Height="18.9" Text="[FRInfo.C1]" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text56" Left="198.45" Top="18.9" Width="41.58" Height="18.9" Text="床号:" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text57" Left="236.25" Top="18.9" Width="39.69" Height="18.9" Text="[FRInfo.C2]" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text58" Width="64.26" Height="18.9" Text="样本编号:" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text59" Left="66.15" Width="136.08" Height="18.9" Text="[FRInfo.C3]" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text60" Left="283.5" Top="18.9" Width="41.58" Height="18.9" Text="性别:" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text61" Left="321.3" Top="18.9" Width="51.03" Height="18.9" Text="[FRInfo.C5]" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text62" Left="434.7" Top="18.9" Width="41.58" Height="18.9" Text="年龄:" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text63" Left="472.5" Top="18.9" Width="98.28" Height="18.9" Text="[FRInfo.C6]" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text64" Left="434.7" Width="56.7" Height="18.9" Text="病案号:" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text65" Left="485.73" Width="122.85" Height="18.9" Text="[FRInfo.C7]" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text66" Left="283.5" Top="37.8" Width="64.26" Height="18.9" Text="标本类型:" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text67" Left="349.65" Top="37.8" Width="79.38" Height="18.9" Text="[FRInfo.C8]" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text68" Left="434.7" Top="37.8" Width="41.58" Height="18.9" Text="医生:" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text69" Left="472.5" Top="37.8" Width="126.63" Height="18.9" Text="[FRInfo.C10]" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text70" Top="37.8" Width="66.15" Height="18.9" Text="临床诊断:" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text71" Left="66.15" Top="37.8" Width="200.34" Height="18.9" Text="[FRInfo.C11]" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text72" Left="283.5" Width="41.58" Height="18.9" Text="姓名:" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text73" Left="321.3" Width="120.96" Height="18.9" Text="[FRInfo.C4]" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text74" Left="198.45" Top="66.15" Width="283.5" Height="22.68" Text="[FRInfo.C16]" VertAlign="Bottom" Font="宋体, 12pt, style=Bold"/>
+      <DataHeaderBand Name="DataHeader3" Width="623.7" Height="47.25">
+        <TextObject Name="Text33" Width="481.95" Height="18.9" Text="[FRInfo.C16]" VertAlign="Center" Font="宋体, 8pt"/>
+        <TextObject Name="Text34" Left="529.2" Width="94.5" Height="18.9" Text="[FRInfo.C20]" VertAlign="Center" WordWrap="false" Font="宋体, 8pt"/>
+        <TextObject Name="Text1" Top="18.9" Width="623.7" Height="28.35" Text="细胞化学实验室检查报告单" HorzAlign="Center" VertAlign="Center" Font="宋体, 12pt, style=Bold"/>
+      </DataHeaderBand>
+      <DataBand Name="Data6" Top="144.08" Width="623.7" Height="172.37" DataSource="Image">
+        <PictureObject Name="Picture4" Left="198.45" Width="205.63" Height="172.37" DataColumn="Image.C0"/>
+      </DataBand>
+      <DataBand Name="Data7" Top="347.13" Width="623.7" Height="37.8" DataSource="FRItem">
+        <TextObject Name="Text75" Width="355.32" Height="37.8" Text="[FRItem.C0]" VertAlign="Center" WordWrap="false" Font="宋体, 12pt"/>
+        <TextObject Name="Text76" Left="349.65" Width="103.95" Height="37.8" Text="[FRItem.C2]" VertAlign="Center" WordWrap="false" Font="宋体, 12pt"/>
+        <TextObject Name="Text77" Left="453.6" Width="151.2" Height="37.8" Text="[FRItem.C5]" VertAlign="Center" WordWrap="false" Font="宋体, 12pt"/>
+        <DataHeaderBand Name="DataHeader4" Top="320.45" Width="623.7" Height="22.68">
+          <TextObject Name="Text2" Width="330.75" Height="22.68" Text="           中文名称" VertAlign="Center" Font="宋体, 12pt"/>
+          <TextObject Name="Text3" Left="349.65" Width="94.5" Height="22.68" Text="结果" VertAlign="Center" Font="宋体, 12pt"/>
+          <TextObject Name="Text4" Left="453.6" Width="151.2" Height="22.68" Text=" 生物参考区间" VertAlign="Center" Font="宋体, 12pt"/>
+        </DataHeaderBand>
+      </DataBand>
+      <DataFooterBand Name="DataFooter2" Top="388.93" Width="623.7" Height="18.9">
+        <TextObject Name="Text23" Width="47.25" Height="18.9" Text="备注:" VertAlign="Center" Font="宋体, 10pt, style=Bold"/>
+        <TextObject Name="Text28" Left="37.8" Width="567" Height="18.9" Text="[FRInfo.C13]" VertAlign="Center" Font="宋体, 10pt"/>
+      </DataFooterBand>
+    </DataBand>
+    <PageFooterBand Name="PageFooter1" Top="411.83" Width="623.7" Height="102.06">
+      <TextObject Name="Text44" Top="37.8" Width="64.26" Height="18.9" Text="报告时间:" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text47" Left="56.7" Top="37.8" Width="151.2" Height="18.9" Text="[FRInfo.C19]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text51" Top="54.81" Width="415.8" Height="18.9" Text="注:此报告仅对该份被检标本有效，如有质疑请在48小时内提出！" VertAlign="Center" Font="宋体, 10pt, style=Bold"/>
+      <TextObject Name="Text52" Left="321.3" Top="7.56" Width="47.25" Height="28.35" Text="检验者:" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <PictureObject Name="Picture1" Left="368.55" Top="1.89" Width="75.6" Height="37.8" DataColumn="FRInfo.C30"/>
+      <TextObject Name="Text53" Left="463.05" Top="7.56" Width="47.25" Height="28.35" Text="审核者:" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <PictureObject Name="Picture2" Left="510.3" Top="1.89" Width="75.6" Height="37.8" DataColumn="FRInfo.C31"/>
+      <TextObject Name="Text29" Top="73.71" Width="311.85" Height="18.9" Text="地址:天津市和平区南京路288号C-3楼细胞化学室" VertAlign="Center" Font="宋体, 9pt"/>
+      <TextObject Name="Text30" Left="311.85" Top="75.6" Width="198.45" Height="18.9" Text="联系电话:022-23909158" VertAlign="Center" Font="宋体, 10pt"/>
+      <TextObject Name="Text42" Width="64.26" Height="18.9" Text="采样时间:" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text45" Left="56.7" Width="151.2" Height="18.9" Text="[FRInfo.C17]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text43" Top="18.9" Width="64.26" Height="18.9" Text="签收时间:" VertAlign="Center" WordWrap="false" Font="宋体, 9pt"/>
+      <TextObject Name="Text46" Left="56.7" Top="18.9" Width="151.2" Height="18.9" Text="[FRInfo.C18]" Format="Date" Format.Format="f" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+      <TextObject Name="Text31" Left="519.75" Top="75.6" Width="94.5" Height="18.9" Text="第[Page#]页，共[TotalPages#]页" VertAlign="Center" WordWrap="false" Font="宋体, 10pt"/>
+    </PageFooterBand>
+  </ReportPage>
+</Report>

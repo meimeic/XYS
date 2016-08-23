@@ -53,6 +53,7 @@
     <Compile Include="LabPK.cs" />
     <Compile Include="LabService.cs" />
     <Compile Include="ReportElement.cs" />
+    <Compile Include="Utils\PUser.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\XYS\XYS.csproj">

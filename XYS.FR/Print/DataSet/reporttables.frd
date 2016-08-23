@@ -48,6 +48,9 @@
     <Column Name="C27" DataType="System.String" PropName="Column" />
     <Column Name="C28" DataType="System.String" PropName="Column" />
     <Column Name="C29" DataType="System.String" PropName="Column" />
+    <Column Name="C30" DataType="System.Byte[]" PropName="Column" />
+    <Column Name="C31" DataType="System.Byte[]" PropName="Column" />
+    <Column Name="C32" DataType="System.Byte[]" PropName="Column" />
   </TableDataSource>
   <TableDataSource Name="FRData" ReferenceName="Data.FRData" DataType="System.Int32" Enabled="true">
     <Column Name="C0" DataType="System.String" PropName="Column" />
@@ -99,14 +102,14 @@
     <Column Name="C14" DataType="System.String" PropName="Column" />
   </TableDataSource>
   <TableDataSource Name="Image" ReferenceName="Data.Image" DataType="System.Int32" Enabled="true">
-    <Column Name="C0" DataType="System.String" PropName="Column" />
-    <Column Name="C1" DataType="System.String" PropName="Column" />
-    <Column Name="C2" DataType="System.String" PropName="Column" />
-    <Column Name="C3" DataType="System.String" PropName="Column" />
-    <Column Name="C4" DataType="System.String" PropName="Column" />
-    <Column Name="C5" DataType="System.String" PropName="Column" />
-    <Column Name="C6" DataType="System.String" PropName="Column" />
-    <Column Name="C7" DataType="System.String" PropName="Column" />
+    <Column Name="C0" DataType="System.Byte[]" PropName="Column" />
+    <Column Name="C1" DataType="System.Byte[]" PropName="Column" />
+    <Column Name="C2" DataType="System.Byte[]" PropName="Column" />
+    <Column Name="C3" DataType="System.Byte[]" PropName="Column" />
+    <Column Name="C4" DataType="System.Byte[]" PropName="Column" />
+    <Column Name="C5" DataType="System.Byte[]" PropName="Column" />
+    <Column Name="C6" DataType="System.Byte[]" PropName="Column" />
+    <Column Name="C7" DataType="System.Byte[]" PropName="Column" />
     <Column Name="C8" DataType="System.String" PropName="Column" />
     <Column Name="C9" DataType="System.String" PropName="Column" />
     <Column Name="C10" DataType="System.String" PropName="Column" />
@@ -114,6 +117,7 @@
     <Column Name="C12" DataType="System.String" PropName="Column" />
     <Column Name="C13" DataType="System.String" PropName="Column" />
     <Column Name="C14" DataType="System.String" PropName="Column" />
+    <Column Name="C15" DataType="System.String" PropName="Column" />
   </TableDataSource>
   <TableDataSource Name="FRKV" ReferenceName="Data.FRKV" DataType="System.Int32" Enabled="true">
     <Column Name="Key" DataType="System.String" PropName="Column" />

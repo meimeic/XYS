@@ -13,6 +13,9 @@ using XYS.Report;
 using XYS.Model.Lab;
 
 using XYS.Lis.Report;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.IO;
 namespace LisTest
 {
     public partial class Form1 : Form
@@ -29,16 +32,30 @@ namespace LisTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string where = "where serialno='1602237378'";
+            string where = "where receivedate>'2016-02-22' and sectionno=4";
             this.service.InitReport(where);
         }
         private void PrintPDF(LabReport report)
         {
-            byte[] bytes = Helper.SerializeObject(report);
-            this.client.LabPDF(bytes);
+            byte[] re = TransHelper.SerializeObject(report);
+            this.client.LabPDF(re);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            string where = "where serialno='" + textBox2.Text + "'";
+            this.service.InitReport(where);
+        }
+        private void textBox2_TextChanged(object sender, EventArgs e)
         {
 
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Reflection;
+using System.Text;
 
 using XYS.Common;
 using XYS.Persistent;
@@ -57,7 +57,7 @@ namespace XYS.Report
             //LOG.Info("生成ReportInfo的SQL语句:" + sql);
             try
             {
-               //LOG.Info("ReportInfo数据填充");
+                //LOG.Info("ReportInfo数据填充");
                 this.DAL.Fill(element, sql);
                 return true;
             }
@@ -126,7 +126,7 @@ namespace XYS.Report
         }
         #endregion
 
-        #region
+        #region 受保护方法
         protected bool IsExist(List<IFillElement> elementList)
         {
             if (elementList != null && elementList.Count > 0)

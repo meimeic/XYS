@@ -27,7 +27,8 @@ namespace XYS.FR.Lab
             FRInfo data = new FRInfo();
             data.C0 = "te";
             data.C1 = "t1";
-            string model = "D:\\Project\\VS2013\\Repos\\XYS\\XYS.FR\\Print\\Model\\test.frx";
+            data.C2 = "http://img.xys.com:8080/lab/logo.png";
+            string model = "D:\\Project\\VS2013\\Repos\\XYS\\XYS.FR\\Print\\Lab\\test.frx";
             DataSet ds = DataStruct.GetSet();
             this.pdf.ExportElement(data, ds);
             GenderPDF(model, ds);
@@ -39,9 +40,9 @@ namespace XYS.FR.Lab
             report.Load(model);
             report.RegisterData(ds);
 
-            //report.Prepare();
-            report.PreparePhase1();
-            report.PreparePhase2();
+            report.Prepare();
+            //report.PreparePhase1();
+            //report.PreparePhase2();
 
             //初始化输出类
             PDFExport export = new PDFExport();

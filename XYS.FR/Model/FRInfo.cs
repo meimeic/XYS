@@ -4,7 +4,7 @@ using XYS.Report;
 using XYS.Common;
 namespace XYS.FR.Model
 {
-    public class FRInfo:IExportElement
+    public class FRInfo : IExportElement
     {
         private string m_c0;
         private string m_c1;
@@ -36,6 +36,9 @@ namespace XYS.FR.Model
         private string m_c27;
         private string m_c28;
         private string m_c29;
+        private byte[] m_c30;
+        private byte[] m_c31;
+        private byte[] m_c32;
 
         public FRInfo()
         {
@@ -220,6 +223,24 @@ namespace XYS.FR.Model
         {
             get { return this.m_c29; }
             set { this.m_c29 = value; }
+        }
+        [Export]
+        public byte[] C30
+        {
+            get { return this.m_c30; }
+            set { this.m_c30 = value; }
+        }
+        [Export]
+        public byte[] C31
+        {
+            get { return this.m_c31; }
+            set { this.m_c31 = value; }
+        }
+        [Export]
+        public byte[] C32
+        {
+            get { return this.m_c32; }
+            set { this.m_c32 = value; }
         }
     }
 }

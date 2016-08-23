@@ -6,15 +6,15 @@ namespace XYS.FR.Model
 {
     public class Image : IExportElement
     {
-        private static readonly int PropertyCount = 15;
-        private string m_c0;
-        private string m_c1;
-        private string m_c2;
-        private string m_c3;
-        private string m_c4;
-        private string m_c5;
-        private string m_c6;
-        private string m_c7;
+        private static readonly int PropertyCount = 16;
+        private byte[] m_c0;
+        private byte[] m_c1;
+        private byte[] m_c2;
+        private byte[] m_c3;
+        private byte[] m_c4;
+        private byte[] m_c5;
+        private byte[] m_c6;
+        private byte[] m_c7;
         private string m_c8;
         private string m_c9;
         private string m_c10;
@@ -22,6 +22,7 @@ namespace XYS.FR.Model
         private string m_c12;
         private string m_c13;
         private string m_c14;
+        private string m_c15;
 
 
         public Image()
@@ -33,49 +34,49 @@ namespace XYS.FR.Model
         }
 
         [Export]
-        public string C0
+        public byte[] C0
         {
             get { return this.m_c0; }
             set { this.m_c0 = value; }
         }
         [Export]
-        public string C1
+        public byte[] C1
         {
             get { return this.m_c1; }
             set { this.m_c1 = value; }
         }
         [Export]
-        public string C2
+        public byte[] C2
         {
             get { return this.m_c2; }
             set { this.m_c2 = value; }
         }
         [Export]
-        public string C3
+        public byte[] C3
         {
             get { return this.m_c3; }
             set { this.m_c3 = value; }
         }
         [Export]
-        public string C4
+        public byte[] C4
         {
             get { return this.m_c4; }
             set { this.m_c4 = value; }
         }
         [Export]
-        public string C5
+        public byte[] C5
         {
             get { return this.m_c5; }
             set { this.m_c5 = value; }
         }
         [Export]
-        public string C6
+        public byte[] C6
         {
             get { return this.m_c6; }
             set { this.m_c6 = value; }
         }
         [Export]
-        public string C7
+        public byte[] C7
         {
             get { return this.m_c7; }
             set { this.m_c7 = value; }
@@ -121,6 +122,12 @@ namespace XYS.FR.Model
         {
             get { return this.m_c14; }
             set { this.m_c14 = value; }
+        }
+        [Export]
+        public string C15
+        {
+            get { return this.m_c15; }
+            set { this.m_c15 = value; }
         }
     }
 }

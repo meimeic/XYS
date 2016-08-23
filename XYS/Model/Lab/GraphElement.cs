@@ -13,7 +13,7 @@ namespace XYS.Model.Lab
         private byte[] m_graphImage;
         #endregion
 
-        #region 公共构造函数
+        #region 构造函数
         public GraphElement()
         {
         }

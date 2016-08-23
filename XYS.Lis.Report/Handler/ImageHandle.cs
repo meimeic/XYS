@@ -20,7 +20,7 @@ namespace XYS.Lis.Report.Handler
     {
         #region 私有字段
         private static readonly string ImageLocal = "E:\\image\\report\\lab";
-        private static readonly string ImageServer = "http://img.xys.com/lab";
+        private static readonly string ImageServer = "http://img.xys.com:8080/lab";
         private static readonly string UploadUri = "http://10.1.11.10:8090";
         #endregion
 
@@ -42,7 +42,7 @@ namespace XYS.Lis.Report.Handler
         {
             if (IsExist(elements))
             {
-                return UploadImages(elements, RK);
+                return SaveLocalImages(elements, RK);
             }
             return true;
         }
@@ -53,30 +53,18 @@ namespace XYS.Lis.Report.Handler
         protected bool SaveLocalImages(List<IFillElement> elements, IReportKey RK)
         {
             ImageElement ie = null;
-            GraphElement ge = null;
-            string imgName = null;
+            string imgFileName = null;
             string midPath = DateTime.Now.ToString("yyyyMMdd");
             string imagePath = this.ImagePath(midPath);
-            List<ImageElement> images = new List<ImageElement>(10);
             foreach (IFillElement element in elements)
             {
-                ge = element as GraphElement;
-                if (ge != null)
+                ie = element as ImageElement;
+                if (ie != null)
                 {
-                    ie = new ImageElement();
-                    imgName = SaveImage(imagePath, ge.GraphImage);
-                    ie.Name = ge.GraphName;
                     ie.ReportID = RK.ID;
-                    ie.Url = midPath + "/" + imgName;
-
-                    images.Add(ie);
+                    imgFileName = SaveImage(imagePath, ie.Value);
+                    ie.Url = ImageServer + "/" + midPath + "/" + imgFileName;
                 }
-            }
-
-            elements.Clear();
-            foreach (ImageElement image in images)
-            {
-                elements.Add(image);
             }
             return true;
         }
@@ -108,51 +96,53 @@ namespace XYS.Lis.Report.Handler
         #region 图片上传
         protected bool UploadImages(List<IFillElement> elements, IReportKey RK)
         {
-            ImageElement rie = null;
-            WebClient wc = new WebClient();
+            ImageElement ie = null;
             string boundary = GenderBoundary();
             string folder = DateTime.Now.ToString("yyyyMMdd");
             //LOG.Info("生成上传图片数据");
             //获取上传数据
             byte[] postData = GenderPostData(elements, boundary);
-            InitWebClient(wc, boundary, folder);
-            try
+            using (WebClient wc = new WebClient())
             {
-               //LOG.Info("开始图片上传,上传url为" + wc.BaseAddress + "/upload");
-                byte[] resposeBytes = wc.UploadData("/upload", "POST", postData);
-                string resposeStr = Encoding.UTF8.GetString(resposeBytes);
-                List<WebImage> resList = JsonConvert.DeserializeObject<List<WebImage>>(resposeStr);
-
-                elements.Clear();
-                foreach (WebImage wi in resList)
+                InitWebClient(wc, boundary, folder);
+                try
                 {
-                    if (!string.IsNullOrEmpty(wi.Path))
+                    //LOG.Info("开始图片上传,上传url为" + wc.BaseAddress + "/upload");
+                    byte[] resposeBytes = wc.UploadData("/upload", "POST", postData);
+                    string resposeStr = Encoding.UTF8.GetString(resposeBytes);
+                    List<WebImage> resList = JsonConvert.DeserializeObject<List<WebImage>>(resposeStr);
+
+                    foreach (WebImage wi in resList)
                     {
-                        rie = new ImageElement();
-                        rie.ReportID = RK.ID;
-                        rie.Name = wi.Name;
-                        if (wi.Path[0] == '/')
+                        if (!string.IsNullOrEmpty(wi.Path))
                         {
-                            rie.Url = ImageServer + wi.Path;
+                            ie = GetImageByName(wi.Name, elements);
+                            if (ie != null)
+                            {
+                                ie.ReportID = RK.ID;
+                                if (wi.Path[0] == '/')
+                                {
+                                    ie.Url = ImageServer + wi.Path;
+                                }
+                                else
+                                {
+                                    ie.Url = ImageServer + "/" + wi.Path;
+                                }
+                            }
                         }
                         else
                         {
-                            rie.Url = ImageServer + "/" + wi.Path;
+                            //LOG.Error("图片服务器返回数据格式错误，上传图片集合失败");
+                            return false;
                         }
-                        elements.Add(rie);
                     }
-                    else
-                    {
-                        //LOG.Error("图片服务器返回数据格式错误，上传图片集合失败");
-                        return false;
-                    }
+                    return true;
                 }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                //LOG.Error("上传图片集合出现异常！");
-                return false;
+                catch (Exception ex)
+                {
+                    //LOG.Error("上传图片集合出现异常！");
+                    return false;
+                }
             }
         }
         private string GenderGUIDName()
@@ -160,12 +150,12 @@ namespace XYS.Lis.Report.Handler
             return SystemInfo.NewGuid().ToString();
         }
         //单张图片上传
-        private byte[] GenderPostData(GraphElement graph, string boundary)
+        private byte[] GenderPostData(ImageElement img, string boundary)
         {
             string fileName = GenderGUIDName();
             MemoryStream stream = new MemoryStream();
 
-            WriteImageData(graph.GraphImage, boundary, "graph", fileName, stream);
+            WriteImageData(img.Value, boundary, "graph", fileName, stream);
             WritePostFooterData(boundary, stream);
 
             stream.Position = 0;
@@ -180,24 +170,25 @@ namespace XYS.Lis.Report.Handler
         private byte[] GenderPostData(List<IFillElement> elements, string boundary)
         {
             string fileName = null;
-            GraphElement rge = null;
-            MemoryStream stream = new MemoryStream();
-            foreach (IFillElement element in elements)
+            ImageElement ie = null;
+            using (MemoryStream stream = new MemoryStream())
             {
-                rge = element as GraphElement;
-                if (rge != null)
+                foreach (IFillElement element in elements)
                 {
-                    fileName = GenderGUIDName();
-                    WriteImageData(rge.GraphImage, boundary, rge.GraphName, fileName, stream);
+                    ie = element as ImageElement;
+                    if (ie != null)
+                    {
+                        fileName = GenderGUIDName();
+                        WriteImageData(ie.Value, boundary, ie.Name, fileName, stream);
+                    }
                 }
+                WritePostFooterData(boundary, stream);
+                //读取内容
+                stream.Position = 0;
+                byte[] postBuffer = new byte[stream.Length];
+                stream.Read(postBuffer, 0, postBuffer.Length);
+                return postBuffer;
             }
-            WritePostFooterData(boundary, stream);
-            //读取内容
-            stream.Position = 0;
-            byte[] postBuffer = new byte[stream.Length];
-            stream.Read(postBuffer, 0, postBuffer.Length);
-            stream.Close();
-            return postBuffer;
         }
         private string GenderFormName(int i)
         {
@@ -262,6 +253,23 @@ namespace XYS.Lis.Report.Handler
             wc.Headers.Set("Content-Type", "multipart/form-data;boundary=" + boundary);
             wc.Headers.Set("Accept-Language", "utf-8");
             wc.QueryString.Set("folder", folder);
+        }
+
+        private ImageElement GetImageByName(string name, List<IFillElement> elements)
+        {
+            ImageElement result = null;
+            foreach (IFillElement element in elements)
+            {
+                result = element as ImageElement;
+                if (result != null)
+                {
+                    if (result.Name.Equals(name))
+                    {
+                        return result;
+                    }
+                }
+            }
+            return null;
         }
         #endregion
 

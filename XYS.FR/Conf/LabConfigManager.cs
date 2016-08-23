@@ -111,7 +111,7 @@ namespace XYS.FR.Conf
             LabModelCollection models = FRConfig.ModelCollection;
             foreach (LabModelSection model in models)
             {
-                PrintModelMap[model.Value] = Path.Combine(SystemInfo.ApplicationBaseDirectory, "Print", "Model", model.ModelName);
+                PrintModelMap[model.Value] = Path.Combine(SystemInfo.ApplicationBaseDirectory, "Print", "Lab", model.ModelName);
             }
         }
         #endregion

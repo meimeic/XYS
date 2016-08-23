@@ -25,7 +25,7 @@ namespace XYS.Report.WS
         public void UpdateLabApplyInfo(string param)
         {
             LisService serivce = Global.ReportService;
-            serivce.Deserialize(param);
+            serivce.Handle(param);
         }
     }
 }

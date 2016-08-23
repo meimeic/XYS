@@ -22,15 +22,16 @@ namespace XYS.FR
         [WebMethod]
         public string HelloWorld()
         {
-            PDFTest test = new PDFTest();
-            test.Test();
+            //PDFTest test = new PDFTest();
+            //test.Test();
+            DataStruct.InitXMLStruct();
             return "Hello World";
         }
         [WebMethod]
         public void LabPDF(byte[] bytes)
         {
             LabService service = Global.PDF;
-            LabReport report = Helper.DeserializeObject(bytes) as LabReport;
+            LabReport report = TransHelper.DeserializeObject(bytes) as LabReport;
             if (report != null)
             {
                 service.HandleReport(report);

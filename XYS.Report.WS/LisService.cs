@@ -15,8 +15,8 @@ namespace XYS.Report.WS
         #endregion
 
         #region 实例只读字段
-        private readonly XmlSerializer Serializer;
         private readonly LabService LabService;
+        private readonly XmlSerializer Serializer;
         #endregion
 
         #region 实例字段
@@ -44,7 +44,7 @@ namespace XYS.Report.WS
         #endregion
 
         #region 生产者方法
-        public void Deserialize(string applyInfo)
+        public void Handle(string applyInfo)
         {
             WriteLog(applyInfo);
             if (!string.IsNullOrEmpty(applyInfo))
@@ -58,7 +58,7 @@ namespace XYS.Report.WS
                 }
                 catch (InvalidOperationException ex)
                 {
-                    WriteLog("处理xml报文异常");
+                    WriteLog("处理xml报文异常:" + ex.Message);
                 }
             }
             else

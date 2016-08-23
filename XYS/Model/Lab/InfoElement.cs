@@ -41,7 +41,13 @@ namespace XYS.Model.Lab
         private string m_description;
 
         private string m_technician;
+        private byte[] m_technicianImage;
+        private string m_technicianUrl;
+
         private string m_checker;
+        private byte[] m_checkerImage;
+        private string m_checkerUrl;
+
         private string m_reportContent;
 
         //时间信息
@@ -215,11 +221,31 @@ namespace XYS.Model.Lab
             get { return this.m_technician; }
             set { this.m_technician = value; }
         }
+        public byte[] TechnicianImage
+        {
+            get { return this.m_technicianImage; }
+            set { this.m_technicianImage = value; }
+        }
+        public string TechnicianUrl
+        {
+            get { return this.m_technicianUrl; }
+            set { this.m_technicianUrl = value; }
+        }
         [Column]
         public string Checker
         {
             get { return this.m_checker; }
             set { this.m_checker = value; }
+        }
+        public byte[] CheckerImage
+        {
+            get { return this.m_checkerImage; }
+            set { this.m_checkerImage = value; }
+        }
+        public string CheckerUrl
+        {
+            get { return this.m_checkerUrl; }
+            set { this.m_checkerUrl = value; }
         }
         [Column]
         public string Memo

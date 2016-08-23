@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="aK9JZHFU6rsp4c3vYkicGkmC4js=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="cphWMpkJB9F93WbPNlBdVSIwuC0=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="PDFSoap">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="PDFSoap" contract="FRService.PDFSoap" bindingType="basicHttpBinding" address="http://10.1.10.187:8089/PDF.asmx" bindingConfiguration="PDFSoap">
+    <endpoint name="PDFSoap" contract="FRService.PDFSoap" bindingType="basicHttpBinding" address="http://localhost:4054/PDF.asmx" bindingConfiguration="PDFSoap">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://10.1.10.187:8089/PDF.asmx</serializedValue>
+          <serializedValue>http://localhost:4054/PDF.asmx</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

@@ -1,29 +1,32 @@
 ﻿using System;
+using System.Net;
+
 using XYS.Report;
 using XYS.Common;
-
 namespace XYS.Model.Lab
 {
     [Serializable]
-    public class ImageElement : IFillElement, IComparable<ImageElement>
+    public class ImageElement : IFillElement
     {
         #region 私有字段
         private string m_reportID;
         private string m_name;
         private string m_url;
+        private byte[] m_value;
         #endregion
-        
-        #region
+
+        #region 构造函数
         public ImageElement()
         { }
         #endregion
-        
-        #region
+
+        #region 实例属性
         public string ReportID
         {
             get { return this.m_reportID; }
             set { this.m_reportID = value; }
         }
+        [Column()]
         public string Name
         {
             get { return this.m_name; }
@@ -32,17 +35,35 @@ namespace XYS.Model.Lab
         public string Url
         {
             get { return this.m_url; }
-            set { this.m_url = value; }
+            set
+            {
+                this.m_url = value;
+                if (this.m_value == null)
+                {
+                    this.m_value = LoadURL(value);
+                }
+            }
+        }
+        [Column()]
+        public byte[] Value
+        {
+            get { return this.m_value; }
+            set { this.m_value = value; }
         }
         #endregion
 
-        public int CompareTo(ImageElement other)
+        #region 静态私有方法
+        private static byte[] LoadURL(string url)
         {
-            if (other == null)
+            if (!string.IsNullOrEmpty(url))
             {
-                return -1;
+                using (WebClient client = new WebClient())
+                {
+                    return client.DownloadData(url);
+                }
             }
-            return String.CompareOrdinal(this.Name, other.Name);
+            return null;
         }
+        #endregion
     }
 }

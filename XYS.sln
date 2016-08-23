@@ -17,6 +17,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Lis.Report", "XYS.Lis.Report\XYS.Lis.Report.csproj", "{3C572359-5098-452E-B7FA-BB068CC9F0D9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LisTest", "LisTest\LisTest.csproj", "{08C45C48-DFC2-4C6A-A48D-F857CEC93BFD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{F1A57A97-3553-4267-9820-779D3CBDB807} = {F1A57A97-3553-4267-9820-779D3CBDB807}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Mongo.Service", "XYS.Mongo.Service\XYS.Mongo.Service.csproj", "{3CDFAF33-FCA8-43F4-9E0B-B6C9647464E5}"
 EndProject

@@ -53,11 +53,6 @@ namespace XYS.Lis.Report.Handler
             {
                 return false;
             }
-            //判断检验项是否合法
-            if (!IsLegal(rie))
-            {
-                return false;
-            }
             //合法，检验项处理操作
             if (rie.ItemNo == 50004360 || rie.ItemNo == 50004370)
             {
@@ -67,20 +62,6 @@ namespace XYS.Lis.Report.Handler
                 }
             }
             return true;
-        }
-        //检验项是否合法
-        private bool IsLegal(ItemElement rie)
-        {
-            int secretGrade = rie.SecretGrade;
-            //根据保密等级判断检验项是否合法
-            if (secretGrade > 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
         }
         #endregion
     }

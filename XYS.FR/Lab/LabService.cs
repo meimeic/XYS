@@ -27,15 +27,17 @@ namespace XYS.FR.Lab
         #region 静态属性
         private static string RootPath;
         private static int WorkerCount;
+        private static readonly bool HalfEnable;
         private static readonly DateTime MinTime;
         private static readonly LabService ServiceInstance;
         #endregion
-        
+
         #region 实例属性
-        private Thread[] m_workerPool;
         private readonly LabDAL DAL;
+        private Thread[] m_workerPool;
         private readonly ExportData Export;
         private readonly Hashtable Item2CustomMap;
+        private readonly Hashtable Image2ImageMap;
         private readonly BlockingCollection<LabReport> RequestQueue;
         #endregion
 
@@ -49,7 +51,7 @@ namespace XYS.FR.Lab
         {
             WorkerCount = 2;
             Config.WebMode = true;
-            RootPath = "E:\\report\\lab";
+            RootPath = "E:\\pdf\\report\\lab";
             MinTime = new DateTime(2011, 1, 1);
             Config.ReportSettings.ShowProgress = false;
 
@@ -60,6 +62,7 @@ namespace XYS.FR.Lab
             this.DAL = new LabDAL();
             this.Export = new ExportData();
             this.Item2CustomMap = new Hashtable(20);
+            this.Image2ImageMap = new Hashtable(40);
             this.RequestQueue = new BlockingCollection<LabReport>(10000);
 
             this.Init();
@@ -105,17 +108,26 @@ namespace XYS.FR.Lab
         {
             DataSet ds = DataStruct.GetSet();
             int sectionNo = report.Info.SectionNo;
-            List<int> superList = new List<int>(16);
             //数据填充
             this.FillInfo(report.Info, ds);
-            this.FillItems(report.ItemList, superList, ds);
+            this.FillItems(report.ItemList, ds);
             this.FillImage(report.ImageList, ds);
+
             //获取模板
-            string model = GetModelPath(sectionNo, superList);
+            //string model = GetModelPath(sectionNo, 0, report.SuperList);
+            if (report.ImageList.Count > 0)
+            {
+
+            }
+            else
+            {
+ 
+            }
+            string model = "D:\\Project\\VS2013\\Repos\\XYS\\XYS.FR\\Print\\Lab\\yichuan-RAN.frx";
             //生成pdf,获取pdf路径
             string filePath = this.GenderPDF(model, ds);
             //获取排序号
-            int orderNo = GetOrderNo(sectionNo, superList);
+            int orderNo = GetOrderNo(sectionNo, report.SuperList);
             //保存生成记录
             this.DAL.SaveRecord(report.Info, orderNo, filePath);
             //触发生成pdf成功事件
@@ -124,22 +136,23 @@ namespace XYS.FR.Lab
         private string GenderPDF(string model, DataSet ds)
         {
             //
-            FastReport.Report report = new FastReport.Report();
-            report.Load(model);
-            report.RegisterData(ds);
-            //report.Prepare(); 报告准备
-            report.PreparePhase1();
-            report.PreparePhase2();
-            //初始化PDF输出类
-            PDFExport export = new PDFExport();
-            this.InitExport(export);
-            //输出PDF
-            string fileFullName = GetFileFullName();
-            export.Export(report, fileFullName);
-            //释放资源
-            report.Dispose();
-
-            return fileFullName;
+            using (FastReport.Report report = new FastReport.Report())
+            {
+                report.Load(model);
+                report.RegisterData(ds);
+                report.Prepare(); //报告准备
+                //report.PreparePhase1();
+                //report.PreparePhase2();
+                //初始化PDF输出类
+                using (PDFExport export = new PDFExport())
+                {
+                    this.InitPDFExport(export);
+                    //输出PDF
+                    string fileFullName = GetFileFullName();
+                    export.Export(report, fileFullName);
+                    return fileFullName;
+                }
+            }
         }
         private string GetFileFullName()
         {
@@ -151,7 +164,7 @@ namespace XYS.FR.Lab
             }
             return Path.Combine(filePath, fileName);
         }
-        private void InitExport(PDFExport export)
+        private void InitPDFExport(PDFExport export)
         {
         }
         #endregion
@@ -176,7 +189,7 @@ namespace XYS.FR.Lab
         #endregion
 
         #region 将数据填充到DataSet
-        private void FillInfo(InfoElement info,DataSet ds)
+        private void FillInfo(InfoElement info, DataSet ds)
         {
             FRInfo header = new FRInfo();
             header.C0 = info.SerialNo;
@@ -198,14 +211,20 @@ namespace XYS.FR.Lab
             header.C15 = info.Description;
             header.C16 = info.ReportContent;
 
-            header.C17 = info.CollectTime>MinTime?info.CollectTime.ToString("yyyy-MM-dd HH:mm"):"";
+            header.C17 = info.CollectTime > MinTime ? info.CollectTime.ToString("yyyy-MM-dd HH:mm") : "";
             header.C18 = info.InceptTime > MinTime ? info.InceptTime.ToString("yyyy-MM-dd HH:mm") : "";
             header.C19 = info.CheckTime > MinTime ? info.CheckTime.ToString("yyyy-MM-dd HH:mm") : "";
             header.C20 = info.TestTime > MinTime ? info.TestTime.ToString("yyyy-MM-dd") : "";
 
-            this.Export.ExportElement(header,ds);
+            header.C21 = info.TechnicianUrl;
+            header.C22 = info.CheckerUrl;
+
+            header.C30 = info.TechnicianImage;
+            header.C31 = info.CheckerImage;
+
+            this.Export.ExportElement(header, ds);
         }
-        private void FillItems(List<ItemElement> ls, List<int> superList, DataSet ds)
+        private void FillItems(List<ItemElement> ls, DataSet ds)
         {
             FRItem data = null;
             Custom custom = new Custom();
@@ -213,11 +232,6 @@ namespace XYS.FR.Lab
             ls.Sort();
             foreach (ItemElement item in ls)
             {
-                //
-                if (!superList.Contains(item.SuperNo))
-                {
-                    superList.Add(item.SuperNo);
-                }
                 if (!this.ConvertCustom(item, custom))
                 {
                     data = new FRItem();
@@ -236,6 +250,7 @@ namespace XYS.FR.Lab
             data.C3 = item.Status;
             data.C4 = item.Unit;
             data.C5 = item.RefRange;
+            data.C6 = item.ItemNo.ToString();
         }
         private bool ConvertCustom(ItemElement item, Custom custom)
         {
@@ -249,16 +264,16 @@ namespace XYS.FR.Lab
         }
         private void FillImage(List<ImageElement> images, DataSet ds)
         {
-            int order = 0;
             string propertyName = null;
             Image image = new Image();
-            //图片排序
-            images.Sort();
+
             foreach (ImageElement img in images)
             {
-                propertyName = GetImagePropName(order);
-                this.SetProperty(propertyName, img.Url, image);
-                order++;
+                propertyName = GetImagePropName(img.Name);
+                if (!string.IsNullOrEmpty(propertyName))
+                {
+                    this.SetProperty(propertyName, img.Value, image);
+                }
             }
             this.Export.ExportElement(image, ds);
         }
@@ -266,6 +281,10 @@ namespace XYS.FR.Lab
         {
             int m = no % Image.ColumnCount;
             return "C" + m;
+        }
+        private string GetImagePropName(string name)
+        {
+            return Image2ImageMap[name] as string;
         }
         private void SetProperty(string propName, object value, IExportElement element)
         {
@@ -285,14 +304,54 @@ namespace XYS.FR.Lab
         #endregion
 
         #region 获取模板路径及报告序号
-        private string GetModelPath(int sectionNo, List<int> list)
+        private string GetModelPath(int sectionNo, int itemCount, List<int> list)
+        {
+            int modelNo = -1;
+            //按小组划分模板
+            //switch (sectionNo)
+            //{
+            //    //根据小组号获得固定死模板
+            //    case 2:
+            //    case 27:
+            //        modelNo = LabConfigManager.GetModelNo(sectionNo);
+            //        break;
+            //    //有图模板
+            //    case 11:
+            //        modelNo = GetModelNo(sectionNo, list);
+            //        break;
+            //}
+            modelNo = this.GetModelNo(sectionNo, list);
+            return LabConfigManager.GetModelPath(modelNo);
+        }
+        //获取通用模板
+        private int GetModelNo(int sectionNo, int itemCount, List<int> list)
+        {
+            int modelNo = LabConfigManager.GetModelNo(list);
+            if (modelNo <= 0)
+            {
+                modelNo = GetModelNo(sectionNo, itemCount);
+            }
+            return modelNo;
+        }
+        //获取有图模板
+        private int GetModelNo(int sectionNo, List<int> list)
         {
             int modelNo = LabConfigManager.GetModelNo(list);
             if (modelNo <= 0)
             {
                 modelNo = LabConfigManager.GetModelNo(sectionNo);
             }
-            return LabConfigManager.GetModelPath(modelNo);
+            return modelNo;
+        }
+
+        private int GetModelNo(int sectionNo, int itemCount)
+        {
+            int modelNo = LabConfigManager.GetModelNo(sectionNo);
+            if (itemCount < 17 && HalfEnable)
+            {
+                modelNo++;
+            }
+            return modelNo;
         }
         private int GetOrderNo(int sectionNo, List<int> itemList)
         {
@@ -310,6 +369,7 @@ namespace XYS.FR.Lab
         {
             this.InitWorkerPool();
             this.InitItem2CustomMap();
+            this.InitImage2ImageMap();
         }
         private void InitWorkerPool()
         {
@@ -343,6 +403,20 @@ namespace XYS.FR.Lab
             this.Item2CustomMap.Add(90008797, "C1");
             this.Item2CustomMap.Add(90008798, "C2");
             this.Item2CustomMap.Add(90008799, "C3");
+        }
+        private void InitImage2ImageMap()
+        {
+            this.Image2ImageMap.Clear();
+            this.Image2ImageMap.Add("S_FLHxS", "C0");
+            this.Image2ImageMap.Add("S_FLLxS", "C1");
+            this.Image2ImageMap.Add("S_SSCxS", "C2");
+            this.Image2ImageMap.Add("B_FLHxB1", "C3");
+            this.Image2ImageMap.Add("S_FSCWxS", "C4");
+            this.Image2ImageMap.Add("S_FLLWxS", "C5");
+            this.Image2ImageMap.Add("图像1", "C0");
+            this.Image2ImageMap.Add("normal", "C1");
+            this.Image2ImageMap.Add("图谱", "C0");
+            this.Image2ImageMap.Add("蛋白电泳", "C1");
         }
         #endregion
     }

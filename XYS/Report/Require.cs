@@ -13,7 +13,7 @@ namespace XYS.Report
         private Dictionary<string, object> m_equalDictionary;
         private Dictionary<string, object> m_notEqualDictionary;
 
-        #region
+        #region 构造函数
         public Require()
         {
             this.m_ltDictionary = new Dictionary<string, object>(2);
@@ -24,7 +24,7 @@ namespace XYS.Report
         }
         #endregion
 
-        #region
+        #region 实例属性
         public Dictionary<string, object> LTFields
         {
             get { return this.m_ltDictionary; }
@@ -47,7 +47,7 @@ namespace XYS.Report
         }
         #endregion
 
-        #region
+        #region 私有方法
         private bool IsExist(Dictionary<string, object> dic)
         {
             if (dic != null && dic.Count > 0)
