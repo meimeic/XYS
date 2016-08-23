@@ -41,6 +41,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Model\Lab\CustomElement.cs" />
     <Compile Include="Model\TransHelper.cs" />
     <Compile Include="Model\Lab\GraphElement.cs" />
     <Compile Include="Model\Lab\ImageElement.cs" />

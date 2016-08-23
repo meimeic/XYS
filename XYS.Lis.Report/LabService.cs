@@ -158,7 +158,7 @@ namespace XYS.Lis.Report
         //内部操作，处理成功后触发成功事件，失败后触发失败事件
         private void InnerHandle(ReportElement RE)
         {
-            IReportKey RK = RE.ReportPK;
+            LabPK RK = RE.ReportPK;
             LabReport report = new LabReport();
             bool result = this.InnerHandle(RE, RK);
             this.InnerConvert(report, RE);
@@ -174,7 +174,7 @@ namespace XYS.Lis.Report
             }
         }
         //数据填充、清洗、转换等操作
-        private bool InnerHandle(ReportElement report, IReportKey RK)
+        private bool InnerHandle(ReportElement report, LabPK RK)
         {
             bool result = false;
             //处理info

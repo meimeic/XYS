@@ -11,7 +11,7 @@ namespace XYS.Lis.Report
     {
         #region 私有字段
         private IFillElement m_info;
-        private IReportKey m_reportPK;
+        private LabPK m_reportPK;
         private List<IFillElement> m_itemList;
         private List<IFillElement> m_imageList;
         #endregion
@@ -41,7 +41,7 @@ namespace XYS.Lis.Report
             get { return this.m_imageList; }
             set { this.m_imageList = value; }
         }
-        public IReportKey ReportPK
+        public LabPK ReportPK
         {
             get { return this.m_reportPK; }
             set { this.m_reportPK = value; }
