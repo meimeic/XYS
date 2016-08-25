@@ -36,6 +36,26 @@ namespace XYS.FR.Model
         private string m_c27;
         private string m_c28;
         private string m_c29;
+        private string m_c30;
+        private string m_c31;
+        private string m_c32;
+        private string m_c33;
+        private string m_c34;
+        private string m_c35;
+        private string m_c36;
+        private string m_c37;
+        private string m_c38;
+        private string m_c39;
+        private string m_c40;
+        private string m_c41;
+        private string m_c42;
+        private string m_c43;
+        private string m_c44;
+        private string m_c45;
+        private string m_c46;
+        private string m_c47;
+        private string m_c48;
+        private string m_c49;
 
         public FRData()
         {
@@ -220,6 +240,126 @@ namespace XYS.FR.Model
         {
             get { return this.m_c29; }
             set { this.m_c29 = value; }
+        }
+         [Export]
+        public string C30
+        {
+            get { return this.m_c30; }
+            set { this.m_c30 = value; }
+        }
+        [Export]
+        public string C31
+        {
+            get { return this.m_c31; }
+            set { this.m_c31 = value; }
+        }
+        [Export]
+        public string C32
+        {
+            get { return this.m_c32; }
+            set { this.m_c32 = value; }
+        }
+        [Export]
+        public string C33
+        {
+            get { return this.m_c33; }
+            set { this.m_c33 = value; }
+        }
+        [Export]
+        public string C34
+        {
+            get { return this.m_c34; }
+            set { this.m_c34 = value; }
+        }
+        [Export]
+        public string C35
+        {
+            get { return this.m_c35; }
+            set { this.m_c35 = value; }
+        }
+        [Export]
+        public string C36
+        {
+            get { return this.m_c36; }
+            set { this.m_c36 = value; }
+        }
+        [Export]
+        public string C37
+        {
+            get { return this.m_c37; }
+            set { this.m_c37 = value; }
+        }
+        [Export]
+        public string C38
+        {
+            get { return this.m_c38; }
+            set { this.m_c38 = value; }
+        }
+        [Export]
+        public string C39
+        {
+            get { return this.m_c39; }
+            set { this.m_c39 = value; }
+        }
+        [Export]
+        public string C40
+        {
+            get { return this.m_c40; }
+            set { this.m_c40 = value; }
+        }
+        [Export]
+        public string C41
+        {
+            get { return this.m_c41; }
+            set { this.m_c41 = value; }
+        }
+        [Export]
+        public string C42
+        {
+            get { return this.m_c42; }
+            set { this.m_c42 = value; }
+        }
+        [Export]
+        public string C43
+        {
+            get { return this.m_c43; }
+            set { this.m_c43 = value; }
+        }
+        [Export]
+        public string C44
+        {
+            get { return this.m_c44; }
+            set { this.m_c44 = value; }
+        }
+        [Export]
+        public string C45
+        {
+            get { return this.m_c45; }
+            set { this.m_c45 = value; }
+        }
+        [Export]
+        public string C46
+        {
+            get { return this.m_c46; }
+            set { this.m_c46 = value; }
+        }
+        [Export]
+        public string C47
+        {
+            get { return this.m_c47; }
+            set { this.m_c47 = value; }
+        }
+        [Export]
+        public string C48
+        {
+            get { return this.m_c48; }
+            set { this.m_c48 = value; }
+        }
+        [Export]
+        public string C49
+        {
+            get { return this.m_c49; }
+            set { this.m_c49 = value; }
         }
     }
 }

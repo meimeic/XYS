@@ -12,15 +12,17 @@ namespace XYS.Model
         private List<int> m_superList;
         private List<ItemElement> m_itemList;
         private List<ImageElement> m_imageList;
+        private List<CustomElement> m_customList;
         #endregion
 
         #region 构造方法
         public LabReport()
         {
-            this.m_info = null;
+            this.m_info = new InfoElement();
             this.m_superList = new List<int>(8);
             this.m_itemList = new List<ItemElement>(16);
             this.m_imageList = new List<ImageElement>(8);
+            this.m_customList = new List<CustomElement>(3);
         }
         #endregion
 
@@ -41,6 +43,10 @@ namespace XYS.Model
         public List<ImageElement> ImageList
         {
             get { return this.m_imageList; }
+        }
+        public List<CustomElement> CustomList
+        {
+            get { return this.m_customList; }
         }
         #endregion
     }

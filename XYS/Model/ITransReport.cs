@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace XYS.Lis.Report
+namespace XYS.Model
 {
-    public class GeneService
+    public interface ITransReport
     {
-
     }
 }

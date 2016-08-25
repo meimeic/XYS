@@ -70,6 +70,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractService.cs" />
     <Compile Include="Conf\LabConfigManager.cs" />
     <Compile Include="Conf\LabModelCollection.cs" />
     <Compile Include="Conf\LabModelSection.cs" />
@@ -88,7 +89,6 @@
     <Compile Include="Model\FRData.cs" />
     <Compile Include="Model\FRItem.cs" />
     <Compile Include="Model\Custom.cs" />
-    <Compile Include="Model\FRKV.cs" />
     <Compile Include="Model\Image.cs" />
     <Compile Include="PDF.asmx.cs">
       <DependentUpon>PDF.asmx</DependentUpon>

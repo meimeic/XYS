@@ -45,7 +45,6 @@ namespace XYS.Lis.Report.Persistent
                 }
             }
         }
-
         public void InitKey(string where, List<LabPK> PKList)
         {
             LabPK temp = null;
@@ -62,7 +61,30 @@ namespace XYS.Lis.Report.Persistent
                 }
             }
         }
-
+        //基因配型特殊代码处理
+        public void InitKey(LabPK PK, List<LabPK> PKList)
+        {
+            string sql = "select patno,paritemname from reportform" + PK.KeyWhere();
+            DataTable dt = GetDataTable(sql);
+            if (dt.Rows.Count > 0)
+            {
+                StringBuilder sb = new StringBuilder();
+                sb.Append(" where");
+                sb.Append(" receivedate='");
+                sb.Append(PK.ReceiveDate.ToString("yyyy-MM-dd"));
+                sb.Append("' and sectionno=");
+                sb.Append(PK.SectionNo);
+                sb.Append(" and testtypeno=");
+                sb.Append(PK.TestTypeNo);
+                sb.Append(" and patno='");
+                sb.Append(dt.Rows[0]["patno"].ToString());
+                sb.Append("' and paritemname='");
+                sb.Append(dt.Rows[0]["paritemname"].ToString());
+                sb.Append("'");
+                string where = sb.ToString();
+                this.InitKey(where, PKList);
+            }
+        }
         protected void SetKey(DataRow dr, LabPK PK)
         {
             PK.SampleNo = dr["sampleno"].ToString();

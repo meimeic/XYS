@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Reflection;
 using System.Threading;
 
 using XYS.Util;
@@ -11,6 +12,7 @@ using XYS.Report;
 
 using XYS.Lis.Report.Handler;
 using XYS.Lis.Report.Persistent;
+using XYS.Lis.Report.Model;
 namespace XYS.Lis.Report
 {
     public delegate void HandleErrorHandler(LabReport report);
@@ -25,12 +27,14 @@ namespace XYS.Lis.Report
         private readonly IHandle InfoHandler;
         private readonly IHandle ItemHandler;
         private readonly IHandle ImageHandler;
+        private readonly IHandle CustomHandler;
 
         private Thread[] m_workerPool;
         private readonly LabPKDAL PKDAL;
         private readonly LabReportDAL ReportDAL;
+        private readonly Hashtable Item2CustomMap;
         private readonly Hashtable ImageNormalMap;
-        private readonly BlockingCollection<ReportElement> RequestQueue;
+        private readonly BlockingCollection<LabPK> RequestQueue;
         #endregion
 
         #region 私有事件
@@ -54,9 +58,11 @@ namespace XYS.Lis.Report
             this.InfoHandler = new InfoHandle(this.ReportDAL);
             this.ItemHandler = new ItemHandle(this.ReportDAL);
             this.ImageHandler = new ImageHandle(this.ReportDAL);
+            this.CustomHandler = new GeneCustomHandle(this.ReportDAL);
 
+            this.Item2CustomMap = new Hashtable(20);
             this.ImageNormalMap = new Hashtable(40);
-            this.RequestQueue = new BlockingCollection<ReportElement>(1000);
+            this.RequestQueue = new BlockingCollection<LabPK>(1000);
 
             this.Init();
         }
@@ -82,55 +88,42 @@ namespace XYS.Lis.Report
         }
         #endregion
 
-        #region 公共方法
+        #region 公共方法/生产者方法
         public void InitReport(Require req)
         {
             List<LabPK> PKList = new List<LabPK>(100);
             this.PKDAL.InitKey(req, PKList);
-            this.HandleReport(PKList);
+            this.InitReport(PKList);
         }
         public void InitReport(string where)
         {
             List<LabPK> PKList = new List<LabPK>(100);
             this.PKDAL.InitKey(where, PKList);
-            this.HandleReport(PKList);
+            this.InitReport(PKList);
+        }
+        public void InitReport(List<LabPK> PKList)
+        {
+            foreach (LabPK pk in PKList)
+            {
+                this.InitReport(pk);
+            }
         }
         public void InitReport(LabPK PK)
         {
             if (PK != null && PK.Configured)
             {
-                ReportElement report = new ReportElement();
-                report.ReportPK = PK;
-                this.HandleReport(report);
+                this.RequestQueue.Add(PK);
             }
-        }
-        #endregion
-
-        #region 生产者方法
-        private void HandleReport(List<LabPK> PKList)
-        {
-            ReportElement report = null;
-            foreach (LabPK pk in PKList)
-            {
-                report = new ReportElement();
-                report.ReportPK = pk;
-                this.HandleReport(report);
-            }
-        }
-        private void HandleReport(ReportElement report)
-        {
-            //LOG.Info("将处理报告请求加入到处理请求队列");
-            this.RequestQueue.Add(report);
         }
         #endregion
 
         #region 消费者方法
         protected void Consumer()
         {
-            foreach (ReportElement report in this.RequestQueue.GetConsumingEnumerable())
+            foreach (LabPK pk in this.RequestQueue.GetConsumingEnumerable())
             {
                 //LOG.Info("报告处理线程开始处理报告,报告ID为:" + report.ReportPK.ID);
-                this.InnerHandle(report);
+                this.InnerHandle(pk);
             }
         }
         #endregion
@@ -154,14 +147,12 @@ namespace XYS.Lis.Report
         }
         #endregion
 
-        #region 私有方法
+        #region 内部处理方法
         //内部操作，处理成功后触发成功事件，失败后触发失败事件
-        private void InnerHandle(ReportElement RE)
+        private void InnerHandle(LabPK RK)
         {
-            LabPK RK = RE.ReportPK;
             LabReport report = new LabReport();
-            bool result = this.InnerHandle(RE, RK);
-            this.InnerConvert(report, RE);
+            bool result = this.InnerHandle(report, RK);
             if (result)
             {
                 //后续处理
@@ -174,37 +165,111 @@ namespace XYS.Lis.Report
             }
         }
         //数据填充、清洗、转换等操作
-        private bool InnerHandle(ReportElement report, LabPK RK)
+        private bool InnerHandle(LabReport report, LabPK RK)
         {
             bool result = false;
             //处理info
             result = this.InfoHandler.HandleElement(report.Info, RK);
-            if (result)
+            switch (RK.SectionNo)
             {
-                //处理item
-                result = this.ItemHandler.HandleElement(report.ItemList, RK, typeof(ItemElement));
-                if (result)
-                {
-                    //处理image
-                    result = this.ImageHandler.HandleElement(report.ImageList, RK, typeof(ImageElement));
-                }
+                //无图
+                //临检
+                case 2:
+                case 27:
+                case 62:
+                //生化
+                case 17:
+                case 23:
+                case 29:
+                case 34:
+                //免疫
+                case 5:
+                case 19:
+                case 20:
+                case 21:
+                case 25:
+                case 30:
+                case 33:
+                case 63:
+                case 14:
+                //止血
+                case 4:
+                case 24:
+                //溶血
+                case 18:
+                    result = this.InnerHandleItem(report, RK);
+                    break;
+                //基因配型
+                case 45:
+                    result = this.InnerHandleGene(report, RK);
+                    break;
+                //默认
+                default:
+                    result = this.InnerHandleItem(report, RK);
+                    result = this.InnerHandleImage(report, RK);
+                    break;
             }
             return result;
         }
-        //11小组添加标准图片（通讯数据整体处理）
-        private void HandleAfter(LabReport report, IReportKey RK)
+        private bool InnerHandleItem(LabReport report, LabPK RK)
         {
-            this.HandleAfterItem(report);
-            this.HandleAfterImage(report, RK.ID);
+            bool result = false;
+            List<IFillElement> ls = new List<IFillElement>(32);
+            result = this.ItemHandler.HandleElement(ls, RK, typeof(ItemElement));
+            if (result)
+            {
+                this.ItemConvert(report, ls);
+            }
+            return result;
+        }
+        private bool InnerHandleImage(LabReport report, LabPK RK)
+        {
+            bool result = false;
+            List<IFillElement> ls = new List<IFillElement>(6);
+            //处理image
+            result = this.ImageHandler.HandleElement(ls, RK, typeof(ImageElement));
+            if (result)
+            {
+                this.ImageConvert(report, ls);
+            }
+            return result;
+        }
+        private bool InnerHandleGene(LabReport report, LabPK RK)
+        {
+            bool result = false;
+            GeneCustom ci = null;
+            CustomElement custom = null;
+            List<IFillElement> items = null;
+            List<LabPK> PKList = new List<LabPK>(3);
+            this.PKDAL.InitKey(RK, PKList);
+            foreach (LabPK key in PKList)
+            {
+                ci = new GeneCustom();
+                custom = new CustomElement();
+                result = this.CustomHandler.HandleElement(ci, RK);
+                if (result)
+                {
+                    this.GeneConvert(custom, ci);
+                    items = new List<IFillElement>(5);
+                    result = this.ItemHandler.HandleElement(items, RK, typeof(ItemElement));
+                    if (result)
+                    {
+                        this.GeneConvert(custom, items, report.SuperList);
+                    }
+                }
+                else
+                {
+                    break;
+                }
+                report.CustomList.Add(custom);
+            }
+            return result;
         }
         //将内部数据转换成通讯数据
-        private void InnerConvert(LabReport lr, ReportElement re)
+        private void ItemConvert(LabReport lr, List<IFillElement> ItemList)
         {
             ItemElement item = null;
-            ImageElement image = null;
-
-            lr.Info = re.Info as InfoElement;
-            foreach (IFillElement element in re.ItemList)
+            foreach (IFillElement element in ItemList)
             {
                 item = element as ItemElement;
                 if (item != null)
@@ -212,7 +277,11 @@ namespace XYS.Lis.Report
                     lr.ItemList.Add(item);
                 }
             }
-            foreach (IFillElement element in re.ImageList)
+        }
+        private void ImageConvert(LabReport lr, List<IFillElement> ImageList)
+        {
+            ImageElement image = null;
+            foreach (IFillElement element in ImageList)
             {
                 image = element as ImageElement;
                 if (image != null)
@@ -221,30 +290,139 @@ namespace XYS.Lis.Report
                 }
             }
         }
-        //后续处理
-        private void HandleAfterInfo(LabReport report)
+        private void GeneConvert(CustomElement custom, GeneCustom item)
         {
+            custom.C0 = item.SampleNo;
+            custom.C1 = item.Name;
+            custom.C2 = item.Age;
+            custom.C3 = item.Relation;
+            custom.C4 = item.EqualCount;
+        }
+        private void GeneConvert(CustomElement custom, List<IFillElement> ls, List<int> superList)
+        {
+            //排序
+            ls.Sort((x, y) =>
+            {
+                ItemElement x1 = x as ItemElement;
+                ItemElement y1 = y as ItemElement;
+                if (x1 != null && y1 != null)
+                {
+                    return x1.DispOrder - y1.DispOrder;
+                }
+                else
+                {
+                    return 0;
+                }
+            });
+            //转换
+            int index = 5;
+            ItemElement item = null;
+            foreach (IFillElement ele in ls)
+            {
+                item = ele as ItemElement;
+                if (item != null)
+                {
+                    if (!superList.Contains(item.SuperNo))
+                    {
+                        superList.Add(item.SuperNo);
+                    }
+                    this.GeneConvert(custom, item, index);
+                    index = index + 3;
+                }
+            }
+        }
+        private void GeneConvert(CustomElement custom, ItemElement item, int index)
+        {
+            string propName = null;
+            propName = GetGenePropName(index);
+            this.SetProperty(propName, item.CName, custom);
+            string[] values = item.Result.Split(new char[] { ';' });
+            if (values.Length > 1)
+            {
+                index++;
+                propName = GetGenePropName(index);
+                this.SetProperty(propName, values[0], custom);
+
+                index++;
+                propName = GetGenePropName(index);
+                this.SetProperty(propName, values[0], custom);
+            }
+        }
+        private string GetGenePropName(int no)
+        {
+            int m = no % CustomElement.PropertyCount;
+            return "C" + m;
+        }
+        private void SetProperty(string propName, object value, CustomElement element)
+        {
+            try
+            {
+                PropertyInfo pro = element.GetType().GetProperty(propName);
+                if (pro != null)
+                {
+                    pro.SetValue(element, value, null);
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        #endregion
+        
+        #region 后续处理
+        //11小组添加标准图片（通讯数据整体处理）
+        private void HandleAfter(LabReport report, IReportKey RK)
+        {
+            this.HandleAfterItem(report);
+            this.HandleAfterImage(report, RK.ID);
         }
         private void HandleAfterItem(LabReport report)
         {
             ItemElement item = null;
             List<int> superList = report.SuperList;
             List<ItemElement> items = report.ItemList;
-            for (int i = items.Count - 1; i >= 0; i--)
+            if (items.Count > 0)
             {
-                item = items[i];
-
-                //
-                if (!superList.Contains(item.SuperNo))
+                CustomElement custom = new CustomElement();
+                for (int i = items.Count - 1; i >= 0; i--)
                 {
-                    superList.Add(item.SuperNo);
+                    item = items[i];
+                    if (!superList.Contains(item.SuperNo))
+                    {
+                        superList.Add(item.SuperNo);
+                    }
+                    if (ConvertCustom(item, custom))
+                    {
+                        items.RemoveAt(i);
+                        continue;
+                    }
+                    if (!IsItemLegal(item))
+                    {
+                        items.RemoveAt(i);
+                        continue;
+                    }
                 }
-                //
-                if (!IsItemLegal(item))
-                {
-                    items.RemoveAt(i);
-                }
+                report.CustomList.Add(custom);
             }
+        }
+        private bool ConvertCustom(ItemElement item, CustomElement custom)
+        {
+            string key = Item2CustomMap[item.ItemNo] as string;
+            if (key != null)
+            {
+                this.SetProperty(key, item.Result, custom);
+                return true;
+            }
+            return false;
+        }
+        private bool IsItemLegal(ItemElement rie)
+        {
+            if (rie.SecretGrade > 0)
+            {
+                return false;
+            }
+            return true;
         }
         private void HandleAfterImage(LabReport report, string id)
         {
@@ -260,14 +438,6 @@ namespace XYS.Lis.Report
                 }
             }
         }
-        private bool IsItemLegal(ItemElement rie)
-        {
-            if (rie.SecretGrade > 0)
-            {
-                return false;
-            }
-            return true;
-        }
         private ImageElement GetNormalImage(int no, string id)
         {
             string path = ImageNormalMap[no] as string;
@@ -281,10 +451,13 @@ namespace XYS.Lis.Report
             }
             return null;
         }
-        //初始化
+        #endregion
+     
+        #region 初始化
         private void Init()
         {
             this.InitWorkerPool();
+            this.InitItem2CustomMap();
             this.InitImageNormalMap();
         }
         private void InitWorkerPool()
@@ -297,6 +470,28 @@ namespace XYS.Lis.Report
                 this.m_workerPool[i] = th;
                 th.Start();
             }
+        }
+        private void InitItem2CustomMap()
+        {
+            this.Item2CustomMap.Clear();
+
+            this.Item2CustomMap.Add(90009288, "C0");
+            this.Item2CustomMap.Add(90009289, "C1");
+            this.Item2CustomMap.Add(90009290, "C2");
+            this.Item2CustomMap.Add(90009291, "C3");
+            this.Item2CustomMap.Add(90009292, "C4");
+            this.Item2CustomMap.Add(90009293, "C5");
+            this.Item2CustomMap.Add(90009294, "C6");
+            this.Item2CustomMap.Add(90009295, "C7");
+            this.Item2CustomMap.Add(90009296, "C8");
+            this.Item2CustomMap.Add(90009297, "C9");
+            this.Item2CustomMap.Add(90009300, "C10");
+            this.Item2CustomMap.Add(90009301, "C11");
+
+            this.Item2CustomMap.Add(90008528, "C0");
+            this.Item2CustomMap.Add(90008797, "C1");
+            this.Item2CustomMap.Add(90008798, "C2");
+            this.Item2CustomMap.Add(90008799, "C3");
         }
         private void InitImageNormalMap()
         {

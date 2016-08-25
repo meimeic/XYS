@@ -250,7 +250,6 @@ namespace XYS.FR.Util
             TypeList.Add(typeof(FRData));
             TypeList.Add(typeof(FRItem));
             TypeList.Add(typeof(Image));
-            TypeList.Add(typeof(FRKV));
 
             InitRamStruct();
         }
