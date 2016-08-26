@@ -49,6 +49,7 @@ namespace XYS.FR.Lab
         static LabService()
         {
             WorkerCount = 2;
+            HalfEnable = false;
             Config.WebMode = true;
             RootPath = "E:\\pdf\\report\\lab";
             MinTime = new DateTime(2011, 1, 1);
@@ -106,11 +107,12 @@ namespace XYS.FR.Lab
         {
             DataSet ds = DataStruct.GetSet();
             int sectionNo = report.Info.SectionNo;
+            bool hasImage = (report.ImageList.Count > 0);
             //数据填充
-            this.FillReport(report,ds);
+            this.FillReport(report, ds);
             //获取模板
-            //string model = GetModelPath(sectionNo, 0, report.SuperList);
-            string model = "D:\\Project\\VS2013\\Repos\\XYS\\XYS.FR\\Print\\Lab\\mianyi-adaption.frx";
+            string model = GetModelPath(sectionNo, report.ItemList.Count, hasImage, report.SuperList);
+            //string model = "D:\\Project\\VS2013\\Repos\\XYS\\XYS.FR\\Print\\Lab\\mianyi-adaption.frx";
             //生成pdf,获取pdf路径
             string filePath = this.GenderPDF(model, ds);
             //获取排序号
@@ -259,7 +261,7 @@ namespace XYS.FR.Lab
             {
                 foreach (ImageElement img in images)
                 {
-                    propertyName = GetImagePropName(img.Name);
+                    propertyName = GetImageName(img.Name);
                     if (!string.IsNullOrEmpty(propertyName))
                     {
                         this.SetProperty(propertyName, img.Value, image);
@@ -268,7 +270,7 @@ namespace XYS.FR.Lab
                 ls.Add(image);
             }
         }
-        private string GetImagePropName(string name)
+        private string GetImageName(string name)
         {
             return Image2ImageMap[name] as string;
         }
@@ -328,54 +330,31 @@ namespace XYS.FR.Lab
         #endregion
 
         #region 获取模板路径及报告序号
-        private string GetModelPath(int sectionNo, int itemCount, List<int> list)
+        //获取模板
+        private string GetModelPath(int sectionNo, int itemCount, bool hasImage, List<int> list)
         {
-            int modelNo = -1;
-            //按小组划分模板
-            //switch (sectionNo)
-            //{
-            //    //根据小组号获得固定死模板
-            //    case 2:
-            //    case 27:
-            //        modelNo = LabConfigManager.GetModelNo(sectionNo);
-            //        break;
-            //    //有图模板
-            //    case 11:
-            //        modelNo = GetModelNo(sectionNo, list);
-            //        break;
-            //}
-            modelNo = this.GetModelNo(sectionNo, list);
+            int modelNo = this.GetModelNo(sectionNo, itemCount, hasImage, list);
             return LabConfigManager.GetModelPath(modelNo);
         }
-        //获取通用模板
-        private int GetModelNo(int sectionNo, int itemCount, List<int> list)
+        private int GetModelNo(int sectionNo, int itemCount, bool hasImage, List<int> list)
         {
             int modelNo = LabConfigManager.GetModelNo(list);
-            if (modelNo <= 0)
+            if (modelNo > 0)
             {
-                modelNo = GetModelNo(sectionNo, itemCount);
+                return HalfModelNo(itemCount, hasImage, itemCount);
             }
-            return modelNo;
+            modelNo = LabConfigManager.GetModelNo(sectionNo);
+            return HalfModelNo(itemCount, hasImage, itemCount);
         }
-        //获取有图模板
-        private int GetModelNo(int sectionNo, List<int> list)
+        private int HalfModelNo(int itemCount, bool hasImage, int modelNo)
         {
-            int modelNo = LabConfigManager.GetModelNo(list);
-            if (modelNo <= 0)
-            {
-                modelNo = LabConfigManager.GetModelNo(sectionNo);
-            }
-            return modelNo;
-        }
-        private int GetModelNo(int sectionNo, int itemCount)
-        {
-            int modelNo = LabConfigManager.GetModelNo(sectionNo);
-            if (itemCount < 17 && HalfEnable)
+            if (!hasImage && HalfEnable && itemCount < 17)
             {
                 modelNo++;
             }
             return modelNo;
         }
+        //获取排序号
         private int GetOrderNo(int sectionNo, List<int> itemList)
         {
             int result = LabConfigManager.GetOrderNo(itemList);
