@@ -245,11 +245,11 @@ namespace XYS.FR.Util
         #region 私有静态方法
         private static void Init()
         {
-            TypeList.Add(typeof(Custom));
+            TypeList.Add(typeof(FRCustom));
             TypeList.Add(typeof(FRInfo));
             TypeList.Add(typeof(FRData));
             TypeList.Add(typeof(FRItem));
-            TypeList.Add(typeof(Image));
+            TypeList.Add(typeof(FRImage));
 
             InitRamStruct();
         }

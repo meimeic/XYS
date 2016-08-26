@@ -32,7 +32,7 @@ namespace LisTest
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string where = "where receivedate>'2016-02-22' and sectionno=4";
+            string where = " where sectionno=20 and ReceiveDate>'2016-02-22'";
             this.service.InitReport(where);
         }
         private void PrintPDF(LabReport report)

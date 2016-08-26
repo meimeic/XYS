@@ -5,14 +5,12 @@ using XYS.Report;
 using XYS.Lis.Report.Persistent;
 namespace XYS.Lis.Report.Handler
 {
-    public class GeneCustomHandle : HandleSkeleton
+    public class GSCustomHandle : HandleSkeleton
     {
-        #region 构造函数
-        public GeneCustomHandle(LabReportDAL dal)
+
+        public GSCustomHandle(LabReportDAL dal)
             : base(dal)
-        {
-        }
-        #endregion
+        { }
 
         protected override bool InnerHandle(IFillElement element, IReportKey RK)
         {

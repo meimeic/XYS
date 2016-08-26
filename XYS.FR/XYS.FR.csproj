@@ -88,8 +88,8 @@
     <Compile Include="Model\FRInfo.cs" />
     <Compile Include="Model\FRData.cs" />
     <Compile Include="Model\FRItem.cs" />
-    <Compile Include="Model\Custom.cs" />
-    <Compile Include="Model\Image.cs" />
+    <Compile Include="Model\FRCustom.cs" />
+    <Compile Include="Model\FRImage.cs" />
     <Compile Include="PDF.asmx.cs">
       <DependentUpon>PDF.asmx</DependentUpon>
       <SubType>Component</SubType>

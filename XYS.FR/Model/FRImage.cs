@@ -4,7 +4,7 @@ using XYS.Report;
 using XYS.Common;
 namespace XYS.FR.Model
 {
-    public class Image : IExportElement
+    public class FRImage : IExportElement
     {
         private static readonly int PropertyCount = 16;
         private byte[] m_c0;
@@ -25,7 +25,7 @@ namespace XYS.FR.Model
         private string m_c15;
 
 
-        public Image()
+        public FRImage()
         { }
 
         public static int ColumnCount

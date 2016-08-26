@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="08/13/2015 15:10:27" ReportInfo.Modified="08/23/2016 14:38:55" ReportInfo.CreatorVersion="2015.3.4.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="08/13/2015 15:10:27" ReportInfo.Modified="08/26/2016 16:06:45" ReportInfo.CreatorVersion="2015.3.4.0">
   <ScriptText>using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,7 +27,7 @@ namespace FastReport
 }
 </ScriptText>
   <Dictionary>
-    <TableDataSource Name="Custom" ReferenceName="Data.Custom" DataType="System.Int32" Enabled="true">
+    <TableDataSource Name="FRCustom" ReferenceName="Data.FRCustom" DataType="System.Int32" Enabled="true">
       <Column Name="C0" DataType="System.String" PropName="Column"/>
       <Column Name="C1" DataType="System.String" PropName="Column"/>
       <Column Name="C2" DataType="System.String" PropName="Column"/>
@@ -43,6 +43,41 @@ namespace FastReport
       <Column Name="C12" DataType="System.String" PropName="Column"/>
       <Column Name="C13" DataType="System.String" PropName="Column"/>
       <Column Name="C14" DataType="System.String" PropName="Column"/>
+      <Column Name="C15" DataType="System.String" PropName="Column"/>
+      <Column Name="C16" DataType="System.String" PropName="Column"/>
+      <Column Name="C17" DataType="System.String" PropName="Column"/>
+      <Column Name="C18" DataType="System.String" PropName="Column"/>
+      <Column Name="C19" DataType="System.String" PropName="Column"/>
+      <Column Name="C20" DataType="System.String" PropName="Column"/>
+      <Column Name="C21" DataType="System.String" PropName="Column"/>
+      <Column Name="C22" DataType="System.String" PropName="Column"/>
+      <Column Name="C23" DataType="System.String" PropName="Column"/>
+      <Column Name="C24" DataType="System.String" PropName="Column"/>
+      <Column Name="C25" DataType="System.String" PropName="Column"/>
+      <Column Name="C26" DataType="System.String" PropName="Column"/>
+      <Column Name="C27" DataType="System.String" PropName="Column"/>
+      <Column Name="C28" DataType="System.String" PropName="Column"/>
+      <Column Name="C29" DataType="System.String" PropName="Column"/>
+      <Column Name="C30" DataType="System.String" PropName="Column"/>
+      <Column Name="C31" DataType="System.String" PropName="Column"/>
+      <Column Name="C32" DataType="System.String" PropName="Column"/>
+      <Column Name="C33" DataType="System.String" PropName="Column"/>
+      <Column Name="C34" DataType="System.String" PropName="Column"/>
+      <Column Name="C35" DataType="System.String" PropName="Column"/>
+      <Column Name="C36" DataType="System.String" PropName="Column"/>
+      <Column Name="C37" DataType="System.String" PropName="Column"/>
+      <Column Name="C38" DataType="System.String" PropName="Column"/>
+      <Column Name="C39" DataType="System.String" PropName="Column"/>
+      <Column Name="C40" DataType="System.String" PropName="Column"/>
+      <Column Name="C41" DataType="System.String" PropName="Column"/>
+      <Column Name="C42" DataType="System.String" PropName="Column"/>
+      <Column Name="C43" DataType="System.String" PropName="Column"/>
+      <Column Name="C44" DataType="System.String" PropName="Column"/>
+      <Column Name="C45" DataType="System.String" PropName="Column"/>
+      <Column Name="C46" DataType="System.String" PropName="Column"/>
+      <Column Name="C47" DataType="System.String" PropName="Column"/>
+      <Column Name="C48" DataType="System.String" PropName="Column"/>
+      <Column Name="C49" DataType="System.String" PropName="Column"/>
     </TableDataSource>
     <TableDataSource Name="FRInfo" ReferenceName="Data.FRInfo" DataType="System.Int32" Enabled="true">
       <Column Name="C0" DataType="System.String" PropName="Column"/>
@@ -110,6 +145,26 @@ namespace FastReport
       <Column Name="C27" DataType="System.String" PropName="Column"/>
       <Column Name="C28" DataType="System.String" PropName="Column"/>
       <Column Name="C29" DataType="System.String" PropName="Column"/>
+      <Column Name="C30" DataType="System.String" PropName="Column"/>
+      <Column Name="C31" DataType="System.String" PropName="Column"/>
+      <Column Name="C32" DataType="System.String" PropName="Column"/>
+      <Column Name="C33" DataType="System.String" PropName="Column"/>
+      <Column Name="C34" DataType="System.String" PropName="Column"/>
+      <Column Name="C35" DataType="System.String" PropName="Column"/>
+      <Column Name="C36" DataType="System.String" PropName="Column"/>
+      <Column Name="C37" DataType="System.String" PropName="Column"/>
+      <Column Name="C38" DataType="System.String" PropName="Column"/>
+      <Column Name="C39" DataType="System.String" PropName="Column"/>
+      <Column Name="C40" DataType="System.String" PropName="Column"/>
+      <Column Name="C41" DataType="System.String" PropName="Column"/>
+      <Column Name="C42" DataType="System.String" PropName="Column"/>
+      <Column Name="C43" DataType="System.String" PropName="Column"/>
+      <Column Name="C44" DataType="System.String" PropName="Column"/>
+      <Column Name="C45" DataType="System.String" PropName="Column"/>
+      <Column Name="C46" DataType="System.String" PropName="Column"/>
+      <Column Name="C47" DataType="System.String" PropName="Column"/>
+      <Column Name="C48" DataType="System.String" PropName="Column"/>
+      <Column Name="C49" DataType="System.String" PropName="Column"/>
     </TableDataSource>
     <TableDataSource Name="FRItem" ReferenceName="Data.FRItem" DataType="System.Int32" Enabled="true">
       <Column Name="C0" DataType="System.String" PropName="Column"/>
@@ -128,7 +183,7 @@ namespace FastReport
       <Column Name="C13" DataType="System.String" PropName="Column"/>
       <Column Name="C14" DataType="System.String" PropName="Column"/>
     </TableDataSource>
-    <TableDataSource Name="Image" ReferenceName="Data.Image" DataType="System.Int32" Enabled="true">
+    <TableDataSource Name="FRImage" ReferenceName="Data.FRImage" DataType="System.Int32" Enabled="true">
       <Column Name="C0" DataType="System.Byte[]" PropName="Column"/>
       <Column Name="C1" DataType="System.Byte[]" PropName="Column"/>
       <Column Name="C2" DataType="System.Byte[]" PropName="Column"/>
@@ -145,10 +200,6 @@ namespace FastReport
       <Column Name="C13" DataType="System.String" PropName="Column"/>
       <Column Name="C14" DataType="System.String" PropName="Column"/>
       <Column Name="C15" DataType="System.String" PropName="Column"/>
-    </TableDataSource>
-    <TableDataSource Name="FRKV" ReferenceName="Data.FRKV" DataType="System.Int32" Enabled="true">
-      <Column Name="Key" DataType="System.String" PropName="Column"/>
-      <Column Name="Value" DataType="System.String" PropName="Column"/>
     </TableDataSource>
   </Dictionary>
   <ReportPage Name="Page1" PaperWidth="195" PaperHeight="271" RawPaperSize="166" LeftMargin="20" TopMargin="5" BottomMargin="5" FirstPageSource="15" OtherPagesSource="15">
@@ -182,18 +233,18 @@ namespace FastReport
         <TextObject Name="Text31" Left="557.55" Width="94.5" Height="18.9" Text="第[Page#]页，共[TotalPages#]页" WordWrap="false" Font="宋体, 10pt, style=Bold"/>
         <TextObject Name="Text1" Top="47.25" Width="623.7" Height="37.8" Text="细胞分子遗传室染色体检查报告单" HorzAlign="Center" VertAlign="Center" Font="宋体, 18pt, style=Bold"/>
       </DataHeaderBand>
-      <DataBand Name="Data6" Top="183.77" Width="623.7" Height="81.27" DataSource="Custom">
+      <DataBand Name="Data6" Top="183.77" Width="623.7" Height="81.27" DataSource="FRCustom">
         <TextObject Name="Text2" Top="7.56" Width="85.05" Height="22.68" Text="标本质量:" VertAlign="Center" WordWrap="false" Font="宋体, 12pt, style=Bold"/>
-        <TextObject Name="Text3" Left="75.6" Top="7.56" Width="132.3" Height="22.68" Text="[Custom.C0]" VertAlign="Center" WordWrap="false" Font="宋体, 12pt"/>
+        <TextObject Name="Text3" Left="75.6" Top="7.56" Width="132.3" Height="22.68" Text="[FRCustom.C0]" VertAlign="Center" WordWrap="false" Font="宋体, 12pt"/>
         <TextObject Name="Text32" Left="217.35" Top="7.56" Width="85.05" Height="22.68" Text="培养方法:" VertAlign="Center" WordWrap="false" Font="宋体, 12pt, style=Bold"/>
-        <TextObject Name="Text33" Left="292.95" Top="7.56" Width="132.3" Height="22.68" Text="[Custom.C1]" VertAlign="Center" WordWrap="false" Font="宋体, 12pt"/>
+        <TextObject Name="Text33" Left="292.95" Top="7.56" Width="132.3" Height="22.68" Text="[FRCustom.C1]" VertAlign="Center" WordWrap="false" Font="宋体, 12pt"/>
         <TextObject Name="Text34" Left="415.8" Top="7.56" Width="85.05" Height="22.68" Text="显带方法:" VertAlign="Center" WordWrap="false" Font="宋体, 12pt, style=Bold"/>
-        <TextObject Name="Text35" Left="491.4" Top="7.56" Width="141.75" Height="22.68" Text="[Custom.C2]" VertAlign="Center" WordWrap="false" Font="宋体, 12pt"/>
+        <TextObject Name="Text35" Left="491.4" Top="7.56" Width="141.75" Height="22.68" Text="[FRCustom.C2]" VertAlign="Center" WordWrap="false" Font="宋体, 12pt"/>
         <TextObject Name="Text36" Top="30.24" Width="85.05" Height="22.68" Text="核型描述:" VertAlign="Center" WordWrap="false" Font="宋体, 12pt, style=Bold"/>
-        <TextObject Name="Text37" Left="75.6" Top="30.24" Width="510.3" Height="51.03" Text="[Custom.C3]" Padding="2, 2, 2, 0" Font="宋体, 12pt"/>
+        <TextObject Name="Text37" Left="75.6" Top="30.24" Width="510.3" Height="51.03" Text="[FRCustom.C3]" Padding="2, 2, 2, 0" Font="宋体, 12pt"/>
       </DataBand>
-      <DataBand Name="Data7" Top="269.04" Width="623.7" Height="441.13" DataSource="Image">
-        <PictureObject Name="Picture3" Left="18.9" Width="583.63" Height="441.13" Border.Lines="All" DataColumn="Image.C0"/>
+      <DataBand Name="Data7" Top="269.04" Width="623.7" Height="441.13" DataSource="FRImage">
+        <PictureObject Name="Picture3" Left="18.9" Width="583.63" Height="441.13" Border.Lines="All" DataColumn="FRImage.C0"/>
       </DataBand>
       <DataFooterBand Name="DataFooter1" Top="714.17" Width="623.7" Height="160.65">
         <TextObject Name="Text5" Top="28.35" Width="623.7" Height="47.25" Text="[FRInfo.C14]" Font="宋体, 12pt"/>

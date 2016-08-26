@@ -4,7 +4,7 @@ using XYS.Report;
 using XYS.Common;
 namespace XYS.FR.Model
 {
-    public class Custom : IExportElement
+    public class FRCustom : IExportElement
     {
         private string m_c0;
         private string m_c1;
@@ -57,7 +57,7 @@ namespace XYS.FR.Model
         private string m_c48;
         private string m_c49;
 
-        public Custom()
+        public FRCustom()
         {
         }
 

@@ -107,19 +107,10 @@ namespace XYS.FR.Lab
             DataSet ds = DataStruct.GetSet();
             int sectionNo = report.Info.SectionNo;
             //数据填充
-            this.FillInfo(report.Info, ds);
-            this.FillItems(report.ItemList, ds);
-            this.FillImage(report.ImageList, ds);
-            this.FillCustoms(report.CustomList,ds);
+            this.FillReport(report,ds);
             //获取模板
             //string model = GetModelPath(sectionNo, 0, report.SuperList);
-            if (report.ImageList.Count > 0)
-            {
-            }
-            else
-            {
-            }
-            string model = "D:\\Project\\VS2013\\Repos\\XYS\\XYS.FR\\Print\\Lab\\peixing-difen.frx";
+            string model = "D:\\Project\\VS2013\\Repos\\XYS\\XYS.FR\\Print\\Lab\\mianyi-adaption.frx";
             //生成pdf,获取pdf路径
             string filePath = this.GenderPDF(model, ds);
             //获取排序号
@@ -185,13 +176,30 @@ namespace XYS.FR.Lab
         #endregion
 
         #region 将数据填充到DataSet
-        private void FillReport(LabReport report,DataSet ds)
+        private void FillReport(LabReport report, DataSet ds)
         {
-
-        }
-        private void FillInfo(InfoElement info, DataSet ds)
-        {
+            //上传info
             FRInfo header = new FRInfo();
+            this.FillInfo(report.Info, header);
+            this.Export.ExportElement(header, ds);
+            //
+            int sectionNo = report.Info.SectionNo;
+            List<IExportElement> ls = new List<IExportElement>(30);
+            switch (sectionNo)
+            {
+                case 39:
+                    this.FillGSCustoms(report.CustomList, ls);
+                    break;
+                default:
+                    this.FillItems(report.ItemList, ls);
+                    this.FillImage(report.ImageList, ls);
+                    this.FillCustoms(report.CustomList, ls);
+                    break;
+            }
+            this.Export.ExportElement(ls, ds);
+        }
+        private void FillInfo(InfoElement info, FRInfo header)
+        {
             header.C0 = info.SerialNo;
             header.C1 = info.DeptName;
             header.C2 = info.BedNo;
@@ -216,28 +224,22 @@ namespace XYS.FR.Lab
             header.C19 = info.CheckTime > MinTime ? info.CheckTime.ToString("yyyy-MM-dd HH:mm") : "";
             header.C20 = info.TestTime > MinTime ? info.TestTime.ToString("yyyy-MM-dd") : "";
 
-            header.C21 = info.TechnicianUrl;
-            header.C22 = info.CheckerUrl;
-
+            header.C29 = info.ReportID;
             header.C30 = info.TechnicianImage;
             header.C31 = info.CheckerImage;
-
-            this.Export.ExportElement(header, ds);
         }
-        private void FillItems(List<ItemElement> items, DataSet ds)
+        private void FillItems(List<ItemElement> items, List<IExportElement> ls)
         {
             FRItem data = null;
-            Custom custom = new Custom();
-            List<IExportElement> ls = new List<IExportElement>(16);
-            items.Sort();
-            foreach (ItemElement item in items)
+            if (items.Count > 0)
             {
-                data = new FRItem();
-                this.FillItem(item, data);
-                ls.Add(data);
+                foreach (ItemElement item in items)
+                {
+                    data = new FRItem();
+                    this.FillItem(item, data);
+                    ls.Add(data);
+                }
             }
-            this.Export.ExportElement(custom, ds);
-            this.Export.ExportElement(ls, ds);
         }
         private void FillItem(ItemElement item, FRItem data)
         {
@@ -249,43 +251,54 @@ namespace XYS.FR.Lab
             data.C5 = item.RefRange;
             data.C6 = item.ItemNo.ToString();
         }
-        private void FillImage(List<ImageElement> images, DataSet ds)
+        private void FillImage(List<ImageElement> images, List<IExportElement> ls)
         {
             string propertyName = null;
-            Image image = new Image();
-
-            foreach (ImageElement img in images)
+            FRImage image = new FRImage();
+            if (images.Count > 0)
             {
-                propertyName = GetImagePropName(img.Name);
-                if (!string.IsNullOrEmpty(propertyName))
+                foreach (ImageElement img in images)
                 {
-                    this.SetProperty(propertyName, img.Value, image);
+                    propertyName = GetImagePropName(img.Name);
+                    if (!string.IsNullOrEmpty(propertyName))
+                    {
+                        this.SetProperty(propertyName, img.Value, image);
+                    }
                 }
+                ls.Add(image);
             }
-            this.Export.ExportElement(image, ds);
-        }
-        private string GetImagePropName(int no)
-        {
-            int m = no % Image.ColumnCount;
-            return "C" + m;
         }
         private string GetImagePropName(string name)
         {
             return Image2ImageMap[name] as string;
         }
-        private void FillCustoms(List<CustomElement> customs, DataSet ds)
+        private void FillCustoms(List<CustomElement> customs, List<IExportElement> ls)
         {
-            FRData data = null;
-            List<IExportElement> ls = new List<IExportElement>(3);
-            foreach (CustomElement custom in customs)
+            FRCustom cs = null;
+            if (customs.Count > 0)
             {
-                data = new FRData();
-                this.FillCustom(custom, data);
+                foreach (CustomElement custom in customs)
+                {
+                    cs = new FRCustom();
+                    this.FillCustom(custom, cs);
+                    ls.Add(cs);
+                }
+            }
+        }
+        private void FillGSCustoms(List<CustomElement> customs, List<IExportElement> ls)
+        {
+            FRData data = new FRData();
+            FRCustom custom = new FRCustom();
+            if (customs.Count > 1)
+            {
+                this.FillCustom(customs[0], custom);
+                ls.Add(custom);
+                //
+                this.FillCustom(customs[1], data);
                 ls.Add(data);
             }
-            this.Export.ExportElement(ls, ds);
         }
-        private void FillCustom(CustomElement custom, FRData data)
+        private void FillCustom(CustomElement custom, IExportElement data)
         {
             PropertyInfo[] props = data.GetType().GetProperties();
             foreach (PropertyInfo prop in props)
@@ -401,6 +414,7 @@ namespace XYS.FR.Lab
             this.Image2ImageMap.Add("S_FSCWxS", "C4");
             this.Image2ImageMap.Add("S_FLLWxS", "C5");
             this.Image2ImageMap.Add("图像1", "C0");
+            this.Image2ImageMap.Add("图像2", "C1");
             this.Image2ImageMap.Add("normal", "C1");
             this.Image2ImageMap.Add("图谱", "C0");
             this.Image2ImageMap.Add("蛋白电泳", "C1");

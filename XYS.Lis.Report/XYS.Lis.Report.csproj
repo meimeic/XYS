@@ -45,10 +45,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Handler\GeneCustomHandle.cs" />
+    <Compile Include="Handler\GSCustomHandle.cs" />
+    <Compile Include="Handler\GSItemHandle.cs" />
     <Compile Include="Model\GeneCustom.cs" />
     <Compile Include="Handler\ImageHandle.cs" />
     <Compile Include="Handler\InfoHandle.cs" />
     <Compile Include="Handler\ItemHandle.cs" />
+    <Compile Include="Model\GSCustom.cs" />
+    <Compile Include="Model\GSItem.cs" />
     <Compile Include="Persistent\LabReportDAL.cs" />
     <Compile Include="Persistent\LabPKDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
