@@ -12,8 +12,6 @@ namespace XYS.Lis.Report.Handler
 {
     public class InfoHandle : HandleSkeleton
     {
-
-
         #region 构造函数
         public InfoHandle(LabReportDAL dal)
             : base(dal)
@@ -24,6 +22,7 @@ namespace XYS.Lis.Report.Handler
         #region 重写父类抽象方法
         protected override bool InnerHandle(IFillElement element, IReportKey RK)
         {
+            LOG.Info("reportinfo 内部处理");
             bool result = false;
             InfoElement info = element as InfoElement;
             if (info != null)
@@ -58,6 +57,7 @@ namespace XYS.Lis.Report.Handler
         {
             if (IsExist(elements))
             {
+                LOG.Info("reportinfo 列表内部处理");
                 bool result = false;
                 for (int i = elements.Count - 1; i >= 0; i--)
                 {

@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using System.Drawing;
 using System.Collections;
+using System.Configuration;
 using System.Collections.Generic;
 
 using Newtonsoft.Json;
@@ -19,12 +20,17 @@ namespace XYS.Lis.Report.Handler
     public class ImageHandle : HandleSkeleton
     {
         #region 私有字段
-        private static readonly string ImageLocal = "E:\\image\\report\\lab";
-        private static readonly string ImageServer = "http://img.xys.com:8080/lab";
-        private static readonly string UploadUri = "http://10.1.11.10:8090";
+        private static readonly string UploadUri;
+        private static readonly string ImageLocal;
+        private static readonly string ImageServer;
         #endregion
 
         #region 构造函数
+        static ImageHandle()
+        {
+            ImageServer = ConfigurationManager.AppSettings["LabImageServer"].ToString();
+            ImageLocal = ConfigurationManager.AppSettings["LabImageLocalDir"].ToString();
+        }
         public ImageHandle(LabReportDAL dal)
             : base(dal)
         {
@@ -42,12 +48,12 @@ namespace XYS.Lis.Report.Handler
         {
             if (IsExist(elements))
             {
+                LOG.Info("保存报告图片到本地");
                 return SaveLocalImages(elements, RK);
             }
             return true;
         }
         #endregion
-
 
         #region 图片本地保存
         protected bool SaveLocalImages(List<IFillElement> elements, IReportKey RK)

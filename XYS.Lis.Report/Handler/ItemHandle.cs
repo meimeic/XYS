@@ -32,6 +32,7 @@ namespace XYS.Lis.Report.Handler
         {
             if (IsExist(elements))
             {
+                LOG.Info("报告项列表内部处理");
                 bool result = false;
                 for (int i = elements.Count - 1; i >= 0; i--)
                 {

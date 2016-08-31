@@ -8,21 +8,27 @@ namespace XYS.Lis.Report.Utils
 {
     public class PUser
     {
+        #region 静态字段
         private static readonly Hashtable User2UrlMap;
         private static readonly Hashtable UserImageMap;
-
+        private static readonly string ImageServer;
         private static readonly string ConnectionString;
-        private static readonly string ImageServer = "http://img.xys.com:8080/lab/user";
+        #endregion
 
+        #region 构造函数
         static PUser()
         {
-            UserImageMap = new Hashtable(50);
             User2UrlMap = new Hashtable(30);
+            UserImageMap = new Hashtable(50);
+            ImageServer = ConfigurationManager.AppSettings["LabImageServer"].ToString();
             ConnectionString = ConfigurationManager.ConnectionStrings["LabMSSQL"].ConnectionString;
 
             InitUserUrlMap();
             InitUserImageMap();
         }
+        #endregion
+
+        #region  公共方法
         public static byte[] GetUserImage(string userName)
         {
             return UserImageMap[userName] as byte[];
@@ -35,9 +41,11 @@ namespace XYS.Lis.Report.Utils
             //    return ImageServer + path;
             //}
             //return null;
-            return ImageServer + "/" + name + ".jpg";
+            return ImageServer + "/user/" + name + ".jpg";
         }
+        #endregion
 
+        #region
         private static void InitUserImageMap()
         {
             string sql = "select cname,userimage from PUser where userimage is not null";
@@ -69,5 +77,6 @@ namespace XYS.Lis.Report.Utils
         private static void InitUserUrlMap()
         {
         }
+        #endregion
     }
 }

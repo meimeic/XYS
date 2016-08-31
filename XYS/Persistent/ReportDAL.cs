@@ -3,12 +3,18 @@ using System.Data;
 using System.Reflection;
 using System.Collections.Generic;
 
+using log4net;
+
 using XYS.Report;
 using XYS.Common;
 namespace XYS.Persistent
 {
     public abstract class ReportDAL
     {
+        #region
+        protected static readonly ILog LOG = LogManager.GetLogger("ReportPersistent");
+        #endregion
+
         #region 受保护构造函数
         protected ReportDAL()
         {
@@ -24,7 +30,7 @@ namespace XYS.Persistent
                 FillData(element, dt.Rows[0], dt.Columns);
             }
         }
-        public void FillList(List<IFillElement> elementList, Type elementType, string sql)
+        public void FillList(List<IFillElement> elementList, Type type, string sql)
         {
             DataTable dt = GetDataTable(sql);
             if (dt != null && dt.Rows.Count > 0)
@@ -34,8 +40,8 @@ namespace XYS.Persistent
                 {
                     try
                     {
-                        element = (IFillElement)elementType.Assembly.CreateInstance(elementType.FullName);
-                        FillData(element, elementType, dr, dt.Columns);
+                        element = (IFillElement)type.Assembly.CreateInstance(type.FullName);
+                        FillData(element, type, dr, dt.Columns);
                         elementList.Add(element);
                     }
                     catch (Exception ex)

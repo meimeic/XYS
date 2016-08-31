@@ -3,13 +3,19 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
+using log4net;
+
 using XYS.Common;
 using XYS.Persistent;
 namespace XYS.Report
 {
     public abstract class HandleSkeleton : IHandle
     {
+        #region 私有字段
         private readonly ReportDAL DAL;
+        protected static readonly ILog LOG = LogManager.GetLogger("ReportHandle");
+        #endregion
+
         protected HandleSkeleton(ReportDAL dal)
         {
             this.DAL = dal;
@@ -24,6 +30,7 @@ namespace XYS.Report
                 result = FillElement(element, RK);
                 if (result)
                 {
+                    LOG.Info(element.GetType().Name+"数据填充成功，进行内部处理");
                     result = InnerHandle(element, RK);
                 }
             }
@@ -38,6 +45,7 @@ namespace XYS.Report
                 result = FillElement(elements, RK, type);
                 if (result)
                 {
+                    LOG.Info(type.Name + "数据列表填充成功，进行内部处理");
                     result = InnerHandle(elements, RK);
                 }
             }
@@ -54,32 +62,32 @@ namespace XYS.Report
         private bool FillElement(IFillElement element, IReportKey RK)
         {
             string sql = GenderSql(element, RK);
-            //LOG.Info("生成ReportInfo的SQL语句:" + sql);
+            LOG.Info("填充数据SQL语句:" + sql);
             try
             {
-                //LOG.Info("ReportInfo数据填充");
+                LOG.Info("数据填充中");
                 this.DAL.Fill(element, sql);
                 return true;
             }
             catch (Exception ex)
             {
-                //LOG.Error("ReportInfo填充异常");
+                LOG.Error("数据填充异常:" + ex.Message);
                 return false;
             }
         }
         private bool FillElement(List<IFillElement> elements, IReportKey RK, Type type)
         {
             string sql = GenderSql(type, RK);
-            //LOG.Info("生成" + type.Name + "的SQL语句:" + sql);
+            LOG.Info("填充"+type.Name + "类型数据列表的SQL语句:" + sql);
             try
             {
-                //LOG.Info(type.Name + "集合填充");
+                LOG.Info(type.Name + "类型列表填充");
                 this.DAL.FillList(elements, type, sql);
                 return true;
             }
             catch (Exception ex)
             {
-                //LOG.Error(type.Name + "集合填充异常");
+                LOG.Error(type.Name + "类型列表填充异常:" + ex.Message);
                 return false;
             }
         }
@@ -110,6 +118,7 @@ namespace XYS.Report
             sb.Remove(sb.Length - 1, 1);
             sb.Append(" from ");
             sb.Append(type.Name);
+            sb.Append(" ");
             return sb.ToString();
         }
         private bool IsColumn(PropertyInfo prop)

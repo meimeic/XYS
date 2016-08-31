@@ -24,6 +24,7 @@ namespace XYS.Lis.Report.Handler
         {
             if (IsExist(elements))
             {
+                LOG.Info("基因分型自定义项列表处理");
                 bool result = false;
                 for (int i = elements.Count - 1; i >= 0; i--)
                 {

@@ -2,8 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
+using System.Configuration;
 using System.Reflection;
 using System.Threading;
+
+using log4net;
 
 using XYS.Util;
 using XYS.Model;
@@ -21,8 +24,9 @@ namespace XYS.Lis.Report
     {
         #region 静态变量
         private static int WorkerCount;
+        private static readonly ILog LOG;
         private static readonly LabService ServiceInstance;
-        private static readonly string ImageServer = "http://img.xys.com:8080/lab/normal";
+        private static readonly string ImageServer;
 
         private readonly IHandle InfoHandler;
         private readonly IHandle ItemHandler;
@@ -30,7 +34,6 @@ namespace XYS.Lis.Report
         private readonly IHandle GSItemHandler;
         private readonly IHandle GSCustomHandler;
         private readonly IHandle GeneCustomHandler;
-
 
         private Thread[] m_workerPool;
         private readonly LabPKDAL PKDAL;
@@ -49,7 +52,8 @@ namespace XYS.Lis.Report
         static LabService()
         {
             WorkerCount = 2;
-            //LOG = LogManager.GetLogger("Lab");
+            ImageServer = ConfigurationManager.AppSettings["LabImageServer"].ToString();
+            LOG = LogManager.GetLogger("LabReport");
 
             ServiceInstance = new LabService();
         }
@@ -127,7 +131,7 @@ namespace XYS.Lis.Report
         {
             foreach (LabPK pk in this.RequestQueue.GetConsumingEnumerable())
             {
-                //LOG.Info("报告处理线程开始处理报告,报告ID为:" + report.ReportPK.ID);
+                LOG.Info("报告处理线程开始处理报告,报告ID为:" + pk.ID);
                 this.InnerHandle(pk);
             }
         }
@@ -161,11 +165,14 @@ namespace XYS.Lis.Report
             if (result)
             {
                 //后续处理
+                LOG.Info("完整报告后续处理");
                 this.HandleAfter(report, RK);
+                LOG.Info("报告处理完成触发事件");
                 this.OnSuccess(report);
             }
             else
             {
+                LOG.Info("报告处理失败触发事件");
                 this.OnError(report);
             }
         }
@@ -197,17 +204,21 @@ namespace XYS.Lis.Report
                 case 4:
                 case 24:
                 case 18:
+                    LOG.Info("通用无图报告处理");
                     result = this.InnerHandleItem(report, RK);
                     break;
                 //基因配型
                 case 45:
+                    LOG.Info("基因配型报告处理");
                     result = this.InnerHandleGene(report, RK);
                     break;
                 case 39:
+                    LOG.Info("骨髓报告处理");
                     result = this.InnerHandleGS(report, RK);
                     break;
                 //默认
                 default:
+                    LOG.Info("通用有图报告处理（默认处理方式）");
                     result = this.InnerHandleItem(report, RK);
                     result = this.InnerHandleImage(report, RK);
                     break;
@@ -478,14 +489,13 @@ namespace XYS.Lis.Report
             return false;
         }
         #endregion
-        
+
         #region 后续处理
         //11小组添加标准图片（通讯数据整体处理）
         private void HandleAfter(LabReport report, IReportKey RK)
         {
             this.HandleAfterImage(report, RK.ID);
         }
-   
         private void HandleAfterImage(LabReport report, string id)
         {
             if (report.Info.SectionNo == 11)
@@ -514,7 +524,7 @@ namespace XYS.Lis.Report
             return null;
         }
         #endregion
-     
+
         #region 初始化
         private void Init()
         {
@@ -536,68 +546,70 @@ namespace XYS.Lis.Report
         private void InitItem2CustomMap()
         {
             this.Item2CustomMap.Clear();
+            lock (Item2CustomMap)
+            {
+                this.Item2CustomMap.Add(90009288, "C0");
+                this.Item2CustomMap.Add(90009289, "C1");
+                this.Item2CustomMap.Add(90009290, "C2");
+                this.Item2CustomMap.Add(90009291, "C3");
+                this.Item2CustomMap.Add(90009292, "C4");
+                this.Item2CustomMap.Add(90009293, "C5");
+                this.Item2CustomMap.Add(90009294, "C6");
+                this.Item2CustomMap.Add(90009295, "C7");
+                this.Item2CustomMap.Add(90009296, "C8");
+                this.Item2CustomMap.Add(90009297, "C9");
+                this.Item2CustomMap.Add(90009300, "C10");
+                this.Item2CustomMap.Add(90009301, "C11");
 
-            this.Item2CustomMap.Add(90009288, "C0");
-            this.Item2CustomMap.Add(90009289, "C1");
-            this.Item2CustomMap.Add(90009290, "C2");
-            this.Item2CustomMap.Add(90009291, "C3");
-            this.Item2CustomMap.Add(90009292, "C4");
-            this.Item2CustomMap.Add(90009293, "C5");
-            this.Item2CustomMap.Add(90009294, "C6");
-            this.Item2CustomMap.Add(90009295, "C7");
-            this.Item2CustomMap.Add(90009296, "C8");
-            this.Item2CustomMap.Add(90009297, "C9");
-            this.Item2CustomMap.Add(90009300, "C10");
-            this.Item2CustomMap.Add(90009301, "C11");
-
-            this.Item2CustomMap.Add(90008528, "C0");
-            this.Item2CustomMap.Add(90008797, "C1");
-            this.Item2CustomMap.Add(90008798, "C2");
-            this.Item2CustomMap.Add(90008799, "C3");
+                this.Item2CustomMap.Add(90008528, "C0");
+                this.Item2CustomMap.Add(90008797, "C1");
+                this.Item2CustomMap.Add(90008798, "C2");
+                this.Item2CustomMap.Add(90008799, "C3");
+            }
         }
         private void InitImageNormalMap()
         {
             lock (ImageNormalMap)
             {
                 ImageNormalMap.Clear();
-                ImageNormalMap.Add(50006570, "/AML1-ETO.jpg");
-                ImageNormalMap.Add(90009363, "/ATM-CEP11.jpg");
-                ImageNormalMap.Add(90008499, "/BCL2.jpg");
-                ImageNormalMap.Add(90008738, "/BCL6.jpg");
-                ImageNormalMap.Add(50006569, "/BCR-ABL.jpg");
-                ImageNormalMap.Add(90009026, "/BCR-ABL-ASS1.jpg");
-                ImageNormalMap.Add(50006576, "/CBFB.jpg");
-                ImageNormalMap.Add(50006583, "/CCND1-IgH.jpg");
-                ImageNormalMap.Add(90009367, "/CDKN2A.jpg");
-                ImageNormalMap.Add(90008735, "/CEP12.jpg");
-                ImageNormalMap.Add(90008495, "/D7S486-CEP7.jpg");
-                ImageNormalMap.Add(50006573, "/CEPX-CEPY.jpg");
-                ImageNormalMap.Add(90008729, "/CKS1B-CDKN2C.jpg");
-                ImageNormalMap.Add(90009373, "/CRLF2.jpg");
-                ImageNormalMap.Add(90009370, "/D13S319.jpg");
-                ImageNormalMap.Add(90008497, "/D20S108.jpg");
-                ImageNormalMap.Add(90008494, "/EGR1-D5S721.jpg");
-                ImageNormalMap.Add(90008741, "/EVI1.jpg");
-                ImageNormalMap.Add(90008730, "/FGFR1-D8Z2.jpg");
-                ImageNormalMap.Add(50006574, "/IgH.jpg");
-                ImageNormalMap.Add(90009041, "/IGH-BCL2.jpg");
-                ImageNormalMap.Add(50006582, "/FGFR3-IgH.jpg");
-                ImageNormalMap.Add(50006581, "/MAF-IgH.jpg");
-                ImageNormalMap.Add(90009364, "/IGH-MAFB.jpg");
-                ImageNormalMap.Add(90009038, "/IGH-MYC.jpg");
-                ImageNormalMap.Add(50006575, "/MLL.jpg");
-                ImageNormalMap.Add(50006579, "/MYC.jpg");
-                ImageNormalMap.Add(90008744, "/MYC.jpg");
-                ImageNormalMap.Add(90009376, "/P2RY8.jpg");
-                ImageNormalMap.Add(90009362, "/P53-CEP17.jpg");
-                ImageNormalMap.Add(90009032, "/PDGFRA.jpg");
-                ImageNormalMap.Add(90009035, "/PDGFRB.jpg");
-                ImageNormalMap.Add(50006571, "/PML-RARA.jpg");
-                ImageNormalMap.Add(90009029, "/RARA.jpg");
-                ImageNormalMap.Add(50006578, "/RB-1.jpg");
-                ImageNormalMap.Add(90008496, "/TCF3-PBX1.jpg");
-                ImageNormalMap.Add(50006572, "/TEL-AML1.jpg");
-                ImageNormalMap.Add(50006577, "/SANTI8.jpg");
+                ImageNormalMap.Add(50006570, "/normal/AML1-ETO.jpg");
+                ImageNormalMap.Add(90009363, "/normal/ATM-CEP11.jpg");
+                ImageNormalMap.Add(90008499, "/normal/BCL2.jpg");
+                ImageNormalMap.Add(90008738, "/normal/BCL6.jpg");
+                ImageNormalMap.Add(50006569, "/normal/BCR-ABL.jpg");
+                ImageNormalMap.Add(90009026, "/normal/BCR-ABL-ASS1.jpg");
+                ImageNormalMap.Add(50006576, "/normal/CBFB.jpg");
+                ImageNormalMap.Add(50006583, "/normal/CCND1-IgH.jpg");
+                ImageNormalMap.Add(90009367, "/normal/CDKN2A.jpg");
+                ImageNormalMap.Add(90008735, "/normal/CEP12.jpg");
+                ImageNormalMap.Add(90008495, "/normal/D7S486-CEP7.jpg");
+                ImageNormalMap.Add(50006573, "/normal/CEPX-CEPY.jpg");
+                ImageNormalMap.Add(90008729, "/normal/CKS1B-CDKN2C.jpg");
+                ImageNormalMap.Add(90009373, "/normal/CRLF2.jpg");
+                ImageNormalMap.Add(90009370, "/normal/D13S319.jpg");
+                ImageNormalMap.Add(90008497, "/normal/D20S108.jpg");
+                ImageNormalMap.Add(90008494, "/normal/EGR1-D5S721.jpg");
+                ImageNormalMap.Add(90008741, "/normal/EVI1.jpg");
+                ImageNormalMap.Add(90008730, "/normal/FGFR1-D8Z2.jpg");
+                ImageNormalMap.Add(50006574, "/normal/IgH.jpg");
+                ImageNormalMap.Add(90009041, "/normal/IGH-BCL2.jpg");
+                ImageNormalMap.Add(50006582, "/normal/FGFR3-IgH.jpg");
+                ImageNormalMap.Add(50006581, "/normal/MAF-IgH.jpg");
+                ImageNormalMap.Add(90009364, "/normal/IGH-MAFB.jpg");
+                ImageNormalMap.Add(90009038, "/normal/IGH-MYC.jpg");
+                ImageNormalMap.Add(50006575, "/normal/MLL.jpg");
+                ImageNormalMap.Add(50006579, "/normal/MYC.jpg");
+                ImageNormalMap.Add(90008744, "/normal/MYC.jpg");
+                ImageNormalMap.Add(90009376, "/normal/P2RY8.jpg");
+                ImageNormalMap.Add(90009362, "/normal/P53-CEP17.jpg");
+                ImageNormalMap.Add(90009032, "/normal/PDGFRA.jpg");
+                ImageNormalMap.Add(90009035, "/normal/PDGFRB.jpg");
+                ImageNormalMap.Add(50006571, "/normal/PML-RARA.jpg");
+                ImageNormalMap.Add(90009029, "/normal/RARA.jpg");
+                ImageNormalMap.Add(50006578, "/normal/RB-1.jpg");
+                ImageNormalMap.Add(90008496, "/normal/TCF3-PBX1.jpg");
+                ImageNormalMap.Add(50006572, "/normal/TEL-AML1.jpg");
+                ImageNormalMap.Add(50006577, "/normal/SANTI8.jpg");
             }
         }
         #endregion

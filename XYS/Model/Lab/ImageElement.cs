@@ -55,14 +55,22 @@ namespace XYS.Model.Lab
         #region 静态私有方法
         private static byte[] LoadURL(string url)
         {
+            byte[] res = null;
             if (!string.IsNullOrEmpty(url))
             {
                 using (WebClient client = new WebClient())
                 {
-                    return client.DownloadData(url);
+                    try
+                    {
+                        res = client.DownloadData(url);
+                    }
+                    catch (Exception ex)
+                    {
+                        res = null;
+                    }
                 }
             }
-            return null;
+            return res;
         }
         #endregion
     }

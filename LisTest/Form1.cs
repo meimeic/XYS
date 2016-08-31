@@ -21,24 +21,24 @@ namespace LisTest
     public partial class Form1 : Form
     {
         private readonly LabService service;
-        private readonly FRService.PDFSoapClient client;
+        //private readonly FRService.PDFSoapClient client;
         public Form1()
         {
             InitializeComponent();
             this.service = LabService.LService;
             this.service.HandleCompleteEvent += this.PrintPDF;
-            this.client = new FRService.PDFSoapClient("PDFSoap");
+            //this.client = new FRService.PDFSoapClient("PDFSoap");
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string where = " where sectionno=20 and ReceiveDate>'2016-02-22'";
+            string where = " where sectionno=11 and ReceiveDate>'2016-02-16'";
             this.service.InitReport(where);
         }
         private void PrintPDF(LabReport report)
         {
             byte[] re = TransHelper.SerializeObject(report);
-            this.client.LabPDF(re);
+            //this.client.LabPDF(re);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
