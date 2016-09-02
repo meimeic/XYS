@@ -2,6 +2,7 @@
 using System.Web;
 using System.Web.Services;
 
+using XYS.ReportWS.Lab;
 namespace XYS.ReportWS
 {
     /// <summary>

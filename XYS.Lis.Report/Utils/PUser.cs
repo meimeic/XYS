@@ -45,7 +45,7 @@ namespace XYS.Lis.Report.Utils
         }
         #endregion
 
-        #region
+        #region 初始化
         private static void InitUserImageMap()
         {
             string sql = "select cname,userimage from PUser where userimage is not null";
@@ -68,7 +68,7 @@ namespace XYS.Lis.Report.Utils
                     da.Fill(ds, "dt");
                     return ds.Tables["dt"];
                 }
-                catch (SqlException e)
+                catch (Exception e)
                 {
                     throw new Exception(e.Message);
                 }

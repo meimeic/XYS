@@ -21,24 +21,41 @@ namespace LisTest
     public partial class Form1 : Form
     {
         private readonly LabService service;
-        //private readonly FRService.PDFSoapClient client;
+        private readonly string m_connectionString;
+        //private readonly FRService.LabPDFSoapClient PDFClient;
+        //private readonly MongoService.LabMongoSoapClient MongoClient;
+
+        private readonly ReportService.ReportStatusSoapClient ReportClient;
+
+        static Form1()
+        {
+            log4net.Config.XmlConfigurator.Configure();
+        }
         public Form1()
         {
             InitializeComponent();
             this.service = LabService.LService;
             this.service.HandleCompleteEvent += this.PrintPDF;
-            //this.client = new FRService.PDFSoapClient("PDFSoap");
+            //this.PDFClient = new FRService.LabPDFSoapClient("LabPDFSoap");
+            //this.MongoClient = new MongoService.LabMongoSoapClient("LabMongoSoap");
+            this.ReportClient = new ReportService.ReportStatusSoapClient("ReportStatusSoap");
+            this.m_connectionString = ConfigurationManager.ConnectionStrings["LabMSSQL"].ConnectionString;
         }
-
         private void button1_Click(object sender, EventArgs e)
         {
-            string where = " where sectionno=11 and ReceiveDate>'2016-02-16'";
+            string where = " where sectionno=27 and ReceiveDate>'2016-02-20'";
             this.service.InitReport(where);
         }
         private void PrintPDF(LabReport report)
         {
             byte[] re = TransHelper.SerializeObject(report);
-            //this.client.LabPDF(re);
+            //this.PDFClient.PrintPDF(re);
+        }
+
+        private void SaveMongo(LabReport report)
+        {
+            byte[] re = TransHelper.SerializeObject(report);
+            //this.MongoClient.SaveToMongo(re);
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
@@ -48,6 +65,13 @@ namespace LisTest
 
         private void button2_Click(object sender, EventArgs e)
         {
+            string sql = "select serialno from reportform where sectionno=27 and ReceiveDate>'2016-02-20'";
+            DataTable dt = this.Query(sql).Tables["dt"];
+            foreach (DataRow dr in dt.Rows)
+            {
+                string req = this.Request(dr["serialno"].ToString());
+                this.ReportClient.UpdateLabApplyInfo(req);
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -58,6 +82,40 @@ namespace LisTest
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+
+        private string Request(string serialno)
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
+            sb.Append("<root><visit_type>2</visit_type>");
+            sb.Append("<patient_id>346097</patient_id><visit_no>1</visit_no>");
+            sb.Append("<operator>尚磊</operator><applys>");
+            sb.Append("<apply><apply_no>");
+            sb.Append(serialno.Trim());
+            sb.Append("</apply_no><apply_status>7</apply_status>");
+            sb.Append("<operator>尚磊</operator></apply></applys>");
+            sb.Append("</root>");
+            return sb.ToString();
+        }
+        private DataSet Query(string SQLString)
+        {
+            using (SqlConnection con = new SqlConnection(this.m_connectionString))
+            {
+                try
+                {
+                    DataSet ds = new DataSet();
+                    con.Open();
+                    SqlDataAdapter da = new SqlDataAdapter(SQLString, con);
+                    da.Fill(ds, "dt");
+                    return ds;
+                }
+                catch (Exception e)
+                {
+                    return null;
+                }
+            }
         }
     }
 }

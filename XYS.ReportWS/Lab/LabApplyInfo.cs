@@ -3,7 +3,7 @@ using System.Xml;
 using System.Xml.Serialization;
 using System.Collections.Generic;
 
-namespace XYS.ReportWS
+namespace XYS.ReportWS.Lab
 {
     [XmlRoot("root")]
     public class LabApplyInfo

@@ -50,10 +50,6 @@ namespace XYS.Lis.Report.Handler
         #region 检验项处理逻辑
         private bool OperateItem(ItemElement rie)
         {
-            if (rie == null)
-            {
-                return false;
-            }
             //合法，检验项处理操作
             if (rie.ItemNo == 50004360 || rie.ItemNo == 50004370)
             {

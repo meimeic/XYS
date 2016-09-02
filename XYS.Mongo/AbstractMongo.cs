@@ -4,7 +4,6 @@ using System.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Bson.Serialization;
-
 namespace XYS.Mongo
 {
     public abstract class AbstractMongo

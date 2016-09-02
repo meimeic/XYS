@@ -12,8 +12,8 @@ namespace XYS.ReportWS.FRService {
     
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(Namespace="http://fr.xys.org/", ConfigurationName="FRService.PDFSoap")]
-    internal interface PDFSoap {
+    [System.ServiceModel.ServiceContractAttribute(Namespace="http://fr.xys.org/", ConfigurationName="FRService.LabPDFSoap")]
+    internal interface LabPDFSoap {
         
         // CODEGEN: 命名空间 http://fr.xys.org/ 的元素名称 HelloWorldResult 以后生成的消息协定未标记为 nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://fr.xys.org/HelloWorld", ReplyAction="*")]
@@ -23,11 +23,11 @@ namespace XYS.ReportWS.FRService {
         System.Threading.Tasks.Task<XYS.ReportWS.FRService.HelloWorldResponse> HelloWorldAsync(XYS.ReportWS.FRService.HelloWorldRequest request);
         
         // CODEGEN: 命名空间 http://fr.xys.org/ 的元素名称 bytes 以后生成的消息协定未标记为 nillable
-        [System.ServiceModel.OperationContractAttribute(Action="http://fr.xys.org/LabPDF", ReplyAction="*")]
-        XYS.ReportWS.FRService.LabPDFResponse LabPDF(XYS.ReportWS.FRService.LabPDFRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://fr.xys.org/PrintPDF", ReplyAction="*")]
+        XYS.ReportWS.FRService.PrintPDFResponse PrintPDF(XYS.ReportWS.FRService.PrintPDFRequest request);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://fr.xys.org/LabPDF", ReplyAction="*")]
-        System.Threading.Tasks.Task<XYS.ReportWS.FRService.LabPDFResponse> LabPDFAsync(XYS.ReportWS.FRService.LabPDFRequest request);
+        [System.ServiceModel.OperationContractAttribute(Action="http://fr.xys.org/PrintPDF", ReplyAction="*")]
+        System.Threading.Tasks.Task<XYS.ReportWS.FRService.PrintPDFResponse> PrintPDFAsync(XYS.ReportWS.FRService.PrintPDFRequest request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -95,15 +95,15 @@ namespace XYS.ReportWS.FRService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    internal partial class LabPDFRequest {
+    internal partial class PrintPDFRequest {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="LabPDF", Namespace="http://fr.xys.org/", Order=0)]
-        public XYS.ReportWS.FRService.LabPDFRequestBody Body;
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="PrintPDF", Namespace="http://fr.xys.org/", Order=0)]
+        public XYS.ReportWS.FRService.PrintPDFRequestBody Body;
         
-        public LabPDFRequest() {
+        public PrintPDFRequest() {
         }
         
-        public LabPDFRequest(XYS.ReportWS.FRService.LabPDFRequestBody Body) {
+        public PrintPDFRequest(XYS.ReportWS.FRService.PrintPDFRequestBody Body) {
             this.Body = Body;
         }
     }
@@ -112,15 +112,15 @@ namespace XYS.ReportWS.FRService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://fr.xys.org/")]
-    internal partial class LabPDFRequestBody {
+    internal partial class PrintPDFRequestBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public byte[] bytes;
         
-        public LabPDFRequestBody() {
+        public PrintPDFRequestBody() {
         }
         
-        public LabPDFRequestBody(byte[] bytes) {
+        public PrintPDFRequestBody(byte[] bytes) {
             this.bytes = bytes;
         }
     }
@@ -129,15 +129,15 @@ namespace XYS.ReportWS.FRService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    internal partial class LabPDFResponse {
+    internal partial class PrintPDFResponse {
         
-        [System.ServiceModel.MessageBodyMemberAttribute(Name="LabPDFResponse", Namespace="http://fr.xys.org/", Order=0)]
-        public XYS.ReportWS.FRService.LabPDFResponseBody Body;
+        [System.ServiceModel.MessageBodyMemberAttribute(Name="PrintPDFResponse", Namespace="http://fr.xys.org/", Order=0)]
+        public XYS.ReportWS.FRService.PrintPDFResponseBody Body;
         
-        public LabPDFResponse() {
+        public PrintPDFResponse() {
         }
         
-        public LabPDFResponse(XYS.ReportWS.FRService.LabPDFResponseBody Body) {
+        public PrintPDFResponse(XYS.ReportWS.FRService.PrintPDFResponseBody Body) {
             this.Body = Body;
         }
     }
@@ -146,84 +146,84 @@ namespace XYS.ReportWS.FRService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute()]
-    internal partial class LabPDFResponseBody {
+    internal partial class PrintPDFResponseBody {
         
-        public LabPDFResponseBody() {
+        public PrintPDFResponseBody() {
         }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    internal interface PDFSoapChannel : XYS.ReportWS.FRService.PDFSoap, System.ServiceModel.IClientChannel {
+    internal interface LabPDFSoapChannel : XYS.ReportWS.FRService.LabPDFSoap, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    internal partial class PDFSoapClient : System.ServiceModel.ClientBase<XYS.ReportWS.FRService.PDFSoap>, XYS.ReportWS.FRService.PDFSoap {
+    internal partial class LabPDFSoapClient : System.ServiceModel.ClientBase<XYS.ReportWS.FRService.LabPDFSoap>, XYS.ReportWS.FRService.LabPDFSoap {
         
-        public PDFSoapClient() {
+        public LabPDFSoapClient() {
         }
         
-        public PDFSoapClient(string endpointConfigurationName) : 
+        public LabPDFSoapClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
         
-        public PDFSoapClient(string endpointConfigurationName, string remoteAddress) : 
+        public LabPDFSoapClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public PDFSoapClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public LabPDFSoapClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public PDFSoapClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public LabPDFSoapClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        XYS.ReportWS.FRService.HelloWorldResponse XYS.ReportWS.FRService.PDFSoap.HelloWorld(XYS.ReportWS.FRService.HelloWorldRequest request) {
+        XYS.ReportWS.FRService.HelloWorldResponse XYS.ReportWS.FRService.LabPDFSoap.HelloWorld(XYS.ReportWS.FRService.HelloWorldRequest request) {
             return base.Channel.HelloWorld(request);
         }
         
         public string HelloWorld() {
             XYS.ReportWS.FRService.HelloWorldRequest inValue = new XYS.ReportWS.FRService.HelloWorldRequest();
             inValue.Body = new XYS.ReportWS.FRService.HelloWorldRequestBody();
-            XYS.ReportWS.FRService.HelloWorldResponse retVal = ((XYS.ReportWS.FRService.PDFSoap)(this)).HelloWorld(inValue);
+            XYS.ReportWS.FRService.HelloWorldResponse retVal = ((XYS.ReportWS.FRService.LabPDFSoap)(this)).HelloWorld(inValue);
             return retVal.Body.HelloWorldResult;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<XYS.ReportWS.FRService.HelloWorldResponse> XYS.ReportWS.FRService.PDFSoap.HelloWorldAsync(XYS.ReportWS.FRService.HelloWorldRequest request) {
+        System.Threading.Tasks.Task<XYS.ReportWS.FRService.HelloWorldResponse> XYS.ReportWS.FRService.LabPDFSoap.HelloWorldAsync(XYS.ReportWS.FRService.HelloWorldRequest request) {
             return base.Channel.HelloWorldAsync(request);
         }
         
         public System.Threading.Tasks.Task<XYS.ReportWS.FRService.HelloWorldResponse> HelloWorldAsync() {
             XYS.ReportWS.FRService.HelloWorldRequest inValue = new XYS.ReportWS.FRService.HelloWorldRequest();
             inValue.Body = new XYS.ReportWS.FRService.HelloWorldRequestBody();
-            return ((XYS.ReportWS.FRService.PDFSoap)(this)).HelloWorldAsync(inValue);
+            return ((XYS.ReportWS.FRService.LabPDFSoap)(this)).HelloWorldAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        XYS.ReportWS.FRService.LabPDFResponse XYS.ReportWS.FRService.PDFSoap.LabPDF(XYS.ReportWS.FRService.LabPDFRequest request) {
-            return base.Channel.LabPDF(request);
+        XYS.ReportWS.FRService.PrintPDFResponse XYS.ReportWS.FRService.LabPDFSoap.PrintPDF(XYS.ReportWS.FRService.PrintPDFRequest request) {
+            return base.Channel.PrintPDF(request);
         }
         
-        public void LabPDF(byte[] bytes) {
-            XYS.ReportWS.FRService.LabPDFRequest inValue = new XYS.ReportWS.FRService.LabPDFRequest();
-            inValue.Body = new XYS.ReportWS.FRService.LabPDFRequestBody();
+        public void PrintPDF(byte[] bytes) {
+            XYS.ReportWS.FRService.PrintPDFRequest inValue = new XYS.ReportWS.FRService.PrintPDFRequest();
+            inValue.Body = new XYS.ReportWS.FRService.PrintPDFRequestBody();
             inValue.Body.bytes = bytes;
-            XYS.ReportWS.FRService.LabPDFResponse retVal = ((XYS.ReportWS.FRService.PDFSoap)(this)).LabPDF(inValue);
+            XYS.ReportWS.FRService.PrintPDFResponse retVal = ((XYS.ReportWS.FRService.LabPDFSoap)(this)).PrintPDF(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<XYS.ReportWS.FRService.LabPDFResponse> XYS.ReportWS.FRService.PDFSoap.LabPDFAsync(XYS.ReportWS.FRService.LabPDFRequest request) {
-            return base.Channel.LabPDFAsync(request);
+        System.Threading.Tasks.Task<XYS.ReportWS.FRService.PrintPDFResponse> XYS.ReportWS.FRService.LabPDFSoap.PrintPDFAsync(XYS.ReportWS.FRService.PrintPDFRequest request) {
+            return base.Channel.PrintPDFAsync(request);
         }
         
-        public System.Threading.Tasks.Task<XYS.ReportWS.FRService.LabPDFResponse> LabPDFAsync(byte[] bytes) {
-            XYS.ReportWS.FRService.LabPDFRequest inValue = new XYS.ReportWS.FRService.LabPDFRequest();
-            inValue.Body = new XYS.ReportWS.FRService.LabPDFRequestBody();
+        public System.Threading.Tasks.Task<XYS.ReportWS.FRService.PrintPDFResponse> PrintPDFAsync(byte[] bytes) {
+            XYS.ReportWS.FRService.PrintPDFRequest inValue = new XYS.ReportWS.FRService.PrintPDFRequest();
+            inValue.Body = new XYS.ReportWS.FRService.PrintPDFRequestBody();
             inValue.Body.bytes = bytes;
-            return ((XYS.ReportWS.FRService.PDFSoap)(this)).LabPDFAsync(inValue);
+            return ((XYS.ReportWS.FRService.LabPDFSoap)(this)).PrintPDFAsync(inValue);
         }
     }
 }

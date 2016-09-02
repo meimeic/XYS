@@ -14,31 +14,33 @@ namespace XYS.Lis.Report.Persistent
         {
             this.m_connectionString = ConfigurationManager.ConnectionStrings["LabMSSQL"].ConnectionString;
         }
+
         protected override DataTable GetDataTable(string sql)
         {
-            DataTable dt = null;
-            if (!string.IsNullOrEmpty(sql))
+            DataSet ds = this.Query(sql);
+            if (ds != null)
             {
-                dt = this.Query(sql).Tables["dt"];
+                return ds.Tables["dt"];
             }
-            return dt;
+            return null;
         }
         private DataSet Query(string SQLString)
         {
             using (SqlConnection con = new SqlConnection(this.m_connectionString))
             {
-                DataSet ds = new DataSet();
                 try
                 {
+                    DataSet ds = new DataSet();
                     con.Open();
                     SqlDataAdapter da = new SqlDataAdapter(SQLString, con);
                     da.Fill(ds, "dt");
+                    return ds;
                 }
-                catch (SqlException e)
+                catch (Exception e)
                 {
-                    throw new Exception(e.Message);
+                    LOG.Error("查询数据库失败", e);
+                    return null;
                 }
-                return ds;
             }
         }
     }

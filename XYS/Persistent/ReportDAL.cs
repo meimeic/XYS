@@ -11,7 +11,7 @@ namespace XYS.Persistent
 {
     public abstract class ReportDAL
     {
-        #region
+        #region 静态字段
         protected static readonly ILog LOG = LogManager.GetLogger("ReportPersistent");
         #endregion
 
@@ -22,34 +22,56 @@ namespace XYS.Persistent
         #endregion
 
         #region 公共方法
-        public void Fill(IFillElement element, string sql)
+        public bool Fill(IFillElement element, string sql)
         {
             DataTable dt = GetDataTable(sql);
-            if (dt != null && dt.Rows.Count > 0)
+            if (dt == null)
             {
-                FillData(element, dt.Rows[0], dt.Columns);
+                return false;
             }
+            if (dt.Rows.Count > 0)
+            {
+                if (!FillData(element, dt.Rows[0], dt.Columns))
+                {
+                    LOG.Error("填充" + element.GetType().Name + "元素失败");
+                    return false;
+                }
+            }
+            return true;
         }
-        public void FillList(List<IFillElement> elementList, Type type, string sql)
+        public bool FillList(List<IFillElement> elementList, Type type, string sql)
         {
             DataTable dt = GetDataTable(sql);
-            if (dt != null && dt.Rows.Count > 0)
+            if (dt == null)
             {
-                IFillElement element;
+                return false;
+            }
+            if (dt.Rows.Count > 0)
+            {
+                IFillElement element = null;
                 foreach (DataRow dr in dt.Rows)
                 {
                     try
                     {
                         element = (IFillElement)type.Assembly.CreateInstance(type.FullName);
-                        FillData(element, type, dr, dt.Columns);
-                        elementList.Add(element);
+                        if (FillData(element, type, dr, dt.Columns))
+                        {
+                            elementList.Add(element);
+                        }
+                        else
+                        {
+                            LOG.Error("填充" + type.Name + "元素列表失败");
+                            return false;
+                        }
                     }
                     catch (Exception ex)
                     {
-                        continue;
+                        LOG.Error("创建" + type.Name + "元素异常", ex);
+                        return false;
                     }
                 }
             }
+            return true;
         }
         #endregion
 
@@ -59,24 +81,33 @@ namespace XYS.Persistent
 
         #region 受保护的方法
         //填充对象属性
-        protected void FillData(IFillElement element, DataRow dr, DataColumnCollection columns)
+        protected bool FillData(IFillElement element, DataRow dr, DataColumnCollection columns)
         {
             Type type = element.GetType();
-            FillData(element, type, dr, columns);
+            return FillData(element, type, dr, columns);
         }
-        protected void FillData(IFillElement element, Type type, DataRow dr, DataColumnCollection columns)
+        protected bool FillData(IFillElement element, Type type, DataRow dr, DataColumnCollection columns)
         {
             PropertyInfo prop = null;
             foreach (DataColumn dc in columns)
             {
-                prop = type.GetProperty(dc.ColumnName);
-                if (IsColumn(prop))
+                try
                 {
-                    FillProperty(element, prop, dr[dc]);
+                    prop = type.GetProperty(dc.ColumnName);
+                    if (IsColumn(prop))
+                    {
+                        FillProperty(element, prop, dr[dc]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LOG.Error("填充" + type.Name + "的" + dc.ColumnName + "属性异常", ex);
+                    return false;
                 }
             }
+            return true;
         }
-        protected bool FillProperty(IFillElement element, PropertyInfo p, object v)
+        protected void FillProperty(IFillElement element, PropertyInfo p, object v)
         {
             try
             {
@@ -89,34 +120,10 @@ namespace XYS.Persistent
                 {
                     p.SetValue(element, DefaultForType(p.PropertyType), null);
                 }
-                return true;
             }
             catch (Exception ex)
             {
-                return false;
-            }
-        }
-        protected bool FillProperty(IFillElement element, PropertyInfo p, DataRow dr)
-        {
-            try
-            {
-                if (dr[p.Name] != null)
-                {
-                    if (dr[p.Name] != DBNull.Value)
-                    {
-                        object value = Convert.ChangeType(dr[p.Name], p.PropertyType);
-                        p.SetValue(element, value, null);
-                    }
-                    else
-                    {
-                        p.SetValue(element, DefaultForType(p.PropertyType), null);
-                    }
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
+                throw ex;
             }
         }
         protected object DefaultForType(Type targetType)
@@ -138,23 +145,6 @@ namespace XYS.Persistent
                 }
             }
             return false;
-        }
-        private bool StrEqual(string str1, string str2)
-        {
-            return str1.ToLower().Equals(str2.ToLower());
-        }
-        private PropertyInfo GetProperty(PropertyInfo[] props, string propName)
-        {
-            PropertyInfo p = null;
-            foreach (PropertyInfo prop in props)
-            {
-                if (StrEqual(prop.Name, propName))
-                {
-                    p = prop;
-                    break;
-                }
-            }
-            return p;
         }
         #endregion
     }

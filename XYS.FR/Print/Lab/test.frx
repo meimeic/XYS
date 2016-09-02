@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" ReportInfo.Created="08/13/2015 15:10:27" ReportInfo.Modified="08/16/2016 11:47:11" ReportInfo.CreatorVersion="2015.3.4.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+  {
+    private void Picture1_BeforePrint(object sender, EventArgs e)
+    {
+      String url=Picture1.ImageLocation;
+      if(url==null)
+      {
+        Text4.Text=&quot;the url is null&quot;;
+      }
+      else
+      {
+        Text4.Text=url;
+      }  
+    }
+
+    private void Data1_BeforePrint(object sender, EventArgs e)
+    {
+      //String url=(String)Report.GetColumnValue(&quot;FRInfo.C2&quot;);
+      //Text1.Text=url;
+      //Picture1.ImageLocation=url;
+    }
+  }
+}
+</ScriptText>
+  <Dictionary>
+    <TableDataSource Name="Custom" ReferenceName="Data.Custom" DataType="System.Int32" Enabled="true">
+      <Column Name="C0" DataType="System.String" PropName="Column"/>
+      <Column Name="C1" DataType="System.String" PropName="Column"/>
+      <Column Name="C2" DataType="System.String" PropName="Column"/>
+      <Column Name="C3" DataType="System.String" PropName="Column"/>
+      <Column Name="C4" DataType="System.String" PropName="Column"/>
+      <Column Name="C5" DataType="System.String" PropName="Column"/>
+      <Column Name="C6" DataType="System.String" PropName="Column"/>
+      <Column Name="C7" DataType="System.String" PropName="Column"/>
+      <Column Name="C8" DataType="System.String" PropName="Column"/>
+      <Column Name="C9" DataType="System.String" PropName="Column"/>
+      <Column Name="C10" DataType="System.String" PropName="Column"/>
+      <Column Name="C11" DataType="System.String" PropName="Column"/>
+      <Column Name="C12" DataType="System.String" PropName="Column"/>
+      <Column Name="C13" DataType="System.String" PropName="Column"/>
+      <Column Name="C14" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="FRInfo" ReferenceName="Data.FRInfo" DataType="System.Int32" Enabled="true">
+      <Column Name="C0" DataType="System.String" PropName="Column"/>
+      <Column Name="C1" DataType="System.String" PropName="Column"/>
+      <Column Name="C2" DataType="System.String" PropName="Column"/>
+      <Column Name="C3" DataType="System.String" PropName="Column"/>
+      <Column Name="C4" DataType="System.String" PropName="Column"/>
+      <Column Name="C5" DataType="System.String" PropName="Column"/>
+      <Column Name="C6" DataType="System.String" PropName="Column"/>
+      <Column Name="C7" DataType="System.String" PropName="Column"/>
+      <Column Name="C8" DataType="System.String" PropName="Column"/>
+      <Column Name="C9" DataType="System.String" PropName="Column"/>
+      <Column Name="C10" DataType="System.String" PropName="Column"/>
+      <Column Name="C11" DataType="System.String" PropName="Column"/>
+      <Column Name="C12" DataType="System.String" PropName="Column"/>
+      <Column Name="C13" DataType="System.String" PropName="Column"/>
+      <Column Name="C14" DataType="System.String" PropName="Column"/>
+      <Column Name="C15" DataType="System.String" PropName="Column"/>
+      <Column Name="C16" DataType="System.String" PropName="Column"/>
+      <Column Name="C17" DataType="System.String" PropName="Column"/>
+      <Column Name="C18" DataType="System.String" PropName="Column"/>
+      <Column Name="C19" DataType="System.String" PropName="Column"/>
+      <Column Name="C20" DataType="System.String" PropName="Column"/>
+      <Column Name="C21" DataType="System.String" PropName="Column"/>
+      <Column Name="C22" DataType="System.String" PropName="Column"/>
+      <Column Name="C23" DataType="System.String" PropName="Column"/>
+      <Column Name="C24" DataType="System.String" PropName="Column"/>
+      <Column Name="C25" DataType="System.String" PropName="Column"/>
+      <Column Name="C26" DataType="System.String" PropName="Column"/>
+      <Column Name="C27" DataType="System.String" PropName="Column"/>
+      <Column Name="C28" DataType="System.String" PropName="Column"/>
+      <Column Name="C29" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="FRData" ReferenceName="Data.FRData" DataType="System.Int32" Enabled="true">
+      <Column Name="C0" DataType="System.String" PropName="Column"/>
+      <Column Name="C1" DataType="System.String" PropName="Column"/>
+      <Column Name="C2" DataType="System.String" PropName="Column"/>
+      <Column Name="C3" DataType="System.String" PropName="Column"/>
+      <Column Name="C4" DataType="System.String" PropName="Column"/>
+      <Column Name="C5" DataType="System.String" PropName="Column"/>
+      <Column Name="C6" DataType="System.String" PropName="Column"/>
+      <Column Name="C7" DataType="System.String" PropName="Column"/>
+      <Column Name="C8" DataType="System.String" PropName="Column"/>
+      <Column Name="C9" DataType="System.String" PropName="Column"/>
+      <Column Name="C10" DataType="System.String" PropName="Column"/>
+      <Column Name="C11" DataType="System.String" PropName="Column"/>
+      <Column Name="C12" DataType="System.String" PropName="Column"/>
+      <Column Name="C13" DataType="System.String" PropName="Column"/>
+      <Column Name="C14" DataType="System.String" PropName="Column"/>
+      <Column Name="C15" DataType="System.String" PropName="Column"/>
+      <Column Name="C16" DataType="System.String" PropName="Column"/>
+      <Column Name="C17" DataType="System.String" PropName="Column"/>
+      <Column Name="C18" DataType="System.String" PropName="Column"/>
+      <Column Name="C19" DataType="System.String" PropName="Column"/>
+      <Column Name="C20" DataType="System.String" PropName="Column"/>
+      <Column Name="C21" DataType="System.String" PropName="Column"/>
+      <Column Name="C22" DataType="System.String" PropName="Column"/>
+      <Column Name="C23" DataType="System.String" PropName="Column"/>
+      <Column Name="C24" DataType="System.String" PropName="Column"/>
+      <Column Name="C25" DataType="System.String" PropName="Column"/>
+      <Column Name="C26" DataType="System.String" PropName="Column"/>
+      <Column Name="C27" DataType="System.String" PropName="Column"/>
+      <Column Name="C28" DataType="System.String" PropName="Column"/>
+      <Column Name="C29" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="FRItem" ReferenceName="Data.FRItem" DataType="System.Int32" Enabled="true">
+      <Column Name="C0" DataType="System.String" PropName="Column"/>
+      <Column Name="C1" DataType="System.String" PropName="Column"/>
+      <Column Name="C2" DataType="System.String" PropName="Column"/>
+      <Column Name="C3" DataType="System.String" PropName="Column"/>
+      <Column Name="C4" DataType="System.String" PropName="Column"/>
+      <Column Name="C5" DataType="System.String" PropName="Column"/>
+      <Column Name="C6" DataType="System.String" PropName="Column"/>
+      <Column Name="C7" DataType="System.String" PropName="Column"/>
+      <Column Name="C8" DataType="System.String" PropName="Column"/>
+      <Column Name="C9" DataType="System.String" PropName="Column"/>
+      <Column Name="C10" DataType="System.String" PropName="Column"/>
+      <Column Name="C11" DataType="System.String" PropName="Column"/>
+      <Column Name="C12" DataType="System.String" PropName="Column"/>
+      <Column Name="C13" DataType="System.String" PropName="Column"/>
+      <Column Name="C14" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="Image" ReferenceName="Data.Image" DataType="System.Int32" Enabled="true">
+      <Column Name="C0" DataType="System.String" PropName="Column"/>
+      <Column Name="C1" DataType="System.String" PropName="Column"/>
+      <Column Name="C2" DataType="System.String" PropName="Column"/>
+      <Column Name="C3" DataType="System.String" PropName="Column"/>
+      <Column Name="C4" DataType="System.String" PropName="Column"/>
+      <Column Name="C5" DataType="System.String" PropName="Column"/>
+      <Column Name="C6" DataType="System.String" PropName="Column"/>
+      <Column Name="C7" DataType="System.String" PropName="Column"/>
+      <Column Name="C8" DataType="System.String" PropName="Column"/>
+      <Column Name="C9" DataType="System.String" PropName="Column"/>
+      <Column Name="C10" DataType="System.String" PropName="Column"/>
+      <Column Name="C11" DataType="System.String" PropName="Column"/>
+      <Column Name="C12" DataType="System.String" PropName="Column"/>
+      <Column Name="C13" DataType="System.String" PropName="Column"/>
+      <Column Name="C14" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+    <TableDataSource Name="FRKV" ReferenceName="Data.FRKV" DataType="System.Int32" Enabled="true">
+      <Column Name="Key" DataType="System.String" PropName="Column"/>
+      <Column Name="Value" DataType="System.String" PropName="Column"/>
+    </TableDataSource>
+  </Dictionary>
+  <ReportPage Name="Page1" PaperWidth="195" PaperHeight="271" FirstPageSource="15" OtherPagesSource="15">
+    <DataBand Name="Data1" Width="661.5" Height="132.3" BeforePrintEvent="Data1_BeforePrint" DataSource="FRInfo">
+      <TextObject Name="Text1" Left="28.35" Top="9.45" Width="94.5" Height="18.9" Font="宋体, 9pt"/>
+      <TextObject Name="Text2" Left="189" Top="9.45" Width="94.5" Height="18.9" BeforePrintEvent="Text2_BeforePrint" Text="[FRInfo.C1]" Font="宋体, 9pt"/>
+      <PictureObject Name="Picture1" Left="311.85" Top="9.45" Width="122.85" Height="66.15" BeforePrintEvent="Picture1_BeforePrint" ImageLocation="[FRInfo.C2]"/>
+      <TextObject Name="Text3" Left="28.35" Top="94.5" Width="198.45" Height="18.9" BeforePrintEvent="Text3_BeforePrint" Text="[FRInfo.C2]" Font="宋体, 9pt"/>
+      <TextObject Name="Text4" Left="245.7" Top="94.5" Width="387.45" Height="18.9" Font="宋体, 9pt"/>
+    </DataBand>
+  </ReportPage>
+</Report>

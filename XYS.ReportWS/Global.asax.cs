@@ -2,13 +2,14 @@
 using System;
 using System.Web;
 
+using XYS.ReportWS.Lab;
 namespace XYS.ReportWS
 {
     public class Global : System.Web.HttpApplication
     {
         public static LisService ReportService
         {
-            get { return LisService.RService; }
+            get { return LisService.LService; }
         }
         protected void Application_Start(object sender, EventArgs e)
         {

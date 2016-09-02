@@ -27,10 +27,11 @@ namespace XYS.Report
             bool result = false;
             if (element != null)
             {
+                LOG.Info("ID为" + RK.ID + "的报告进行" + element.GetType().Name + "类型的数据填充");
                 result = FillElement(element, RK);
                 if (result)
                 {
-                    LOG.Info(element.GetType().Name+"数据填充成功，进行内部处理");
+                    LOG.Info(element.GetType().Name + "数据填充成功，进行内部处理");
                     result = InnerHandle(element, RK);
                 }
             }
@@ -42,10 +43,11 @@ namespace XYS.Report
             if (elements != null)
             {
                 elements.Clear();
+                LOG.Info("ID为" + RK.ID + "的报告进行" + type.Name + "类型的数据集合填充");
                 result = FillElement(elements, RK, type);
                 if (result)
                 {
-                    LOG.Info(type.Name + "数据列表填充成功，进行内部处理");
+                    LOG.Info(type.Name + "数据集合填充成功，进行内部处理");
                     result = InnerHandle(elements, RK);
                 }
             }
@@ -62,12 +64,11 @@ namespace XYS.Report
         private bool FillElement(IFillElement element, IReportKey RK)
         {
             string sql = GenderSql(element, RK);
-            LOG.Info("填充数据SQL语句:" + sql);
+            LOG.Info("填充SQL语句:" + sql);
             try
             {
                 LOG.Info("数据填充中");
-                this.DAL.Fill(element, sql);
-                return true;
+                return this.DAL.Fill(element, sql);
             }
             catch (Exception ex)
             {
@@ -78,16 +79,15 @@ namespace XYS.Report
         private bool FillElement(List<IFillElement> elements, IReportKey RK, Type type)
         {
             string sql = GenderSql(type, RK);
-            LOG.Info("填充"+type.Name + "类型数据列表的SQL语句:" + sql);
+            LOG.Info("填充" + type.Name + "集合SQL语句:" + sql);
             try
             {
-                LOG.Info(type.Name + "类型列表填充");
-                this.DAL.FillList(elements, type, sql);
-                return true;
+                LOG.Info(type.Name + "类型集合填充");
+                return this.DAL.FillList(elements, type, sql);
             }
             catch (Exception ex)
             {
-                LOG.Error(type.Name + "类型列表填充异常:" + ex.Message);
+                LOG.Error(type.Name + "类型集合填充异常:" + ex.Message);
                 return false;
             }
         }
@@ -125,10 +125,18 @@ namespace XYS.Report
         {
             if (prop != null)
             {
-                object[] attrs = prop.GetCustomAttributes(typeof(ColumnAttribute), true);
-                if (attrs != null && attrs.Length > 0)
+                try
                 {
-                    return true;
+                    object[] attrs = prop.GetCustomAttributes(typeof(ColumnAttribute), true);
+                    if (attrs != null && attrs.Length > 0)
+                    {
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LOG.Warn("获取" + prop.Name + "的特性异常", ex);
+                    return false;
                 }
             }
             return false;

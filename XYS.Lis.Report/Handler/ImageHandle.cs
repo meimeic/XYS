@@ -77,10 +77,11 @@ namespace XYS.Lis.Report.Handler
         protected string SaveImage(string imagePath, byte[] bytes)
         {
             string imageName = this.ImageName();
+            string imageFullName = Path.Combine(imagePath, imageName);
             using (MemoryStream ms = new MemoryStream(bytes))
             {
                 Image image = Image.FromStream(ms);
-                image.Save(Path.Combine(imagePath, imageName), System.Drawing.Imaging.ImageFormat.Jpeg);
+                image.Save(imageFullName, System.Drawing.Imaging.ImageFormat.Jpeg);
             }
             return imageName;
         }

@@ -38,25 +38,51 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FastReport, Version=2014.4.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>DLL\FastReport.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
-    <Reference Include="System.EnterpriseServices" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Print\DataSet\reporttables.frd" />
+    <Content Include="Print\Lab\linjian-adaption.frx" />
+    <Content Include="Print\Lab\linjian-da.frx" />
+    <Content Include="Print\Lab\linjian-image.frx" />
+    <Content Include="Print\Lab\linjian-xue.frx" />
+    <Content Include="Print\Lab\mianyi-adaption.frx" />
+    <Content Include="Print\Lab\mianyi-da.frx" />
+    <Content Include="Print\Lab\mianyi-shougong-adaption.frx" />
+    <Content Include="Print\Lab\mianyi-shougong-da.frx" />
+    <Content Include="Print\Lab\mianyi-SPIFE4000.frx" />
+    <Content Include="Print\Lab\mianyi-T150-adaption.frx" />
+    <Content Include="Print\Lab\mianyi-T150-da.frx" />
+    <Content Include="Print\Lab\mianyi-xibao-adaption.frx" />
+    <Content Include="Print\Lab\mianyi-xibao-da.frx" />
+    <Content Include="Print\Lab\peixing-difen-adaption.frx" />
+    <Content Include="Print\Lab\peixing-difen.frx" />
+    <Content Include="Print\Lab\peixing-gaofen-adaption.frx" />
+    <Content Include="Print\Lab\peixing-gaofen.frx" />
+    <Content Include="Print\Lab\rongxue-adaption.frx" />
+    <Content Include="Print\Lab\rongxue-da.frx" />
+    <Content Include="Print\Lab\shenghua-adaption.frx" />
+    <Content Include="Print\Lab\shenghua-da.frx" />
+    <Content Include="Print\Lab\test.frx" />
+    <Content Include="Print\Lab\xingtai-gs-1.frx" />
+    <Content Include="Print\Lab\xingtai-gs.frx" />
+    <Content Include="Print\Lab\yichuan-FISH.frx" />
+    <Content Include="Print\Lab\yichuan-Ran.frx" />
+    <Content Include="Print\Lab\zhixue-adaption.frx" />
+    <Content Include="Print\Lab\zhixue-da.frx" />
+    <Content Include="Print\Lab\zuhua-image-1.frx" />
+    <Content Include="Print\Lab\zuhua-image-2.frx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -65,11 +91,49 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="DLL\FastReport.Bars.dll" />
+    <Content Include="DLL\FastReport.dll" />
+    <Content Include="DLL\FastReport.Editor.dll" />
+    <Content Include="DLL\FastReport.Web.dll" />
+    <Content Include="Global.asax" />
+    <Content Include="LabPDF.asmx" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Conf\LabConfigManager.cs" />
+    <Compile Include="Conf\LabGroupCollection.cs" />
+    <Compile Include="Conf\LabGroupSection.cs" />
+    <Compile Include="Conf\LabItemCollection.cs" />
+    <Compile Include="Conf\LabItemSection.cs" />
+    <Compile Include="Conf\LabModelCollection.cs" />
+    <Compile Include="Conf\LabModelSection.cs" />
+    <Compile Include="Conf\LabSection.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="LabPDF.asmx.cs">
+      <DependentUpon>LabPDF.asmx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Lab\LabDAL.cs" />
+    <Compile Include="Lab\LabService.cs" />
+    <Compile Include="Lab\PDFTest.cs" />
+    <Compile Include="Model\FRCustom.cs" />
+    <Compile Include="Model\FRData.cs" />
+    <Compile Include="Model\FRImage.cs" />
+    <Compile Include="Model\FRInfo.cs" />
+    <Compile Include="Model\FRItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\DataStruct.cs" />
+    <Compile Include="Util\ExportData.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\XYS\XYS.csproj">
+      <Project>{f43981ac-83e5-4ae8-a9ee-93db0a9a35b9}</Project>
+      <Name>XYS</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

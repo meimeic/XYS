@@ -19,12 +19,11 @@ namespace XYS.Lis.Report.Handler
             element.ReportID = RK.ID;
             return true;
         }
-
         protected override bool InnerHandle(List<IFillElement> elements, IReportKey RK)
         {
             if (IsExist(elements))
             {
-                LOG.Info("基因分型自定义项列表处理");
+                LOG.Info("基因分型自定义项集合处理");
                 bool result = false;
                 for (int i = elements.Count - 1; i >= 0; i--)
                 {

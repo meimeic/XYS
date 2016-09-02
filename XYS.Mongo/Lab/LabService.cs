@@ -30,7 +30,7 @@ namespace XYS.Mongo.Lab
         private LabService()
         {
             this.MongoService = LabMongo.MongoService;
-            this.RequestQueue = new BlockingCollection<LabReport>(10000);
+            this.RequestQueue = new BlockingCollection<LabReport>(5000);
 
             this.InitWorkerPool();
         }
@@ -67,7 +67,7 @@ namespace XYS.Mongo.Lab
             this.ConvertReport(lr, mr);
 
             //
-            this.MongoService.InsertReport(mr);
+            this.MongoService.UpdateAndInsertReport(mr);
         }
         private void ConvertReport(LabReport lr, MReport mr)
         {

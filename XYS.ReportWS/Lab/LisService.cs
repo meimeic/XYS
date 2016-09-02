@@ -10,7 +10,7 @@ using log4net;
 using XYS.Model;
 using XYS.Report;
 using XYS.Lis.Report;
-namespace XYS.ReportWS
+namespace XYS.ReportWS.Lab
 {
     public class LisService
     {
@@ -22,7 +22,8 @@ namespace XYS.ReportWS
         #region 实例只读字段
         private readonly LabService LabService;
         private readonly XmlSerializer Serializer;
-        private readonly FRService.PDFSoapClient FRClient;
+        private readonly FRService.LabPDFSoapClient FRClient;
+        private readonly MongoService.LabMongoSoapClient MongoClient;
         #endregion
 
         #region 构造函数
@@ -33,15 +34,17 @@ namespace XYS.ReportWS
         }
         private LisService()
         {
-            this.Serializer = new XmlSerializer(typeof(LabApplyInfo));
             this.LabService = LabService.LService;
-            this.LabService.HandleCompleteEvent += this.PrintPDF;
-            this.FRClient = new FRService.PDFSoapClient("PDFSoap");
+            this.LabService.HandleCompleteEvent += this.PrintAndSave;
+
+            this.Serializer = new XmlSerializer(typeof(LabApplyInfo));
+            this.FRClient = new FRService.LabPDFSoapClient("LabPDFSoap");
+            this.MongoClient = new MongoService.LabMongoSoapClient("LabMongoSoap");
         }
         #endregion
 
         #region 静态属性
-        public static LisService RService
+        public static LisService LService
         {
             get { return ServiceInstance; }
         }
@@ -60,7 +63,7 @@ namespace XYS.ReportWS
                     LOG.Info("处理xml报文成功");
                     this.GetApplyInfo(info);
                 }
-                catch (InvalidOperationException ex)
+                catch (Exception ex)
                 {
                     LOG.Error("处理xml报文异常:" + ex.Message);
                 }
@@ -88,17 +91,21 @@ namespace XYS.ReportWS
         }
         private void HandleReport(string SerialNo)
         {
+            LOG.Info("根据申请单处理报告,申请号为:" + SerialNo);
             string where = " where serialno='" + SerialNo + "'";
-            this.LabService.InitReport(where);
+            LabService.InitReport(where);
         }
         #endregion
 
         #region 私有方法
-        private void PrintPDF(LabReport report)
+        private void PrintAndSave(LabReport report)
         {
-            LOG.Info("获取报告成功，报告ID为:"+report.Info.ReportID+",将报告发送到打印服务");
+            LOG.Info("获取报告成功，报告ID为:" + report.Info.ReportID + ",将报告发送到打印服务");
             byte[] re = TransHelper.SerializeObject(report);
-            this.FRClient.LabPDF(re);
+            this.FRClient.PrintPDF(re);
+
+            LOG.Info("获取报告成功，报告ID为:" + report.Info.ReportID + ",将报告发送到保存服务");
+            this.MongoClient.SaveToMongo(re);
         }
         #endregion
     }

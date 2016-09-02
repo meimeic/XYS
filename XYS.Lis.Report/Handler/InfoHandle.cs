@@ -46,7 +46,7 @@ namespace XYS.Lis.Report.Handler
                 info.CheckerUrl = PUser.GetUserUrl(info.Checker);
                 info.TechnicianUrl = PUser.GetUserUrl(info.Technician);
 
-                //
+                //设置检验者、审核者签名图片
                 info.CheckerImage = PUser.GetUserImage(info.Checker);
                 info.TechnicianImage = PUser.GetUserImage(info.Technician);
                 result = true;

@@ -55,8 +55,8 @@
     <Compile Include="Handler\ItemHandle.cs" />
     <Compile Include="Model\GSCustom.cs" />
     <Compile Include="Model\GSItem.cs" />
-    <Compile Include="Persistent\LabReportDAL.cs" />
     <Compile Include="Persistent\LabPKDAL.cs" />
+    <Compile Include="Persistent\LabReportDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LabPK.cs" />
     <Compile Include="LabService.cs" />

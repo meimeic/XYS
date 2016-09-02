@@ -27,7 +27,7 @@ namespace XYS.Lis.Report
         private static readonly ILog LOG;
         private static readonly LabService ServiceInstance;
         private static readonly string ImageServer;
-
+       
         private readonly IHandle InfoHandler;
         private readonly IHandle ItemHandler;
         private readonly IHandle ImageHandler;
@@ -36,6 +36,7 @@ namespace XYS.Lis.Report
         private readonly IHandle GeneCustomHandler;
 
         private Thread[] m_workerPool;
+
         private readonly LabPKDAL PKDAL;
         private readonly LabReportDAL ReportDAL;
         private readonly Hashtable Item2CustomMap;
@@ -52,8 +53,8 @@ namespace XYS.Lis.Report
         static LabService()
         {
             WorkerCount = 2;
-            ImageServer = ConfigurationManager.AppSettings["LabImageServer"].ToString();
             LOG = LogManager.GetLogger("LabReport");
+            ImageServer = ConfigurationManager.AppSettings["LabImageServer"].ToString();
 
             ServiceInstance = new LabService();
         }
@@ -71,7 +72,7 @@ namespace XYS.Lis.Report
 
             this.Item2CustomMap = new Hashtable(20);
             this.ImageNormalMap = new Hashtable(40);
-            this.RequestQueue = new BlockingCollection<LabPK>(1000);
+            this.RequestQueue = new BlockingCollection<LabPK>(5000);
 
             this.Init();
         }
@@ -98,29 +99,28 @@ namespace XYS.Lis.Report
         #endregion
 
         #region 公共方法/生产者方法
-        public void InitReport(Require req)
-        {
-            List<LabPK> PKList = new List<LabPK>(100);
-            this.PKDAL.InitKey(req, PKList);
-            this.InitReport(PKList);
-        }
         public void InitReport(string where)
         {
+            LOG.Info("根据where语句获取主键集合:"+where);
             List<LabPK> PKList = new List<LabPK>(100);
             this.PKDAL.InitKey(where, PKList);
             this.InitReport(PKList);
         }
         public void InitReport(List<LabPK> PKList)
         {
-            foreach (LabPK pk in PKList)
+            if (PKList != null)
             {
-                this.InitReport(pk);
+                foreach (LabPK pk in PKList)
+                {
+                    this.InitReport(pk);
+                }
             }
         }
         public void InitReport(LabPK PK)
         {
             if (PK != null && PK.Configured)
             {
+                LOG.Info("将ID为" + PK.ID + "的主键添加到待处理队列");
                 this.RequestQueue.Add(PK);
             }
         }
@@ -131,7 +131,7 @@ namespace XYS.Lis.Report
         {
             foreach (LabPK pk in this.RequestQueue.GetConsumingEnumerable())
             {
-                LOG.Info("报告处理线程开始处理报告,报告ID为:" + pk.ID);
+                LOG.Info("开始处理报告,报告ID为:" + pk.ID);
                 this.InnerHandle(pk);
             }
         }
@@ -165,14 +165,14 @@ namespace XYS.Lis.Report
             if (result)
             {
                 //后续处理
-                LOG.Info("完整报告后续处理");
+                LOG.Info("报告后续处理");
                 this.HandleAfter(report, RK);
-                LOG.Info("报告处理完成触发事件");
+                LOG.Info("触发处理完成事件");
                 this.OnSuccess(report);
             }
             else
             {
-                LOG.Info("报告处理失败触发事件");
+                LOG.Info("触发处理失败事件");
                 this.OnError(report);
             }
         }
@@ -204,7 +204,7 @@ namespace XYS.Lis.Report
                 case 4:
                 case 24:
                 case 18:
-                    LOG.Info("通用无图报告处理");
+                    LOG.Info("通用无图类型报告处理");
                     result = this.InnerHandleItem(report, RK);
                     break;
                 //基因配型
@@ -218,7 +218,7 @@ namespace XYS.Lis.Report
                     break;
                 //默认
                 default:
-                    LOG.Info("通用有图报告处理（默认处理方式）");
+                    LOG.Info("通用有图类型报告处理（默认处理方式）");
                     result = this.InnerHandleItem(report, RK);
                     result = this.InnerHandleImage(report, RK);
                     break;
@@ -229,6 +229,7 @@ namespace XYS.Lis.Report
         {
             bool result = false;
             List<IFillElement> ls = new List<IFillElement>(32);
+            LOG.Info("报告明细项处理");
             result = this.ItemHandler.HandleElement(ls, RK, typeof(ItemElement));
             if (result)
             {
