@@ -4,7 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 
-namespace XYS.Lis.Report.Utils
+namespace XYS.Lis.Report.Util
 {
     public class PUser
     {

@@ -48,12 +48,13 @@ namespace XYS.FR.Lab
         #region 构造函数
         static LabService()
         {
-            WorkerCount = 2;
-            HalfEnable = false;
-            Config.WebMode = true;
-            RootPath = "E:\\pdf\\report\\lab";
             MinTime = new DateTime(2011, 1, 1);
+
+            Config.WebMode = true;
             Config.ReportSettings.ShowProgress = false;
+            RootPath = LabConfigManager.GetRootPath();
+            HalfEnable = LabConfigManager.GetHalfEnable();
+            WorkerCount = LabConfigManager.GetWorkerCount();
 
             ServiceInstance = new LabService();
         }

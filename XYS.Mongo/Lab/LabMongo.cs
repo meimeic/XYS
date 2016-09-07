@@ -6,8 +6,10 @@ using System.Collections.Generic;
 using System.Configuration;
 
 using log4net;
+
 using XYS.Util;
 using XYS.Mongo.Model;
+using XYS.Mongo.Util;
 
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -15,15 +17,15 @@ using MongoDB.Bson.Serialization;
 namespace XYS.Mongo.Lab
 {
     delegate void InsertErrorHandler(MReport report);
-    delegate void InsertSuccessHandler(MReport  report);
-    delegate void UpdateErrorHandler(MReport  report);
+    delegate void InsertSuccessHandler(MReport report);
+    delegate void UpdateErrorHandler(MReport report);
     delegate void UpdateSuccessHandler(MReport report);
     public class LabMongo : AbstractMongo
     {
         #region 常量字段
         protected static readonly ILog LOG;
-        private static readonly string MongoDataBaseStr;
         private static readonly LabMongo MService;
+        private static readonly string MongoDBName;
 
         private readonly IMongoDatabase LisMDB;
         private readonly FilterDefinitionBuilder<MReport> FilterBuiler;
@@ -42,7 +44,7 @@ namespace XYS.Mongo.Lab
         static LabMongo()
         {
             LOG = LogManager.GetLogger("LabMongo");
-            MongoDataBaseStr = ConfigurationManager.AppSettings["MongoDB"].ToString();
+            MongoDBName = Config.GetDBName();
 
             MService = new LabMongo();
         }
@@ -52,7 +54,7 @@ namespace XYS.Mongo.Lab
             this.FilterBuiler = Builders<MReport>.Filter;
             this.UpdateBuiler = Builders<MReport>.Update;
             this.ProjectionBuiler = Builders<MReport>.Projection;
-            this.LisMDB = MClient.GetDatabase(MongoDataBaseStr);
+            this.LisMDB = MClient.GetDatabase(MongoDBName);
         }
         #endregion
 

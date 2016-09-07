@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Configuration;
 using System.Reflection;
 using System.Threading;
 
@@ -16,6 +15,7 @@ using XYS.Report;
 using XYS.Lis.Report.Handler;
 using XYS.Lis.Report.Persistent;
 using XYS.Lis.Report.Model;
+using XYS.Lis.Report.Util;
 namespace XYS.Lis.Report
 {
     public delegate void HandleErrorHandler(LabReport report);
@@ -52,9 +52,9 @@ namespace XYS.Lis.Report
         #region 构造函数
         static LabService()
         {
-            WorkerCount = 2;
+            ImageServer = Config.GetImageServer();
+            WorkerCount = Config.GetWorkerCount();
             LOG = LogManager.GetLogger("LabReport");
-            ImageServer = ConfigurationManager.AppSettings["LabImageServer"].ToString();
 
             ServiceInstance = new LabService();
         }

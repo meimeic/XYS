@@ -13,7 +13,7 @@ namespace XYS.ReportWS.MongoService {
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://mongo.xys.org/", ConfigurationName="MongoService.LabMongoSoap")]
-    internal interface LabMongoSoap {
+    public interface LabMongoSoap {
         
         // CODEGEN: 命名空间 http://mongo.xys.org/ 的元素名称 HelloWorldResult 以后生成的消息协定未标记为 nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://mongo.xys.org/HelloWorld", ReplyAction="*")]
@@ -34,7 +34,7 @@ namespace XYS.ReportWS.MongoService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    internal partial class HelloWorldRequest {
+    public partial class HelloWorldRequest {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="HelloWorld", Namespace="http://mongo.xys.org/", Order=0)]
         public XYS.ReportWS.MongoService.HelloWorldRequestBody Body;
@@ -51,7 +51,7 @@ namespace XYS.ReportWS.MongoService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute()]
-    internal partial class HelloWorldRequestBody {
+    public partial class HelloWorldRequestBody {
         
         public HelloWorldRequestBody() {
         }
@@ -61,7 +61,7 @@ namespace XYS.ReportWS.MongoService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    internal partial class HelloWorldResponse {
+    public partial class HelloWorldResponse {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="HelloWorldResponse", Namespace="http://mongo.xys.org/", Order=0)]
         public XYS.ReportWS.MongoService.HelloWorldResponseBody Body;
@@ -78,7 +78,7 @@ namespace XYS.ReportWS.MongoService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://mongo.xys.org/")]
-    internal partial class HelloWorldResponseBody {
+    public partial class HelloWorldResponseBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public string HelloWorldResult;
@@ -95,7 +95,7 @@ namespace XYS.ReportWS.MongoService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    internal partial class SaveToMongoRequest {
+    public partial class SaveToMongoRequest {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="SaveToMongo", Namespace="http://mongo.xys.org/", Order=0)]
         public XYS.ReportWS.MongoService.SaveToMongoRequestBody Body;
@@ -112,7 +112,7 @@ namespace XYS.ReportWS.MongoService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute(Namespace="http://mongo.xys.org/")]
-    internal partial class SaveToMongoRequestBody {
+    public partial class SaveToMongoRequestBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
         public byte[] bytes;
@@ -129,7 +129,7 @@ namespace XYS.ReportWS.MongoService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(IsWrapped=false)]
-    internal partial class SaveToMongoResponse {
+    public partial class SaveToMongoResponse {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="SaveToMongoResponse", Namespace="http://mongo.xys.org/", Order=0)]
         public XYS.ReportWS.MongoService.SaveToMongoResponseBody Body;
@@ -146,19 +146,19 @@ namespace XYS.ReportWS.MongoService {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.Runtime.Serialization.DataContractAttribute()]
-    internal partial class SaveToMongoResponseBody {
+    public partial class SaveToMongoResponseBody {
         
         public SaveToMongoResponseBody() {
         }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    internal interface LabMongoSoapChannel : XYS.ReportWS.MongoService.LabMongoSoap, System.ServiceModel.IClientChannel {
+    public interface LabMongoSoapChannel : XYS.ReportWS.MongoService.LabMongoSoap, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    internal partial class LabMongoSoapClient : System.ServiceModel.ClientBase<XYS.ReportWS.MongoService.LabMongoSoap>, XYS.ReportWS.MongoService.LabMongoSoap {
+    public partial class LabMongoSoapClient : System.ServiceModel.ClientBase<XYS.ReportWS.MongoService.LabMongoSoap>, XYS.ReportWS.MongoService.LabMongoSoap {
         
         public LabMongoSoapClient() {
         }

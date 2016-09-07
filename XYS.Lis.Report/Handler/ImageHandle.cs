@@ -4,7 +4,6 @@ using System.Net;
 using System.Text;
 using System.Drawing;
 using System.Collections;
-using System.Configuration;
 using System.Collections.Generic;
 
 using Newtonsoft.Json;
@@ -15,6 +14,7 @@ using XYS.Report;
 using XYS.Model.Lab;
 
 using XYS.Lis.Report.Persistent;
+using XYS.Lis.Report.Util;
 namespace XYS.Lis.Report.Handler
 {
     public class ImageHandle : HandleSkeleton
@@ -28,8 +28,8 @@ namespace XYS.Lis.Report.Handler
         #region 构造函数
         static ImageHandle()
         {
-            ImageServer = ConfigurationManager.AppSettings["LabImageServer"].ToString();
-            ImageLocal = ConfigurationManager.AppSettings["LabImageLocalDir"].ToString();
+            ImageServer = Config.GetImageServer();
+            ImageLocal = Config.GetLabImageLocalRoot();
         }
         public ImageHandle(LabReportDAL dal)
             : base(dal)

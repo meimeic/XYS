@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="82e6HB6mgMpsOqb3qYl3ZCWATSM=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="lqFtcfI/CsUn1UEHppixtNFsqz8=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="LabMongoSoap">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="LabMongoSoap" contract="MongoService.LabMongoSoap" bindingType="basicHttpBinding" address="http://10.1.10.187:8090/LabMongo.asmx" bindingConfiguration="LabMongoSoap">
+    <endpoint name="LabMongoSoap" contract="MongoService.LabMongoSoap" bindingType="basicHttpBinding" address="http://localhost:26186/LabMongo.asmx" bindingConfiguration="LabMongoSoap">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://10.1.10.187:8090/LabMongo.asmx</serializedValue>
+          <serializedValue>http://localhost:26186/LabMongo.asmx</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

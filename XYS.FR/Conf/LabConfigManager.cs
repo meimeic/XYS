@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 
 using XYS.Util;
@@ -113,6 +114,45 @@ namespace XYS.FR.Conf
             {
                 PrintModelMap[model.Value] = Path.Combine(SystemInfo.ApplicationBaseDirectory, "Print", "Lab", model.ModelName);
             }
+        }
+        #endregion
+
+        #region
+        public static int GetWorkerCount()
+        {
+            string str = ConfigurationManager.AppSettings["LabWorkerCount"];
+            if (!string.IsNullOrEmpty(str))
+            {
+                int count;
+                if (int.TryParse(str, out count))
+                {
+                    return count;
+                }
+            }
+            return 2;
+        }
+        public static string GetRootPath()
+        {
+            string result = "E:\\pdf\\report\\lab";
+            string rootPath = ConfigurationManager.AppSettings["LabPDFRootPath"];
+            if (!string.IsNullOrEmpty(rootPath))
+            {
+                if (Directory.Exists(rootPath))
+                {
+                    result = rootPath;
+                }
+            }
+            return result;
+        }
+        public static bool GetHalfEnable()
+        {
+            bool result = false;
+            string str = ConfigurationManager.AppSettings["LabPDFHalfEnable"];
+            if (!string.IsNullOrEmpty(str))
+            {
+                SystemInfo.ToBoolean(str, result);
+            }
+            return result;
         }
         #endregion
     }

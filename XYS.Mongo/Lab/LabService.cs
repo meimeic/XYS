@@ -10,6 +10,7 @@ using System.Threading;
 using XYS.Model;
 using XYS.Model.Lab;
 using XYS.Mongo.Model;
+using XYS.Mongo.Util;
 namespace XYS.Mongo.Lab
 {
     public class LabService
@@ -24,7 +25,7 @@ namespace XYS.Mongo.Lab
         #region 构造函数
         static LabService()
         {
-            WorkerCount = 2;
+            WorkerCount = Config.GetWorkerCount();
             ServiceInstance = new LabService();
         }
         private LabService()

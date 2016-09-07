@@ -4,16 +4,18 @@ using System.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Bson.Serialization;
+
+using XYS.Mongo.Util;
 namespace XYS.Mongo
 {
     public abstract class AbstractMongo
     {
-        private static readonly string MongoConnectionStr;
+        private static readonly string MongoServer;
         protected static readonly MongoClient MClient;
         static AbstractMongo()
         {
-            MongoConnectionStr = ConfigurationManager.AppSettings["MongoConnStr"].ToString();
-            MClient = new MongoClient(MongoConnectionStr);
+            MongoServer = Config.GetMongoServer();
+            MClient = new MongoClient(MongoServer);
         }
         protected AbstractMongo()
         {

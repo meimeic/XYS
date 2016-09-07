@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="b28a2ac4-1a21-432c-acaf-049542e89b8c" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="98256da7-ab4c-4646-bd68-6952c725f8ea" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
     <EnableDataBinding>true</EnableDataBinding>
     <ExcludedTypes />
     <ImportXmlTypes>false</ImportXmlTypes>
-    <GenerateInternalTypes>true</GenerateInternalTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
     <GenerateMessageContracts>false</GenerateMessageContracts>
     <NamespaceMappings />
     <CollectionMappings />
@@ -19,11 +19,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://10.1.10.187:8090/LabMongo.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:26186/LabMongo.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="LabMongo.wsdl" MetadataType="Wsdl" ID="3f444492-1e04-4cf2-8966-de6e242cce42" SourceId="1" SourceUrl="http://10.1.10.187:8090/LabMongo.asmx?wsdl" />
-    <MetadataFile FileName="LabMongo.disco" MetadataType="Disco" ID="cc883551-fec4-48ca-b1d6-2ff213f0ac71" SourceId="1" SourceUrl="http://10.1.10.187:8090/LabMongo.asmx?disco" />
+    <MetadataFile FileName="LabMongo.wsdl" MetadataType="Wsdl" ID="cb6a381b-829a-466e-92a3-1d1048239a0a" SourceId="1" SourceUrl="http://localhost:26186/LabMongo.asmx?wsdl" />
+    <MetadataFile FileName="LabMongo.disco" MetadataType="Disco" ID="8b60b43d-53f1-4f5e-af17-aea047b62a0b" SourceId="1" SourceUrl="http://localhost:26186/LabMongo.asmx?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

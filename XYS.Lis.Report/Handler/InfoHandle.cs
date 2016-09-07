@@ -6,7 +6,7 @@ using XYS.Util;
 using XYS.Report;
 using XYS.Model.Lab;
 
-using XYS.Lis.Report.Utils;
+using XYS.Lis.Report.Util;
 using XYS.Lis.Report.Persistent;
 namespace XYS.Lis.Report.Handler
 {
