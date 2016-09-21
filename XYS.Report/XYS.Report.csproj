@@ -42,7 +42,11 @@
     <Compile Include="Attributes\ColumnAttribute.cs" />
     <Compile Include="Attributes\ExportAttribute.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="Entities\DBReportItemBase.cs" />
     <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Entities\DBReportBase.cs" />
+    <Compile Include="Entities\ReportPKBase.cs" />
+    <Compile Include="Entities\TSReportBase.cs" />
     <Compile Include="Exceptions\ReportException.cs" />
     <Compile Include="Exceptions\XYSException.cs" />
     <Compile Include="Persistent\ReportDB.cs" />
