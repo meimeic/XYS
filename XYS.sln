@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.ReportWS", "XYS.ReportW
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.FR", "XYS.FR\XYS.FR.csproj", "{066B65BC-A9AE-403A-90C6-84518906891E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Report", "XYS.Report\XYS.Report.csproj", "{052B7D97-238B-4D76-9751-FDD6BB928B4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,6 +73,10 @@ Global
 		{066B65BC-A9AE-403A-90C6-84518906891E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{066B65BC-A9AE-403A-90C6-84518906891E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{066B65BC-A9AE-403A-90C6-84518906891E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{052B7D97-238B-4D76-9751-FDD6BB928B4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{052B7D97-238B-4D76-9751-FDD6BB928B4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{052B7D97-238B-4D76-9751-FDD6BB928B4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{052B7D97-238B-4D76-9751-FDD6BB928B4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

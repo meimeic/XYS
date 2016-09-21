@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Collections.Concurrent;
 using System.Threading;
 
+using log4net;
+
 using XYS.Model;
 using XYS.Model.Lab;
 using XYS.Mongo.Model;
@@ -15,6 +17,7 @@ namespace XYS.Mongo.Lab
 {
     public class LabService
     {
+        static readonly ILog LOG;
         private static int WorkerCount;
         private static readonly LabService ServiceInstance;
 
@@ -25,6 +28,7 @@ namespace XYS.Mongo.Lab
         #region 构造函数
         static LabService()
         {
+            LOG = LogManager.GetLogger("LabMongo");
             WorkerCount = Config.GetWorkerCount();
             ServiceInstance = new LabService();
         }
@@ -56,7 +60,10 @@ namespace XYS.Mongo.Lab
         {
             foreach (LabReport report in this.RequestQueue.GetConsumingEnumerable())
             {
+                TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
                 this.SaveReport(report);
+                TimeSpan end = new TimeSpan(DateTime.Now.Ticks);
+                LOG.Info("保存报告:" + report.Info.ReportID + "的时间为:" + start.Subtract(end).TotalMilliseconds.ToString());
             }
         }
         #endregion

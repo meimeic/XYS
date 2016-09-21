@@ -102,6 +102,18 @@ namespace XYS.Mongo.Lab
                 throw ex;
             }
         }
+        public void InsertReport(List<MReport> reports)
+        {
+            try
+            {
+                IMongoCollection<MReport> ReportCollection = LisMDB.GetCollection<MReport>("labs");
+                ReportCollection.InsertMany(reports);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public void UpdateAndInsertReport(MReport report)
         {
             FilterDefinition<MReport> filter = this.FilterBuiler.Eq(r => r.ReportID, report.ReportID)
