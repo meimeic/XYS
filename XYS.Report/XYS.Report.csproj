@@ -39,8 +39,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\ColumnAttribute.cs" />
+    <Compile Include="Attributes\ExportAttribute.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="Entities\EntityBase.cs" />
+    <Compile Include="Exceptions\ReportException.cs" />
+    <Compile Include="Exceptions\XYSException.cs" />
+    <Compile Include="Persistent\ReportDB.cs" />
+    <Compile Include="ReportHandler\ReportHandler.cs" />
+    <Compile Include="ReportQueue\ReportQueue.cs" />
+    <Compile Include="ReportQueue\ReportQueueItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Threads\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
