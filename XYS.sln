@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS", "XYS\XYS.csproj", "{F43981AC-83E5-4AE8-A9EE-93DB0A9A35B9}"
 EndProject
@@ -30,6 +30,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.FR", "XYS.FR\XYS.FR.csproj", "{066B65BC-A9AE-403A-90C6-84518906891E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Report", "XYS.Report\XYS.Report.csproj", "{052B7D97-238B-4D76-9751-FDD6BB928B4C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Report.Lab", "XYS.Report.Lab\XYS.Report.Lab.csproj", "{6D3A77CB-2F94-4BEB-9DEC-104A54E11C1C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,6 +79,10 @@ Global
 		{052B7D97-238B-4D76-9751-FDD6BB928B4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{052B7D97-238B-4D76-9751-FDD6BB928B4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{052B7D97-238B-4D76-9751-FDD6BB928B4C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6D3A77CB-2F94-4BEB-9DEC-104A54E11C1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6D3A77CB-2F94-4BEB-9DEC-104A54E11C1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D3A77CB-2F94-4BEB-9DEC-104A54E11C1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6D3A77CB-2F94-4BEB-9DEC-104A54E11C1C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

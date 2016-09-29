@@ -1,5 +1,5 @@
 ﻿using System;
-namespace XYS.Common
+namespace XYS.Report.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, Inherited = true)]
     public class ExportAttribute : Attribute

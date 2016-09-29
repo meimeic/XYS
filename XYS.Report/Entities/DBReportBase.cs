@@ -7,12 +7,12 @@ namespace XYS.Report.Entities
     {
         IReportPK RK { get; set; }
         List<Type> FillTypes { get; }
-        Hashtable ItemCollection { get; }
+        List<IDBReportItem> ItemCollection(Type type);
     }
     public abstract class DBReportBase : IDBReport
     {
         public IReportPK RK { get; set; }
-        public List<Type> FillTypes { get; }
-        public Hashtable ItemCollection { get; }
+        public virtual List<Type> FillTypes { get; }
+        public abstract List<IDBReportItem> ItemCollection(Type type);
     }
 }

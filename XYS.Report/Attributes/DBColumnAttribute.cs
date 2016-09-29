@@ -1,15 +1,15 @@
 ﻿using System;
-namespace XYS.Common
+namespace XYS.Report.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, Inherited=true)]
-    public sealed class ColumnAttribute:Attribute
+    public sealed class DBColumnAttribute:Attribute
     {
         private bool flag;
-        public ColumnAttribute()
+        public DBColumnAttribute()
         {
             this.flag = true;
         }
-        public ColumnAttribute(bool flag)
+        public DBColumnAttribute(bool flag)
         {
             this.flag = flag;
         }

@@ -1,21 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
-using System.Collections.Generic;
 
+using XYS.Report.Attributes;
 using XYS.Report.Entities;
 namespace XYS.Report.Persistent
 {
-    public abstract class ReportDB
+    public interface IReportDAO
     {
-        #region 受保护构造函数
-        protected ReportDB()
+        bool Fill(IDBReportItem element,string sql);
+        bool Fill(List<IDBReportItem> elementList, Type type,string sql);
+    }
+
+    public abstract class ReportDAOBase:IReportDAO
+    {
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        protected ReportDAOBase()
         {
         }
-        #endregion
+        
 
-        #region 公共方法
-        public bool Fill(IDBEntity element, string sql)
+        /// <summary>
+        /// 数据项填充
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public bool Fill(IDBReportItem element,string sql)
         {
             DataTable dt = GetDataTable(sql);
             if (dt == null)
@@ -31,7 +44,7 @@ namespace XYS.Report.Persistent
             }
             return true;
         }
-        public bool FillList(List<IDBEntity> elementList, Type type, string sql)
+        public bool Fill(List<IDBReportItem> elementList, Type type,string sql)
         {
             DataTable dt = GetDataTable(sql);
             if (dt == null)
@@ -40,12 +53,12 @@ namespace XYS.Report.Persistent
             }
             if (dt.Rows.Count > 0)
             {
-                IDBEntity element = null;
+                IDBReportItem element = null;
                 foreach (DataRow dr in dt.Rows)
                 {
                     try
                     {
-                        element = (IDBEntity)type.Assembly.CreateInstance(type.FullName);
+                        element = (IDBReportItem)type.Assembly.CreateInstance(type.FullName);
                         if (FillData(element, type, dr, dt.Columns))
                         {
                             elementList.Add(element);
@@ -63,7 +76,6 @@ namespace XYS.Report.Persistent
             }
             return true;
         }
-        #endregion
 
         #region 抽象方法
         protected abstract DataTable GetDataTable(string sql);
@@ -71,12 +83,12 @@ namespace XYS.Report.Persistent
 
         #region 受保护的方法
         //填充对象属性
-        protected bool FillData(IDBEntity element, DataRow dr, DataColumnCollection columns)
+        protected bool FillData(IDBReportItem element, DataRow dr, DataColumnCollection columns)
         {
             Type type = element.GetType();
             return FillData(element, type, dr, columns);
         }
-        protected bool FillData(IDBEntity element, Type type, DataRow dr, DataColumnCollection columns)
+        protected bool FillData(IDBReportItem element, Type type, DataRow dr, DataColumnCollection columns)
         {
             PropertyInfo prop = null;
             foreach (DataColumn dc in columns)
@@ -96,7 +108,7 @@ namespace XYS.Report.Persistent
             }
             return true;
         }
-        protected void FillProperty(IDBEntity element, PropertyInfo p, object v)
+        protected void FillProperty(IDBReportItem element, PropertyInfo p, object v)
         {
             try
             {
@@ -121,20 +133,24 @@ namespace XYS.Report.Persistent
         }
         #endregion
 
-        #region 私有方法
-        //查看属性是否为数据库列
         private bool IsColumn(PropertyInfo prop)
         {
             if (prop != null)
             {
-                object[] attrs = prop.GetCustomAttributes(typeof(ColumnAttribute), true);
-                if (attrs != null && attrs.Length > 0)
+                try
                 {
-                    return true;
+                    object[] attrs = prop.GetCustomAttributes(typeof(DBColumnAttribute), true);
+                    if (attrs != null && attrs.Length > 0)
+                    {
+                        return true;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return false;
                 }
             }
             return false;
         }
-        #endregion
     }
 }

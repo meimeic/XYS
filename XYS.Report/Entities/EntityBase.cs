@@ -13,7 +13,6 @@
     /// </summary>
     public interface IDBEntity : IEntityBase
     {
-
     }
 
     /// <summary>
