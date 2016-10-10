@@ -21,10 +21,11 @@ namespace XYS.Mongo
         {
             return "Hello World";
         }
+
         [WebMethod]
         public void SaveToMongo(byte[] bytes)
         {
-            LabService service = Global.DBService;
+            LabService service = LabService.LService;
             LabReport report = TransHelper.DeserializeObject(bytes) as LabReport;
             if (report != null)
             {

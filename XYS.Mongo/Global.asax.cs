@@ -9,12 +9,9 @@ namespace XYS.Mongo
 {
     public class Global : System.Web.HttpApplication
     {
-        public static LabService DBService
-        {
-            get { return LabService.LService; }
-        }
         protected void Application_Start(object sender, EventArgs e)
         {
+            LabService.RegistService();
             XmlConfigurator.Configure();
         }
 

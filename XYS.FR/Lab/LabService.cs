@@ -36,6 +36,7 @@ namespace XYS.FR.Lab
         private readonly LabDAL DAL;
         private Thread[] m_workerPool;
         private readonly ExportData Export;
+        private readonly Hashtable Item2CustomMap;
         private readonly Hashtable Image2ImageMap;
         private readonly BlockingCollection<LabReport> RequestQueue;
         #endregion
@@ -191,12 +192,15 @@ namespace XYS.FR.Lab
             switch (sectionNo)
             {
                 case 39:
-                    this.FillGSCustoms(report.CustomList, ls);
+                    this.FillGSCustom(report.CustomList, ls);
+                    break;
+                case 45:
+                    this.FillGeneCustom(report.CustomList,ls);
                     break;
                 default:
                     this.FillItems(report.ItemList, ls);
                     this.FillImage(report.ImageList, ls);
-                    this.FillCustoms(report.CustomList, ls);
+                    this.FillCustom(report.CustomList, ls);
                     break;
             }
             this.Export.ExportElement(ls, ds);
@@ -233,14 +237,25 @@ namespace XYS.FR.Lab
         }
         private void FillItems(List<ItemElement> items, List<IExportElement> ls)
         {
+            bool flag = false;
             FRItem data = null;
+            FRCustom custom = new FRCustom();
             if (items.Count > 0)
             {
                 foreach (ItemElement item in items)
                 {
+                    if (ConvertCustom(item, custom))
+                    {
+                        flag = true;
+                        continue;
+                    }
                     data = new FRItem();
                     this.FillItem(item, data);
                     ls.Add(data);
+                }
+                if (flag)
+                {
+                    ls.Add(custom);
                 }
             }
         }
@@ -275,7 +290,7 @@ namespace XYS.FR.Lab
         {
             return Image2ImageMap[name] as string;
         }
-        private void FillCustoms(List<CustomElement> customs, List<IExportElement> ls)
+        private void FillCustom(List<CustomElement> customs, List<IExportElement> ls)
         {
             FRCustom cs = null;
             if (customs.Count > 0)
@@ -288,29 +303,79 @@ namespace XYS.FR.Lab
                 }
             }
         }
-        private void FillGSCustoms(List<CustomElement> customs, List<IExportElement> ls)
+        private void FillGSCustom(List<CustomElement> customs, List<IExportElement> ls)
         {
-            FRData data = new FRData();
-            FRCustom custom = new FRCustom();
-            if (customs.Count > 1)
+            //FRData data = new FRData();
+            //FRCustom custom = new FRCustom();
+            //if (customs.Count > 1)
+            //{
+            //    this.FillCustom(customs[0], custom);
+            //    ls.Add(custom);
+            //    //
+            //    this.FillCustom(customs[1], data);
+            //    ls.Add(data);
+            //}
+        }
+
+        private void FillGeneCustom(List<CustomElement> customs, List<IExportElement> ls)
+        {
+            string kv = null;
+            FRCustom frc = null;
+            foreach (CustomElement custom in customs)
             {
-                this.FillCustom(customs[0], custom);
-                ls.Add(custom);
-                //
-                this.FillCustom(customs[1], data);
-                ls.Add(data);
+                frc = new FRCustom();
+                frc.C0 = custom.C0;
+                frc.C1 = custom.C1;
+                frc.C2 = custom.C2;
+                frc.C3 = custom.C3;
+                frc.C4 = custom.C4;
+                int index = 5;
+                for (int i = 5; i < CustomElement.PropertyCount; i++)
+                {
+                    kv = GetPropValue("C" + i, custom);
+                    if (!string.IsNullOrEmpty(kv))
+                    {
+                        this.FillGene(kv, index, frc);
+                        index += 3;
+                    }
+                }
+                ls.Add(frc);
             }
         }
-        private void FillCustom(CustomElement custom, IExportElement data)
+        private void FillGene(string str, int index, FRCustom custom)
         {
-            PropertyInfo[] props = data.GetType().GetProperties();
+            string propName = null;
+            string[] kv = str.Split(new char[] { '@' });
+            if (kv.Length > 1)
+            {
+                propName = GetPropNameByIndex(index);
+                this.SetProperty(propName, kv[0], custom);
+
+                string[] vs = kv[1].Split(new char[] { ';' });
+                if (vs.Length > 1)
+                {
+                    index++;
+                    propName = GetPropNameByIndex(index);
+                    this.SetProperty(propName, vs[0], custom);
+
+                    index++;
+                    propName = GetPropNameByIndex(index);
+                    this.SetProperty(propName, vs[0], custom);
+                }
+            }
+        }
+
+        private void FillCustom(CustomElement custom, FRCustom frc)
+        {
+            PropertyInfo[] props = typeof(CustomElement).GetProperties();
             foreach (PropertyInfo prop in props)
             {
-                PropertyInfo prop1 = custom.GetType().GetProperty(prop.Name);
-                if (prop1 != null)
-                {
-                    prop.SetValue(data, prop1.GetValue(custom), null);
-                }
+                this.SetProperty(prop.Name, prop.GetValue(custom), frc);
+                //PropertyInfo prop1 = typeof(FRCustom).GetProperty(prop.Name);
+                //if (prop1 != null)
+                //{
+                //    prop1.SetValue(frc, prop.GetValue(custom), null);
+                //}
             }
         }
         private void SetProperty(string propName, object value, IExportElement element)
@@ -327,6 +392,35 @@ namespace XYS.FR.Lab
             {
                 throw ex;
             }
+        }
+        private string GetPropNameByIndex(int no)
+        {
+            int m = no % FRCustom.PropertyCount;
+            return "C" + m;
+        }
+
+        private string GetPropValue(string propName, CustomElement custom)
+        {
+            PropertyInfo pro = typeof(CustomElement).GetProperty(propName);
+            if (pro != null)
+            {
+                object res = pro.GetValue(custom);
+                if (res != null)
+                {
+                    return res.ToString();
+                }
+            }
+            return null;
+        }
+        private bool ConvertCustom(ItemElement item, FRCustom custom)
+        {
+            string key = Item2CustomMap[item.ItemNo] as string;
+            if (key != null)
+            {
+                this.SetProperty(key, item.Result, custom);
+                return true;
+            }
+            return false;
         }
         #endregion
 
@@ -371,6 +465,7 @@ namespace XYS.FR.Lab
         private void Init()
         {
             this.InitWorkerPool();
+            this.InitItem2CustomMap();
             this.InitImage2ImageMap();
         }
         private void InitWorkerPool()
@@ -398,6 +493,30 @@ namespace XYS.FR.Lab
             this.Image2ImageMap.Add("normal", "C1");
             this.Image2ImageMap.Add("图谱", "C0");
             this.Image2ImageMap.Add("蛋白电泳", "C1");
+        }
+        private void InitItem2CustomMap()
+        {
+            this.Item2CustomMap.Clear();
+            lock (Item2CustomMap)
+            {
+                this.Item2CustomMap.Add(90009288, "C0");
+                this.Item2CustomMap.Add(90009289, "C1");
+                this.Item2CustomMap.Add(90009290, "C2");
+                this.Item2CustomMap.Add(90009291, "C3");
+                this.Item2CustomMap.Add(90009292, "C4");
+                this.Item2CustomMap.Add(90009293, "C5");
+                this.Item2CustomMap.Add(90009294, "C6");
+                this.Item2CustomMap.Add(90009295, "C7");
+                this.Item2CustomMap.Add(90009296, "C8");
+                this.Item2CustomMap.Add(90009297, "C9");
+                this.Item2CustomMap.Add(90009300, "C10");
+                this.Item2CustomMap.Add(90009301, "C11");
+
+                this.Item2CustomMap.Add(90008528, "C0");
+                this.Item2CustomMap.Add(90008797, "C1");
+                this.Item2CustomMap.Add(90008798, "C2");
+                this.Item2CustomMap.Add(90008799, "C3");
+            }
         }
         #endregion
     }

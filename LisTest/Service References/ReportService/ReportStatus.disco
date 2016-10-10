@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <discovery xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://schemas.xmlsoap.org/disco/">
-  <contractRef ref="http://10.1.10.187:8088/ReportStatus.asmx?wsdl" docRef="http://10.1.10.187:8088/ReportStatus.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
-  <soap address="http://10.1.10.187:8088/ReportStatus.asmx" xmlns:q1="http://report.xys.org/" binding="q1:ReportStatusSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
-  <soap address="http://10.1.10.187:8088/ReportStatus.asmx" xmlns:q2="http://report.xys.org/" binding="q2:ReportStatusSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <contractRef ref="http://localhost:26289/ReportStatus.asmx?wsdl" docRef="http://localhost:26289/ReportStatus.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="http://localhost:26289/ReportStatus.asmx" xmlns:q1="http://report.xys.org/" binding="q1:ReportStatusSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="http://localhost:26289/ReportStatus.asmx" xmlns:q2="http://report.xys.org/" binding="q2:ReportStatusSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
 </discovery>

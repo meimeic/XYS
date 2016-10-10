@@ -12,6 +12,7 @@ namespace XYS.FR
         {
             get { return LabService.PService; }
         }
+
         protected void Application_Start(object sender, EventArgs e)
         {
 

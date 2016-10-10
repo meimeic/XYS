@@ -29,18 +29,5 @@ namespace XYS.Lis.Report.Util
             }
             return result;
         }
-        public static int GetWorkerCount()
-        {
-            string str = ConfigurationManager.AppSettings["LabWorkerCount"];
-            if (!string.IsNullOrEmpty(str))
-            {
-                int count;
-                if (int.TryParse(str, out count))
-                {
-                    return count;
-                }
-            }
-            return 2;
-        }
     }
 }

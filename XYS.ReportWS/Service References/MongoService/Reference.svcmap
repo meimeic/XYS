@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="98256da7-ab4c-4646-bd68-6952c725f8ea" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="b01f17f4-def2-4f31-978c-01345a4f2121" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
     <EnableDataBinding>true</EnableDataBinding>
     <ExcludedTypes />
     <ImportXmlTypes>false</ImportXmlTypes>
-    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateInternalTypes>true</GenerateInternalTypes>
     <GenerateMessageContracts>false</GenerateMessageContracts>
     <NamespaceMappings />
     <CollectionMappings />
@@ -22,8 +22,8 @@
     <MetadataSource Address="http://localhost:26186/LabMongo.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="LabMongo.wsdl" MetadataType="Wsdl" ID="cb6a381b-829a-466e-92a3-1d1048239a0a" SourceId="1" SourceUrl="http://localhost:26186/LabMongo.asmx?wsdl" />
-    <MetadataFile FileName="LabMongo.disco" MetadataType="Disco" ID="8b60b43d-53f1-4f5e-af17-aea047b62a0b" SourceId="1" SourceUrl="http://localhost:26186/LabMongo.asmx?disco" />
+    <MetadataFile FileName="LabMongo.wsdl" MetadataType="Wsdl" ID="19793751-fb27-4dff-9004-9df03887f019" SourceId="1" SourceUrl="http://localhost:26186/LabMongo.asmx?wsdl" />
+    <MetadataFile FileName="LabMongo.disco" MetadataType="Disco" ID="3bff3f60-2922-4240-b84e-ebc92d0a6bdd" SourceId="1" SourceUrl="http://localhost:26186/LabMongo.asmx?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

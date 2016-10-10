@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="P3ugV+k3KGP+dMNGuoGx/oYJ15Y=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="3a/HHPdtSMYuymjWNhqwefLJO0A=">
   <bindingConfigurations>
     <bindingConfiguration bindingType="basicHttpBinding" name="ReportStatusSoap">
       <properties>
@@ -112,10 +112,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="ReportStatusSoap" contract="ReportService.ReportStatusSoap" bindingType="basicHttpBinding" address="http://10.1.10.187:8088/ReportStatus.asmx" bindingConfiguration="ReportStatusSoap">
+    <endpoint name="ReportStatusSoap" contract="ReportService.ReportStatusSoap" bindingType="basicHttpBinding" address="http://localhost:26289/ReportStatus.asmx" bindingConfiguration="ReportStatusSoap">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>http://10.1.10.187:8088/ReportStatus.asmx</serializedValue>
+          <serializedValue>http://localhost:26289/ReportStatus.asmx</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

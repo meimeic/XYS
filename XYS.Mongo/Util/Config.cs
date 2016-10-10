@@ -5,19 +5,6 @@ namespace XYS.Mongo.Util
 {
     public class Config
     {
-        public static int GetWorkerCount()
-        {
-            string str = ConfigurationManager.AppSettings["WorkerCount"];
-            if (!string.IsNullOrEmpty(str))
-            {
-                int count;
-                if (int.TryParse(str, out count))
-                {
-                    return count;
-                }
-            }
-            return 1;
-        }
         public static string GetMongoServer()
         {
             string result = "mongodb://127.0.0.1:27017";

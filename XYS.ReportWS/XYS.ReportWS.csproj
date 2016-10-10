@@ -61,6 +61,13 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <None Include="Service References\MongoService\LabMongo.wsdl" />
+    <None Include="Service References\FRService\LabPDF.disco" />
+    <None Include="Service References\FRService\configuration91.svcinfo" />
+    <None Include="Service References\FRService\configuration.svcinfo" />
+    <None Include="Service References\FRService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Service References\MongoService\XYS.ReportWS.MongoService.HelloWorldResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -77,13 +84,6 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="ReportStatus.asmx" />
-    <None Include="Service References\FRService\LabPDF.disco" />
-    <None Include="Service References\FRService\configuration91.svcinfo" />
-    <None Include="Service References\FRService\configuration.svcinfo" />
-    <None Include="Service References\FRService\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
     <None Include="Service References\MongoService\LabMongo.disco" />
     <None Include="Service References\MongoService\configuration91.svcinfo" />
     <None Include="Service References\MongoService\configuration.svcinfo" />
@@ -97,6 +97,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Lab\Config.cs" />
     <Compile Include="Lab\LabApplyInfo.cs" />
     <Compile Include="Lab\LisService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -132,6 +133,7 @@
     <WCFMetadataStorage Include="Service References\FRService\" />
     <WCFMetadataStorage Include="Service References\MongoService\" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

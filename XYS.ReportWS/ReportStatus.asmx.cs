@@ -25,7 +25,7 @@ namespace XYS.ReportWS
         [WebMethod]
         public void UpdateLabApplyInfo(string param)
         {
-            LisService serivce = Global.ReportService;
+            LisService serivce = LisService.LService;
             serivce.Handle(param);
         }
     }

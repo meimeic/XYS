@@ -1,7 +1,7 @@
 ﻿using System;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace XYS.Mongo.Model
+namespace XYS.Mongo.Lab.Model
 {
     public class Item
     {

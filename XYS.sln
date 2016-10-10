@@ -13,6 +13,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.Lis.Report", "XYS.Lis.R
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LisTest", "LisTest\LisTest.csproj", "{08C45C48-DFC2-4C6A-A48D-F857CEC93BFD}"
 	ProjectSection(ProjectDependencies) = postProject
+		{E0AAD998-EBEA-4006-AA54-8D15C75D063D} = {E0AAD998-EBEA-4006-AA54-8D15C75D063D}
 		{6E8A12AE-3DA4-4891-B79B-96F90AE62E90} = {6E8A12AE-3DA4-4891-B79B-96F90AE62E90}
 		{066B65BC-A9AE-403A-90C6-84518906891E} = {066B65BC-A9AE-403A-90C6-84518906891E}
 	EndProjectSection
@@ -28,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.ReportWS", "XYS.ReportW
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.FR", "XYS.FR\XYS.FR.csproj", "{066B65BC-A9AE-403A-90C6-84518906891E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XYS.His.Bill", "XYS.His.Bill\XYS.His.Bill.csproj", "{1C5EB908-545C-4411-B142-4B3681F265CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +74,10 @@ Global
 		{066B65BC-A9AE-403A-90C6-84518906891E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{066B65BC-A9AE-403A-90C6-84518906891E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{066B65BC-A9AE-403A-90C6-84518906891E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C5EB908-545C-4411-B142-4B3681F265CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C5EB908-545C-4411-B142-4B3681F265CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C5EB908-545C-4411-B142-4B3681F265CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C5EB908-545C-4411-B142-4B3681F265CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

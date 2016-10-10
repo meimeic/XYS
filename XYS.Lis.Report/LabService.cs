@@ -23,11 +23,11 @@ namespace XYS.Lis.Report
     public class LabService
     {
         #region 静态变量
-        private static int WorkerCount;
         private static readonly ILog LOG;
-        private static readonly LabService ServiceInstance;
         private static readonly string ImageServer;
-       
+        private static readonly LabService ServiceInstance;
+      
+
         private readonly IHandle InfoHandler;
         private readonly IHandle ItemHandler;
         private readonly IHandle ImageHandler;
@@ -35,13 +35,10 @@ namespace XYS.Lis.Report
         private readonly IHandle GSCustomHandler;
         private readonly IHandle GeneCustomHandler;
 
-        private Thread[] m_workerPool;
-
         private readonly LabPKDAL PKDAL;
         private readonly LabReportDAL ReportDAL;
-        private readonly Hashtable Item2CustomMap;
         private readonly Hashtable ImageNormalMap;
-        private readonly BlockingCollection<LabPK> RequestQueue;
+
         #endregion
 
         #region 私有事件
@@ -53,7 +50,6 @@ namespace XYS.Lis.Report
         static LabService()
         {
             ImageServer = Config.GetImageServer();
-            WorkerCount = Config.GetWorkerCount();
             LOG = LogManager.GetLogger("LabReport");
 
             ServiceInstance = new LabService();
@@ -70,9 +66,7 @@ namespace XYS.Lis.Report
             this.GSCustomHandler = new GSCustomHandle(this.ReportDAL);
             this.GeneCustomHandler = new GeneCustomHandle(this.ReportDAL);
 
-            this.Item2CustomMap = new Hashtable(20);
             this.ImageNormalMap = new Hashtable(40);
-            this.RequestQueue = new BlockingCollection<LabPK>(5000);
 
             this.Init();
         }
@@ -98,12 +92,14 @@ namespace XYS.Lis.Report
         }
         #endregion
 
-        #region 公共方法/生产者方法
+        #region 公共方法
         public void InitReport(string where)
         {
-            LOG.Info("根据where语句获取主键集合:"+where);
             List<LabPK> PKList = new List<LabPK>(100);
+            TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
             this.PKDAL.InitKey(where, PKList);
+            TimeSpan end = new TimeSpan(DateTime.Now.Ticks);
+            LOG.Info("根据where语句获取主键集合" + where + "时间为" + end.Subtract(start).TotalMilliseconds.ToString() + "ms");
             this.InitReport(PKList);
         }
         public void InitReport(List<LabPK> PKList)
@@ -121,18 +117,7 @@ namespace XYS.Lis.Report
             if (PK != null && PK.Configured)
             {
                 LOG.Info("将ID为" + PK.ID + "的主键添加到待处理队列");
-                this.RequestQueue.Add(PK);
-            }
-        }
-        #endregion
-
-        #region 消费者方法
-        protected void Consumer()
-        {
-            foreach (LabPK pk in this.RequestQueue.GetConsumingEnumerable())
-            {
-                LOG.Info("开始处理报告,报告ID为:" + pk.ID);
-                this.InnerHandle(pk);
+                this.InnerHandle(PK);
             }
         }
         #endregion
@@ -161,7 +146,11 @@ namespace XYS.Lis.Report
         private void InnerHandle(LabPK RK)
         {
             LabReport report = new LabReport();
+            TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
             bool result = this.InnerHandle(report, RK);
+            TimeSpan end = new TimeSpan(DateTime.Now.Ticks);
+            LOG.Info("处理主键为" + RK.ID + "的报告时间为" + end.Subtract(start).TotalMilliseconds.ToString() + "ms");
+
             if (result)
             {
                 //后续处理
@@ -172,7 +161,7 @@ namespace XYS.Lis.Report
             }
             else
             {
-                LOG.Info("触发处理失败事件");
+                LOG.Info("处理报告失败，报告ID:"+RK.ID);
                 this.OnError(report);
             }
         }
@@ -301,9 +290,7 @@ namespace XYS.Lis.Report
         //将内部数据转换成通讯数据
         private void ItemConvert(LabReport lr, List<IFillElement> ItemList)
         {
-            bool cb = false;
             ItemElement item = null;
-            CustomElement custom = new CustomElement();
             foreach (IFillElement element in ItemList)
             {
                 item = element as ItemElement;
@@ -313,20 +300,11 @@ namespace XYS.Lis.Report
                     {
                         lr.SuperList.Add(item.SuperNo);
                     }
-                    if (this.ConvertCustom(item, custom))
-                    {
-                        cb = true;
-                        continue;
-                    }
                     if (this.IsItemLegal(item))
                     {
                         lr.ItemList.Add(item);
                     }
                 }
-            }
-            if (cb)
-            {
-                lr.CustomList.Add(custom);
             }
         }
         private void ImageConvert(LabReport lr, List<IFillElement> ImageList)
@@ -378,7 +356,7 @@ namespace XYS.Lis.Report
                         superList.Add(item.SuperNo);
                     }
                     this.GeneConvert(custom, item, index);
-                    index = index + 3;
+                    index++;
                 }
             }
         }
@@ -386,18 +364,19 @@ namespace XYS.Lis.Report
         {
             string propName = null;
             propName = GetPropNameByIndex(index);
-            this.SetProperty(propName, item.CName, custom);
-            string[] values = item.Result.Split(new char[] { ';' });
-            if (values.Length > 1)
-            {
-                index++;
-                propName = GetPropNameByIndex(index);
-                this.SetProperty(propName, values[0], custom);
+            string str = item.CName + "@" + item.Result;
+            this.SetProperty(propName, str, custom);
+            //string[] values = item.Result.Split(new char[] { ';' });
+            //if (values.Length > 1)
+            //{
+            //    index++;
+            //    propName = GetPropNameByIndex(index);
+            //    this.SetProperty(propName, values[0], custom);
 
-                index++;
-                propName = GetPropNameByIndex(index);
-                this.SetProperty(propName, values[0], custom);
-            }
+            //    index++;
+            //    propName = GetPropNameByIndex(index);
+            //    this.SetProperty(propName, values[0], custom);
+            //}
         }
         private void GSItemConvert(List<IFillElement> ls, List<CustomElement> customs)
         {
@@ -479,16 +458,6 @@ namespace XYS.Lis.Report
             }
             return true;
         }
-        private bool ConvertCustom(ItemElement item, CustomElement custom)
-        {
-            string key = Item2CustomMap[item.ItemNo] as string;
-            if (key != null)
-            {
-                this.SetProperty(key, item.Result, custom);
-                return true;
-            }
-            return false;
-        }
         #endregion
 
         #region 后续处理
@@ -529,44 +498,7 @@ namespace XYS.Lis.Report
         #region 初始化
         private void Init()
         {
-            this.InitWorkerPool();
-            this.InitItem2CustomMap();
             this.InitImageNormalMap();
-        }
-        private void InitWorkerPool()
-        {
-            Thread th = null;
-            this.m_workerPool = new Thread[WorkerCount];
-            for (int i = 0; i < WorkerCount; i++)
-            {
-                th = new Thread(Consumer);
-                this.m_workerPool[i] = th;
-                th.Start();
-            }
-        }
-        private void InitItem2CustomMap()
-        {
-            this.Item2CustomMap.Clear();
-            lock (Item2CustomMap)
-            {
-                this.Item2CustomMap.Add(90009288, "C0");
-                this.Item2CustomMap.Add(90009289, "C1");
-                this.Item2CustomMap.Add(90009290, "C2");
-                this.Item2CustomMap.Add(90009291, "C3");
-                this.Item2CustomMap.Add(90009292, "C4");
-                this.Item2CustomMap.Add(90009293, "C5");
-                this.Item2CustomMap.Add(90009294, "C6");
-                this.Item2CustomMap.Add(90009295, "C7");
-                this.Item2CustomMap.Add(90009296, "C8");
-                this.Item2CustomMap.Add(90009297, "C9");
-                this.Item2CustomMap.Add(90009300, "C10");
-                this.Item2CustomMap.Add(90009301, "C11");
-
-                this.Item2CustomMap.Add(90008528, "C0");
-                this.Item2CustomMap.Add(90008797, "C1");
-                this.Item2CustomMap.Add(90008798, "C2");
-                this.Item2CustomMap.Add(90008799, "C3");
-            }
         }
         private void InitImageNormalMap()
         {

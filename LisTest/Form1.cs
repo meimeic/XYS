@@ -16,6 +16,7 @@ using XYS.Lis.Report;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.IO;
+using System.Threading;
 namespace LisTest
 {
     public partial class Form1 : Form
@@ -65,19 +66,20 @@ namespace LisTest
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string sql = "select serialno from reportform where sectionno=27 and ReceiveDate>'2016-02-20'";
+            string sql = "select top 100000 serialno from reportform where SectionNo in (2,27) and serialno is not null and serialno<>'' and ReceiveDate>'2014-12-31' and ReceiveDate<'2016-01-01'";
             DataTable dt = this.Query(sql).Tables["dt"];
             foreach (DataRow dr in dt.Rows)
             {
                 string req = this.Request(dr["serialno"].ToString());
                 this.ReportClient.UpdateLabApplyInfo(req);
+                Thread.Sleep(3);
             }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            string where = "where serialno='" + textBox2.Text + "'";
-            this.service.InitReport(where);
+            string req = this.Request(textBox2.Text);
+            this.ReportClient.UpdateLabApplyInfo(req);
         }
         private void textBox2_TextChanged(object sender, EventArgs e)
         {

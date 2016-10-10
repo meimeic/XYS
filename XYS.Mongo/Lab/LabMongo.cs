@@ -8,7 +8,7 @@ using System.Configuration;
 using log4net;
 
 using XYS.Util;
-using XYS.Mongo.Model;
+using XYS.Mongo.Lab.Model;
 using XYS.Mongo.Util;
 
 using MongoDB.Bson;
@@ -28,6 +28,7 @@ namespace XYS.Mongo.Lab
         private static readonly string MongoDBName;
 
         private readonly IMongoDatabase LisMDB;
+        private readonly IMongoCollection<MReport> LabCollection;
         private readonly FilterDefinitionBuilder<MReport> FilterBuiler;
         private readonly UpdateDefinitionBuilder<MReport> UpdateBuiler;
         private readonly ProjectionDefinitionBuilder<MReport> ProjectionBuiler;
@@ -43,8 +44,8 @@ namespace XYS.Mongo.Lab
         #region 构造函数
         static LabMongo()
         {
-            LOG = LogManager.GetLogger("LabMongo");
             MongoDBName = Config.GetDBName();
+            LOG = LogManager.GetLogger("LabMongo");
 
             MService = new LabMongo();
         }
@@ -55,6 +56,7 @@ namespace XYS.Mongo.Lab
             this.UpdateBuiler = Builders<MReport>.Update;
             this.ProjectionBuiler = Builders<MReport>.Projection;
             this.LisMDB = MClient.GetDatabase(MongoDBName);
+            this.LabCollection = LisMDB.GetCollection<MReport>("labs");
         }
         #endregion
 
@@ -88,13 +90,19 @@ namespace XYS.Mongo.Lab
         }
         #endregion
 
+        #region
+        protected IMongoCollection<MReport> LabTable
+        {
+            get { return this.LabCollection; }
+        }
+        #endregion
+
         #region 同步方法
         public void InsertReport(MReport report)
         {
             try
             {
-                IMongoCollection<MReport> ReportCollection = LisMDB.GetCollection<MReport>("labs");
-                ReportCollection.InsertOne(report);
+                LabTable.InsertOne(report);
                 this.OnInsertSuccess(report);
             }
             catch (Exception ex)
@@ -102,35 +110,60 @@ namespace XYS.Mongo.Lab
                 throw ex;
             }
         }
+        public void InsertReport(List<MReport> reports)
+        {
+            try
+            {
+                LabTable.InsertMany(reports);
+            }
+            catch (Exception ex)
+            {
+                LOG.Error(ex.Message);
+            }
+        }
         public void UpdateAndInsertReport(MReport report)
         {
             FilterDefinition<MReport> filter = this.FilterBuiler.Eq(r => r.ReportID, report.ReportID)
                                                                                      & FilterBuiler.Eq(r => r.ActiveFlag, 1);
-            UpdateDefinition<MReport> updater = this.UpdateBuiler.Set(r => r.ActiveFlag, 0);
             try
             {
-                IMongoCollection<MReport> ReportCollection = LisMDB.GetCollection<MReport>("labs");
-                UpdateResult res = ReportCollection.UpdateOne(filter, updater);
-                if (res.IsAcknowledged)
+                TimeSpan start = new TimeSpan(DateTime.Now.Ticks);
+                long count = LabTable.Count(filter);
+                TimeSpan end = new TimeSpan(DateTime.Now.Ticks);
+                LOG.Info("查询报告时间为" + end.Subtract(start).TotalMilliseconds.ToString() + "ms");
+                if (count > 0)
                 {
-                    if (res.MatchedCount == 0 && res.ModifiedCount == 0)
+                    UpdateDefinition<MReport> updater = this.UpdateBuiler.Set(r => r.ActiveFlag, 0);
+                    //LabTable.FindOneAndUpdate(filter, updater);
+                    start = new TimeSpan(DateTime.Now.Ticks);
+                    UpdateResult res = LabTable.UpdateOne(filter, updater);
+                    if (res.IsAcknowledged)
                     {
-                        this.InsertReport(report);
-                    }
-                    else if (res.MatchedCount == res.ModifiedCount)
-                    {
-                        this.OnUpdateSuccess(report);
-                        this.InsertReport(report);
+                        //if (res.MatchedCount == 0 && res.ModifiedCount == 0)
+                        //{
+                        //    this.InsertReport(report);
+                        //}
+                        //else if (res.MatchedCount == res.ModifiedCount)
+                        //{
+                        //    this.OnUpdateSuccess(report);
+                        //    this.InsertReport(report);
+                        //}
+                        //else
+                        //{
+                        //    throw new Exception("未知错误");
+                        //}
                     }
                     else
                     {
-                        throw new Exception();
+                        LOG.Info("修改未确认");
                     }
+                    end = new TimeSpan(DateTime.Now.Ticks);
+                    LOG.Info("修改报告时间为" + end.Subtract(start).TotalMilliseconds.ToString() + "ms");
                 }
-                else
-                {
-                    throw new Exception();
-                }
+                start = new TimeSpan(DateTime.Now.Ticks);
+                this.InsertReport(report);
+                end = new TimeSpan(DateTime.Now.Ticks);
+                LOG.Info("插入报告时间为" + end.Subtract(start).TotalMilliseconds.ToString() + "ms");
             }
             catch (Exception ex)
             {
@@ -139,6 +172,36 @@ namespace XYS.Mongo.Lab
         }
         public void UpdateReportActive(Guid guid)
         {
+        }
+
+        public void MakeIndex()
+        {
+            IndexKeysDefinition<MReport> reportIDIndexDesc = Builders<MReport>.IndexKeys.Descending(r=>r.ReportID);
+            IndexKeysDefinition<MReport> activeFlagIndexDesc = Builders<MReport>.IndexKeys.Descending(r => r.ActiveFlag);
+            var indexBuiler = Builders<MReport>.IndexKeys.Combine(reportIDIndexDesc, activeFlagIndexDesc);
+            LabCollection.Indexes.CreateOne(indexBuiler);
+        }
+        #endregion
+
+        #region
+        public void FindOneAndReplace(MReport newReport)
+        {
+            FilterDefinition<MReport> filter = this.FilterBuiler.Eq(r => r.ReportID, newReport.ReportID)
+                                                                                    & FilterBuiler.Eq(r => r.ActiveFlag, 1);
+            FindOneAndReplaceOptions<MReport> options = new FindOneAndReplaceOptions<MReport>()
+            {
+                IsUpsert = true,
+                ReturnDocument = ReturnDocument.Before
+            };
+            MReport oldReport = LabCollection.FindOneAndReplace(filter, newReport);
+            if (oldReport == null)
+            {
+                LOG.Info("不存在报告");
+            }
+            else 
+            {
+                LOG.Info("存在报告ID为:" + oldReport.ReportID);
+            }
         }
         #endregion
 

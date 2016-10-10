@@ -6,6 +6,8 @@ namespace XYS.FR.Model
 {
     public class FRCustom : IExportElement
     {
+        public static readonly int PropertyCount = 16;
+
         private string m_c0;
         private string m_c1;
         private string m_c2;
